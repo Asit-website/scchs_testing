@@ -8506,6 +8506,12 @@ label {
   margin-top: 20px;
 }
 
+@media(max-width:480px){
+  .section-description {
+    font-size: 16px;
+  }
+}
+
 .serachjj_sectss {
   margin-top: 30px;
 }
@@ -8583,6 +8589,8 @@ label {
 
 .form-input {
   flex: 1;
+  overflow-x: auto;
+  white-space: nowrap;
   padding: 14px 16px;
   font-size: 18px;
   border: 1px solid rgba(8, 13, 23, 1);
@@ -8610,6 +8618,21 @@ label {
   align-items: center;
   gap: 20px;
   margin-top: 40px;
+}
+
+@media(max-width:375px){
+  .rt_sh{
+    font-size: 12px;
+    gap: 10px;
+  }
+  .rt_search{
+    padding: 10px 25px !important;
+    font-size: 10px;
+  }
+  .rt_reset {
+    padding: 10px 25px !important;
+    font-size: 10px;
+  }
 }
 
 .rt_search{
@@ -8847,6 +8870,12 @@ label {
   max-width: 1720px;
   margin: auto;
   background-color: #f8f8f8;
+}
+
+@media(max-width:375px){
+  .archieve_suing{
+    padding: 30px;
+  }
 }
 .ks_pages11{
   padding: 0rem;
@@ -9189,6 +9218,28 @@ label {
   }
 }
 
+@media(max-width:769px){
+  .ks-search-bar {
+    padding: 30px 20px;
+  }
+}
+
+@media(max-width:470px){
+  .ks-result-card {
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  #listingg{
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    align-items: center;
+}
+  }
+
+
 @media only screen and (max-width:450px) {
   .filters-container {
     padding: 20px 0px;
@@ -9417,9 +9468,9 @@ label {
     padding: 40px 0px;
   }
 
-  .ks-result-card {
+  /* .ks-result-card {
     flex-direction: column;
-  }
+  } */
 
   .ks-result-text {
     text-align: center;
