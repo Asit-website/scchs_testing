@@ -1,0 +1,46 @@
+{
+  "name": "fairchildfun",
+  "version": "1.0.0",
+  "private": true,
+  "proxy": "https://admin.kmiroofing.com",
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
+    "build": "next build",
+    "start": "cross-env next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "autoprefixer": "10.4.14",
+    "cross-env": "^7.0.3",
+    "eslint": "8.43.0",
+    "eslint-config-next": "13.4.6",
+    "jquery": "^3.7.0",
+    "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.1",
+    "moment": "^2.29.4",
+    "next": "13.4.6",
+    "next-auth": "^4.22.1",
+    "next-progress": "^2.3.1",
+    "nookies": "^2.5.2",
+    "postcss": "8.4.24",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-google-recaptcha": "^3.1.0",
+    "react-icons": "^5.3.0",
+    "react-multi-date-picker": "^4.4.1",
+    "react-search-autocomplete": "^8.5.2",
+    "react-slick": "^0.29.0",
+    "sass": "^1.63.6",
+    "slick-carousel": "^1.8.1",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
+    "swiper": "^9.4.1",
+    "tailwindcss": "3.3.2",
+    "uuidv4": "^6.2.13"
+  },
+  "devDependencies": {
+    "@types/node": "20.3.1",
+    "@types/react": "18.2.13",
+    "typescript": "5.5.4"
+  }
+}

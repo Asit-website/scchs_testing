@@ -1,0 +1,189 @@
+import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
+import style from "./css/shoppings-lists.module.scss";
+import Link from "next/link";
+
+import HeadSEO from "../components/common/Head/head";
+import GlobalHeaderFooter from "../utils/common/global-header-footer";
+import Navbar from '../components/common/Navbar/Navbar'
+//Slider css files
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import ShoppingProductSlider from "../components/common/shopping/product-slider";
+import { MdKeyboardArrowDown } from "react-icons/md";
+
+import ShoppingCollections from "../components/common/shopping/collections";
+import Head from "next/head";
+import HeadSEO1 from "../components/common/Head/head1";
+
+
+
+var settingsMorePhotos = {
+    arrows: true,
+    dots: false,
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1
+};
+
+
+
+const ITEMS_PER_PAGE = 3;
+
+export default function eventdetail(pageProp) {
+
+    const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+
+    const handleLoadMore = () => {
+        setVisibleCount(prev => prev + ITEMS_PER_PAGE);
+    }
+
+    const product = pageProp.page_content.product;
+    const customFields = product?.customFields;
+
+    return (
+        <div className="page_shopping_list sop">
+            <HeadSEO title={product?.seo?.pageTitle == "" ? product?.name : product?.seo?.pageTitle} description={product?.seo?.metaDescription} image={null} />
+
+            <HeadSEO1 />
+
+            <div className="event_system_main">
+                <div className="event_main">
+                    <div className="event_details_main">
+                        <div className="event-page">
+                            <div className="event-header">
+                                <div className="event-info">
+                                    <h1>Rock n Roll Bingo (Special Event)</h1>
+                                    <h2>Saturday, March 29</h2>
+
+                                    <div className="timing-box">
+                                        <div className="item">
+                                            <h4>Doors open at</h4>
+                                            <p>Sat, March 29, 6:00 PM</p>
+                                        </div>
+                                        <div className="item">
+                                            <h4>Event Starts</h4>
+                                            <p>Sat, March 29, At 7:00 PM</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="event-details">
+                                        <h3>When and where</h3>
+
+                                        <div className="detail-row">
+                                            <span className="icon"><svg width="38" height="38" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="48" height="48" rx="4" fill="white" />
+                                                <path d="M33.9434 12.2207H30.9434V11.2207C30.9434 10.9555 30.838 10.7011 30.6505 10.5136C30.4629 10.3261 30.2086 10.2207 29.9434 10.2207C29.6781 10.2207 29.4238 10.3261 29.2363 10.5136C29.0487 10.7011 28.9434 10.9555 28.9434 11.2207V12.2207H18.9434V11.2207C18.9434 10.9555 18.838 10.7011 18.6505 10.5136C18.4629 10.3261 18.2086 10.2207 17.9434 10.2207C17.6781 10.2207 17.4238 10.3261 17.2363 10.5136C17.0487 10.7011 16.9434 10.9555 16.9434 11.2207V12.2207H13.9434C13.4129 12.2207 12.9042 12.4314 12.5291 12.8065C12.1541 13.1816 11.9434 13.6903 11.9434 14.2207V34.2207C11.9434 34.7511 12.1541 35.2598 12.5291 35.6349C12.9042 36.01 13.4129 36.2207 13.9434 36.2207H33.9434C34.4738 36.2207 34.9825 36.01 35.3576 35.6349C35.7326 35.2598 35.9434 34.7511 35.9434 34.2207V14.2207C35.9434 13.6903 35.7326 13.1816 35.3576 12.8065C34.9825 12.4314 34.4738 12.2207 33.9434 12.2207ZM16.9434 14.2207V15.2207C16.9434 15.4859 17.0487 15.7403 17.2363 15.9278C17.4238 16.1153 17.6781 16.2207 17.9434 16.2207C18.2086 16.2207 18.4629 16.1153 18.6505 15.9278C18.838 15.7403 18.9434 15.4859 18.9434 15.2207V14.2207H28.9434V15.2207C28.9434 15.4859 29.0487 15.7403 29.2363 15.9278C29.4238 16.1153 29.6781 16.2207 29.9434 16.2207C30.2086 16.2207 30.4629 16.1153 30.6505 15.9278C30.838 15.7403 30.9434 15.4859 30.9434 15.2207V14.2207H33.9434V18.2207H13.9434V14.2207H16.9434ZM33.9434 34.2207H13.9434V20.2207H33.9434V34.2207Z" fill="#AB0635" />
+                                            </svg>
+                                            </span>
+                                            <div className="text">
+                                                <span>Date and time</span><br />
+                                                <p>Sat, March 29, 6:00 PM – Sat, March 29, 10:00 PM</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="detail-row">
+                                            <span className="icon"><svg width="38" height="38" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="48" height="48" rx="4" fill="white" />
+                                                <path d="M24.1914 16.4023C23.2025 16.4023 22.2358 16.6956 21.4136 17.245C20.5913 17.7944 19.9504 18.5753 19.572 19.4889C19.1936 20.4026 19.0946 21.4079 19.2875 22.3778C19.4804 23.3477 19.9566 24.2386 20.6559 24.9379C21.3551 25.6371 22.246 26.1133 23.216 26.3063C24.1859 26.4992 25.1912 26.4002 26.1048 26.0217C27.0185 25.6433 27.7993 25.0024 28.3488 24.1802C28.8982 23.3579 29.1914 22.3913 29.1914 21.4023C29.1914 20.0763 28.6646 18.8045 27.7269 17.8668C26.7893 16.9291 25.5175 16.4023 24.1914 16.4023ZM24.1914 24.4023C23.5981 24.4023 23.018 24.2264 22.5247 23.8968C22.0313 23.5671 21.6468 23.0986 21.4198 22.5504C21.1927 22.0022 21.1333 21.399 21.2491 20.8171C21.3648 20.2351 21.6505 19.7006 22.0701 19.281C22.4896 18.8615 23.0242 18.5757 23.6061 18.46C24.1881 18.3442 24.7913 18.4036 25.3395 18.6307C25.8876 18.8578 26.3562 19.2423 26.6858 19.7356C27.0155 20.229 27.1914 20.809 27.1914 21.4023C27.1914 22.198 26.8753 22.9611 26.3127 23.5237C25.7501 24.0863 24.9871 24.4023 24.1914 24.4023ZM24.1914 10.4023C21.275 10.4057 18.4791 11.5656 16.4169 13.6278C14.3547 15.69 13.1947 18.486 13.1914 21.4023C13.1914 25.3273 15.0052 29.4873 18.4414 33.4336C19.9854 35.2168 21.7232 36.8225 23.6227 38.2211C23.7908 38.3389 23.9911 38.4021 24.1964 38.4021C24.4017 38.4021 24.602 38.3389 24.7702 38.2211C26.6661 36.8219 28.4005 35.2162 29.9414 33.4336C33.3727 29.4873 35.1914 25.3273 35.1914 21.4023C35.1881 18.486 34.0281 15.69 31.9659 13.6278C29.9037 11.5656 27.1078 10.4057 24.1914 10.4023ZM24.1914 36.1523C22.1252 34.5273 15.1914 28.5586 15.1914 21.4023C15.1914 19.0154 16.1396 16.7262 17.8274 15.0384C19.5153 13.3506 21.8045 12.4023 24.1914 12.4023C26.5784 12.4023 28.8675 13.3506 30.5554 15.0384C32.2432 16.7262 33.1914 19.0154 33.1914 21.4023C33.1914 28.5561 26.2577 34.5273 24.1914 36.1523Z" fill="#AB0635" />
+                                            </svg>
+                                            </span>
+                                            <div className="text">
+                                                <span>Location</span><br />
+                                                <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="event-gallery-main">
+                                    <div className="event-gallery">
+                                        <div className="main-photo">
+                                            <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282766/image_s8otec.png" alt="Main Event" />
+                                        </div>
+
+                                        <div className="side-photos">
+                                            <div className="thumbs">
+                                                <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282766/image_1_vctfyt.png" alt="Thumb 1" />
+                                                <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282765/image_2_yqkqjg.png" alt="Thumb 2" />
+                                            </div>
+
+                                            {/* Wrap this to include both button and text */}
+                                            {/* <div className="show-more-wrapper">
+                                            <button className="show-more-btn">📷 Show More Photos</button>
+                                           
+                                        </div> */}
+                                        </div>
+                                    </div>
+                                    <p className="presented-by">
+                                        Presented by the Saint Charles County Historical Society
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div className="event-about">
+                                <h4>About this event</h4>
+                                <ul>
+                                    <li>1) <b>$200</b> per table of 8 or <b>$25</b> per person</li>
+                                    <li>2) Free soda and water, BYO snacks and adult beverages</li>
+                                    <li>3) <b>50/50</b> raffle drawing, silent auction, game of Dead or Alive</li>
+                                    <li><span style={{ textTransform: "uppercase" }}>To reserve a table</span>: Please call, visit or mail in the attached form to:<br />
+                                        Saint Charles County Historical Society 101 S. Main Street, St. Charles, MO <b>63301</b>
+                                        <b>636-946-9828</b> sccshs.org</li>
+                                </ul>
+                            </div>
+                            <div className="event_payment">
+                                <h3>Payment can be made by check or phone with a credit card. Make checks payable to SCCHS</h3>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div className="payment_advance">
+                    <div className="payment_advance_flex">
+                        <div className="payment_left">
+                            <h3>Payment in advance is greatly appreciated, table hosts are responsible <br /> for ensuring full payment at or prior to event</h3>
+                        </div>
+                        <div className="payment_right">
+                            <button>Purchase Tickets</button>
+                        </div>
+                        <div className="payment_right">
+                            <button>Download</button>
+                        </div>
+                        <div className="payment_right">
+                            <button>Reserve Seats</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    );
+}
+
+export async function getServerSideProps(context) {
+    try {
+
+        const globalSettings = await GlobalHeaderFooter();
+        return {
+            props: {
+                page_content: false,
+                navbar: globalSettings?.header,
+                footer: globalSettings?.footer
+            },
+        };
+
+    } catch (error) {
+
+        return {
+            props: {
+                page_content: false,
+                navbar: false,
+                footer: false
+            },
+            notFound: true
+        };
+
+    }
+}
