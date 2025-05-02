@@ -65,9 +65,11 @@ export default function DatePage({ navbar, footer }) {
             <span className="callout-text">
               Everyone has a story to tell, including you
             </span>
+            <Link href="/research-1">
             <button className="callout-button">
               Share Your Memories
             </button>
+           </Link>
             {/* </div> */}
           </div>
 
