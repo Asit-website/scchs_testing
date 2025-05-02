@@ -46,7 +46,10 @@ export default function storeorder(pageProp) {
             <div className="event_system_main">
                 <div className="event_main">
                     <div className="order-info-container">
+                    <div className="order-info-containerr">
                         <h2 className="order-info-title">Order Information</h2>
+                        <button className="order-btnn">Back</button>
+                        </div>
                         <div className="order-info-table">
                             <div className="order-info-header">
                                 <div className="item-col">Item</div>

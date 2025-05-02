@@ -87,7 +87,7 @@ export default function DatePage({ navbar, footer }) {
                 <option value="" disabled>Select a page</option>
                   <option value={"/heritage-journal"}>SCCHS Heritage Journal</option>
                   <option value={"/heritage"}>Membership Newsletters</option>
-                  <option>Genealogy Newsletter</option>
+                  <option value={'/genealogy-newsletter'}>Genealogy Newsletter</option>
                 </select>
               </div>
             </div>
