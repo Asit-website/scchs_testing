@@ -4962,6 +4962,7 @@ justify-content: center !important;
   color: rgba(41, 41, 41, 1) !important;
 }
 
+
 .scchs_logo img {
   width: 130px;
 }
@@ -4989,7 +4990,7 @@ justify-content: center !important;
 .test_drop {
   background-color: rgba(0, 49, 92, 1);
   position: absolute;
-  top: 87px;
+  top: 96px;
   padding: 8px 0px;
   opacity: 90%;
   z-index: 10;
@@ -5207,11 +5208,16 @@ justify-content: center !important;
 .filters-container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: baseline;
   flex-wrap: wrap;
   padding: 20px;
   background-color: #f9f9f9;
   gap: 10px;
+}
+@media(max-width:769px){
+  .store_heading {
+    padding: 30px 40px !important;
+  }
 }
 
 .filters-left {
@@ -5250,6 +5256,23 @@ justify-content: center !important;
   display: inline-block;
   width: 100%;
   /* adjust as needed */
+}
+.dropdown small{
+  width: 100% !important;
+  -webkit-appearance: none !important;
+ }
+@media(max-width:776px){
+ .dropdown small{
+  width: 40% !important;
+ }
+}
+@media(max-width:450px){
+  /* .custom_drop{
+    max-width: 100px;
+  } */
+  .filters-left{
+    
+  }
 }
 
 .custom_drop1 {
@@ -5786,12 +5809,19 @@ justify-content: center !important;
 .payment_advance_flex {
   display: flex;
   align-items: center;
+  gap: 10px;
   justify-content: space-between;
   padding: 30px 60px;
   max-width: 1720px;
   margin: auto;
 }
+/* @media(max-width:1473px){
+  .payment_advance_flex {
+    flex-direction: column;
+    gap: 10px;
+}
 
+} */
 .payment_left h3 {
   color: rgba(255, 255, 255, 1);
   font-size: 24.5px;
@@ -6728,9 +6758,15 @@ th {
 
 .funeral-notes-intro {
   font-size: 15px;
+
   margin-bottom: 25px;
 }
 
+@media(max-width:898px){
+  .funeral-notes-intro{
+    padding: 10px 0px;
+  }
+}
 .funeral-notes-subheading {
   font-weight: 600;
   font-size: 16px;
@@ -6850,6 +6886,24 @@ th {
   position: absolute;
   top: 20px;
   right: 20px;
+}
+@media(max-width:490px){
+  .scchs-next-btn{
+    position: initial;
+  }
+  .scchs-new-membership{
+    height: 424px;
+  }
+}
+@media(max-width:400px){
+  .scchs-new-membership{
+    height: 444px;
+  }
+}
+@media(max-width:380px){
+  .scchs-new-membership{
+    height: 504px;
+  }
 }
 
 /* Membership Plan Section */
@@ -7051,6 +7105,16 @@ th {
 .nameformis select {
   width: 85%;
 }
+@media(max-width:554px){
+  .nameformis select{
+    width: 60%;
+  }
+}
+/* @media(max-width:375px){
+  .do_left{
+    gap: 5 !important;
+  }
+} */
 
 .nameformis span {
   width: 15%;
@@ -7061,6 +7125,7 @@ th {
 
 .nameform-date-group .nameform-input {
   flex: 1;
+  width: 100%;
 }
 
 .format {
@@ -7374,10 +7439,16 @@ th {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   min-width: 100px;
-  padding: 4px 0;
+  /* padding: 4px 0; */
   z-index: 1000;
   font-size: 14px;
   animation: fadeIn 0.15s ease-in-out;
+}
+@media(max-width:800px){
+  .action-dropdown{
+    top: 30px;
+    left: 10px;
+  }
 }
 
 .action-dropdown div {
@@ -7769,6 +7840,76 @@ th {
 
 }
 
+@media(max-width:980px){
+  .item-col{
+    flex-direction: column;
+  }
+  .order-info-details{
+    padding: 15px 0px;
+  }
+}
+@media(max-width:860px){
+  .order-info-row{
+    flex-direction: column;
+  }
+}
+@media(max-width:425px){
+  .order-info-image{
+    max-width: 200px !important;
+  }
+}
+@media(max-width:375px){
+  .order-info-image{
+    max-width: 150px !important;
+  }
+  
+ 
+  .order-info-title{
+    font-size: 20px;
+  }
+}
+@media(max-width:426px){
+  .order-info-containerr{
+    flex-direction: column;
+    justify-items: center;
+    padding-bottom: 20px;
+  }
+  .order-btnn{
+    margin: auto;
+  }
+  .order-info-title{
+    font-size: 25px;
+    margin: 20px auto;
+  }
+  .qty-col,.price-col11,.item-col {
+    font-size: 14px;
+    
+  }
+  .order-info-header {
+    padding: 0px;
+  }
+}
+@media(max-width:345px){
+  .next-btn1{
+    gap: 0 !important;
+  }
+}
+
+.order-info-containerr{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.order-btnn{
+  border: 1px solid rgba(0, 49, 92, 1);
+  padding: 10px 20px;
+  border-radius: 10px;
+
+}
+.order-btnn:hover{
+background-color: #AB0635;
+color: #fff;
+}
 .qty-col {
   flex: 0.3;
   /* display: flex;
@@ -8139,6 +8280,7 @@ label {
 
 .small-input-1 {
   /* width: 100%; */
+  width: 61%;
   padding: 9px 20px;
   font-size: 19px;
   border: 1px solid var(--text-colour, #080D17);
@@ -8148,6 +8290,12 @@ label {
   height: 60px;
   color: rgb(84, 85, 86);
 
+}
+
+@media(max-width:835px){
+  .small-input-1{
+    width: 100%;
+  }
 }
 
 .textarea {
@@ -8252,7 +8400,7 @@ label {
   .box_1 {
     flex-wrap: wrap;
     text-align: center;
-    justify-content: center;
+    justify-content: space-around;
     gap: 20px;
   }
 }
@@ -8336,11 +8484,11 @@ label {
   }
 
   .container-1 {
-    padding: 20px 0;
+    padding: 20px 20px;
   }
 
   .container-2 {
-    padding: 20px 0;
+    padding: 20px 20px;
   }
 }
 
@@ -8384,7 +8532,11 @@ label {
   font-size: 16px;
   column-gap: 10px;
 }
-
+@media(max-width:380px){
+  .donation-grid{
+    grid-template-columns: 109px 20px 1fr;
+  }
+}
 .donation-label {
   color: rgba(8, 13, 23, 1);
   font-size: 18px;
@@ -8568,7 +8720,7 @@ label {
 }
 
 .adv-checkbox input {
-  width: 24px;
+  width: 38px;
   height: 24px;
   border-radius: 8px;
   border: 1px solid rgba(8, 13, 23, 1);
@@ -8605,10 +8757,11 @@ label {
   color: rgba(8, 13, 23, 1);
   font-family: "Euclid-Regular";
   opacity: 95%;
-  font-size: 18px;
+
+  font-size: 15px;
 }
 #ids{
-  width: 48%;
+  width: 48.4%;
 }
 .form-input:focus {
   border-color: #102441;
@@ -8705,9 +8858,18 @@ label {
 .do_have{
   display: flex;
   align-items: center;
+  gap: 10px;
   justify-content: space-between;
   max-width: 850px;
   margin: auto;
+}
+@media(max-width:425px){
+  .do_have {
+    flex-direction: column;
+  }
+  .do_left {
+    padding: 20px 0px;
+  }
 }
 .do_left{
   display: flex;
@@ -8909,7 +9071,7 @@ label {
 }
 .store_heading{
   background-color: white;
-  padding: 30px 70px;
+  padding: 30px 80px;
 }
 .store_heading h2{
   color: #080D17;
@@ -8956,6 +9118,11 @@ label {
   }
 }
 
+@media(max-width:1110px){
+  .photo-record-title{
+    font-size: 20px !important;
+  }
+}
 @media only screen and (max-width:1100px) {
   .navbar-wrapper {
     display: block;
@@ -9009,8 +9176,10 @@ label {
   .photo-record-content{
     flex-direction: column;
   }
+
   .photo-record-title{
     position: initial;
+    font-size: 20px !important;
     top: initial;
   }
 }
@@ -9020,6 +9189,7 @@ label {
     flex-direction: column;
     gap: 40px;
   }
+ 
 
   .payment_left br {
     display: none;
@@ -9047,6 +9217,8 @@ label {
 
   .payment_advance_flex {
     padding: 30px 20px;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .schss_research_inner {
@@ -9139,6 +9311,7 @@ label {
 
   .payment_advance_flex {
     flex-direction: column;
+    gap: 0;
   }
 
   .payment_left h3 {
@@ -9151,6 +9324,8 @@ label {
 
   .membership_info {
     margin: 10px 0px;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .membership-container {
@@ -9190,9 +9365,9 @@ label {
     padding: 30px 20px;
   }
 
-  .ks-page {
+  /* .ks-page {
     padding: 0rem;
-  }
+  } */
   .form-section{
     padding: 24px 20px;
   }
@@ -9211,10 +9386,17 @@ label {
   }
   .photo-record-header{
     flex-wrap: wrap;
+
     gap: 10px;
   }
   .photo-record-actions{
     flex-direction: column;
+  }
+}
+@media(max-width:386px){
+  .photo-record-header{
+    justify-content: center;
+    gap: 20px;
   }
 }
 
@@ -9231,12 +9413,16 @@ label {
     justify-content: center;
   }
 
-  #listingg{
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    align-items: center;
-}
+
+  }
+
+  @media(max-width:542px){
+    #listingg{
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+  }
   }
 
 
@@ -9381,7 +9567,7 @@ label {
   }
 
   .reset_flex button {
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .black_set {
@@ -9394,6 +9580,7 @@ label {
 
   .membership_info_right p {
     font-size: 15px;
+    text-align: center;
     line-height: 25px;
   }
 
@@ -9495,7 +9682,26 @@ label {
   }
 }
 
+@media(max-width:410px){
+  .reset_flex button {
+    font-size: 10px;
+  }
 
+}
+@media(max-width:470px){
+  .ks-result-text{
+    text-align: center;
+  }
+  .ks-result-image-placeholder{
+    margin: 0 auto;
+  }
+}
+
+@media(max-width:929px){
+  .scch-member-table thead tr th{
+    font-size: 16px;
+  }
+}
 
 
 /* =============header mobile and tab responsive end======= */
@@ -9519,7 +9725,7 @@ label {
   gap: 20px;
 }
 #ktt-page{
-  padding: 1rem  !important;
+  padding: 1rem 0px  !important;
 }
 #eventt-mont{
   padding: 1rem 60px !important;
@@ -9737,7 +9943,11 @@ label {
   cursor: pointer;
   transition: background .2s;
 }
-
+@media(max-width:1380px){
+.date-button{
+font-size: 16px;
+}
+}
 .date-button:hover {
   background: rgba(171, 6, 53, 1);
   color: #fff;
@@ -9789,10 +9999,28 @@ label {
     gap: 10px;
   }
   .date-button {
-    font-size: 12px;
+    font-size: 10px;
     padding: 6px 6px;
   }
+  .current-issues{
+    margin-bottom: 10px;
+  }
+  .surname-btn-group{
+    justify-content: center !important;
+  }
+ 
 }
+
+
+@media(max-width:375px){
+  .surname-details-grid {
+    column-gap: 34px;
+    row-gap: 20px;
+  }
+}
+
+
+
 
 
 
@@ -9965,13 +10193,20 @@ label {
     font-size: 18px;
   }
   .callout-button {
-    padding: 10px 20px;
+    padding: 10px 20px !important;
     font-size: 15px;
   }
+  
 
   .footer-button {
     padding: 12px 28px;
     font-size: 15px;
+  }
+}
+
+@media(max-width:1400px){
+  .heritage-intro{
+    padding: 30px 20px;
   }
 }
 
@@ -9998,3 +10233,36 @@ label {
   }
 }
 
+
+
+/* ================================================================dropdown hover*/
+
+.scchs_nav_ul li a,
+.test_drop p {
+  position: relative;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.scchs_nav_ul li a::after,
+.test_drop p::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 100%;
+  background-color: #0056b3;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.scchs_nav_ul li a:hover::after,
+.test_drop p:hover::after {
+  transform: scaleX(1);
+}
+
+.scchs_nav_ul li a:hover,
+.test_drop p:hover {
+  color: #0056b3; 
+}

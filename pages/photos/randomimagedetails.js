@@ -98,7 +98,7 @@ export default function randomimagedetails(pageProp) {
                                             </tr>
                                             <tr>
                                                 <td>Subjects</td>
-                                                <td>World War I War destruction & pillage War damage</td>
+                                                <td>World War I <br/> War destruction & pillage <br/> War damage</td>
                                             </tr>
                                             <tr>
                                                 <td>Image</td>

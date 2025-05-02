@@ -78,7 +78,22 @@ const images = [
         src: "https://res.cloudinary.com/dgif730br/image/upload/v1745588452/2400451_piz26u.png",
         caption: "Wabash Freight Depot, Main and Clark, St. Charles - 1900 - 1920",
     },
-
+    {
+        src: "https://res.cloudinary.com/dgif730br/image/upload/v1745588453/image_amqxkh.png",
+        caption: "Gentleman of Old Britanny",
+    },
+    {
+        src: "https://res.cloudinary.com/dgif730br/image/upload/v1745588452/213258_lp7zkp.png",
+        caption: "Dr. Stumberg, WWII, 1940 - 1950",
+    },
+    {
+        src: "https://res.cloudinary.com/dgif730br/image/upload/v1745588453/396149_si5c9x.png",
+        caption: "Al and George: Al with a Rifle and George on a hobby horse",
+    },
+    {
+        src: "https://res.cloudinary.com/dgif730br/image/upload/v1745588452/2400451_piz26u.png",
+        caption: "Wabash Freight Depot, Main and Clark, St. Charles - 1900 - 1920",
+    },
 
 
 ];
@@ -271,7 +286,7 @@ export default function contribute(pageProp) {
                                         <strong>Search Hints:</strong> To search by phrase wrap your criteria in quotes. ex: "Find me"
                                     </p>
                                     <p className="ks-result-count">
-                                        <strong>3627</strong> Results found. Records searched: <strong>3627</strong>
+                                        <strong>14251</strong>  Results found. Records searched:  <strong>14251</strong>
                                     </p>
                                 </div>
                             )
@@ -437,7 +452,7 @@ export default function contribute(pageProp) {
                                             <strong>Search Hints:</strong> To search by phrase wrap your criteria in quotes. ex: "Find me"
                                         </p>
                                         <p className="ks-result-count">
-                                            <strong>3627</strong> Results found. Records searched: <strong>3627</strong>
+                                            <strong>14251 </strong> Results found. Records searched: <strong>14251 </strong>
                                         </p>
                                     </div>
 
