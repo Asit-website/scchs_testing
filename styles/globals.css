@@ -6444,7 +6444,7 @@ th {
 .edit-icon {
   color: #ae0035;
   font-size: 16px;
-  margin-left: 8px;
+  margin-left: 20px;
   cursor: pointer;
 }
 
@@ -7078,7 +7078,7 @@ th {
 
 /* =====================archieve css start============== */
 .ks-page {
-  padding: 2rem;
+  /* padding: 2rem; */
   /* max-width: 1000px; */
   margin: auto;
 }
@@ -9244,8 +9244,17 @@ label {
   .filters-container {
     padding: 20px 0px;
   }
+
+  /* ----- */
+  .edit-icon {
+    margin-left: 4px;
+  }
+  /* ---- */
   .photo-record-image img{
     width: 100%;
+  }
+  .access-box{
+    gap: 10px;
   }
   .test_photo_img{
      margin-top:30px;
