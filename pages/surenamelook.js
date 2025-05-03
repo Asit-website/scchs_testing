@@ -65,6 +65,14 @@ export default function surenamelook(pageProp) {
         }
     };
 
+ const tableRef = useRef(null);
+
+const scrollToTable = () => {
+  if (tableRef.current) {
+    tableRef.current.scrollIntoView({ behavior: "smooth" });
+  }
+};
+
     useEffect(() => {
         document.addEventListener('mousedown', handleOutsideClick);
         return () => document.removeEventListener('mousedown', handleOutsideClick);
@@ -102,7 +110,7 @@ export default function surenamelook(pageProp) {
 
                             <div className="button-section">
                                 <div className="label-box">To begin your search.</div>
-                                <button className="start-btn">Click Here</button>
+                                <button className="start-btn" onClick={scrollToTable}>Click Here</button>
                             </div>
 
                             <div className="instructions">
@@ -158,7 +166,7 @@ export default function surenamelook(pageProp) {
                     </div>
 
                     <div className="scch-table-container">
-                        <table className="scch-member-table">
+                        <table className="scch-member-table"  ref={tableRef}>
                             {/* <colgroup>
                                 <col style={{ width: "25%" }} />
                                 <col style={{ width: "30%" }} />
