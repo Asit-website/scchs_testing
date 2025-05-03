@@ -33,32 +33,63 @@ const records = [
         category: "City/State/Federal Records",
     },
     {
-        title: "Burial or Removal Permits",
+        title: "Burials By Church - IN PROCESS",
         description:
-            "An index to burial or removal permits issued in St. Charles County for the years 1927 - 1942. The original documents, maintained at the St. Charles County Historical Society Archives, typically include the full name of the deceased, age, cause of death, date of death, place of burial, undertaker, signature of the sexton at the cemetery where the burial took place, and date of interment.",
-        updated: "15 July 2016",
-        category: "City/State/Federal Records",
+            "This index of old St. Charles churches is offered as a finding tool. While the actual records are held by the individual churches, St. Charles County Historical Society has indexes of these church records which will include more information for you; typical information might be the names of the deceased, burial date, and cause of death. Sometimes information about the deceased's family is given. If you see your family name listed in a church's burial records, you may want to also check the entire index of that church for marriage and burial information. Locating their church may pinpoint the region of St. Charles County where your family resided.",
+        updated: " 08 November 2023",
+        category: " Church Records",
     },
     {
-        title: "Burial or Removal Permits",
+        title: "Business & Industry Files Index",
         description:
-            "An index to burial or removal permits issued in St. Charles County for the years 1927 - 1942. The original documents, maintained at the St. Charles County Historical Society Archives, typically include the full name of the deceased, age, cause of death, date of death, place of burial, undertaker, signature of the sexton at the cemetery where the burial took place, and date of interment.",
-        updated: "15 July 2016",
-        category: "City/State/Federal Records",
+            `Additions are made to these "drop files" on a rolling basis - news clippings, pamphlets, and other relevant documents are "dropped" into the appropriate file as they are discovered. Please note that the contents of most of these files relate specifically to St. Charles City and/or St. Charles County, though occasionally included items may pertain to large entities, such as the state of Missouri as a whole.`,
+        updated: " 26 March 2021",
+        category: " City/State/Federal Records",
     },
     {
-        title: "Burial or Removal Permits",
+        title: "Cemeteries in St. Charles County",
         description:
-            "An index to burial or removal permits issued in St. Charles County for the years 1927 - 1942. The original documents, maintained at the St. Charles County Historical Society Archives, typically include the full name of the deceased, age, cause of death, date of death, place of burial, undertaker, signature of the sexton at the cemetery where the burial took place, and date of interment.",
-        updated: "15 July 2016",
-        category: "City/State/Federal Records",
+            "",
+        updated: " 10 May 2022",
+        category: " Cemeteries",
     },
     {
-        title: "Burial or Removal Permits",
+        title: "Cemetery Records (St. Charles County)",
         description:
-            "An index to burial or removal permits issued in St. Charles County for the years 1927 - 1942. The original documents, maintained at the St. Charles County Historical Society Archives, typically include the full name of the deceased, age, cause of death, date of death, place of burial, undertaker, signature of the sexton at the cemetery where the burial took place, and date of interment.",
-        updated: "15 July 2016",
-        category: "City/State/Federal Records",
+            "",
+        updated: "10 May 2022",
+        category: "Cemeteries",
+    },
+
+    {
+        title: "Census, St. Charles County, 1876",
+        description:
+            "1876 State Census, St. Charles County, Missouri.",
+        updated: "10 May 2022",
+        category: "Cemeteries",
+    },
+
+    {
+        title: "Circuit Court Index 1805-1893",
+        description:
+            "Includes sessions held from 1805 through 1893 (includes the period St. Charles served as Missouri's state capital), is to original records that are stored at the SCCHS Archives, and may be searched free at MO Judicial Archives as part of the Missouri Judicial Records Collection (select Saint Charles in the County box). The original documents are at the St. Charles County Historical Society Archives.",
+        updated: " 08 November 2023",
+        category: " City/State/Federal Records",
+    },
+
+    {
+        title: "Deed Records Related To Smith Chapel Cemetery",
+        description:
+            "Deed records related Smith Chapel Cemetery.",
+        updated: "  07 August 2020",
+        category: "Cemeteries",
+    },
+    {
+        title: "Family Files",
+        description:
+            "An index of family files that may include documents such as genealogy charts, photographs, death certificates, newspaper articles, etc. New documents are added to the files as they are discovered.",
+        updated: "20 March 2024",
+        category: "Family History",
     },
 ];
 

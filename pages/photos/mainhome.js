@@ -164,6 +164,331 @@ const records = [
         imagePlaceholder: true,
     }
 ];
+
+
+// =================for photos====================
+
+const imagess = [
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263548/Group_1171281767_vtlbtk.png",
+        caption: "Gentleman of Old Britanny",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/2400350_muzl7w.png",
+        caption: "Dr. Stumberg, WWII, 1940 - 1950",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Al and George: Al with a Rifle and George on a hobby horse",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Wabash Freight Depot, Main and Clark, St. Charles - 1900 - 1920",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263548/Group_1171281767_vtlbtk.png",
+        caption: "Gentleman of Old Britanny",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/2400350_muzl7w.png",
+        caption: "Dr. Stumberg, WWII, 1940 - 1950",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Al and George: Al with a Rifle and George on a hobby horse",
+    },
+
+
+
+];
+
+
+const photos = [
+    {
+        title: "Telescope inside Grover Parker's observatory February 1973 - Parker Collection",
+        description: "3 1/2 x 3 1/2",
+        recordType: "Photo",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "Tank on Parade - 1919 - 1920 - Thomas J. Campbell Collection",
+        description: "2 x 3 1/2",
+        recordType: "Photo",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "Mexico - Vera Cruz - Decampo Monument 1910 - 1920 - Stumberg Family Collection",
+        description: "Map of Missouri counties 3",
+        recordType: "7 x 5",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "A No. 4 Federal Drift Type siren - claimed to be the loudest fire apparatus siren ever made, according to a letter to Mr. Henry Bloebaum, City Clerk, St. Charles dated Nov. 8, 1929. Quoted price was $85.00.",
+        description: "3 1/2 x 5 1/2",
+        recordType: "Photo",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "Telescope inside Grover Parker's observatory February 1973 - Parker Collection",
+        description: "Map of Missouri counties 5",
+        recordType: "Photo",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "Tank on Parade - 1919 - 1920 - Thomas J. Campbell Collection",
+        description: "2 x 3 1/2",
+        recordType: "Photo",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "Mexico - Vera Cruz - Decampo Monument 1910 - 1920 - Stumberg Family Collection",
+        description: "7 x 5",
+        recordType: "Photo",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+
+];
+
+
+// ===========================for Library======================================
+
+
+const immagess = [
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263548/Group_1171281767_vtlbtk.png",
+        caption: "Gentleman of Old Britanny",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/2400350_muzl7w.png",
+        caption: "Dr. Stumberg, WWII, 1940 - 1950",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Al and George: Al with a Rifle and George on a hobby horse",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Wabash Freight Depot, Main and Clark, St. Charles - 1900 - 1920",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263548/Group_1171281767_vtlbtk.png",
+        caption: "Gentleman of Old Britanny",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/2400350_muzl7w.png",
+        caption: "Dr. Stumberg, WWII, 1940 - 1950",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Al and George: Al with a Rifle and George on a hobby horse",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Al and George: Al with a Rifle and George on a hobby horse",
+    },
+
+
+
+];
+
+
+const phottos = [
+    {
+        title: "Historic Inventions - 608",
+        description: "Holland, Rupert S.",
+        recordType: "Library",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "20th Century Bookkeeping and Accounting - 657.2",
+        description: "Baker, James W.",
+        recordType: " Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "Tales & Talk from Down in Pike",
+        description: "GFWC Coterie, Clarksville Missouri",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "The Messages and Proclamations of the Governors of the State of Missouri - 353.9778",
+        description: "Land Entry, Survey.",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "Historic Inventions - 608",
+        description: "Holland, Rupert S.",
+        recordType: "Library",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },   
+    {
+        title: "20th Century Bookkeeping and Accounting - 657.2",
+        description: "Baker, James W.",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "Tales & Talk from Down in Pike",
+        description: "Tales & Talk from Down in Pike",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "The Messages and Proclamations of the Governors of the State of Missouri - 353.9778",
+        description: "Land Entry, Survey.",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+];
+
+
+// =======================for archiver=================================
+
+const immagesss = [
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263548/Group_1171281767_vtlbtk.png",
+        caption: "Gentleman of Old Britanny",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/2400350_muzl7w.png",
+        caption: "Dr. Stumberg, WWII, 1940 - 1950",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Al and George: Al with a Rifle and George on a hobby horse",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Wabash Freight Depot, Main and Clark, St. Charles - 1900 - 1920",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263548/Group_1171281767_vtlbtk.png",
+        caption: "Gentleman of Old Britanny",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/2400350_muzl7w.png",
+        caption: "Dr. Stumberg, WWII, 1940 - 1950",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Al and George: Al with a Rifle and George on a hobby horse",
+    },
+    {
+        src: "https://res.cloudinary.com/dbcmdtr3r/image/upload/v1746263382/213658_fhnlfh.png",
+        caption: "Al and George: Al with a Rifle and George on a hobby horse",
+    },
+
+
+
+];
+
+
+const archive = [
+    {
+        title: "600.001.587 - Map",
+        description: "Map of Missouri counties",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "2008.006.175 - Folder",
+        description: "Land Entry, Survey",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "600.001.574 - Map",
+        description: "Educational poster of Missouri, 1821",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "2008.006.175 - Folder",
+        description: "Land Entry, Survey",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "2008.006.175 - Folder",
+        description: "Land Entry, Survey",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "600.001.574 - Map",
+        description: "Educational poster of Missouri, 1821",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "2008.006.175 - Folder",
+        description: "Land Entry, Survey",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "2008.006.175 - Folder",
+        description: "Land Entry, Survey",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    },
+    {
+        title: "600.001.587 - Map",
+        description: "Educational poster of Missouri, 1821",
+        recordType: "Archive",
+        buttonText: "Know More",
+        imagePlaceholder: true,
+    }
+
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const itemsPerPage = 3;
 export default function contribute(pageProp) {
 
@@ -194,11 +519,23 @@ export default function contribute(pageProp) {
     };
 
     // ===============for archieve================
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1)   ;
 
-    const totalPages = Math.ceil(records.length / itemsPerPage);
+
+    const totalPages = Math.ceil((activeTab === "Photos" ? photos.length : (activeTab === "Libraries"? phottos.length : records.length)) / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = records.slice(startIndex, startIndex + itemsPerPage);
+    const currentItems = (activeTab === "Photos" ? photos : (activeTab === "Libraries"? phottos : records)).slice(startIndex, startIndex + itemsPerPage);
+  
+// const items = activeTab === "Photos" ? phottos : records;
+// const totalPagess = Math.ceil(items.length / itemsPerPage);
+// const startIndexx = (currentPage - 1) * itemsPerPage;
+// const currentItemss = items.slice(startIndex, startIndex + itemsPerPage);
+
+
+    // ======================for photo============
+    // const totalPagess = Math.ceil(photos.length / itemsPerPage);
+    // const currentItemss = photos.slice(startIndex, startIndex + itemsPerPage);
+
 
     const handleClick = (page) => {
         if (page >= 1 && page <= totalPages) {
@@ -286,7 +623,7 @@ export default function contribute(pageProp) {
                                         <strong>Search Hints:</strong> To search by phrase wrap your criteria in quotes. ex: "Find me"
                                     </p>
                                     <p className="ks-result-count">
-                                        <strong>14251</strong>  Results found. Records searched:  <strong>14251</strong>
+                                        {/* <strong>14251</strong>  Results found. Records searched:  <strong>14251</strong> */}
                                     </p>
                                 </div>
                             )
@@ -388,10 +725,10 @@ export default function contribute(pageProp) {
                                                     return (
                                                         <div key={idx} className="ks-result-card">
                                                             <div className="ks-result-text">
-                                                                <h3 className="ks-result-title">{item?.title}</h3>
-                                                                <p className="ks-result-desc">{item?.description}</p>
-                                                                <p className="ks-record-type"><strong>Record Type:</strong>{item?.recordType}</p>
-                                                                <Link href={"/photos/archieverecord"}><button className="ks-more-button">{item?.buttonText}</button></Link>
+                                                                <h3 className="ks-result-title">{archive[(currentPage-1)*itemsPerPage + idx]?.title}</h3>
+                                                                <p className="ks-result-desc">{archive[(currentPage-1)*itemsPerPage + idx]?.description}</p>
+                                                                <p className="ks-record-type"><strong>Record Type:</strong>{archive[(currentPage-1)*itemsPerPage + idx]?.recordType}</p>
+                                                                <Link href={"/photos/archieverecord"}><button className="ks-more-button">{archive[(currentPage-1)*itemsPerPage + idx]?.buttonText}</button></Link>
                                                             </div>
                                                             <div className="ks-result-image-placeholder"></div>
                                                         </div>
@@ -463,12 +800,12 @@ export default function contribute(pageProp) {
                                                     return (
                                                         <div key={idx} className="ks-result-card">
                                                             <div className="ks-result-text">
-                                                                <h3 className="ks-result-title">{item?.title}</h3>
-                                                                <p className="ks-result-desc">{item?.description}</p>
-                                                                <p className="ks-record-type"><strong>Record Type:</strong>{item?.recordType}</p>
-                                                                <Link href={"/photos/photodetail"}><button className="ks-more-button">{item?.buttonText}</button></Link>
+                                                                <h3 className="ks-result-title">{photos[(currentPage-1)*itemsPerPage + idx]?.title}</h3>
+                                                                <p className="ks-result-desc">{photos[(currentPage-1)*itemsPerPage + idx]?.description}</p>
+                                                                <p className="ks-record-type"><strong>Record Type:</strong>{photos[(currentPage-1)*itemsPerPage + idx]?.recordType}</p>
+                                                                <Link href={"/photos/photodetail"}><button className="ks-more-button">{photos[(currentPage-1)*itemsPerPage + idx]?.buttonText}</button></Link>
                                                             </div>
-                                                            <img className="test_photo_img" src="https://res.cloudinary.com/dgif730br/image/upload/v1745681045/Group_1171281766_eplmhr.png" />
+                                                            <img className="test_photo_img" src={imagess[(currentPage-1)*itemsPerPage + idx].src} />
                                                         </div>
                                                     )
                                                 })
@@ -537,10 +874,10 @@ export default function contribute(pageProp) {
                                                     return (
                                                         <div key={idx} className="ks-result-card">
                                                             <div className="ks-result-text">
-                                                                <h3 className="ks-result-title">{item?.title}</h3>
-                                                                <p className="ks-result-desc">{item?.description}</p>
-                                                                <p className="ks-record-type"><strong>Record Type:</strong>{item?.recordType}</p>
-                                                                <Link href={"/photos/archieverecord"}><button className="ks-more-button">{item?.buttonText}</button></Link>
+                                                                <h3 className="ks-result-title">{phottos[(currentPage-1)*itemsPerPage + idx]?.title}</h3>
+                                                                <p className="ks-result-desc">{phottos[(currentPage-1)*itemsPerPage + idx]?.description}</p>
+                                                                <p className="ks-record-type"><strong>Record Type:</strong>{phottos[(currentPage-1)*itemsPerPage + idx]?.recordType}</p>
+                                                                <Link href={`/photos/librarydetail?id=${(currentPage - 1) * itemsPerPage + idx}`}><button className="ks-more-button">{phottos[(currentPage-1)*itemsPerPage + idx]?.buttonText}</button></Link>
                                                             </div>
                                                             <div className="ks-result-image-placeholder"></div>
                                                         </div>
@@ -600,7 +937,7 @@ export default function contribute(pageProp) {
                                         <strong>Search Hints:</strong> To search by phrase wrap your criteria in quotes. ex: "Find me"
                                     </p>
                                     <p className="ks-result-count">
-                                        <strong>3627</strong> Results found. Records searched: <strong>3627</strong>
+                                        <strong></strong> No Results found. Records searched: <strong>0</strong>
                                     </p>
                                 </div>
                             )
