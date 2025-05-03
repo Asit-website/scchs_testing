@@ -565,6 +565,8 @@ export default function Navbar(props) {
                   </div>
                 )}
               </div> */}
+
+              
               <div className="schss_parent">
                 {/* Only this button toggles */}
                 <li className="dev_svg" onClick={handleToggle} ref={buttonRef}>
@@ -625,6 +627,8 @@ export default function Navbar(props) {
                   </div>
                 )}
               </div>
+
+
               <li>
                 <Link href={"/archieve"}>Archives</Link>
               </li>

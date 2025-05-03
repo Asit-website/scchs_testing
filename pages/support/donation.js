@@ -90,7 +90,7 @@ export default function donation(pageProp) {
                 </p>
                 <div className="box_1">
                     <p className="box-paragraph">You may make an online donation.</p>
-                    <a href="#">Click Here</a>
+                    <a href="#fghj">Click Here</a>
                 </div>
                 <p className="donation-of-papers">
                     Donations of papers, photographs, books and other miscellaneous documents
@@ -122,7 +122,7 @@ export default function donation(pageProp) {
                     </p>
                 </div>
                 <form>
-                <div className="container-1">
+                <div className="container-1"id="fghj">
                     <div className="form-title">Place a Donation:</div>
                     {/* <form> */}
                         <input

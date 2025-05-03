@@ -10245,45 +10245,43 @@ font-size: 16px;
 
 /* ================================================================navbaar 2nd dropdown hover===========================*/
 
-
-.scchs_nav_ul li:not(.test_sign) a,
-.test_drop p,.newsLetter_why ol li {
+.scchs_nav_ul li:not(.test_sign) a {
   position: relative;
   text-decoration: none;
   transition: color 0.3s ease;
+  color: white;
 }
 
-.scchs_nav_ul li:not(.test_sign) a::after,
-.test_drop p::after {
+/* Underline animation for main menu */
+.scchs_nav_ul li:not(.test_sign) a::after {
   content: '';
   position: absolute;
   left: 0;
   bottom: -2px;
   height: 2px;
   width: 100%;
-  background-color: #0056b3;
+  background-color: #0056b3 !important;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease;
 }
 
-.scchs_nav_ul li:not(.test_sign) a:hover::after,
-.test_drop p:hover::after {
+.scchs_nav_ul li:not(.test_sign) a:hover::after {
   transform: scaleX(1);
 }
 
-.scchs_nav_ul li:not(.test_sign) a:hover,
-.test_drop p:hover {
-  color: #0056b3; 
+.scchs_nav_ul li:not(.test_sign) a:hover {
+  color: #0056b3;
 }
+
 
 
 /* ==================================================================== */
 
 /* nav bar 1st hover ================================================================*/
 
-
-.scchs_ul li a {
+/* ONLY main menu a tag */
+.schss_parent > li.dev_svg > a {
   position: relative;
   text-decoration: none;
   display: inline-block;
@@ -10291,44 +10289,138 @@ font-size: 16px;
   color: white;
 }
 
-
-.test_drop1 a p {
-  position: relative;
-  display: inline-block;
-  transition: color 0.3s ease;
-  color: white;
- 
-}
-
-.scchs_ul li a::after,
-.test_drop1 p::after,
-.test_drop1 a p::after {
+/* Underline effect only for main menu anchor */
+.schss_parent > li.dev_svg > a::after {
   content: '';
   position: absolute;
   left: 0;
   bottom: -2px;
-  height: 2px;
+  height: 1px;
+  background-color: white;
+  width: 0;
+  transition: width 0.3s ease;
+}
+li link{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  background-color: white;
+  width: 0;
+  transition: width 0.3s ease;
+}
+li link{
+  width: 90%;
+
+}
+.schss_parent > li.dev_svg > a:hover::after {
+  width: 100%;
+}
+
+
+
+/* Only direct anchor under li inside the nav UL */
+ul li > a {
+  position: relative;
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.3s ease;
+  color: white;
+}
+
+/* Underline animation */
+ul li > a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
   background-color: white;
   width: 0;
   transition: width 0.3s ease;
 }
 
-.scchs_ul li a:hover::after,
-.test_drop1 p:hover::after,
-.test_drop1 a p:hover::after {
-  width: 100%;
+ul li > a:hover::after {
+  width: 90%;
 }
 
-.scchs_ul li a:hover,
-.test_drop1 p:hover,
-.test_drop1 a p:hover {
-  
-}
 
-.test_sign a,.test_drop1 p,
-.test_sign button {
-  text-decoration: none !important;
-  position: static !important;
-}
 
 /* ====================================== */
+
+
+/* footer bottom css */
+.footer-bottom {
+  margin-top: 40px;
+  padding: 20px 60px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #4b5563; /* Tailwind's gray-600 */
+}
+
+.footer-bottom-top-line {
+  margin-bottom: 20px;
+  border-top: 1.3px solid #06163A;
+  border-top: dotted;
+}
+
+.footer-bottom-content {
+display: flex;
+justify-content: space-between;
+align-items: baseline;
+font-weight: 400;
+font-size: 17px;
+line-height: 40px;
+color: #141A24  ;
+text-transform: capitalize;
+
+}
+
+.footer-bottom-left p {
+  margin: 0;
+}
+
+.footer-bottom-right {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+
+
+.footer-bottom-right a img {
+  width: 37px;
+  height: 26px;
+  object-fit: contain;
+  color: #434850;
+}
+.footer-bottom-connect{
+    color: #141A24;
+    font-size: 19px;
+padding-bottom: 20px;
+}
+@media (max-width:450px) {
+    .footer-bottom{
+        padding: 20px;
+    }
+    .footer-bottom-content{
+        flex-wrap: wrap;
+        font-size: small;
+        justify-content: center;
+    }
+
+    .footer-bottom-left{
+        text-align: center;
+    }
+    .footer-bottom-right a img{
+        height: 15px;
+        width: 15px;
+    
+    }
+    .footer-bottom-connect{
+        font-size: small !important;
+        padding-bottom: 6px;
+    }
+    
+}

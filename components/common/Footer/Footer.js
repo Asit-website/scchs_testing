@@ -320,6 +320,40 @@ export default function Footer(footerProps) {
           </div>
 
 
+       
+          <footer className="footer-bottom">
+  <div className="footer-bottom-top-line" />
+  <div className="footer-bottom-content">
+    <div className="footer-bottom-left">
+      <p>
+        © 2025 St. Charles County Historical Society, Designed By
+        Digitalgrowthus
+      </p>
+    </div>
+    <div className="footer-bottom-right">
+      <span className="footer-bottom-connect">Connect:</span>
+      <a href="#">
+        <img
+          src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg"
+          alt="Facebook"
+        />
+      </a>
+      <a href="#">
+        <img
+          src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"
+          alt="Instagram"
+        />
+      </a>
+      <a href="#">
+        <img
+          src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg"
+          alt="YouTube"
+        />
+      </a>
+    </div>
+  </div>
+</footer>
+
 
         </footer >
 
