@@ -4976,7 +4976,10 @@ justify-content: center !important;
   padding: 8px 30px;
   border-radius: 5px;
 }
-
+.test_sign a button:hover {
+  background-color: rgba(172, 6, 54, 1) !important;
+  color: white;
+}
 .dev_svg {
   display: flex;
   align-items: center;
@@ -6272,17 +6275,17 @@ th {
   overflow: auto;
 }
 
-.info-section1 {
+/* .info-section1 {
   width: 25%;
-}
+} */
 
-.info-section2 {
+/* .info-section2 {
   width: 25%;
-}
+} */
 
-.info-section3 {
+/* .info-section3 {
   width: 50%;
-}
+} */
 
 .info-section3 .grid-2col {
   white-space: nowrap;
@@ -6300,7 +6303,7 @@ th {
 
 .card-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 1.5rem;
   margin-top: 40px;
   padding: 0px 15px;
@@ -6333,7 +6336,7 @@ th {
 .info-card {
   border: 1px solid #d1d5db;
   /* border-top: none; */
-  padding: 1rem;
+  padding: 1.5rem 2.8rem 1.8rem 1rem;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   background-color: white;
@@ -6353,8 +6356,13 @@ th {
   color: rgba(28, 26, 26, 1);
   font-size: 18px;
   font-family: "Euclid-Regular";
-  gap: 20px;
+  gap: 6px;
   margin-bottom: 1.5rem;
+}
+@media(max-width:1210px){
+  .info-card strong{
+    font-size: 16px;
+  }
 }
 
 .info-section3 p {
@@ -6432,7 +6440,7 @@ th {
 .grid-2col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  row-gap: 24px;
+  row-gap: 19px;
   column-gap: 20px;
   margin-top: 4px;
 }
@@ -10235,15 +10243,17 @@ font-size: 16px;
 
 
 
-/* ================================================================dropdown hover*/
+/* ================================================================navbaar 2nd dropdown hover===========================*/
 
-.scchs_nav_ul li a,
-.test_drop p {
+
+.scchs_nav_ul li:not(.test_sign) a,
+.test_drop p,.newsLetter_why ol li {
   position: relative;
   text-decoration: none;
   transition: color 0.3s ease;
 }
-.scchs_nav_ul li a::after,
+
+.scchs_nav_ul li:not(.test_sign) a::after,
 .test_drop p::after {
   content: '';
   position: absolute;
@@ -10257,12 +10267,68 @@ font-size: 16px;
   transition: transform 0.3s ease;
 }
 
-.scchs_nav_ul li a:hover::after,
+.scchs_nav_ul li:not(.test_sign) a:hover::after,
 .test_drop p:hover::after {
   transform: scaleX(1);
 }
 
-.scchs_nav_ul li a:hover,
+.scchs_nav_ul li:not(.test_sign) a:hover,
 .test_drop p:hover {
   color: #0056b3; 
 }
+
+
+/* ==================================================================== */
+
+/* nav bar 1st hover ================================================================*/
+
+
+.scchs_ul li a {
+  position: relative;
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.3s ease;
+  color: white;
+}
+
+
+.test_drop1 a p {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+  color: white;
+ 
+}
+
+.scchs_ul li a::after,
+.test_drop1 p::after,
+.test_drop1 a p::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  background-color: white;
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.scchs_ul li a:hover::after,
+.test_drop1 p:hover::after,
+.test_drop1 a p:hover::after {
+  width: 100%;
+}
+
+.scchs_ul li a:hover,
+.test_drop1 p:hover,
+.test_drop1 a p:hover {
+  
+}
+
+.test_sign a,.test_drop1 p,
+.test_sign button {
+  text-decoration: none !important;
+  position: static !important;
+}
+
+/* ====================================== */

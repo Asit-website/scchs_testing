@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../../components/common/Head/head1";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 
 
@@ -22,8 +23,71 @@ var settingsMorePhotos = {
 
 // const itemsPerPage = 10;
 export default function librarydetail(pageProp) {
+    const router = useRouter();
+    const { id } = router.query;
 
+    const phottos = [
+        {
+            title: "600.001.574",
+            description: "Map",
+            recordType: "Educational poster of Missouri, 1821",
+            buttonText: "Map",
+            buttonTextt:"1986",
+            CatalogNumber:"004.608",
 
+        },
+        {
+            title: "20th Century Bookkeeping and Accounting - 657.2",
+            description: "657.2",
+            recordType: "Baker, James W.",
+            buttonText: "Student's guide to bookkeeping principles and procedures.",
+            buttonTextt:"1928",
+            CatalogNumber:"004.657.2",
+            imagePlaceholder: true,
+        },
+        {
+            title: "Tales & Talk from Down in Pike",
+            description: "GFWC Coterie, Clarksville Missouri",
+            recordType: "Archive",
+            buttonText: "Know More",
+            imagePlaceholder: true,
+        },
+        {
+            title: "The Messages and Proclamations of the Governors of the State of Missouri - 353.9778",
+            description: "Land Entry, Survey.",
+            recordType: "Archive",
+            buttonText: "Know More",
+            imagePlaceholder: true,
+        },
+        {
+            title: "Historic Inventions - 608",
+            description: "Holland, Rupert S.",
+            recordType: "Library",
+            buttonText: "Know More",
+            imagePlaceholder: true,
+        },   
+        {
+            title: "20th Century Bookkeeping and Accounting - 657.2",
+            description: "Baker, James W.",
+            recordType: "Archive",
+            buttonText: "Know More",
+            imagePlaceholder: true,
+        },
+        {
+            title: "Tales & Talk from Down in Pike",
+            description: "Tales & Talk from Down in Pike",
+            recordType: "Archive",
+            buttonText: "Know More",
+            imagePlaceholder: true,
+        },
+        {
+            title: "The Messages and Proclamations of the Governors of the State of Missouri - 353.9778",
+            description: "Land Entry, Survey.",
+            recordType: "Archive",
+            buttonText: "Know More",
+            imagePlaceholder: true,
+        },
+    ];
 
     return (
         <div className="page_shopping_list sop">
@@ -49,9 +113,9 @@ export default function librarydetail(pageProp) {
 
                                     <table>
                                         <tbody>
-                                            <tr>
+                                            {/* <tr>
                                                 <td>Title</td>
-                                                <td>600.001.574</td>
+                                                <td>{600.001.574}</td>
                                             </tr>
                                             <tr>
                                                 <td>Call#</td>
@@ -72,6 +136,33 @@ export default function librarydetail(pageProp) {
                                             <tr>
                                                 <td>Catalog Number</td>
                                                 <td>004.608</td>
+                                            </tr> */}
+
+
+
+                                            <tr>
+                                                <td>Title</td>
+                                                <td>{phottos[id].title}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Call#</td>
+                                                <td>{phottos[id].description}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Author</td>
+                                                <td>{phottos[id].recordType}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Summary</td>
+                                                <td>{phottos[id].buttonText}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Published Date</td>
+                                                <td>{phottos[id].buttonTextt}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Catalog Number</td>
+                                                <td>{phottos[id].CatalogNumber}</td>
                                             </tr>
                                         </tbody>
                                     </table>
