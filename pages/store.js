@@ -16,6 +16,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import ShoppingCollections from "../components/common/shopping/collections";
 import Head from "next/head";
 import HeadSEO1 from "../components/common/Head/head1";
+import { useRouter } from 'next/router';
 
 
 
@@ -42,6 +43,85 @@ const ITEMS_PER_PAGE = 3;
 
 export default function store(pageProp) {
 
+    const [allProduct, setAllProduct] = useState([]);
+    const [allCategory, setAllCategory] = useState([]);
+    const [selectedSlug, setSelectedSlug] = useState('');
+    const [hasSearched, setHasSearched] = useState(false);
+    const [limit, setLimit] = useState(10);
+    const [offset, setOffset] = useState(0);
+    const [totalCount, setTotalCount] = useState(0);
+    const fetchProduct = async () => {
+        try {
+            const resp = await fetch(`https://admin.kmiroofing.com/api/products?limit=${limit}&offset=0&all=1`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+
+            if (resp.status === 200) {
+                const formateddata = await resp.json();
+                console.log(formateddata);
+                setAllProduct(formateddata?.products);
+
+            }
+
+
+        } catch (error) {
+
+            console.error("There was an error fetching the categories:", error);
+        }
+    };
+
+    const fetchCategory = async () => {
+        try {
+
+            const resp = await fetch("https://admin.kmiroofing.com/api/categories", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (resp.status === 200) {
+                const formateddata = await resp.json();
+                setAllCategory(formateddata)
+
+            }
+
+
+        } catch (error) {
+
+            console.error("There was an error fetching the categories:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCategory();
+        fetchProduct();
+    }, [])
+
+
+
+   
+
+
+
+    const fetchProductByCat = async () => {
+        if (!selectedSlug) return;
+        setHasSearched(true);
+        try {
+            const res = await fetch(`https://admin.kmiroofing.com/api/products/category/${selectedSlug}?&offset=0`);
+            const data = await res.json();
+            console.log(data);
+            setAllProduct(data?.products || []);
+        } catch (error) {
+            console.error('Failed to fetch products:', error);
+        }
+    };
+
+
 
 
 
@@ -54,35 +134,28 @@ export default function store(pageProp) {
 
             <div className="event_system_main">
                 <div className="store_heading">
-                   <h2>SCCHS Store</h2>
-                   <p>Members must be logged-in to receive a 10% or greater discount on items in the bookstore. The discount does not apply to events. If you are not a member and would like information about becoming one <Link href="/member/memberlogin"><span>CLICK HERE</span></Link></p>
+                    <h2>SCCHS Store</h2>
+                    <p>Members must be logged-in to receive a 10% or greater discount on items in the bookstore. The discount does not apply to events. If you are not a member and would like information about becoming one <Link href="/member/memberlogin"><span>CLICK HERE</span></Link></p>
                 </div>
                 <div className="event_main">
                     <div className="filters-container">
                         <div className="filters111">
                             <div className="filters-left">
-                                {/* <div className="custom_drop">
-                                    <select className="dropdown">
-                                        <option>Filter by Category</option>
-                                    </select>
-                                </div>
-
-                                <div className="custom_drop">
-                                    <select className="dropdown">
-                                        <option>Timeframe</option>
-                                    </select>
-                                </div> */}
-
                             </div>
                             <div className="event-title-filter ev_tight_fill">
                                 <div className="custom_drop">
-                                    <select className="dropdown small">
+                                    <select value={selectedSlug} onChange={(e) => setSelectedSlug(e.target.value)} className="dropdown small">
                                         <option>Filter by category</option>
+                                        {
+                                            allCategory?.map((item, index) => {
+                                                return <option key={item.id} value={item?.slug}>{item?.name}</option>
+                                            })
+                                        }
                                     </select>
                                 </div>
                                 {/* <span className="for-label">FOR:</span>
                                 <input type="text" className="search-input" /> */}
-                                <button className="search-button">
+                                <button type="button" onClick={fetchProductByCat} className="search-button">
                                     <img width="28" src="https://res.cloudinary.com/dgif730br/image/upload/v1744279927/Mask_group_zicocm.png" alt="this is search image" />
                                 </button>
                             </div>
@@ -92,9 +165,28 @@ export default function store(pageProp) {
                             <div className="listing">
                                 <label>Listing Per Page</label>
                                 <div className="custom_drop custom_drop1">
-                                    <select className="dropdown small">
-                                        <option>50</option>
+                                    <select
+                                        value={limit}
+                                        onChange={(e) => {
+                                            const newLimit = Number(e.target.value);
+                                            setLimit(newLimit);
+                                            console.log(newLimit)
+                                            // Category select ho chuki ho tabhi fetch karo
+                                            if (selectedSlug) {
+                                                fetch(`https://admin.kmiroofing.com/api/products/category/${selectedSlug}?limit=${newLimit}&offset=0`)
+                                                    .then(res => res.json())
+                                                    .then(data => {
+                                                        console.log(data)
+                                                        setAllProduct(data?.products || [2]);
+                                                    });
+                                            }
+                                        }}
+                                    >
+                                        <option value={2}>2</option>
+                                        <option value={4}>4</option>
+                                        <option value={6}>6</option>
                                     </select>
+
                                 </div>
                             </div>
                             <div className="record-info">
@@ -104,19 +196,24 @@ export default function store(pageProp) {
                     </div>
 
                     <div className="custom-grid-container">
-                        {products.map((product, index) => (
+                        {hasSearched && allProduct.length === 0 && <p>No Products Found</p>}
+                        {allProduct.map((product, index) => (
                             <div className="custom-card" key={index}>
-                               <Link href="/storedetail"><img
+                                <Link href={`/storedetail?id=${product?.slug}`}><img
                                     className="custom-card-image"
-                                    src="https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png"
+                                    // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
+                                    src={product?.image}
                                     alt="Product"
                                 /></Link>
                                 <div className="custom-card-content">
-                                    <h3 className="custom-card-title">{product.title}</h3>
-                                    <p className="custom-card-subtitle">{product.subtitle}</p>
-                                    <p className="custom-card-location">{product.location}</p>
+                                    <h3 className="custom-card-title">{product.name}</h3>
+                                    <p className="custom-card-subtitle">{product.slug}</p>
+                                    {/* <p className="custom-card-location">{product.location}</p> */}
+                                    <p className="custom-card-location">MO 1918</p>
                                     <p className="custom-card-updated">
-                                        <span>Last Updated:</span> {product.updated}
+                                        <span>Last Updated:</span> 11 December 2021
+                                        {/* {product.updated} */}
+
                                     </p>
                                     <button
                                         className={`custom-card-button ${!product.inStock ? "out-stock" : ""
@@ -128,6 +225,12 @@ export default function store(pageProp) {
                             </div>
                         ))}
                     </div>
+
+                    {/* <button onClick={() => setOffset(offset - limit)} disabled={offset === 0}>⬅ Prev</button>
+                    <span>Page {Math.floor(offset / limit) + 1}</span>
+                    <button onClick={() => {
+                        if (products.length === limit) setOffset(offset + limit);
+                    }} disabled={products.length < limit}>Next ➡</button> */}
 
 
                 </div>
