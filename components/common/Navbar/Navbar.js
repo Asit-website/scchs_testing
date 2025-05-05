@@ -566,7 +566,7 @@ export default function Navbar(props) {
                 )}
               </div> */}
 
-              
+
               <div className="schss_parent">
                 {/* Only this button toggles */}
                 <li className="dev_svg" onClick={handleToggle} ref={buttonRef}>
@@ -665,7 +665,7 @@ export default function Navbar(props) {
           <div className="scchs_navbar">
             <ul className="scchs_nav_ul">
               <div className="scchs_logo">
-              <a href="/"><img
+                <a href="/"><img
                   src="https://res.cloudinary.com/dgif730br/image/upload/v1745856268/High_Res_SCCHS_Logo_vFINAL_2_1_zlnojv.svg"
                   alt="SCCHS Logo"
                 /></a>
@@ -813,28 +813,33 @@ export default function Navbar(props) {
             </div>
 
             {/* ===========lower nav======= */}
-            {navItemss.map((item, index) => (
+            {navbarItems.map((item, index) => (
               <li
+                // key={index}
+                // className="nav-item"
+                // onClick={() =>
+                //   setActiveDropdown(activeDropdown === index ? null : index)
+                // }
+
                 key={index}
                 className="nav-item"
-                onClick={() =>
-                  setActiveDropdown(activeDropdown === index ? null : index)
-                }
+                onClick={() => toggleDropdown(index)}
+                ref={(el) => (dropdownRefs.current[index] = el)}
               >
                 <span className="nav-title">
-                  <a href={item.link}>{item.title}</a>
-                  {item.dropdown && <span className="arrow">▼</span>}
+                  <Link href={item.parentItems.link}>{item.parentItems.title}</Link>
+                  {item.subItems?.length != 0 && openDropdownIndex === index && <span className="arrow">▼</span>}
                 </span>
-                {item.dropdown && activeDropdown === index && (
+                {item.subItems?.length != 0 && openDropdownIndex === index && (
                   <ul className="dropdown">
-                    {item.dropdown.map((subItem, idx) => (
+                    {item.subItems.map((subItem, idx) => ( 
                       <a href={subItem?.link}><li key={idx} className="dropdown-item">{subItem?.title}</li></a>
                     ))}
                   </ul>
                 )}
               </li>
             ))}
-            <li className="nav-signin">
+            <li className="nav-signin test_sign">
               <button className="signin-btn">SIGN IN</button>
             </li>
           </ul>

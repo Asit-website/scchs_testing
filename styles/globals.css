@@ -5177,6 +5177,7 @@ justify-content: center !important;
   white-space: nowrap;
   cursor: pointer;
   color: rgba(255, 255, 255, 1) !important;
+  font-size: 12px !important;
 }
 
 .dropdown-item:hover {
@@ -9168,10 +9169,13 @@ label {
   .nav-item a {
     text-decoration: none;
     color: rgba(41, 41, 41, 1);
-    font-size: 14px;
+    font-size: 12px;
     font-family: "Euclid-Regular";
+    text-transform: uppercase;
   }
-
+  .scchs_searchbar input{
+    font-size: 14px;
+  }
   .dropdown {
     position: relative;
     top: 0;
