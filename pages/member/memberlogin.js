@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../../components/common/Head/head1";
 import "../css/login.module.scss";
+import { toast } from "react-toastify";
 var settingsMorePhotos = {
     arrows: true,
     dots: false,
@@ -20,6 +21,55 @@ export default function memberlogin(pageProp) {
     const [showLogin, setShowLogin] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+
+    const submitLogin = async (e) => {
+        e.preventDefault(); 
+    
+        const url = `https://admin.kmiroofing.com/api/login`;
+        const payload = {
+           username:username,
+           password:password
+        };
+    
+        try {
+            const response = await fetch(url, {
+                method: "POST", 
+                headers: {
+                    "Content-Type": "application/json", 
+                },
+                body: JSON.stringify(payload), 
+            });
+
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const data = await response.json(); 
+            console.log(data?.user.user_info);
+            
+                localStorage.setItem("scchs_Access" , JSON.stringify(data?.user?.access_token));
+                localStorage.setItem("scchs_User" , JSON.stringify(data?.user?.user_info));
+
+                // added the carts into the user carts 
+                let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+
+                for(let cart of allCarts){
+                     console.log("cart" , cart);
+                    await addToCartApi(cart?.id , data?.user?.access_token);
+                }
+                toast.success(data?.message);
+                setUserName('');
+                setPassword('');
+                router.push("/register2");
+
+        } catch (error) {
+            console.error("Error during login:", error);
+        }
+    };
+
     return (
         <div className="page_shopping_list sop">
             <HeadSEO title={"login"} description={"this is member login page"} image={null} />
@@ -31,12 +81,12 @@ export default function memberlogin(pageProp) {
                 <div className="scchs-login-card">
                     <p className="scchs-info-text">
                         If you are a member, please enter your login information below. If you are not a member, and would like more information about becoming one, please{" "}
-                       <Link href="/membership-information-join-us"><span className="scchs-click-here">CLICK HERE.</span></Link>
+                        <Link href="/membership-information-join-us"><span className="scchs-click-here">CLICK HERE.</span></Link>
                     </p>
                     <h2 className="scchs-login-title">Sign in</h2>
-
+                    <form onSubmit={submitLogin}>
                     <div className="scchs-input-group">
-                        <input type="text" placeholder="Login Name" />
+                        <input required onChange={(e)=> setUserName(e.target.value)} name="username" value={username} type="text" placeholder="Login Name" />
                         <span
                             onClick={() => setShowLogin(!showLogin)}
                             className="scchs-eye-icon"
@@ -50,8 +100,12 @@ export default function memberlogin(pageProp) {
 
                     <div className="scchs-input-group">
                         <input
+                            required
                             type={showPassword ? "text" : "password"}
                             placeholder="Password"
+                            value={password}
+                            name="password"
+                            onChange={(e)=> setPassword(e.target.value)}
                         />
                         <span
                             onClick={() => setShowPassword(!showPassword)}
@@ -64,9 +118,10 @@ export default function memberlogin(pageProp) {
                         </span>
                     </div>
 
-                  <Link style={{textDecoration:"none"}} href="/member/loginchange"><p className="scchs-forgot-link">Forgot Username or Password?</p></Link>
+                    <Link style={{ textDecoration: "none" }} href="/member/loginchange"><p className="scchs-forgot-link">Forgot Username or Password?</p></Link>
 
-                    <button className="scchs-login-button">Login</button>
+                    <button type="submit" className="scchs-login-button">Login</button>
+                    </form>
                 </div>
             </div>
             <div className="login_problem">

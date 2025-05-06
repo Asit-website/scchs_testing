@@ -50,6 +50,7 @@ export default function store(pageProp) {
     const [limit, setLimit] = useState(10);
     const [offset, setOffset] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
+    const router = useRouter();
     const fetchProduct = async () => {
         try {
             const resp = await fetch(`https://admin.kmiroofing.com/api/products?limit=${limit}&offset=0&all=1`, {
@@ -104,10 +105,6 @@ export default function store(pageProp) {
 
 
 
-   
-
-
-
     const fetchProductByCat = async () => {
         if (!selectedSlug) return;
         setHasSearched(true);
@@ -122,7 +119,29 @@ export default function store(pageProp) {
     };
 
 
+    const addToCartApi = async (id) => {
 
+        const resp = await fetch('https://admin.kmiroofing.com/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+            },
+            body: JSON.stringify({
+                product_id: id,
+                quantity: 1,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                alert(data?.message)
+                toggleBoolValue();
+            })
+            .catch(error => console.error('Error:', error));
+
+        // alert(resp)
+    }
 
 
 
@@ -216,10 +235,25 @@ export default function store(pageProp) {
 
                                     </p>
                                     <button
+                                        onClick={() => {
+                                            const productId = product?.id;
+                                            const cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+
+                                            const productExit = cartItems?.some(item => item.id === productId);
+
+                                            if (!productExit) {
+                                                product.quantity = 1;
+                                                cartItems.push(product);
+                                            }
+
+                                            sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
+                                            alert("Product successfuly added");
+                                            router.push("/cart")
+                                        }}
                                         className={`custom-card-button ${!product.inStock ? "out-stock" : ""
                                             }`}
                                     >
-                                        {product.inStock ? "Add To Cart" : "Out Of Stock"}
+                                        {product.inStock ? "Out of Stock" : "Add to Cart"}
                                     </button>
                                 </div>
                             </div>

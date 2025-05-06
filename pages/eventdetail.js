@@ -16,7 +16,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import ShoppingCollections from "../components/common/shopping/collections";
 import Head from "next/head";
 import HeadSEO1 from "../components/common/Head/head1";
-
+import {useRouter} from "next/router";
 
 
 var settingsMorePhotos = {
@@ -41,6 +41,37 @@ export default function eventdetail(pageProp) {
 
     const product = pageProp.page_content.product;
     const customFields = product?.customFields;
+
+    const router = useRouter();
+    const { id } = router.query;
+
+    console.log(id);
+
+    const [aboutnew, setaboutnew] = useState({});
+
+    const fetchnewsbyycat = async (name) => {
+        try {
+
+            const resp = await fetch(`https://admin.kmiroofing.com/api/get-news-details/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (resp.status === 200) {
+                const formateddata = await resp.json();
+                console.log("formare ", formateddata);
+                setaboutnew(formateddata?.news);
+
+            }
+
+
+        } catch (error) {
+
+            console.error("There was an error fetching the categories:", error);
+        }
+    }
 
     return (
         <div className="page_shopping_list sop">

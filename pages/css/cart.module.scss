@@ -11,7 +11,7 @@
     th {
       text-align: center;
       &:first-child {
-        text-align: left;
+        text-align: center;
       }
       padding: 15px 10px;
       border-bottom: 1px solid #f4f4f4;
@@ -22,13 +22,17 @@
       line-height: normal;
 
       &.item_th_1 {
-        width: 50%;
+        width: auto;
       }
       &.item_th_2 {
-        text-align: left;
+        text-align: center;
       }
       &.item_th_4 {
-        text-align: right;
+        text-align: center;
+      }
+      span{
+        display: block;
+        margin: auto;
       }
     }
     @include sm-desktop {
@@ -184,6 +188,8 @@
 .imageWithContent {
   display: flex;
   gap: 27px;
+  align-items: center;
+  justify-content: center;
   .left {
     img {
       width: 91px;
@@ -225,7 +231,7 @@
       border: none;
       padding: 0;
       margin: 0;
-      color: #ff5449;
+      color: #00315C;
       font-size: 14px;
       font-style: normal;
       font-weight: 400;
@@ -421,4 +427,9 @@
         font-size: 16px;
         }
     }
+}
+.test_carting span{
+  display: block !important;
+  text-align: center !important;
+  margin: auto !important;
 }

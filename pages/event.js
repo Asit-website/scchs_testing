@@ -27,73 +27,73 @@ var settingsMorePhotos = {
     slidesToScroll: 1
 };
 
-const cards = [
-    {
-        date: "March 29, 2025",
-        time: "10am - 7pm",
-        title: "ROCK N ROLL BINGO",
-        image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
-        description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
-    },
-    {
-        date: "March 29, 2025",
-        time: "10am - 7pm",
-        title: "ROCK N ROLL BINGO",
-        image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
-        description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
-    },
-    {
-        date: "March 29, 2025",
-        time: "10am - 7pm",
-        title: "ROCK N ROLL BINGO",
-        image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
-        description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
-    },
+// const cards = [
+//     {
+//         date: "March 29, 2025",
+//         time: "10am - 7pm",
+//         title: "ROCK N ROLL BINGO",
+//         image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
+//         description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
+//     },
+//     {
+//         date: "March 29, 2025",
+//         time: "10am - 7pm",
+//         title: "ROCK N ROLL BINGO",
+//         image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
+//         description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
+//     },
+//     {
+//         date: "March 29, 2025",
+//         time: "10am - 7pm",
+//         title: "ROCK N ROLL BINGO",
+//         image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
+//         description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
+//     },
 
-    {
-        date: "March 29, 2025",
-        time: "10am - 7pm",
-        title: "ROCK N ROLL BINGO",
-        image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
-        description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
-    },
-    {
-        date: "March 29, 2025",
-        time: "10am - 7pm",
-        title: "ROCK N ROLL BINGO",
-        image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
-        description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
-    },
-    {
-        date: "March 29, 2025",
-        time: "10am - 7pm",
-        title: "ROCK N ROLL BINGO",
-        image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
-        description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
-    },
-    {
-        date: "March 29, 2025",
-        time: "10am - 7pm",
-        title: "ROCK N ROLL BINGO",
-        image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
-        description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
-    },
-    {
-        date: "March 29, 2025",
-        time: "10am - 7pm",
-        title: "ROCK N ROLL BINGO",
-        image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
-        description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
-    },
-    {
-        date: "March 29, 2025",
-        time: "10am - 7pm",
-        title: "ROCK N ROLL BINGO",
-        image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
-        description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
-    },
-    // repeat for other cards
-];
+//     {
+//         date: "March 29, 2025",
+//         time: "10am - 7pm",
+//         title: "ROCK N ROLL BINGO",
+//         image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
+//         description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
+//     },
+//     {
+//         date: "March 29, 2025",
+//         time: "10am - 7pm",
+//         title: "ROCK N ROLL BINGO",
+//         image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
+//         description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
+//     },
+//     {
+//         date: "March 29, 2025",
+//         time: "10am - 7pm",
+//         title: "ROCK N ROLL BINGO",
+//         image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
+//         description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
+//     },
+//     {
+//         date: "March 29, 2025",
+//         time: "10am - 7pm",
+//         title: "ROCK N ROLL BINGO",
+//         image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
+//         description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
+//     },
+//     {
+//         date: "March 29, 2025",
+//         time: "10am - 7pm",
+//         title: "ROCK N ROLL BINGO",
+//         image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
+//         description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
+//     },
+//     {
+//         date: "March 29, 2025",
+//         time: "10am - 7pm",
+//         title: "ROCK N ROLL BINGO",
+//         image: "https://res.cloudinary.com/dgif730br/image/upload/v1744273279/1740627457_bingo_d7m6tj.png", // use your actual image
+//         description: `ROCK 'N' ROLL BINGO Presented By The Saint Charles County Historical Society SATURDAY, MARCH 29, 2025 - DOORS OPEN AT 6:00PM, EVENT STARTS AT 7:00PM $200 PER TABLE OF 8 OR $25 PER PERSON Free Soda And Water, BYO`
+//     },
+//     // repeat for other cards
+// ];
 
 const ITEMS_PER_PAGE = 3;
 
@@ -190,31 +190,43 @@ export default function events(pageProp) {
 
     // console.log("allnew ", alnews)
 
-    // const [cards,setCards] = useState([]);
+    const [cards, setCards] = useState([]);
 
-    // const fetchAllNews = async (page = 1) => {
-    //     try {
-    //         const resp = await fetch(`https://admin.kmiroofing.com/api/get-event`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             }
-    //         });
+    const fetchAllNews = async () => {
+        try {
+            const resp = await fetch(`https://admin.kmiroofing.com/api/get-event`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
 
-    //         if (resp.status === 200) {
-    //             const formateddata = await resp.json();
-    //             setCards(formateddata?.events);
-    //             // setTotalPages(Math.ceil(formateddata?.news?.length / itemsPerPage)); // Calculate total pages
-    //         }
-    //     } catch (error) {
-    //         console.error("There was an error fetching the news:", error);
-    //     }
-    // };
+            if (resp.status === 200) {
+                const formateddata = await resp.json();
+                setCards(formateddata?.events);
+                // setTotalPages(Math.ceil(formateddata?.news?.length / itemsPerPage)); // Calculate total pages
+            }
+        } catch (error) {
+            console.error("There was an error fetching the news:", error);
+        }
+    };
 
-    // useEffect(()=>{
-    //   fetchAllNews();
-    // },[])
+    useEffect(() => {
+        fetchAllNews();
+    }, [])
 
+    const formatTime = (timeStr) => {
+        const [hour, minute] = timeStr.split(':');
+        const date = new Date();
+        date.setHours(hour);
+        date.setMinutes(minute);
+
+        return new Intl.DateTimeFormat('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+        }).format(date);
+    };
 
 
     return (
@@ -226,7 +238,7 @@ export default function events(pageProp) {
             <div className="event_system_main">
 
                 <div className="event_main">
-                    
+
                     <div className="filters-container">
                         <div>
                             <div className="filters-left">
@@ -277,13 +289,23 @@ export default function events(pageProp) {
                         {cards.map((card, index) => (
                             <div className="event-card" key={index}>
                                 <div className="card-header">
-                                    <span>{card.date}</span>
-                                    <span>{card.time}</span>
+                                    <span>{
+                                        new Intl.DateTimeFormat('en-GB', {
+                                            day: 'numeric',
+                                            month: 'long',
+                                            year: 'numeric',
+                                        }).format(new Date(card.date))
+                                    }
+                                    </span>
+                                    <span>{
+                                        formatTime(card?.start_time)
+                                    }
+                                        - {formatTime(card?.end_time)}</span>
                                 </div>
-                                <img src={card.image} alt="Event" className="card-image" />
+                                <img src={`https://admin.kmiroofing.com/backend/admin/images/event_management/events/${card?.images[0]}`} alt="Event" className="card-image" />
                                 <div className="card-content">
                                     <h3>{card.title}</h3>
-                                    <p>{card.description}</p>
+                                    <p>{card.short_description}</p>
                                     <Link href="/eventdetail"><button className="info-btn">
                                         More Info <span className="arrow-icon"></span>
                                     </button></Link>

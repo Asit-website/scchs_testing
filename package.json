@@ -30,6 +30,7 @@
     "react-multi-date-picker": "^4.4.1",
     "react-search-autocomplete": "^8.5.2",
     "react-slick": "^0.29.0",
+    "react-toastify": "^11.0.5",
     "sass": "^1.63.6",
     "slick-carousel": "^1.8.1",
     "socket.io": "^4.7.2",

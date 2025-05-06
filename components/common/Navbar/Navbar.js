@@ -570,7 +570,8 @@ export default function Navbar(props) {
               <div className="schss_parent">
                 {/* Only this button toggles */}
                 <li className="dev_svg" onClick={handleToggle} ref={buttonRef}>
-                  <a>Members only</a>
+                  <a href="/member/memberlogin">Members only</a>
+                  
                   {isOpen && (
                     <svg
                       width="10"

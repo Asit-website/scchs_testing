@@ -3150,7 +3150,7 @@ button {
 .site-button {
   width: 124px;
   height: 34px;
-  background-color: #EC691F;
+  background-color: #00315C;
   border-radius: 26.5px;
   margin-top: 10px;
   cursor: pointer;
@@ -3814,8 +3814,13 @@ justify-content: center !important;
 
 .test_carting td {
   width: 25%;
+  text-align: center;
 }
-
+.cart_container{
+  padding: 0px 60px;
+  max-width: 1720px;
+  margin: auto;
+}
 .site_button1 {
   display: block;
   width: auto !important;
@@ -5442,9 +5447,10 @@ justify-content: center !important;
   width: 100%;
   height: auto;
   border-radius: 0;
-  object-fit: cover;
   padding: 10px;
   border-radius: 16px;
+  min-height: 300px;
+  object-fit: cover;
 }
 
 .card-content {
@@ -5466,6 +5472,8 @@ justify-content: center !important;
   line-height: 1.6;
   color: rgba(8, 13, 23, 1);
   font-family: "Euclid-Regular";
+  height: 50px;
+  overflow: hidden;
 }
 
 
