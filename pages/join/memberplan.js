@@ -399,6 +399,8 @@ export default function memberplan(pageProp) {
                           const result = await response.json();
                           console.log("Purchase API response:", result);
 
+                          toast.success("membership plan purchased successfully")
+
                           // Optional: show success message or redirect
                         } catch (error) {
                           console.error("Error during payment or API call:", error);
