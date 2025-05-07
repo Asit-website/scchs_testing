@@ -3084,6 +3084,7 @@ button {
   font-size: 18px;
   text-decoration: none;
   line-height: 26px;
+  width: -webkit-fill-available;
 }
 
 .editor-content li span,
@@ -5119,8 +5120,12 @@ justify-content: center !important;
   padding: 10px 20px;
   position: relative;
   display: none;
+  z-index: 100;
 }
-
+.text_red{
+  color: rgba(171, 5, 53, 1);
+  margin-top: 5px;
+}
 .logo-and-toggle {
   display: flex;
   justify-content: space-between;

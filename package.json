@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.8.3",
     "autoprefixer": "10.4.14",
     "cross-env": "^7.0.3",
     "eslint": "8.43.0",

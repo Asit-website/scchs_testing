@@ -48,13 +48,7 @@ export default function register1(pageProp) {
 
     const [step, setStep] = useState(1);
 
-    const handleNext = () => {
-        setStep((prev) => prev + 1)
-    }
-
-    const handlePrevious = () => {
-        setStep((prev) => prev - 1)
-    }
+   
 
     const router = useRouter();
 
@@ -79,6 +73,12 @@ export default function register1(pageProp) {
     const validate = () => {
         const newErrors = {};
         if (!formData.first_name) newErrors.first_name = "FirstName is required";
+        if (!formData.last_name) newErrors.last_name = "LastName is required";
+        // if (!formData.address) newErrors.address = "Address is required";
+        // if (!formData.city) newErrors.city = "City is required";
+        // if (!formData.state) newErrors.state = "State is required";
+        // if (!formData.postal_code) newErrors.postal_code = "Postal Code is required";
+        // if (!formData.email) newErrors.email = "Email Code is required";
         if (!formData.password) newErrors.password = "Password is required";
         if (!formData.password_confirmation) newErrors.password_confirmation = "Confirm your password";
         if (formData.password && formData.password_confirmation && formData.password !== formData.password_confirmation)
@@ -94,7 +94,7 @@ export default function register1(pageProp) {
             toast.error("Please fix the form errors.");
             return;
         }
-
+ 
         // if (formData.password !== formData.password_confirmation) {
         //     alert("Passwords do not match!");
         //     return;
@@ -135,6 +135,21 @@ export default function register1(pageProp) {
             toast.error(error.message || 'Something went wrong!');
         }
     };
+
+    const handleNext = () => {
+        // const validationErrors = validate();
+        // if (Object.keys(validationErrors).length > 0) {
+        //     setErrors(validationErrors);
+        //     toast.error("Please fix the form errors.");
+        //     return;
+        // }
+        setStep((prev) => prev + 1)
+       
+    }
+
+    const handlePrevious = () => {
+        setStep((prev) => prev - 1)
+    }
 
     return (
         <div className="page_shopping_list sop">
@@ -232,7 +247,7 @@ export default function register1(pageProp) {
                                         <div className="nameform-group">
 
                                             <input onChange={handleChange} name="first_name" value={formData.first_name} className="nameform-input" type="text" placeholder="First Name*" />
-                                            {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
+                                            {errors.first_name && <p className="text_red">{errors.first_name}</p>}
                                         </div>
 
                                         <div className="nameform-group">
@@ -260,7 +275,8 @@ export default function register1(pageProp) {
                                         </div>
 
                                         <div className="nameform-group">
-                                            <input onChange={handleChange} name="last_name" value={formData?.last_name} className="nameform-input" type="text" placeholder="Last Name" />
+                                            <input onChange={handleChange} name="last_name" value={formData?.last_name} className="nameform-input" type="text" placeholder="Last Name*" />
+                                            {errors.last_name && <p className="text_red">{errors.last_name}</p>}
                                         </div>
 
                                         <div className="nameform-group">
@@ -313,7 +329,7 @@ export default function register1(pageProp) {
                                         <h2>Main Contact Information</h2>
                                         <div className="nameform-group nams_group">
 
-                                            <input onChange={handleChange} name="address" value={formData?.address} className="nameform-input" type="text" placeholder="Address" />
+                                            <input onChange={handleChange} name="address" value={formData?.address} className="nameform-input" type="text" placeholder="Address*" />
                                         </div>
 
                                         <div className="nameform-group">
@@ -323,7 +339,7 @@ export default function register1(pageProp) {
 
                                         <div className="nameform-group">
 
-                                            <input onChange={handleChange} name="city" value={formData?.city} className="nameform-input" type="text" placeholder="City" />
+                                            <input onChange={handleChange} name="city" value={formData?.city} className="nameform-input" type="text" placeholder="City*" />
                                         </div>
 
                                         <div className="nameform-group">

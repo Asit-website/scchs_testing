@@ -52,7 +52,7 @@ export default function memberlogin(pageProp) {
             
                 localStorage.setItem("scchs_Access" , JSON.stringify(data?.user?.access_token));
                 localStorage.setItem("scchs_User" , JSON.stringify(data?.user?.user_info));
-
+                
                 // added the carts into the user carts 
                 let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 
@@ -61,9 +61,10 @@ export default function memberlogin(pageProp) {
                     await addToCartApi(cart?.id , data?.user?.access_token);
                 }
                 toast.success(data?.message);
+                router.push("/join/memberplan");
                 setUserName('');
                 setPassword('');
-                router.push("/register2");
+                
 
         } catch (error) {
             console.error("Error during login:", error);
