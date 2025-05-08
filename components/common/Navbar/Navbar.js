@@ -19,6 +19,7 @@ import GlobalOrder from "../svg/global/order";
 import GlobalCart from "../svg/global/cart";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
+import { toast } from "react-toastify";
 
 
 
@@ -36,6 +37,8 @@ export default function Navbar(props) {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navRef = useRef();
+
+  const [membershipStatus, setMembershipStatus] = useState("loading");
 
 
   // ==========this is for mobile responsive=============
@@ -304,22 +307,89 @@ export default function Navbar(props) {
   const [accessToken, setAccessToken] = useState(null);
   const [instaUser, setInstaUser] = useState(null);
 
-  console.log(instaUser)
+  console.log(instaUser);
 
 
 
   const [allProduct, setAllProduct] = useState();
 
-  useEffect(() => {
-    if (typeof window !== "undefined") { // Ensures code only runs in the browser
-      const storedAccessToken = localStorage.getItem("insta_Access");
-      const storedInstaUser = localStorage.getItem("insta_User");
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") { // Ensures code only runs in the browser
+  //     const storedAccessToken = localStorage.getItem("insta_Access");
+  //     const storedInstaUser = localStorage.getItem("insta_User");
 
-      setAccessToken(storedAccessToken ? JSON.parse(storedAccessToken) : null);
-      setInstaUser(storedInstaUser ? JSON.parse(storedInstaUser) : null);
-    }
-  }, []);
+  //     setAccessToken(storedAccessToken ? JSON.parse(storedAccessToken) : null);
+  //     setInstaUser(storedInstaUser ? JSON.parse(storedInstaUser) : null);
+  //   }
+  // }, [instaUser]);
 
+  // const [instaUser, setInstaUser] = useState(null);
+
+
+
+  console.log(accessToken);
+  console.log(instaUser);
+  // ===================purchase===================
+  // useEffect(() => {
+  //   const fetchMembership = async () => {
+  //     try {
+  //       const res = await fetch(`https://admin.kmiroofing.com/api/user-memberships/${instaUser?.id}`);
+  //       const data = await res.json();
+
+  //       console.log(data)
+
+  //       const today = new Date();
+
+  //       const activePlan = data?.data?.find(plan => {
+  //         const isActive = plan.status === "active";
+  //         const endDate = new Date(plan.end_date);
+  //         return isActive && endDate >= today;
+  //       });
+
+  //       setMembershipStatus(activePlan ? "active" : "none");
+  //     } catch (err) {
+  //       console.error("Error fetching membership:", err);
+  //       setMembershipStatus("none");
+  //     }
+  //   };
+
+  //   fetchMembership()
+  // }, []);
+
+  // useEffect(() => {
+  //   const fetchMembership = async () => {
+  //     if (!instaUser?.id) return;
+
+  //     try {
+  //       const res = await fetch(`https://admin.kmiroofing.com/api/user-memberships/${instaUser.id}`);
+  //       const data = await res.json();
+
+  //       console.log("Membership API response:", data);
+
+  //       if (!Array.isArray(data?.data)) {
+  //         // Either no plans or wrong format
+  //         setMembershipStatus("none");
+  //         return;
+  //       }
+
+  //       const today = new Date();
+
+  //       const activePlan = data.data.find(plan => {
+  //         const isActive = plan.status === "active";
+  //         const endDate = new Date(plan.end_date);
+  //         return isActive && endDate >= today;
+  //       });
+
+  //       setMembershipStatus(activePlan ? "active" : "none");
+  //     } catch (err) {
+  //       console.error("Fetch error:", err);
+  //       setMembershipStatus("none");
+  //     }
+  //   };
+
+  //   fetchMembership();
+  // }, []);
+  // ====================purchase end=================
 
   if (typeof props.navbarProps == "undefined" || props.navbarProps == false) {
     return "";
@@ -510,69 +580,149 @@ export default function Navbar(props) {
     }, [openDropdownIndex]);
 
 
+    // useEffect(() => {
+    //   const fetchMembership = async () => {
+    //     if (!instaUser?.id) return;
+
+    //     try {
+    //       const res = await fetch(`https://admin.kmiroofing.com/api/user-memberships/${instaUser.id}`);
+    //       const data = await res.json();
+
+    //       if (!Array.isArray(data.data)) {
+    //         setMembershipStatus("none");
+    //         return;
+    //       }
+
+    //       const today = new Date();
+
+    //       // Find any active, unexpired membership
+    //       const activeMembership = data.data.find(plan => {
+    //         const isActive = plan.status === "active";
+    //         const endDate = new Date(plan.end_date);
+    //         return isActive && endDate >= today;
+    //       });
+
+    //       if (activeMembership) {
+    //         setMembershipStatus("active");
+    //       } else {
+    //         setMembershipStatus("none");
+    //       }
+    //     } catch (error) {
+    //       console.error("Error checking membership:", error);
+    //       setMembershipStatus("none");
+    //     }
+    //   };
+
+    //   fetchMembership();
+    // }, [instaUser?.id]);
 
 
+    // if (membershipStatus === "loading") {
+    //   return <p className="p-6">Checking membership status...</p>;
+    // }
 
+
+    useEffect(() => {
+      // Fetch user from localStorage
+      const storedUser = localStorage.getItem("scchs_User");
+      console.log
+      if (storedUser) {
+        setInstaUser(JSON.parse(storedUser));
+      }
+    }, []);
+
+    console.log(instaUser)
+  
+    useEffect(() => {
+      const fetchMembership = async () => {
+        if (!instaUser?.id) return;
+  
+        try {
+          const res = await fetch(`https://admin.kmiroofing.com/api/user-memberships/${instaUser.id}`);
+          const data = await res.json();
+  
+          const today = new Date();
+  
+          const activePlan = data?.data?.find(plan => {
+            const isActive = plan.status === "active";
+            const endDate = new Date(plan.end_date);
+            return isActive && endDate >= today;
+          });
+  
+          setMembershipStatus(activePlan ? "active" : "none");
+        } catch (err) {
+          console.error("Error fetching membership:", err);
+          setMembershipStatus("none");
+        }
+      };
+  
+      fetchMembership();
+    }, [instaUser]);
+
+    const handleMember = () =>{
+      membershipStatus != "active" && toast.error("pls purchase membership plan")  
+    }
 
     return (
       <>
         {/* desktop view  */}
-
         <div className="scchs_header_up">
           <div className="scchs_header">
             <ul className="scchs_ul">
               {/* <div className="schss_parent" onClick={handleToggle} ref={buttonRef}>
-                <li className="dev_svg">
-                  <a>Members only</a>
+                  <li className="dev_svg">
+                    <a>Members only</a>
+                    {isOpen && (
+                      <svg
+                        width="10"
+                        height="6"
+                        viewBox="0 0 13 8"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5.66016 7.19531L0.328125 1.89062C0.0820312 1.61719 0.0820312 1.20703 0.328125 0.960938L0.957031 0.332031C1.20312 0.0859375 1.61328 0.0859375 1.88672 0.332031L6.125 4.54297L10.3359 0.332031C10.6094 0.0859375 11.0195 0.0859375 11.2656 0.332031L11.8945 0.960938C12.1406 1.20703 12.1406 1.61719 11.8945 1.89062L6.5625 7.19531C6.31641 7.44141 5.90625 7.44141 5.66016 7.19531Z"
+                          fill="white"
+                        />
+                      </svg>
+                    )}
+                  </li>
+  
                   {isOpen && (
-                    <svg
-                      width="10"
-                      height="6"
-                      viewBox="0 0 13 8"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5.66016 7.19531L0.328125 1.89062C0.0820312 1.61719 0.0820312 1.20703 0.328125 0.960938L0.957031 0.332031C1.20312 0.0859375 1.61328 0.0859375 1.88672 0.332031L6.125 4.54297L10.3359 0.332031C10.6094 0.0859375 11.0195 0.0859375 11.2656 0.332031L11.8945 0.960938C12.1406 1.20703 12.1406 1.61719 11.8945 1.89062L6.5625 7.19531C6.31641 7.44141 5.90625 7.44141 5.66016 7.19531Z"
-                        fill="white"
-                      />
-                    </svg>
+                    <div ref={dropdownRef11} className="test_drop1">
+                      <div>
+                        <p>Membership List</p>
+                      </div>
+                      <div>
+                        <p>SCCHS Publications Archives</p>
+                      </div>
+                      <div>
+                        <p>My Profile</p>
+                      </div>
+                      <div>
+                        <p>Logout</p>
+                      </div>
+                      <span>
+                        <div>
+                          <p>Research</p>
+                        </div>
+                        <div>
+                          <p>Cemetery Records</p>
+                        </div>
+                      </span>
+                    </div>
                   )}
-                </li>
+                </div> */}
 
-                {isOpen && (
-                  <div ref={dropdownRef11} className="test_drop1">
-                    <div>
-                      <p>Membership List</p>
-                    </div>
-                    <div>
-                      <p>SCCHS Publications Archives</p>
-                    </div>
-                    <div>
-                      <p>My Profile</p>
-                    </div>
-                    <div>
-                      <p>Logout</p>
-                    </div>
-                    <span>
-                      <div>
-                        <p>Research</p>
-                      </div>
-                      <div>
-                        <p>Cemetery Records</p>
-                      </div>
-                    </span>
-                  </div>
-                )}
-              </div> */}
 
-              
               <div className="schss_parent">
                 {/* Only this button toggles */}
                 <li className="dev_svg" onClick={handleToggle} ref={buttonRef}>
-                  <a href="/member/memberlogin">Members only</a>
                   
-                  {isOpen && (
+                  <Link onClick={handleMember} href="#">Members only</Link>
+
+                  { isOpen && (
+                    membershipStatus === "active" &&
                     <svg
                       width="10"
                       height="6"
@@ -590,6 +740,7 @@ export default function Navbar(props) {
 
                 {/* Dropdown appears separately, not wrapped in toggle */}
                 {isOpen && (
+                   membershipStatus === "active" &&
                   <div ref={dropdownRef11} className="test_drop1">
                     <a href="/member/memberlist"><div><p>Membership List</p></div></a>
                     <div onClick={handleDropdownToggle7} ref={dropdownRef7} className="tyino">
@@ -666,7 +817,7 @@ export default function Navbar(props) {
           <div className="scchs_navbar">
             <ul className="scchs_nav_ul">
               <div className="scchs_logo">
-              <a href="/"><img
+                <a href="/"><img
                   src="https://res.cloudinary.com/dgif730br/image/upload/v1745856268/High_Res_SCCHS_Logo_vFINAL_2_1_zlnojv.svg"
                   alt="SCCHS Logo"
                 /></a>

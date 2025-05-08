@@ -54,14 +54,14 @@ export default function memberlogin(pageProp) {
                 localStorage.setItem("scchs_User" , JSON.stringify(data?.user?.user_info));
                 
                 // added the carts into the user carts 
-                let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+                // let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 
-                for(let cart of allCarts){
-                     console.log("cart" , cart);
-                    await addToCartApi(cart?.id , data?.user?.access_token);
-                }
+                // for(let cart of allCarts){
+                //      console.log("cart" , cart);
+                //     await addToCartApi(cart?.id , data?.user?.access_token);
+                // }
                 toast.success(data?.message);
-                router.push("/join/memberplan");
+                window.location.href = "/join/memberplan";
                 setUserName('');
                 setPassword('');
                 

@@ -18,8 +18,8 @@ var settingsMorePhotos = {
   slidesToScroll: 1
 };
 
-const plans = [
-  { name: 'Individual', for: 'person(s)person(s)', members: '1', fee: '$30.00', description: 'See JOIN US > Member Benefits section.' },
+const planss = [
+  { name: 'Individual', for: 'person(s)', members: '1', fee: '$30.00', description: 'See JOIN US > Member Benefits section.' },
   // { name: 'Individual - Facebook Group Member', for: 'person(s)', members: '1', fee: '$25.00', description: 'See JOIN US > Member Benefits section' },
   { name: 'Family', for: 'person(s)', members: '2', fee: '$45.00', description: 'See JOIN US > Member Benefits section.' },
   // { name: 'Family - Facebook Group Member', for: 'person(s)', members: '2', fee: '$40.00', description: 'See JOIN US > Member Benefits section' },
@@ -147,7 +147,11 @@ export default function memberplan(pageProp) {
   }, []);
 
   console.log(accessToken);
-  console.log(instaUser)
+  console.log(instaUser?.id);
+
+  
+
+  
 
   const fetchPlan = async () => {
     try {
@@ -190,36 +194,38 @@ export default function memberplan(pageProp) {
 
   // console.log(selectedPlan.price)
 
-  const handlePurchaseSuccess = async (details) => {
-    try {
-      const response = await fetch("https://admin.kmiroofing.com/api/membership/purchase", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        //  "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`,
-        body: JSON.stringify({
-          user_id: instaUser.id,
-          membership_plan_id: selectedPlan.id,
-          amount: selectedPlan.price,
-          transaction_id: details.id,
-          payerEmail: details.payer.email_address,
-          currency: "USD"
-        }),
-      });
+  // const handlePurchaseSuccess = async (details) => {
+  //   try {
+  //     const response = await fetch("https://admin.kmiroofing.com/api/membership/purchase", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       //  "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`,
+  //       body: JSON.stringify({
+  //         user_id: instaUser.id,
+  //         membership_plan_id: selectedPlan.id,
+  //         amount: selectedPlan.price,
+  //         transaction_id: details.id,
+  //         payerEmail: details.payer.email_address,
+  //         currency: "USD"
+  //       }),
+  //     });
 
-      if (!response.ok) throw new Error("Purchase failed");
+  //     if (!response.ok) throw new Error("Purchase failed");
 
-      toast.success("Payment successful!");
-    } catch (err) {
-      toast.error("Purchase failed after payment");
-      console.error(err);
-    }
-  };
+  //     toast.success("Payment successful!");
+  //   } catch (err) {
+  //     toast.error("Purchase failed after payment");
+  //     console.error(err);
+  //   }
+  // };
 
   useEffect(() => {
     fetchPlan();
   }, [])
 
   const [showPaypal, setShowPaypal] = useState(false);
+
+  const [hasSameActivePlan, setHasSameActivePlan] = useState(false);
 
   useEffect(() => {
     if (selectedPlan && instaUser) {
@@ -228,8 +234,34 @@ export default function memberplan(pageProp) {
   }, [selectedPlan, instaUser]);
 
 
-
-
+  useEffect(() => {
+    const checkMembership = async () => {
+      try {
+        const res = await fetch(`https://admin.kmiroofing.com/api/user-memberships/${instaUser?.id}`);
+        const data = await res.json();
+  
+        const today = new Date();
+  
+        const alreadyPurchased = data?.data?.some(plan => {
+          const isSamePlan = plan.membership_plan_id === selectedPlan.id;
+          const isActive = plan.status === "active";
+          const endDate = new Date(plan.end_date); // assuming `end_date` is in ISO format
+          const stillValid = endDate >= today;
+  
+          return isSamePlan && isActive && stillValid;
+        });
+  
+        setHasSameActivePlan(alreadyPurchased);
+      } catch (err) {
+        console.error("Error checking membership:", err);
+      }
+    };
+  
+    if (instaUser?.id && selectedPlan?.id) {
+      checkMembership();
+    }
+  }, [instaUser?.id, selectedPlan?.id]);
+  
 
 
   return (
@@ -241,6 +273,8 @@ export default function memberplan(pageProp) {
 
       <div className="event_system_main event_system_main1">
         <div className="event_main">
+
+          
 
           {
             accessToken ? <div className="scchs-wrapper">
@@ -299,7 +333,7 @@ export default function memberplan(pageProp) {
                       </tr>
                     </thead>
                     <tbody>
-                      {plans.map((item, idx) => (
+                      {planss.map((item, idx) => (
                         <tr key={idx}>
                           <td>{item.name}</td>
                           <td>{item.for}</td>
@@ -310,8 +344,8 @@ export default function memberplan(pageProp) {
                             {item?.fee}
                           </td>
                           {/* <td>
-                                                        {item?.description}
-                                                    </td> */}
+                            {item?.description}
+                          </td> */}
                         </tr>
                       ))}
 
@@ -353,63 +387,86 @@ export default function memberplan(pageProp) {
 
                 {showPaypal && selectedPlan && (
                   <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency: "USD" }}>
-                    <PayPalButtons
-                      style={{ layout: "vertical" }}
-                      createOrder={async (data, actions) => {
-                        const amount = Number(selectedPlan?.price || 0).toFixed(2);
-                        console.log("Creating PayPal order for amount:", amount);
-                        return actions.order.create({
-                          purchase_units: [
-                            {
-                              amount: {
-                                value: amount // like "45.00"
-                              },
-                            },
-                          ],
-                        });
+                    {
+                      hasSameActivePlan ?   <div className="text-red-600 font-semibold">
+                      You have already purchased this membership.
+                    </div> :  
+                     <PayPalButtons
+                    //  onClick={(data, actions) => {
+                    //   if (hasSameActivePlan) {
+                    //     alert("You already purchased this plan and it's still active.");
+                    //     return actions.reject();
+                    //   }
+                    //   return actions.resolve();
+                    // }}
+                     style={{ layout: "vertical" }}
+
+                     
+                     
+                     createOrder={async (data, actions) => {
+                      
+                       const amount = Number(selectedPlan?.price || 0).toFixed(2);
+                       console.log("Creating PayPal order for amount:", amount);
+                       return actions.order.create({
+                         purchase_units: [
+                           {
+                             amount: {
+                               value: amount // like "45.00"
+                             },
+                           },
+                         ],
+                       });
 
 
-                      }}
-                      onApprove={async (data, actions) => {
-                        try {
-                          const details = await actions.order.capture();
-                          console.log(details?.id);
-                          console.log("Payment Successful:", details);
-                          //  console.log(details?.pri)
-                          const payload = {
-                            user_id: parseInt(instaUser.id),  // User ID from your application
-                            membership_plan_id: parseInt(selectedPlan.id),  // ID of the selected membership plan
-                            amount: 300,  // Amount in USD or currency, fixed to 2 decimal places
-                            transaction_id: details.id,  // PayPal transaction ID
-                            status: "success",  // Payment status (could also be "completed" depending on flow)
-                            currency: "USD",  // Currency of the payment (can be dynamic if needed)
-                            payment_gateway: "paypal"  // Payment gateway used (PayPal in this case) 
-                          };
+                     }}
 
-                          console.log(payload);
 
-                          const response = await fetch("https://admin.kmiroofing.com/api/membership/purchase", {
-                            method: "POST",
-                            headers: {
-                              "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(payload),
-                          });
+                     onApprove={async (data, actions) => {
 
-                          const result = await response.json();
-                          console.log("Purchase API response:", result);
+                      
+                       try {
+                        
+                         const details = await actions.order.capture();
+                         console.log(details?.id);
+                         console.log("Payment Successful:", details);
+                         //  console.log(details?.pri)
+                         const payload = {
+                           user_id: parseInt(instaUser.id),
+                           membership_plan_id: parseInt(selectedPlan.id),
+                           amount: selectedPlan.price.toFixed(2),
+                           transaction_id: details.id,
+                           // status: "success", 
+                           status: details?.status,
+                           currency: "USD",
+                           payment_gateway: "paypal"
+                         };
 
-                          toast.success("membership plan purchased successfully")
+                         console.log(payload);
 
-                          // Optional: show success message or redirect
-                        } catch (error) {
-                          console.error("Error during payment or API call:", error);
-                        }
-                      }}
-                      onError={(err) => {
-                        alert(`payment succesfull of ${selectedPlan.price}`);
-                      }}
-                    />
+                         const response = await fetch("https://admin.kmiroofing.com/api/membership/purchase", {
+                           method: "POST",
+                           headers: {
+                             "Content-Type": "application/json",
+                           },
+                           body: JSON.stringify(payload),
+                         });
+
+                         const result = await response.json();
+                         console.log("Purchase API response:", result);
+
+                         toast.success("membership plan purchased successfully")
+
+                         // Optional: show success message or redirect
+                       } catch (error) {
+                         console.error("Error during payment or API call:", error);
+                       }
+                     }}
+                     onError={(err) => {
+                       alert(`payment succesfull of ${selectedPlan.price}`);
+                     }}
+                   />
+                    }
+                   
                   </PayPalScriptProvider>
                 )}
 
@@ -487,7 +544,7 @@ export default function memberplan(pageProp) {
             </div> :
               <div>
                 <h1 style={{ textAlign: "center" }}>Need to login for purchase membership plan</h1>
-                <Link href={"/member/memberlogin"}> <button className="scchs_hj_btn">Sign In</button></Link>
+                <Link style={{ textDecoration: "none" }} href={"/member/memberlogin"}> <button className="scchs_hj_btn">Sign In</button></Link>
               </div>
           }
 

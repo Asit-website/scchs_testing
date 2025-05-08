@@ -65,7 +65,6 @@ export default function store(pageProp) {
                 const formateddata = await resp.json();
                 console.log(formateddata);
                 setAllProduct(formateddata?.products);
-
             }
 
 
@@ -221,7 +220,7 @@ export default function store(pageProp) {
                                 <Link href={`/storedetail?id=${product?.slug}`}><img
                                     className="custom-card-image"
                                     // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
-                                    src={product?.image}
+                                    src={`https://admin.kmiroofing.com//public//ecommerce/products/1746447817-WhatsApp%20Image%202025-05-02%20at%203.59.27%20PM.jpeg`}
                                     alt="Product"
                                 /></Link>
                                 <div className="custom-card-content">

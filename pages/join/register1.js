@@ -8,6 +8,7 @@ import HeadSEO1 from "../../components/common/Head/head1";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+// import { format } from "path";
 
 var settingsMorePhotos = {
     arrows: true,
@@ -48,7 +49,7 @@ export default function register1(pageProp) {
 
     const [step, setStep] = useState(1);
 
-   
+
 
     const router = useRouter();
 
@@ -67,34 +68,115 @@ export default function register1(pageProp) {
             ...prev,
             [e.target.name]: e.target.value,
         }));
-        setErrors({ ...errors, [e.target.name]: "" }); // Clear error on type
+        setErrors((prev) => ({
+            ...prev,
+            [e.target.name]: '',
+        }));
     };
 
-    const validate = () => {
+    // const validate = () => {
+    //     const newErrors = {};
+    //     if (!formData.first_name) newErrors.first_name = "FirstName is required";
+    //     if (!formData.last_name) newErrors.last_name = "LastName is required";
+    //     // if (!formData.address) newErrors.address = "Address is required";
+    //     // if (!formData.city) newErrors.city = "City is required";
+    //     // if (!formData.state) newErrors.state = "State is required";
+    //     // if (!formData.postal_code) newErrors.postal_code = "Postal Code is required";
+    //     // if (!formData.email) newErrors.email = "Email Code is required";
+    //     if (!formData.password) newErrors.password = "Password is required";
+    //     if (!formData.password_confirmation) newErrors.password_confirmation = "Confirm your password";
+    //     if (formData.password && formData.password_confirmation && formData.password !== formData.password_confirmation)
+    //       newErrors.password_confirmation = "Passwords do not match";
+    //     return newErrors;
+    // };
+
+
+    const validateStep = (step) => {
         const newErrors = {};
-        if (!formData.first_name) newErrors.first_name = "FirstName is required";
-        if (!formData.last_name) newErrors.last_name = "LastName is required";
-        // if (!formData.address) newErrors.address = "Address is required";
-        // if (!formData.city) newErrors.city = "City is required";
-        // if (!formData.state) newErrors.state = "State is required";
-        // if (!formData.postal_code) newErrors.postal_code = "Postal Code is required";
-        // if (!formData.email) newErrors.email = "Email Code is required";
-        if (!formData.password) newErrors.password = "Password is required";
-        if (!formData.password_confirmation) newErrors.password_confirmation = "Confirm your password";
-        if (formData.password && formData.password_confirmation && formData.password !== formData.password_confirmation)
-          newErrors.password_confirmation = "Passwords do not match";
-        return newErrors;
+
+        if (step === 1) {
+            if (!formData.first_name) newErrors.first_name = 'First name is required';
+            if (!formData.last_name) newErrors.last_name = 'Last name is required';
+        }
+
+
+
+        if (step === 2) {
+            if (!formData.email.trim()) {
+                newErrors.email = 'Email is required';
+            } else {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData.email)) {
+                    newErrors.email = 'Invalid email format';
+                }
+            }
+
+            if (!formData.phone.trim()) {
+                newErrors.phone = 'Phone number is required';
+            } else {
+                const usPhoneRegex = /^(?:\+1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
+                if (!usPhoneRegex.test(formData.phone)) {
+                    newErrors.phone = 'Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX';
+                }
+
+                const usPhoneRegex1 = /^\d{10}$/;
+                if (!usPhoneRegex1.test(formData.phone)) {
+                    newErrors.phone = 'Phone number must be exactly 10 digits';
+                }
+            }
+
+            if (!formData.address) newErrors.address = "Address is required";
+            if (!formData.city) newErrors.city = "City is required";
+            if (!formData.state) newErrors.state = "State is required";
+            if (!formData.postal_code) newErrors.postal_code = "Postal code is required";
+
+        }
+
+        if (step === 3) {
+            if (!formData.username) newErrors.username = 'Username is required';
+            if (!formData.password) newErrors.password = 'Password is required';
+            if (!formData.confirmPassword) newErrors.confirmPassword = 'Confirm Password is required';
+            if (
+                formData.password &&
+                formData.password_confirmation &&
+                formData.password !== formData.password_confirmation
+            ) {
+                newErrors.password_confirmation = 'Passwords do not match';
+            }
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
+
+    const handleNext = () => {
+        if (validateStep(step)) {
+            console.log(step);
+            setStep((prev) => prev + 1);
+        }
+        else {
+            toast.error("fix the form first");
+        }
+
+    }
+
+    const handlePrevious = () => {
+        setStep((prev) => prev - 1)
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const validationErrors = validate();
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-            toast.error("Please fix the form errors.");
-            return;
-        }
- 
+
+        // if (!validateStep(3)) return;
+        // const validationErrors = validate();
+        // if (Object.keys(validationErrors).length > 0) {
+        //     setErrors(validationErrors);
+        //     toast.error("Please fix the form errors.");
+        //     return;
+        // }
+
+
+
         // if (formData.password !== formData.password_confirmation) {
         //     alert("Passwords do not match!");
         //     return;
@@ -136,20 +218,7 @@ export default function register1(pageProp) {
         }
     };
 
-    const handleNext = () => {
-        // const validationErrors = validate();
-        // if (Object.keys(validationErrors).length > 0) {
-        //     setErrors(validationErrors);
-        //     toast.error("Please fix the form errors.");
-        //     return;
-        // }
-        setStep((prev) => prev + 1)
-       
-    }
 
-    const handlePrevious = () => {
-        setStep((prev) => prev - 1)
-    }
 
     return (
         <div className="page_shopping_list sop">
@@ -330,6 +399,9 @@ export default function register1(pageProp) {
                                         <div className="nameform-group nams_group">
 
                                             <input onChange={handleChange} name="address" value={formData?.address} className="nameform-input" type="text" placeholder="Address*" />
+
+                                            {errors.address && <p className="text_red">{errors.address}</p>}
+
                                         </div>
 
                                         <div className="nameform-group">
@@ -340,16 +412,18 @@ export default function register1(pageProp) {
                                         <div className="nameform-group">
 
                                             <input onChange={handleChange} name="city" value={formData?.city} className="nameform-input" type="text" placeholder="City*" />
+                                            {errors.city && <p className="text_red">{errors.city}</p>}
                                         </div>
 
                                         <div className="nameform-group">
-
                                             <input onChange={handleChange} name="state" value={formData?.state} className="nameform-input" type="text" placeholder="State/ Province*" />
+                                            {errors.state && <p className="text_red">{errors.state}</p>}
                                         </div>
 
                                         <div className="nameform-group">
 
                                             <input name="postal_code" onChange={handleChange} value={formData?.postal_code} className="nameform-input" type="text" placeholder="Postal Code*" />
+                                            {errors.postal_code && <p className="text_red">{errors.postal_code}</p>}
                                         </div>
 
                                         <div className="nameform-group">
@@ -357,17 +431,25 @@ export default function register1(pageProp) {
                                         </div>
 
                                         <div className="nameform-group nameformis nameformis1">
-                                            <input onChange={handleChange} name="phone" value={formData?.phone} className="nameform-input" type="text" placeholder="Phone" />
-                                            <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span>
+                                            <input maxLength={10}
+                                                pattern="\d*" onChange={handleChange} name="phone" value={formData?.phone} className="nameform-input" type="text" placeholder="Phone" />
+                                            {
+                                                !errors.phone ? <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span> :
+                                                    <p style={{ marginLeft: "10px" }} className="text_red">{errors.phone}</p>
+                                            }
+
+                                            {/* {errors.phone && } */}
                                         </div>
                                         <div className="nameform-group nameformis nameformis1" >
-                                            <input onChange={handleChange} name="cell_phone" value={formData?.cell_phone} className="nameform-input" type="text" placeholder="Cell Phone" />
-                                            <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span>
+                                            <input maxLength={10}
+                                                pattern="\d*" onChange={handleChange} name="cell_phone" value={formData?.cell_phone} className="nameform-input" type="text" placeholder="Cell Phone" />
+
+                                            {/* <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span> */}
                                         </div>
-                                        <div className="nameform-group nameformis nameformis1">
+                                        {/* <div className="nameform-group nameformis nameformis1">
                                             <input onChange={handleChange} name="int_phone" value={formData?.int_phone} className="nameform-input" type="text" placeholder="Int'l. Phone:" />
                                             <span className="nameform-note name_int">Unformatted</span>
-                                        </div>
+                                        </div> */}
 
 
 
@@ -384,8 +466,8 @@ export default function register1(pageProp) {
                                         </div>
 
                                         <div className="nameform-group">
-                                            <input name="email" onChange={handleChange} value={formData?.email} className="nameform-input" type="text" placeholder="Email*" />
-
+                                            <input name="email" onChange={handleChange} value={formData?.email} className="nameform-input" type="email" placeholder="Email*" />
+                                            {errors.email && <p className="text_red">{errors.email}</p>}
                                         </div>
 
                                         <div className="nameform-group">
@@ -409,7 +491,7 @@ export default function register1(pageProp) {
                                             step < 3 && <button type="button" onClick={() => {
                                                 console.log("step", step);
                                                 handleNext()
-                                            }} className="scchs_hj_btn">Next</button>
+                                            }} className="scchs_hj_btn testing_btn111">Next</button>
                                         }
                                         {/* <button type="button" onClick={handleNext} className="scchs_hj_btn thhy">Next</button> */}
                                     </div>
@@ -426,17 +508,17 @@ export default function register1(pageProp) {
                                     <div className="nameform-container">
                                         <h2>Primary Member Information</h2>
                                         <div className="nameform-group nams_group">
-
                                             <input onChange={handleChange} name="username" value={formData?.username} className="nameform-input" type="text" placeholder="UserName" />
+                                            {errors?.username && <p className="text_red">{errors.username}</p>}
                                         </div>
                                         <div className="nameform-group">
-
                                             <input onChange={handleChange} name="password" value={formData?.password} className="nameform-input" type="password" placeholder="Password" />
+                                            {errors?.password && <p className="text_red">{errors.password}</p>}
                                         </div>
 
                                         <div className="nameform-group">
-
                                             <input name="password_confirmation" onChange={handleChange} value={formData?.password_confirmation} className="nameform-input" type="password" placeholder="Confirm Password" />
+                                            {errors?.password_confirmation && <p className="text_red">{errors.password_confirmation}</p>}
                                         </div>
 
                                     </div>
