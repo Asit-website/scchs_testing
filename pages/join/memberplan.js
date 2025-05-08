@@ -326,7 +326,7 @@ export default function memberplan(pageProp) {
                     <thead>
                       <tr>
                         <th className="nh1">Plan Name</th>
-                        <th className="nh1">For</th>
+                        {/* <th className="nh1">For</th> */}
                         <th>Maximum Associated Members</th>
                         <th>Annual Fee</th>
                         {/* <th>Description</th> */}
@@ -336,7 +336,7 @@ export default function memberplan(pageProp) {
                       {planss.map((item, idx) => (
                         <tr key={idx}>
                           <td>{item.name}</td>
-                          <td>{item.for}</td>
+                          {/* <td>{item.for}</td> */}
                           <td>
                             {item?.members}
                           </td>
