@@ -329,67 +329,7 @@ export default function Navbar(props) {
 
   console.log(accessToken);
   console.log(instaUser);
-  // ===================purchase===================
-  // useEffect(() => {
-  //   const fetchMembership = async () => {
-  //     try {
-  //       const res = await fetch(`https://admin.kmiroofing.com/api/user-memberships/${instaUser?.id}`);
-  //       const data = await res.json();
-
-  //       console.log(data)
-
-  //       const today = new Date();
-
-  //       const activePlan = data?.data?.find(plan => {
-  //         const isActive = plan.status === "active";
-  //         const endDate = new Date(plan.end_date);
-  //         return isActive && endDate >= today;
-  //       });
-
-  //       setMembershipStatus(activePlan ? "active" : "none");
-  //     } catch (err) {
-  //       console.error("Error fetching membership:", err);
-  //       setMembershipStatus("none");
-  //     }
-  //   };
-
-  //   fetchMembership()
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchMembership = async () => {
-  //     if (!instaUser?.id) return;
-
-  //     try {
-  //       const res = await fetch(`https://admin.kmiroofing.com/api/user-memberships/${instaUser.id}`);
-  //       const data = await res.json();
-
-  //       console.log("Membership API response:", data);
-
-  //       if (!Array.isArray(data?.data)) {
-  //         // Either no plans or wrong format
-  //         setMembershipStatus("none");
-  //         return;
-  //       }
-
-  //       const today = new Date();
-
-  //       const activePlan = data.data.find(plan => {
-  //         const isActive = plan.status === "active";
-  //         const endDate = new Date(plan.end_date);
-  //         return isActive && endDate >= today;
-  //       });
-
-  //       setMembershipStatus(activePlan ? "active" : "none");
-  //     } catch (err) {
-  //       console.error("Fetch error:", err);
-  //       setMembershipStatus("none");
-  //     }
-  //   };
-
-  //   fetchMembership();
-  // }, []);
-  // ====================purchase end=================
+  
 
   if (typeof props.navbarProps == "undefined" || props.navbarProps == false) {
     return "";
@@ -580,87 +520,45 @@ export default function Navbar(props) {
     }, [openDropdownIndex]);
 
 
-    // useEffect(() => {
-    //   const fetchMembership = async () => {
-    //     if (!instaUser?.id) return;
+   
 
-    //     try {
-    //       const res = await fetch(`https://admin.kmiroofing.com/api/user-memberships/${instaUser.id}`);
-    //       const data = await res.json();
-
-    //       if (!Array.isArray(data.data)) {
-    //         setMembershipStatus("none");
-    //         return;
-    //       }
-
-    //       const today = new Date();
-
-    //       // Find any active, unexpired membership
-    //       const activeMembership = data.data.find(plan => {
-    //         const isActive = plan.status === "active";
-    //         const endDate = new Date(plan.end_date);
-    //         return isActive && endDate >= today;
-    //       });
-
-    //       if (activeMembership) {
-    //         setMembershipStatus("active");
-    //       } else {
-    //         setMembershipStatus("none");
-    //       }
-    //     } catch (error) {
-    //       console.error("Error checking membership:", error);
-    //       setMembershipStatus("none");
-    //     }
-    //   };
-
-    //   fetchMembership();
-    // }, [instaUser?.id]);
-
-
-    // if (membershipStatus === "loading") {
-    //   return <p className="p-6">Checking membership status...</p>;
-    // }
-
-
+//  =====plan purchased or not=============
     useEffect(() => {
-      // Fetch user from localStorage
       const storedUser = localStorage.getItem("scchs_User");
-      console.log
       if (storedUser) {
         setInstaUser(JSON.parse(storedUser));
       }
     }, []);
 
-    console.log(instaUser)
-  
+    
     useEffect(() => {
       const fetchMembership = async () => {
         if (!instaUser?.id) return;
-  
+
         try {
           const res = await fetch(`https://admin.kmiroofing.com/api/user-memberships/${instaUser.id}`);
           const data = await res.json();
-  
+
           const today = new Date();
-  
+
           const activePlan = data?.data?.find(plan => {
             const isActive = plan.status === "active";
             const endDate = new Date(plan.end_date);
             return isActive && endDate >= today;
           });
-  
+
           setMembershipStatus(activePlan ? "active" : "none");
         } catch (err) {
           console.error("Error fetching membership:", err);
           setMembershipStatus("none");
         }
       };
-  
+
       fetchMembership();
     }, [instaUser]);
 
-    const handleMember = () =>{
-      membershipStatus != "active" && toast.error("pls purchase membership plan")  
+    const handleMember = () => {
+      membershipStatus != "active" && toast.error("Please purchase membership plan");
     }
 
     return (
@@ -718,10 +616,10 @@ export default function Navbar(props) {
               <div className="schss_parent">
                 {/* Only this button toggles */}
                 <li className="dev_svg" onClick={handleToggle} ref={buttonRef}>
-                  
+
                   <Link onClick={handleMember} href="#">Members only</Link>
 
-                  { isOpen && (
+                  {isOpen && (
                     membershipStatus === "active" &&
                     <svg
                       width="10"
@@ -740,7 +638,7 @@ export default function Navbar(props) {
 
                 {/* Dropdown appears separately, not wrapped in toggle */}
                 {isOpen && (
-                   membershipStatus === "active" &&
+                  membershipStatus === "active" &&
                   <div ref={dropdownRef11} className="test_drop1">
                     <a href="/member/memberlist"><div><p>Membership List</p></div></a>
                     <div onClick={handleDropdownToggle7} ref={dropdownRef7} className="tyino">
@@ -771,7 +669,14 @@ export default function Navbar(props) {
                       }
                     </div>
                     <a href="/member/myprofile"><div><p>My Profile</p></div></a>
-                    <div className="logout"><p>Logout</p></div>
+                    <div onClick={() => {
+                      localStorage.removeItem("scchs_Access");
+                      localStorage.removeItem("scchs_User");
+                      setAccessToken(null)
+                      setInstaUser(null)
+                      toast.success("Logout successfully");
+                      window.location.href = "/"
+                    }} className="logout"><p>Logout</p></div>
                     <span>
                       <a href="/research"><div><p>Research</p></div></a>
                       <a href="/cementry"><div><p>Cemetery Records</p></div></a>
