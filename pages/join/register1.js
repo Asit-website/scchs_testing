@@ -361,20 +361,8 @@ export default function register1(pageProp) {
 
                                         <div className="nameform-group nameform-date-group">
                                             <input onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
-                                            <select name="dobMonth" value={formData?.dobMonth} onChange={handleChange} className="nameform-input">
-                                                <option>MM</option>
-                                                <option>01</option>
-                                                <option>02</option>
-                                                <option>03</option>
-                                                {/* More months */}
-                                            </select>
-                                            <select onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input">
-                                                <option>YY</option>
-                                                <option>1990</option>
-                                                <option>1991</option>
-                                                <option>1992</option>
-                                                {/* More years */}
-                                            </select>
+                                            <input onChange={handleChange} name="dobMonth" value={formData?.dobMonth} className="nameform-input" type="text" placeholder="MM" />
+                                             <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
                                         </div>
                                     </div>
                                     {
