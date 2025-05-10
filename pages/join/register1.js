@@ -181,8 +181,8 @@ export default function register1(pageProp) {
             if (!formData.state) newErrors.state = "State is required";
             if (!formData.postal_code) {
                 newErrors.postal_code = "Postal code is required";
-            } else if (!/^\d{6}$/.test(formData.postal_code)) {
-                newErrors.postal_code = "Postal code must be exactly 6 digits and should be number";
+            } else if (!/^\d{5}$/.test(formData.postal_code)) {
+                newErrors.postal_code = "Postal code must be exactly 5 digits and should be number";
             }
 
             if (formData.website?.trim()) {
