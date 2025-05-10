@@ -56,7 +56,7 @@ export default function register1(pageProp) {
     const [formData, setFormData] = useState({
         prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
         dob: '', dobMonth: '', dobYear: '',
-        address: '', address2: '', city: '', state: '', postal_code: '', country: '', phone: '', cell_phone: '', int_phone: '',
+        address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
         preferred: '', email: '', website: '',
         username: '', password: '', password_confirmation: ''
     });
@@ -74,22 +74,59 @@ export default function register1(pageProp) {
         }));
     };
 
-    // const validate = () => {
-    //     const newErrors = {};
-    //     if (!formData.first_name) newErrors.first_name = "FirstName is required";
-    //     if (!formData.last_name) newErrors.last_name = "LastName is required";
-    //     // if (!formData.address) newErrors.address = "Address is required";
-    //     // if (!formData.city) newErrors.city = "City is required";
-    //     // if (!formData.state) newErrors.state = "State is required";
-    //     // if (!formData.postal_code) newErrors.postal_code = "Postal Code is required";
-    //     // if (!formData.email) newErrors.email = "Email Code is required";
-    //     if (!formData.password) newErrors.password = "Password is required";
-    //     if (!formData.password_confirmation) newErrors.password_confirmation = "Confirm your password";
-    //     if (formData.password && formData.password_confirmation && formData.password !== formData.password_confirmation)
-    //       newErrors.password_confirmation = "Passwords do not match";
-    //     return newErrors;
-    // };
 
+    // ===========for phone number============
+    const handlePhoneChange = (e) => {
+        let value = e.target.value;
+        // Remove non-numeric characters
+        value = value.replace(/\D/g, '');
+        if (value.length === 0) {
+            setFormData((prev) => ({ ...prev, mobile_number: '' }));
+        }
+        else if (value.length <= 3) {
+            value = `(${value}`;
+        } else if (value.length <= 6) {
+            value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+        } else {
+            value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+        }
+
+        setFormData((prev) => ({
+            ...prev,
+            mobile_number: value,
+        }));
+        setErrors((prev) => ({
+            ...prev,
+            mobile_number: '',
+        }));
+    };
+
+    const handleCellPhoneChange = (e) => {
+        let value = e.target.value;
+        // Remove non-numeric characters
+        value = value.replace(/\D/g, '');
+        if (value.length === 0) {
+            setFormData((prev) => ({ ...prev, cell_phone: '' }));
+        }
+        else if (value.length <= 3) {
+            value = `(${value}`;
+        } else if (value.length <= 6) {
+            value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+        } else {
+            value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+        }
+
+        setFormData((prev) => ({
+            ...prev,
+            cell_phone: value,
+        }));
+        setErrors((prev) => ({
+            ...prev,
+            cell_phone: '',
+        }));
+    };
+
+    // =================end================
 
     const validateStep = (step) => {
         const newErrors = {};
@@ -98,8 +135,6 @@ export default function register1(pageProp) {
             if (!formData.first_name) newErrors.first_name = 'First name is required';
             if (!formData.last_name) newErrors.last_name = 'Last name is required';
         }
-
-
 
         if (step === 2) {
             if (!formData.email.trim()) {
@@ -111,31 +146,57 @@ export default function register1(pageProp) {
                 }
             }
 
-            if (!formData.phone.trim()) {
-                newErrors.phone = 'Phone number is required';
+            // Phone validation (must be US format like (XXX) XXX-XXXX)
+            if (!formData.mobile_number.trim()) {
+                newErrors.mobile_number = 'Phone number is required';
             } else {
-                const usPhoneRegex = /^(?:\+1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
-                if (!usPhoneRegex.test(formData.phone)) {
-                    newErrors.phone = 'Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX';
-                }
+                const cleanPhone = formData.mobile_number.replace(/\D/g, '');
 
-                const usPhoneRegex1 = /^\d{10}$/;
-                if (!usPhoneRegex1.test(formData.phone)) {
-                    newErrors.phone = 'Phone number must be exactly 10 digits';
+                if (cleanPhone.length !== 10) {
+                    newErrors.mobile_number = 'Phone number must be exactly 10 digits';
+                } else {
+                    const formattedRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
+                    if (!formattedRegex.test(formData.mobile_number)) {
+                        newErrors.mobile_number = 'Format as (XXX) XXX-XXXX';
+                    }
                 }
             }
+
+            // ================cell phone validation=============
+
+
+            // const cleanPhone1 = formData.cell_phone.replace(/\D/g, '');
+
+
+            if (formData.cell_phone.trim()) {
+                const formattedRegex1 = /^\(\d{3}\) \d{3}-\d{4}$/;
+                if (!formattedRegex1.test(formData.cell_phone)) {
+                    newErrors.cell_phone = 'Format as (XXX) XXX-XXXX';
+                }
+            }
+
 
             if (!formData.address) newErrors.address = "Address is required";
             if (!formData.city) newErrors.city = "City is required";
             if (!formData.state) newErrors.state = "State is required";
-            if (!formData.postal_code) newErrors.postal_code = "Postal code is required";
+            if (!formData.postal_code) {
+                newErrors.postal_code = "Postal code is required";
+            } else if (!/^\d{6}$/.test(formData.postal_code)) {
+                newErrors.postal_code = "Postal code must be exactly 6 digits and should be number";
+            }
 
+            if (formData.website?.trim()) {
+                const websiteRegex = /^https?:\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/[\w\-./?%&=]*)?$/;
+                if (!websiteRegex.test(formData.website.trim())) {
+                    newErrors.website = "Invalid website format";
+                }
+            }
         }
 
         if (step === 3) {
             if (!formData.username) newErrors.username = 'Username is required';
             if (!formData.password) newErrors.password = 'Password is required';
-            if (!formData.confirmPassword) newErrors.confirmPassword = 'Confirm Password is required';
+            if (!formData.password_confirmation) newErrors.password_confirmation = 'Confirm Password is required';
             if (
                 formData.password &&
                 formData.password_confirmation &&
@@ -148,6 +209,83 @@ export default function register1(pageProp) {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+
+
+
+
+
+    // const validateStep = (step) => {
+    //     const newErrors = {};
+
+    //     if (step === 1) {
+    //         if (!formData.first_name) newErrors.first_name = 'First name is required';
+    //         if (!formData.last_name) newErrors.last_name = 'Last name is required';
+    //     }
+
+
+
+    //     if (step === 2) {
+    //         if (!formData.email.trim()) {
+    //             newErrors.email = 'Email is required';
+    //         } else {
+    //             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //             if (!emailRegex.test(formData.email)) {
+    //                 newErrors.email = 'Invalid email format';
+    //             }
+    //         }
+
+    //         if (!formData.mobile_number.trim()) {
+    //             newErrors.mobile_number = 'Phone number is required';
+    //         } else {
+    //             const cleanPhone = formData.mobile_number.replace(/\D/g, '')
+    //             // const usPhoneRegex = /^(?:\+1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
+    //             if (!cleanPhone.length !== 10) {
+    //                 // newErrors.phone = 'Phone number must be exactly 10 digits';
+    //             }
+
+    //             // const usPhoneRegex1 = /^\d{10}$/;
+    //             // if (!usPhoneRegex1.test(formData.phone)) {
+    //             //     newErrors.phone = 'Phone number must be exactly 10 digits';
+    //             // }
+    //             else {
+    //                 const formatted = formData.mobile_number.match(/^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/);
+    //                 if (!formatted) {
+    //                     newErrors.mobile_number = 'Format as (XXX) XXX-XXXX';
+    //                 }
+    //             }
+    //         }
+
+    //         if (!formData.address) newErrors.address = "Address is required";
+    //         if (!formData.city) newErrors.city = "City is required";
+    //         if (!formData.state) newErrors.state = "State is required";
+    //         if (!formData.postal_code) newErrors.postal_code = "Postal code is required";
+
+    //         if (formData.website?.trim()) {
+    //             const websiteRegex = /^https:\/\/[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/[\w\-./?%&=]*)?$/;
+    //             if (!websiteRegex.test(formData.website.trim())) {
+    //                 newErrors.website = "Invalid website format";
+    //             }
+    //         }
+
+    //     }
+
+    //     if (step === 3) {
+    //         if (!formData.username) newErrors.username = 'Username is required';
+    //         if (!formData.password) newErrors.password = 'Password is required';
+    //         if (!formData.password_confirmation) newErrors.password_confirmation = 'Confirm Password is required';
+    //         if (
+    //             formData.password &&
+    //             formData.password_confirmation &&
+    //             formData.password !== formData.password_confirmation
+    //         ) {
+    //             newErrors.password_confirmation = 'Passwords do not match';
+    //         }
+    //     }
+
+
+    //     setErrors(newErrors);
+    //     return Object.keys(newErrors).length === 0;
+    // };
 
     const handleNext = () => {
         if (validateStep(step)) {
@@ -167,20 +305,19 @@ export default function register1(pageProp) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // if (!validateStep(3)) return;
-        // const validationErrors = validate();
-        // if (Object.keys(validationErrors).length > 0) {
-        //     setErrors(validationErrors);
-        //     toast.error("Please fix the form errors.");
-        //     return;
-        // }
 
+        const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
+        if (formData.password !== formData.password_confirmation) {
+            toast.error("Password and confirm password must be the same.");
+            return;
+        }
 
-        // if (formData.password !== formData.password_confirmation) {
-        //     alert("Passwords do not match!");
-        //     return;
-        // }
+        if (!passwordRegex.test(formData.password)) {
+            toast.error("Password must be at least 8 characters long, start with a capital letter, and include at least one letter and one special character.");
+            return;
+        }
+
 
         try {
             const response = await fetch('https://admin.kmiroofing.com/api/registration', {
@@ -195,16 +332,17 @@ export default function register1(pageProp) {
 
             console.log(result);
 
-            //   if (!response.ok) {
-            //     throw new Error(result.message || 'Registration failed.');
-            //   }
+            if (result.status === false) {
+                toast.error(result?.message?.email[0]);
+                return;
+            }
 
             //   alert('Registration successful!');
             toast.success("Registered successfully!");
             setFormData({
                 prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
                 dob: '', dobMonth: '', dobYear: '',
-                address: '', address2: '', city: '', state: '', postal_code: '', country: '', phone: '', cell_phone: '', int_phone: '',
+                address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
                 preferred: '', email: '', website: '',
                 username: '', password: '', password_confirmation: ''
             });
@@ -214,7 +352,7 @@ export default function register1(pageProp) {
         } catch (error) {
             console.error('Error:', error);
             //   alert(error.message || 'Something went wrong!');
-            toast.error(error.message || 'Something went wrong!');
+            toast.error("error");
         }
     };
 
@@ -311,7 +449,19 @@ export default function register1(pageProp) {
                                         <h2>Primary Member Information</h2>
                                         <div className="nameform-group nams_group">
 
-                                            <input onChange={handleChange} name="prefix" value={formData.prefix} className="nameform-input" type="text" placeholder="Prefix" />
+                                            {/* <input onChange={handleChange} name="prefix" value={formData.prefix} className="nameform-input" type="text" placeholder="Prefix" /> */}
+                                            <select onChange={handleChange} name="prefix" value={formData.prefix} className="nameform-input" type="text" placeholder="Prefix">
+                                                <option>Prefix</option>
+                                                <option>Mr.</option>
+                                                <option>Mrs.</option>
+                                                <option>Ms.</option>
+                                                <option>Miss.</option>
+                                                <option>Dr.</option>
+                                                <option>Dr.</option>
+                                                <option>Rev.</option>
+                                                <option>Mayor</option>
+                                                <option>Prof.</option>
+                                            </select>
                                         </div>
                                         <div className="nameform-group">
 
@@ -356,13 +506,16 @@ export default function register1(pageProp) {
                                                 <option >Sr.</option>
                                                 <option >II</option>
                                                 <option >III</option>
+                                                <option>Ph.D.</option>
+                                                <option>M.D.</option>
+                                                <option>Atty.</option>
                                             </select>
                                         </div>
 
                                         <div className="nameform-group nameform-date-group">
-                                            <input onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
                                             <input onChange={handleChange} name="dobMonth" value={formData?.dobMonth} className="nameform-input" type="text" placeholder="MM" />
-                                             <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
+                                            <input onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
+                                            <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
                                         </div>
                                     </div>
                                     {
@@ -398,15 +551,133 @@ export default function register1(pageProp) {
                                         </div>
 
                                         <div className="nameform-group">
-
-                                            <input onChange={handleChange} name="city" value={formData?.city} className="nameform-input" type="text" placeholder="City*" />
-                                            {errors.city && <p className="text_red">{errors.city}</p>}
+                                            {/* <input name="country" onChange={handleChange} value={formData?.country} className="nameform-input" type="text" placeholder="Country" /> */}
+                                            <select name="country" onChange={handleChange} value={formData?.country} className="nameform-input">
+                                               <option value={""}>Country</option>
+                                               <option>United States of America</option>
+                                            </select>
                                         </div>
 
                                         <div className="nameform-group">
-                                            <input onChange={handleChange} name="state" value={formData?.state} className="nameform-input" type="text" placeholder="State/ Province*" />
+                                            {/* <input onChange={handleChange} name="state" value={formData?.state} className="nameform-input" type="text" placeholder="State/ Province*" /> */}
+
+                                            <select name="state" value={formData?.state} onChange={handleChange} className="nameform-input">
+                                                <option value={""}>Select State*</option>
+                                                <option>Alabama</option>
+                                                <option>Alaska</option>
+                                                <option>Arizona</option>
+                                                <option>Arkansas</option>
+                                                <option>California</option>
+                                                <option>Colorado</option>
+                                                <option>Connecticut</option>
+                                                <option>Delaware</option>
+                                                <option>Florida</option>
+                                                <option>Georgia</option>
+                                                <option>Hawaii</option>
+                                                <option>Idaho</option>
+                                                <option>Illinois</option>
+                                                <option>Indiana</option>
+                                                <option>Iowa</option>
+                                                <option>Kansas</option>
+                                                <option>Kentucky</option>
+                                                <option>Louisiana</option>
+                                                <option>Maine</option>
+                                                <option>Maryland</option>
+                                                <option>Massachusetts</option>
+                                                <option>Michigan</option>
+                                                <option>Minnesota</option>
+                                                <option>Mississippi</option>
+                                                <option>Missouri</option>
+                                                <option>Montana</option>
+                                                <option>Nebraska</option>
+                                                <option>Nevada</option>
+                                                <option>New Hampshire</option>
+                                                <option>New Jersey</option>
+                                                <option>New Mexico</option>
+                                                <option>New York</option>
+                                                <option>North Carolina</option>
+                                                <option>North Dakota</option>
+                                                <option>Ohio</option>
+                                                <option>Oklahoma</option>
+                                                <option>Oregon</option>
+                                                <option>Pennsylvania</option>
+                                                <option>Rhode Island</option>
+                                                <option>South Carolina</option>
+                                                <option>South Dakota</option>
+                                                <option>Tennessee</option>
+                                                <option>Texas</option>
+                                                <option>Utah</option>
+                                                <option>Vermont</option>
+                                                <option>Virginia</option>
+                                                <option>Washington</option>
+                                                <option>West Virginia</option>
+                                                <option>Wisconsin</option>
+                                                <option>Wyoming</option>
+                                            </select>
+
                                             {errors.state && <p className="text_red">{errors.state}</p>}
                                         </div>
+
+                                        <div className="nameform-group">
+
+                                            {/* <input onChange={handleChange} name="city" value={formData?.city} className="nameform-input" type="text" placeholder="City*" /> */}
+                                            <select onChange={handleChange} name="city" value={formData?.city} className="nameform-input">
+                                                <option value={""}>Select City*</option>
+                                                <option>New York</option>
+                                                <option>Phoenix</option>
+                                                <option>Philadelphia</option>
+                                                <option>San Antonio</option>
+                                                <option>Meridian</option>
+                                                <option>San Francisco</option>
+                                                <option>Dearborn</option>
+                                                <option>Columbus</option>
+                                                <option>Boston</option>
+                                                <option>Las Vegas</option>
+                                                <option>El Paso</option>
+                                                <option>Austin</option>
+                                                <option>Los Angeles</option>
+                                                <option>San Diego</option>
+                                                <option>Boise</option>
+                                                <option>Baton Rouge</option>
+                                                <option>San Jose</option>
+                                                <option>Jacksonville</option>
+                                                <option>Indianapolis</option>
+                                                <option>Seattle</option>
+                                                <option>Baltimore</option>
+                                                <option>Chicago</option>
+                                                <option>Houston</option>
+                                                <option>Dallas</option>
+                                                <option>Nampa</option>
+                                                <option>Oklahoma City</option>
+                                                <option>Montgomery</option>
+                                                <option>Charlotte</option>
+                                                <option>Fort Worth</option>
+                                                <option>Denver</option>
+                                                <option>Trenton</option>
+                                                <option>Detroit</option>
+                                                <option>Kansas City</option>
+                                                <option>Santa Ana</option>
+                                                <option>Allentown</option>
+                                                <option>Anchorage</option>
+                                                <option>Aurora</option>
+                                                <option>Oakland</option>
+                                                <option>Salt Lake City</option>
+                                                <option>Albuquerque</option>
+                                                <option>Akron</option>
+                                                <option>Anaheim</option>
+                                                <option>Garland</option>
+                                                <option>Abilene</option>
+                                                <option>Jersey City</option>
+                                                <option>Atlanta</option>
+                                                <option>Albany</option>
+                                                <option>Arlington</option>
+                                                <option>Tucson</option>
+                                                <option>Augusta</option>
+                                            </select>
+                                            {errors.city && <p className="text_red">{errors.city}</p>}
+                                        </div>
+
+
 
                                         <div className="nameform-group">
 
@@ -414,24 +685,29 @@ export default function register1(pageProp) {
                                             {errors.postal_code && <p className="text_red">{errors.postal_code}</p>}
                                         </div>
 
-                                        <div className="nameform-group">
-                                            <input name="country" onChange={handleChange} value={formData?.country} className="nameform-input" type="text" placeholder="Country" />
-                                        </div>
+
 
                                         <div className="nameform-group nameformis nameformis1">
-                                            <input maxLength={10}
-                                                pattern="\d*" onChange={handleChange} name="phone" value={formData?.phone} className="nameform-input" type="text" placeholder="Phone" />
+                                            <input maxLength={14}
+                                                onChange={handlePhoneChange}
+                                                name="mobile_number"
+                                                value={formData?.mobile_number}
+                                                className="nameform-input"
+                                                type="text"
+                                                placeholder="Phone"
+
+                                            />
                                             {
-                                                !errors.phone ? <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span> :
-                                                    <p style={{ marginLeft: "10px" }} className="text_red">{errors.phone}</p>
+                                                !errors.mobile_number ? <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span> :
+                                                    <p style={{ marginLeft: "10px" }} className="text_red">{errors.mobile_number}</p>
                                             }
 
                                             {/* {errors.phone && } */}
                                         </div>
                                         <div className="nameform-group nameformis nameformis1" >
-                                            <input maxLength={10}
-                                                pattern="\d*" onChange={handleChange} name="cell_phone" value={formData?.cell_phone} className="nameform-input" type="text" placeholder="Cell Phone" />
-
+                                            <input maxLength={14}
+                                                onChange={handleCellPhoneChange} name="cell_phone" value={formData?.cell_phone} className="nameform-input" type="text" placeholder="Cell Phone" />
+                                            {errors.cell_phone && <p className="text_red">{errors.cell_phone}</p>}
                                             {/* <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span> */}
                                         </div>
                                         {/* <div className="nameform-group nameformis nameformis1">
@@ -441,7 +717,7 @@ export default function register1(pageProp) {
 
 
 
-                                        <div className="nameform-group">
+                                        {/* <div className="nameform-group">
 
                                             <select onChange={handleChange} name="preferred_name" value={formData?.preferred_name} className="nameform-input">
                                                 <option >
@@ -451,7 +727,7 @@ export default function register1(pageProp) {
                                                 <option>II</option>
                                                 <option>III</option>
                                             </select>
-                                        </div>
+                                        </div> */}
 
                                         <div className="nameform-group">
                                             <input name="email" onChange={handleChange} value={formData?.email} className="nameform-input" type="email" placeholder="Email*" />
@@ -460,6 +736,7 @@ export default function register1(pageProp) {
 
                                         <div className="nameform-group">
                                             <input onChange={handleChange} name="website" value={formData?.website} className="nameform-input" type="text" placeholder="Website" />
+                                            {errors.website && <p className="text_red">{errors.website}</p>}
                                         </div>
 
                                         <p className="format">Format URL above as <span>https://sitename.com</span> or <span>https://sitename.com</span>/dir/file.html</p>
@@ -500,12 +777,12 @@ export default function register1(pageProp) {
                                             {errors?.username && <p className="text_red">{errors.username}</p>}
                                         </div>
                                         <div className="nameform-group">
-                                            <input onChange={handleChange} name="password" value={formData?.password} className="nameform-input" type="password" placeholder="Password" />
+                                            <input required onChange={handleChange} name="password" value={formData?.password} className="nameform-input" type="password" placeholder="Password" />
                                             {errors?.password && <p className="text_red">{errors.password}</p>}
                                         </div>
 
                                         <div className="nameform-group">
-                                            <input name="password_confirmation" onChange={handleChange} value={formData?.password_confirmation} className="nameform-input" type="password" placeholder="Confirm Password" />
+                                            <input required name="password_confirmation" onChange={handleChange} value={formData?.password_confirmation} className="nameform-input" type="password" placeholder="Confirm Password" />
                                             {errors?.password_confirmation && <p className="text_red">{errors.password_confirmation}</p>}
                                         </div>
 

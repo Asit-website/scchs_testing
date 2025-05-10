@@ -643,7 +643,7 @@ export default function Navbar(props) {
                     <a href="/member/memberlist"><div><p>Membership List</p></div></a>
                     <div onClick={handleDropdownToggle7} ref={dropdownRef7} className="tyino">
                       <p>SCCHS Publications Archives</p>
-                      {isDropdownOpen7 &&
+                      {/* {isDropdownOpen7 && */}
                         <svg
                           width="10"
                           height="6"
@@ -656,7 +656,7 @@ export default function Navbar(props) {
                             fill="white"
                           />
                         </svg>
-                      }
+                      {/* } */}
                       {
                         isDropdownOpen7 &&
 
@@ -677,10 +677,10 @@ export default function Navbar(props) {
                       toast.success("Logout successfully");
                       window.location.href = "/"
                     }} className="logout"><p>Logout</p></div>
-                    <span>
+                    
                       <a href="/research"><div><p>Research</p></div></a>
-                      <a href="/cementry"><div><p>Cemetery Records</p></div></a>
-                    </span>
+                      <a style={{paddingRight:"0px"}} href="/cementry"><div><p>Cemetery Records</p></div></a>
+                   
                   </div>
                 )}
               </div>

@@ -296,7 +296,7 @@ export default function memberplan(pageProp) {
                   enter the name of your company when asked to do so. Otherwise, please
                   enter N/A as a company name.
                 </p>
-                <button type="button" onClick={handleNext} className="scchs-next-btn">Next</button>
+                {/* <button type="button" onClick={handleNext} className="scchs-next-btn">Next</button> */}
               </div>
 
               <div className="scchs-membership-plan">
