@@ -622,8 +622,8 @@ export default function register1(pageProp) {
 
                                             {/* <input onChange={handleChange} name="city" value={formData?.city} className="nameform-input" type="text" placeholder="City*" /> */}
                                             <select onChange={handleChange} name="city" value={formData?.city} className="nameform-input">
-                                                <option value={""}>Select City*</option>
-                                                <option>New York</option>
+                                                <option>Select City*</option>
+                                                {/* <option>New York</option>
                                                 <option>Phoenix</option>
                                                 <option>Philadelphia</option>
                                                 <option>San Antonio</option>
@@ -672,7 +672,7 @@ export default function register1(pageProp) {
                                                 <option>Albany</option>
                                                 <option>Arlington</option>
                                                 <option>Tucson</option>
-                                                <option>Augusta</option>
+                                                <option>Augusta</option> */}
                                             </select>
                                             {errors.city && <p className="text_red">{errors.city}</p>}
                                         </div>
