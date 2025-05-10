@@ -457,7 +457,7 @@ export default function register1(pageProp) {
                                                 <option>Ms.</option>
                                                 <option>Miss.</option>
                                                 <option>Dr.</option>
-                                                <option>Dr.</option>
+                                                {/* <option>Dr.</option> */}
                                                 <option>Rev.</option>
                                                 <option>Mayor</option>
                                                 <option>Prof.</option>
