@@ -35,98 +35,6 @@ const planss = [
 // const itemsPerPage = 10;
 export default function memberplan(pageProp) {
 
-  // const [currentPage, setCurrentPage] = useState(1);
-
-  // const totalPages = Math.ceil(records.length / itemsPerPage);
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const currentItems = records.slice(startIndex, startIndex + itemsPerPage);
-
-  // const handleClick = (page) => {
-  //     if (page >= 1 && page <= totalPages) {
-  //         setCurrentPage(page);
-  //     }
-  // };
-
-
-
-  // const [formData, setFormData] = useState({
-  //     prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
-  //     dob: '', dobMonth: '', dobYear: '',
-  //     address: '', address2: '', city: '', state: '', postal_code: '', country: '', phone: '', cell_phone: '', int_phone: '',
-  //     preferred: '', email: '', website: '',
-  //     username: '', password: '', password_confirmation: ''
-  // });
-
-  // const [errors, setErrors] = useState({});
-
-  // const handleChange = (e) => {
-  //     setFormData((prev) => ({
-  //         ...prev,
-  //         [e.target.name]: e.target.value,
-  //     }));
-  //     setErrors({ ...errors, [e.target.name]: "" }); // Clear error on type
-  // };
-
-  // const validate = () => {
-  //     const newErrors = {};
-  //     if (!formData.first_name) newErrors.first_name = "FirstName is required";
-  //     if (!formData.password) newErrors.password = "Password is required";
-  //     if (!formData.password_confirmation) newErrors.password_confirmation = "Confirm your password";
-  //     if (formData.password && formData.password_confirmation && formData.password !== formData.password_confirmation)
-  //       newErrors.password_confirmation = "Passwords do not match";
-  //     return newErrors;
-  // };
-
-  // const handleSubmit = async (e) => {
-  //     e.preventDefault();
-  //     const validationErrors = validate();
-  //     if (Object.keys(validationErrors).length > 0) {
-  //         setErrors(validationErrors);
-  //         toast.error("Please fix the form errors.");
-  //         return;
-  //     }
-
-  //     // if (formData.password !== formData.password_confirmation) {
-  //     //     alert("Passwords do not match!");
-  //     //     return;
-  //     // }
-
-  //     try {
-  //         const response = await fetch('https://admin.kmiroofing.com/api/registration', {
-  //             method: 'POST',
-  //             headers: {
-  //                 'Content-Type': 'application/json',
-  //             },
-  //             body: JSON.stringify(formData),
-  //         });
-
-  //         const result = await response.json();
-
-  //         console.log(result);
-
-  //         //   if (!response.ok) {
-  //         //     throw new Error(result.message || 'Registration failed.');
-  //         //   }
-
-  //         //   alert('Registration successful!');
-  //         toast.success("Registered successfully!");
-  //         setFormData({
-  //             prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
-  //             dob: '', dobMonth: '', dobYear: '',
-  //             address: '', address2: '', city: '', state: '', postal_code: '', country: '', phone: '', cell_phone: '', int_phone: '',
-  //             preferred: '', email: '', website: '',
-  //             username: '', password: '', password_confirmation: ''
-  //         });
-
-  //         router.push("/member/memberlogin");
-
-  //     } catch (error) {
-  //         console.error('Error:', error);
-  //         //   alert(error.message || 'Something went wrong!');
-  //         toast.error(error.message || 'Something went wrong!');
-  //     }
-  // };
-
   const [plans, setPlans] = useState([]);
   const [selectedPlanId, setSelectedPlanId] = useState("");
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -135,6 +43,8 @@ export default function memberplan(pageProp) {
 
   const [accessToken, setAccessToken] = useState(null);
   const [instaUser, setInstaUser] = useState(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") { // Ensures code only runs in the browser
@@ -455,6 +365,8 @@ export default function memberplan(pageProp) {
                          console.log("Purchase API response:", result);
 
                          toast.success("membership plan purchased successfully")
+                         window.location.href = "/member/welcomemember";
+                         
 
                          // Optional: show success message or redirect
                        } catch (error) {

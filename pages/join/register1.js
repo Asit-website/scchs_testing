@@ -63,6 +63,12 @@ export default function register1(pageProp) {
 
     const [errors, setErrors] = useState({});
 
+
+    const [passwordError, setPasswordError] = useState("");
+    const [passwordError1, setPasswordError1] = useState("");
+
+
+
     const handleChange = (e) => {
         setFormData((prev) => ({
             ...prev,
@@ -305,6 +311,8 @@ export default function register1(pageProp) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // const newerrors1 = {}
+
 
         const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
@@ -314,7 +322,7 @@ export default function register1(pageProp) {
         }
 
         if (!passwordRegex.test(formData.password)) {
-            toast.error("Password must be at least 8 characters long, start with a capital letter, and include at least one letter and one special character.");
+            toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
             return;
         }
 
@@ -553,8 +561,8 @@ export default function register1(pageProp) {
                                         <div className="nameform-group">
                                             {/* <input name="country" onChange={handleChange} value={formData?.country} className="nameform-input" type="text" placeholder="Country" /> */}
                                             <select name="country" onChange={handleChange} value={formData?.country} className="nameform-input">
-                                               <option value={""}>Country</option>
-                                               <option>United States of America</option>
+                                                <option value={""}>Country</option>
+                                                <option>United States of America</option>
                                             </select>
                                         </div>
 
@@ -773,17 +781,50 @@ export default function register1(pageProp) {
                                     <div className="nameform-container">
                                         <h2>Primary Member Information</h2>
                                         <div className="nameform-group nams_group">
-                                            <input onChange={handleChange} name="username" value={formData?.username} className="nameform-input" type="text" placeholder="UserName" />
+                                            <input required onChange={handleChange} name="username" value={formData?.username} className="nameform-input" type="text" placeholder="UserName" />
                                             {errors?.username && <p className="text_red">{errors.username}</p>}
                                         </div>
                                         <div className="nameform-group">
-                                            <input required onChange={handleChange} name="password" value={formData?.password} className="nameform-input" type="password" placeholder="Password" />
-                                            {errors?.password && <p className="text_red">{errors.password}</p>}
+                                            <input required onChange={(e) => {
+                                                const value = e.target.value;
+                                                setFormData({ ...formData, password: value });
+
+                                                const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+                                                if (value && !passwordRegex.test(value)) {
+                                                    setPasswordError(
+                                                        "Password must start with a capital letter, include a special character, and be at least 8 characters long."
+                                                    );
+                                                } else {
+                                                    setPasswordError("");
+                                                }
+                                            }} name="password" value={formData?.password} className="nameform-input" type="password" placeholder="Password" />
+                                            {/* {errors?.password && <p className="text_red">{errors.password}</p>} */}
+                                            {passwordError && (
+                                                <p className="text_red">
+                                                    {passwordError}
+                                                </p>
+                                            )}
                                         </div>
 
                                         <div className="nameform-group">
-                                            <input required name="password_confirmation" onChange={handleChange} value={formData?.password_confirmation} className="nameform-input" type="password" placeholder="Confirm Password" />
-                                            {errors?.password_confirmation && <p className="text_red">{errors.password_confirmation}</p>}
+                                            <input required name="password_confirmation" onChange={(e) => {
+                                                const value = e.target.value;
+                                                const updatedFormData = { ...formData, password_confirmation: value };
+                                                setFormData(updatedFormData);
+
+                                                if (value && updatedFormData.password !== value) {
+                                                    setPasswordError1("Password and confirm password must be same");
+                                                } else {
+                                                    setPasswordError1("");
+                                                }
+                                            }} value={formData?.password_confirmation} className="nameform-input" type="password" placeholder="Confirm Password" />
+                                            {/* {errors?.password_confirmation && <p className="text_red">{errors.password_confirmation}</p>} */}
+                                            {passwordError1 && (
+                                                <p className="text_red">
+                                                    {passwordError1}
+                                                </p>
+                                            )}
                                         </div>
 
                                     </div>
