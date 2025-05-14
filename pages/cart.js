@@ -13,6 +13,9 @@ import GlobalHeaderFooter from "../utils/common/global-header-footer";
 import { constrainedMemory } from "process";
 import { format } from "path";
 import handler from "./api/hello";
+import { toast } from "react-toastify";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 export default function Cart(props) {
 
@@ -41,11 +44,12 @@ export default function Cart(props) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
         }
       });
 
       const data = await response.json();
+      console.log(data);
       console.log(data?.cart);
       setCartData(data?.cart);
     } catch (error) {
@@ -58,7 +62,7 @@ export default function Cart(props) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
         },
         body: JSON.stringify({
           product_id: id,
@@ -80,24 +84,37 @@ export default function Cart(props) {
   }
 
   const clearCarts = async () => {
-    try {
-      const response = await fetch("https://admin.kmiroofing.com/api/cart/clear", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
-        },
+  const result = await Swal.fire({
+    title: 'Clear Cart?',
+    text: 'Are you sure you want to remove all items from your cart?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, clear it!',
+    cancelButtonText: 'Cancel',
+  });
 
-      });
-      const data = await response.json();
-      alert(data?.message)
-      setCartData(data?.cart);
-      toggleBoolValue();
+  if (!result.isConfirmed) return;
 
+  try {
+    const response = await fetch("https://admin.kmiroofing.com/api/cart/clear", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+      },
+    });
 
-    } catch (error) {
-    }
+    const data = await response.json();
+    Swal.fire('Cleared!', data?.message || 'Your cart has been cleared.', 'success');
+    setCartData(data?.cart);
+    toggleBoolValue();
+
+  } catch (error) {
+    Swal.fire('Error', 'Failed to clear the cart. Please try again.', 'error');
   }
+};
 
   const [datas, setDatas] = useState([]);
 
@@ -106,11 +123,11 @@ export default function Cart(props) {
   const getAddress = async () => {
 
     try {
-      const response = await fetch("https://admin.instacertify.com/api/listalladdress", {
+      const response = await fetch("https://admin.kmiroofing.com/api/listalladdress", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
         }
       });
 
@@ -127,11 +144,11 @@ export default function Cart(props) {
   const fetchOrders = async () => {
     try {
 
-      const resp = await fetch("https://admin.instacertify.com/api/orders", {
+      const resp = await fetch("https://admin.kmiroofing.com/api/orders", {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-           "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+           "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
         }
       });
 
@@ -156,7 +173,7 @@ export default function Cart(props) {
 
 
   useEffect(() => {
-    const isLoggedIn = JSON?.parse(localStorage.getItem("insta_Access"));
+    const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
     if (isLoggedIn) {
       sessionStorage.removeItem("cartItems");
       getCarts();
@@ -187,7 +204,7 @@ export default function Cart(props) {
 
   useEffect(() => {
     if (typeof window !== "undefined") { // Ensures code only runs in the browser
-      const storedInstaUser = localStorage.getItem("insta_User");
+      const storedInstaUser = localStorage.getItem("scchs_User");
       setInstaUser(storedInstaUser ? JSON.parse(storedInstaUser) : null);
     }
   }, []);
@@ -197,7 +214,7 @@ export default function Cart(props) {
 
   const paymentHandler = async () => {
 
-    const response = await fetch("https://admin.instacertify.com/api/order/create",
+    const response = await fetch("https://admin.kmiroofing.com/api/order/create",
       {
         method: "POST",
         headers: {
@@ -246,11 +263,11 @@ export default function Cart(props) {
       //     clearCarts();
       //   }
 
-      const resp = await fetch("https://admin.instacertify.com/api/ecommerce/transactions",{
+      const resp = await fetch("https://admin.kmiroofing.com/api/ecommerce/transactions",{
         method:"POST",
         headers: {
           "content-type": "application/json",
-          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
 
         },
         body: JSON.stringify({
@@ -343,7 +360,7 @@ export default function Cart(props) {
                               <div className={style.right}>
                                 <h4>{val?.name || val?.product_name}</h4>
                                 <button onClick={() => {
-                                  const isLoggedIn = JSON?.parse(localStorage.getItem("insta_Access"));
+                                  const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
                                   if (isLoggedIn) {
                                     removeCarts(val.product_id, val.quantity);
                                   }
@@ -434,7 +451,7 @@ export default function Cart(props) {
           {
             cartData?.length > 0 && <button onClick={() => {
 
-              const isLoggedIn = JSON?.parse(localStorage.getItem("insta_Access"));
+              const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
               if (isLoggedIn) {
                 clearCarts();
 
@@ -451,7 +468,7 @@ export default function Cart(props) {
           {
             cartData?.length > 0 && <button onClick={() => {
 
-              const isLoggedIn = JSON?.parse(localStorage.getItem("insta_Access"));
+              const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
               if (isLoggedIn) {
                 if (datas[0]?.id) {
                   paymentHandler()
@@ -488,7 +505,7 @@ export default function Cart(props) {
                 Discount codes can be applied during checkout.
               </p>
 
-              {status == "authenticated" ? (<Link href={cartData?.redirect_urls?.checkout_url} className={style.btnCheckout}>Checkout</Link>) : (<Link href={'/login'} className={style.btnCheckout}>Checkout</Link>)}
+              {instaUser ? (<Link href={cartData?.redirect_urls?.checkout_url} className={style.btnCheckout}>Checkout</Link>) : (<Link href={'/login'} className={style.btnCheckout}>Checkout</Link>)}
 
 
             </div>

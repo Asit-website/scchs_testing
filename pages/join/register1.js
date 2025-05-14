@@ -8,6 +8,8 @@ import HeadSEO1 from "../../components/common/Head/head1";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { State, City } from 'country-state-city';
+import zipcodes from 'us-zips';
 // import { format } from "path";
 
 var settingsMorePhotos = {
@@ -132,7 +134,75 @@ export default function register1(pageProp) {
         }));
     };
 
+
+
     // =================end================
+
+    // ============for usa state city=========
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
+
+    useEffect(() => {
+        const usStates = State.getStatesOfCountry('US');
+        setStates(usStates);
+    }, []);
+
+
+    // useEffect(() => {
+    //     if (formData.state) {
+    //         const stateCities = City.getCitiesOfState('US', formData.state);
+    //         setCities(stateCities);
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             city: '', // reset city when state changes
+    //         }));
+    //     }
+        
+    // }, [formData.state]);
+
+    useEffect(() => {
+    if (formData.state) {
+        // find isoCode from state name
+        const stateObj = State.getStatesOfCountry('US').find(
+            (s) => s.name === formData.state
+        );
+
+        if (stateObj) {
+            const stateCities = City.getCitiesOfState('US', stateObj.isoCode);
+            setCities(stateCities);
+            setFormData((prev) => ({
+                ...prev,
+                city: '', // reset city when state changes
+            }));
+        }
+    }
+}, [formData.state]);
+
+// ===================fetch postal code============
+//  const getZipFromCity = (stateCode, cityName) => {
+//   const match = Object.entries(zipcodes).find(([zip, data]) => {
+//   console.log("Checking:", zip, data); // Add this
+//   return data.state === stateCode.toUpperCase() &&
+//          data.city.toLowerCase() === cityName.toLowerCase();
+// });
+//   console.log(match);
+//   console.log(zipcodes);
+//   return match?.[0] || '';
+// };
+
+// useEffect(() => {
+//   if (formData.state && formData.city) {
+//     const zip = getZipFromCity(formData.state, formData.city);
+//     if (zip) {
+//       setFormData((prev) => ({ ...prev, postal_code: zip }));
+//     }
+//   }
+// }, [formData.state, formData.city]);
+
+    // ==============================end=================
+
+  
+
 
     const validateStep = (step) => {
         const newErrors = {};
@@ -145,6 +215,7 @@ export default function register1(pageProp) {
         if (step === 2) {
             if (!formData.email.trim()) {
                 newErrors.email = 'Email is required';
+               
             } else {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(formData.email)) {
@@ -292,6 +363,12 @@ export default function register1(pageProp) {
     //     setErrors(newErrors);
     //     return Object.keys(newErrors).length === 0;
     // };
+
+
+ 
+
+
+
 
     const handleNext = () => {
         if (validateStep(step)) {
@@ -459,7 +536,7 @@ export default function register1(pageProp) {
 
                                             {/* <input onChange={handleChange} name="prefix" value={formData.prefix} className="nameform-input" type="text" placeholder="Prefix" /> */}
                                             <select onChange={handleChange} name="prefix" value={formData.prefix} className="nameform-input" type="text" placeholder="Prefix">
-                                                <option>Prefix</option>
+                                                <option value={""}>Prefix</option>
                                                 <option>Mr.</option>
                                                 <option>Mrs.</option>
                                                 <option>Ms.</option>
@@ -509,7 +586,7 @@ export default function register1(pageProp) {
                                         <div className="nameform-group">
 
                                             <select onChange={handleChange} name="suffix" value={formData?.suffix} className="nameform-input">
-                                                <option >Suffix</option>
+                                                <option value={""}>Suffix</option>
                                                 <option >Jr.</option>
                                                 <option >Sr.</option>
                                                 <option >II</option>
@@ -569,7 +646,7 @@ export default function register1(pageProp) {
                                         <div className="nameform-group">
                                             {/* <input onChange={handleChange} name="state" value={formData?.state} className="nameform-input" type="text" placeholder="State/ Province*" /> */}
 
-                                            <select name="state" value={formData?.state} onChange={handleChange} className="nameform-input">
+                                            {/* <select name="state" value={formData?.state} onChange={handleChange} className="nameform-input">
                                                 <option value={""}>Select State*</option>
                                                 <option>Alabama</option>
                                                 <option>Alaska</option>
@@ -621,6 +698,15 @@ export default function register1(pageProp) {
                                                 <option>West Virginia</option>
                                                 <option>Wisconsin</option>
                                                 <option>Wyoming</option>
+                                            </select> */}
+
+                                            <select name="state" value={formData.state} onChange={handleChange} className="nameform-input">
+                                                <option value="">Select State</option>
+                                                {states.map((state) => (
+                                                    <option key={state.name} value={state.name}>
+                                                        {state.name}
+                                                    </option>
+                                                ))}  
                                             </select>
 
                                             {errors.state && <p className="text_red">{errors.state}</p>}
@@ -628,7 +714,7 @@ export default function register1(pageProp) {
 
                                         <div className="nameform-group">
 
-                                            <input onChange={handleChange} name="city" value={formData?.city} className="nameform-input" type="text" placeholder="City*" />
+                                            {/* <input onChange={handleChange} name="city" value={formData?.city} className="nameform-input" type="text" placeholder="City*" /> */}
                                             {/* <select onChange={handleChange} name="city" value={formData?.city} className="nameform-input">
                                                 <option>Select City*</option>
                                                 <option>New York</option>
@@ -682,6 +768,14 @@ export default function register1(pageProp) {
                                                 <option>Tucson</option>
                                                 <option>Augusta</option>
                                             </select> */}
+                                            <select name="city" value={formData.city} onChange={handleChange} className="nameform-input">
+                                                <option value="">Select City</option>
+                                                {cities.map((city) => (
+                                                    <option key={city.name} value={city.name}>
+                                                        {city.name}
+                                                    </option>
+                                                ))}
+                                            </select>
                                             {errors.city && <p className="text_red">{errors.city}</p>}
                                         </div>
 

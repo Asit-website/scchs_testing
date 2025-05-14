@@ -1,8 +1,10 @@
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import style from "./css/shoppings-lists.module.scss";
+import style from "./css/cart.module.scss";
 import Link from "next/link";
-
+import Cookies from "js-cookie";
+import { useRouter } from 'next/router';
+import { useSession } from "next-auth/react";
 import HeadSEO from "../components/common/Head/head";
 import GlobalHeaderFooter from "../utils/common/global-header-footer";
 import Navbar from '../components/common/Navbar/Navbar'
@@ -16,6 +18,10 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import ShoppingCollections from "../components/common/shopping/collections";
 import Head from "next/head";
 import HeadSEO1 from "../components/common/Head/head1";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { toast } from "react-toastify";
 
 
 
@@ -37,79 +43,549 @@ export default function storeorder(pageProp) {
     const increase = () => setQuantity(q => q + 1);
     const decrease = () => setQuantity(q => (q > 1 ? q - 1 : 1));
 
+    // ====================
+
+    const { toggleBoolValue, boolValue } = pageProp;
+
+    const [cartLoad, setCartLoad] = useState(true);
+    const [cartEnpty, setCartEnpty] = useState(false);
+    const [cartUpdate, setCartUpdate] = useState(false);
+    const [cartData, setCartData] = useState([]);
+    const { data: session, status } = useSession();
+    const nx_cart_id = Cookies.get("nx_cart_id");
+
+    const router = useRouter();
+
+
+    const [count, setCount] = useState(1);
+
+    // const [payment, setPayment] = useState({})
+
+    const [payment, setPayment] = useState(null);
+    const [payNow, setPayNow] = useState(false);
+
+    const getCarts = async () => {
+
+        try {
+            const response = await fetch("https://admin.kmiroofing.com/api/cart", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                }
+            });
+
+            const data = await response.json();
+            console.log(data?.grand_total);
+            console.log(data);
+            setCartData(data);
+        } catch (error) {
+        }
+    };
+
+    const removeCarts = async (id, qty) => {
+        try {
+            const response = await fetch("https://admin.kmiroofing.com/api/cart/remove", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                },
+                body: JSON.stringify({
+                    product_id: id,
+                    quantity: qty
+                }),
+            });
+
+
+            // if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            toggleBoolValue();
+            setCartData(data?.cart);
+
+            // } 
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const clearCarts = async () => {
+        const result = await Swal.fire({
+            title: 'Clear Cart?',
+            text: 'Are you sure you want to remove all items from your cart?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, clear it!',
+            cancelButtonText: 'Cancel',
+        });
+
+        if (!result.isConfirmed) return;
+
+        try {
+            const response = await fetch("https://admin.kmiroofing.com/api/cart/clear", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                },
+            });
+
+            const data = await response.json();
+            Swal.fire('Cleared!', data?.message || 'Your cart has been cleared.', 'success');
+            setCartData(data?.cart);
+            toggleBoolValue();
+
+        } catch (error) {
+            Swal.fire('Error', 'Failed to clear the cart. Please try again.', 'error');
+        }
+    };
+
+    const [datas, setDatas] = useState([]);
+
+    const [order, setOrder] = useState([]);
+
+    const getAddress = async () => {
+
+        try {
+            const response = await fetch("https://admin.kmiroofing.com/api/listalladdress", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                }
+            });
+
+            const data1 = await response.json();
+            setDatas(data1?.data)
+            console.log(data1.data)
+            // setData(data1?.data);
+            // console.log(data?.user_id);
+
+        } catch (error) {
+        }
+    };
+
+    const fetchOrders = async () => {
+        try {
+
+            const resp = await fetch("https://admin.kmiroofing.com/api/orders", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                }
+            });
+
+
+            const formateddata = await resp.json();
+            console.log(formateddata);
+            setOrder(formateddata)
+
+
+
+
+        } catch (error) {
+
+            console.error("There was an error fetching the categories:", error);
+        }
+    };
+
+    useEffect(() => {
+        getAddress();
+        fetchOrders();
+    }, [])
+
+
+    useEffect(() => {
+        const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+        if (isLoggedIn) {
+            sessionStorage.removeItem("cartItems");
+            getCarts();
+        }
+        else {
+            let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+            console.log("alllca0", allCarts);
+            setCartData(allCarts);
+        }
+    }, [boolValue])
+
+    useEffect(() => {
+        const loadRazorpayScript = async () => {
+            // Check if Razorpay script is not already loaded
+            if (!window.Razorpay) {
+                const script = document.createElement('script');
+                script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                script.async = true;
+                document.body.appendChild(script);
+            }
+        };
+
+        loadRazorpayScript();
+    }, []); // Empty dependency array ensures it runs only once after mount
+
+
+    const [instaUser, setInstaUser] = useState(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") { // Ensures code only runs in the browser
+            const storedInstaUser = localStorage.getItem("scchs_User");
+            setInstaUser(storedInstaUser ? JSON.parse(storedInstaUser) : null);
+        }
+    }, []);
+
+
+
+
+    // const paymentHandler = async () => {
+
+    //     const response = await fetch("https://admin.kmiroofing.com/api/order/create",
+    //         {
+    //             method: "POST",
+    //             headers: {
+    //                 "content-type": "application/json",
+    //                 "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+
+    //             },
+    //             body: JSON.stringify(
+    //                 {
+    //                     products: cartData?.cart?.map(x => (
+    //                         {
+    //                             id: x?.product_id,
+    //                             qty: x.quantity
+    //                         }
+    //                     ))
+    //                     ,
+    //                     address_id: datas[0]?.id
+    //                 }
+    //             ),
+    //         }
+    //     );
+
+
+    //     const formattedResponse = await response.json();
+    //     //  let order_id = form
+    //     console.log(formattedResponse);
+
+    //     setPayment(formattedResponse);
+    //     console.log(payment.grand_total_price);
+    //     //  let amount = formattedResponse.message.amount/100;
+
+    //     // http://localhost/instacertify-backend/public/api/ecommerce/transactions
+
+
+    //     const options = {
+    //         // key: "rzp_live_qmaktzPiRRIRtX",
+    //         key: "rzp_test_pX78hyqIUdIzIN",
+    //         amount: formattedResponse?.grand_total_price * 100,
+    //         currency: "INR",
+    //         name: "Nikhil",
+    //         description: "product transaction",
+    //         order_id: formattedResponse?.order_id,
+    //         handler: async function (response) {
+    //             //  console.log(response);
+    //             //   if(response){
+    //             //     clearCarts();
+    //             //   }
+
+    //             const resp = await fetch("https://admin.kmiroofing.com/api/ecommerce/transactions", {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "content-type": "application/json",
+    //                     "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+
+    //                 },
+    //                 body: JSON.stringify({
+    //                     razorpay_payment_id: response.razorpay_payment_id,
+    //                     razorpay_order_id: response.razorpay_order_id,
+    //                     razorpay_signature: response.razorpay_signature
+    //                 })
+
+
+
+    //             })
+
+    //             const formatData = await resp.json();
+    //             console.log(formatData);
+    //             alert(formatData?.message);
+    //             clearCarts();
+
+    //         },
+    //         // reference_id:formattedResponse?.order_id,
+
+
+    //         // callback_url: `https://ecomm-backend-aopz.onrender.com/api/v1/payment/verifySignature/${JSON?.parse(localStorage.getItem("insta_Access"))}`,
+    //         prefill: {
+    //             name: instaUser?.name,
+    //             email: instaUser?.email,
+    //             contact: datas[0]?.phone
+    //         },
+    //         "notes": {
+    //             "address": "Razorpay Corporate Office"
+    //         },
+    //         "theme": {
+    //             "color": "#EC691F"
+    //         }
+    //     }
+
+    //     const paymentObject = new window.Razorpay(options, instaUser);
+
+
+    //     paymentObject.open();
+
+
+    // }
+
+    const paymentHandler = async () => {
+        try {
+            const response = await fetch("https://admin.kmiroofing.com/api/order/create", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                },
+                body: JSON.stringify({
+                    products: cartData?.cart?.map(x => ({
+                        id: x?.product_id,
+                        qty: x.quantity
+                    })),
+                    address_id: datas[0]?.id
+                }),
+            });
+
+            const formattedResponse = await response.json();
+            console.log("Order created:", formattedResponse);
+            setPayment(formattedResponse);
+            setPayNow(true);
+        } catch (error) {
+            console.error("Order creation failed", error);
+        }
+    };
+
+    const updateQuantity = (productId, direction) => {
+        setCartData((prev) => {
+            const updatedCart = prev.cart.map((item) => {
+                if (item.id === productId || item.product_id === productId) {
+                    const newQty = direction === "inc"
+                        ? item.quantity + 1
+                        : Math.max(1, item.quantity - 1);
+
+                    return { ...item, quantity: newQty };
+                }
+                return item;
+            });
+
+            const total_amount = updatedCart.reduce(
+                (sum, item) => sum + item.price * item.quantity,
+                0
+            );
+
+            const shipping_cost = parseFloat(prev.shipping_cost); // static or you can update dynamically
+            const grand_total = total_amount + shipping_cost;
+
+            return {
+                ...prev,
+                cart: updatedCart,
+                total_amount,
+                grand_total,
+            };
+        });
+    };
+
+
     return (
         <div className="page_shopping_list sop">
             <HeadSEO title={"Store"} description={"This is store"} image={null} />
 
             <HeadSEO1 />
 
+            {cartUpdate == true ? (<span className='loadingOverlay' style={{ display: 'block', position: 'fixed' }} />) : ""}
+
             <div className="event_system_main">
                 <div className="event_main">
-                    <div className="order-info-container">
-                    <div className="order-info-containerr">
-                        <h2 className="order-info-title">Order Information</h2>
-                        <button className="order-btnn">Back</button>
-                        </div>
-                        <div className="order-info-table">
-                            <div className="order-info-header">
-                                <div className="item-col">Item</div>
-                                <div className="qty-col">Quantity</div>
-                                <div className="price-col price-col11">Price</div>
-                            </div>
-
-                            <div className="order-info-row">
-                                <div className="item-col">
-                                    <img src="https://res.cloudinary.com/dgif730br/image/upload/v1745412566/image_3_qhe6b5.png" alt="print" className="order-info-image" />
-                                    <div className="order-info-details">
-                                        <div className="item-title">Print "The Meeting Place"</div>
-                                        <div className="item-desc">Street car (interurban) terminal,<br />St.Charles, MO</div>
-                                    </div>
+                    {
+                        cartEnpty === false ? <div className="order-info-container">
+                            {
+                                cartData?.cart?.length > 0 && <div className="order-info-containerr">
+                                    <h2 className="order-info-title">Order Information</h2>
+                                    <button onClick={clearCarts} className="order-btnn">Empty Cart</button>
+                                    <button className="order-btnn">Back</button>
                                 </div>
+                            }
 
-                                <div className="qty-col with-border">
-                                    {/* <div className="qty-control">
+                            {
+                                cartData?.cart?.length > 0 ? <div className="order-info-table">
+                                    <div className="order-info-header">
+                                        <div className="item-col">Item</div>
+                                        <div className="qty-col">Quantity</div>
+                                        <div className="price-col price-col11">Price</div>
+                                    </div>
+                                    {
+                                        cartData?.cart?.map((val, index) => {
+                                            return <div key={index} className="order-info-row">
+                                                <div className="item-col">
+                                                    {/* https://res.cloudinary.com/dgif730br/image/upload/v1745412566/image_3_qhe6b5.png */}
+                                                    <img src={val?.image || val?.images} alt="print" className="order-info-image" />
+                                                    <div className="order-info-details">
+                                                        {/* <div className="item-title">Print "The Meeting Place"</div> */}
+                                                        <div className="item-title">{val?.name || val?.product_name}</div>
+                                                        <div className="item-desc">Street car (interurban) terminal,<br />St.Charles, MO</div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="qty-col with-border">
+                                                    {/* <div className="qty-control">
                                         <button onClick={decrease}>−</button>
                                         <span>{quantity}</span>
                                         <button onClick={increase}>+</button>
                                     </div> */}
-                                    <div className="qty-selector qty-select11">
-                                        <button onClick={decrease}>−</button>
-                                        <span>{quantity}</span>
-                                        <button onClick={increase}>+</button>
+                                                    <div className="qty-selector qty-select11">
+                                                        {/* <button onClick={() => {
+                                                            setCartData((prev) => ({
+                                                                ...prev,
+                                                                cart: prev.cart.map((item) =>
+                                                                    (item.id || item.product_id) === (val.id || val.product_id)
+                                                                        ? { ...item, quantity: Math.max(1, item.quantity - 1) }
+                                                                        : item
+                                                                )
+                                                            }))
+                                                        }}>−</button>
+                                                        <span>{val?.quantity}</span>
+                                                        <button onClick={() => {
+                                                            setCartData((prev) => ({
+                                                                ...prev,
+                                                                cart: prev.cart.map((item) =>
+                                                                    (item.id || item.product_id) === (val.id || val.product_id)
+                                                                        ? { ...item, quantity: item.quantity + 1 }
+                                                                        : item
+                                                                )
+                                                            }))
+                                                        }}>+</button> */}
+
+                                                        <button onClick={() => updateQuantity(val.id || val.product_id, "dec")}>−</button>
+                                                        <span>{val.quantity}</span>
+                                                        <button onClick={() => updateQuantity(val.id || val.product_id, "inc")}>+</button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="price-col with-border">
+                                                    <div className="price-line">
+                                                        <span>@ ${price.toFixed(2)} :</span>
+                                                        <strong>${val?.price * val?.quantity}</strong>
+                                                    </div>
+                                                    <div className="price-line price-line2">
+                                                        <span>S & H :</span>
+                                                        <strong>${parseFloat(cartData.shipping_cost).toFixed(2)}</strong>
+                                                    </div>
+                                                    <div className="price-line">
+                                                        <span>Item Total:</span>
+                                                        <strong>{val?.quantity}</strong>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        })
+                                    }
+
+                                    <div className="total-due">
+                                        Total Due: <strong>${parseFloat(cartData.grand_total).toFixed(2)}</strong>
                                     </div>
+                                </div> :
+                                    <div className="container">
+                                        <div className={style.cart_empty}>
+                                            <svg fill="#1C2E33" width="26" height="28" viewBox="0 0 26 28">
+                                                <path d="M10 24c0 1.094-0.906 2-2 2s-2-0.906-2-2 0.906-2 2-2 2 0.906 2 2zM24 24c0 1.094-0.906 2-2 2s-2-0.906-2-2 0.906-2 2-2 2 0.906 2 2zM26 7v8c0 0.5-0.391 0.938-0.891 1l-16.312 1.906c0.078 0.359 0.203 0.719 0.203 1.094 0 0.359-0.219 0.688-0.375 1h14.375c0.547 0 1 0.453 1 1s-0.453 1-1 1h-16c-0.547 0-1-0.453-1-1 0-0.484 0.703-1.656 0.953-2.141l-2.766-12.859h-3.187c-0.547 0-1-0.453-1-1s0.453-1 1-1h4c1.047 0 1.078 1.25 1.234 2h18.766c0.547 0 1 0.453 1 1z"></path>
+                                            </svg>
+                                            <h2>Your cart is empty</h2>
+                                            <Link href={"/"}>Go to Home</Link>
+                                        </div>
+                                    </div>
+                            }
+
+
+                            <div className="order-info-footer">
+                                {
+                                    cartData?.cart?.length > 0 && <div className="order-info-buttons">
+                                        <button className="btn-secondarys">Continue Shopping</button>
+                                        <button onClick={() => {
+
+                                            const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+                                            if (isLoggedIn) {
+                                                if (datas[0]?.id) {
+                                                    paymentHandler()
+                                                }
+                                                else {
+                                                    router.push("/address")
+                                                }
+                                                // paymentHandler();
+                                            }
+                                            else {
+                                                router.push('/member/memberlogin');
+                                            }
+
+                                        }} className="btn-primarys">Checkout</button>
+                                    </div>
+                                }
+
+                            </div>
+                        </div> :
+                            <div className="container">
+                                <div className={style.cart_empty}>
+                                    <svg fill="#1C2E33" width="26" height="28" viewBox="0 0 26 28">
+                                        <path d="M10 24c0 1.094-0.906 2-2 2s-2-0.906-2-2 0.906-2 2-2 2 0.906 2 2zM24 24c0 1.094-0.906 2-2 2s-2-0.906-2-2 0.906-2 2-2 2 0.906 2 2zM26 7v8c0 0.5-0.391 0.938-0.891 1l-16.312 1.906c0.078 0.359 0.203 0.719 0.203 1.094 0 0.359-0.219 0.688-0.375 1h14.375c0.547 0 1 0.453 1 1s-0.453 1-1 1h-16c-0.547 0-1-0.453-1-1 0-0.484 0.703-1.656 0.953-2.141l-2.766-12.859h-3.187c-0.547 0-1-0.453-1-1s0.453-1 1-1h4c1.047 0 1.078 1.25 1.234 2h18.766c0.547 0 1 0.453 1 1z"></path>
+                                    </svg>
+                                    <h2>Your cart is empty</h2>
+                                    <Link href={"/"}>Go to Home</Link>
                                 </div>
-
-                                <div className="price-col with-border">
-                                    <div className="price-line">
-                                        <span>@ ${price.toFixed(2)} :</span>
-                                        <strong>${(price * quantity).toFixed(2)}</strong>
-                                    </div>
-                                    <div className="price-line price-line2">
-                                        <span>S & H :</span>
-                                        <strong>${shipping.toFixed(2)}</strong>
-                                    </div>
-                                    <div className="price-line">
-                                        <span>Item Total:</span>
-                                        <strong>{quantity}</strong>
-                                    </div>
-
-                                </div>
-
                             </div>
-                            <div className="total-due">
-                                Total Due: <strong>${(price * quantity + shipping).toFixed(2)}</strong>
-                            </div>
-                        </div>
+                    }
 
-                        <div className="order-info-footer">
+                    {payNow && payment?.grand_sale_price && (
+                    <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency:"USD" }}>
+                        <PayPalButtons
+                            style={{ layout: "vertical" }}
+                            createOrder={(data, actions) => {
+                                return actions.order.create({
+                                    purchase_units: [{
+                                        amount: {
+                                            value: payment?.grand_sale_price?.toString(),
+                                        }
+                                    }]
+                                });
+                            }}
+                            onApprove={async (data, actions) => {
+                                const details = await actions.order.capture();
+                                console.log("Payment successful!", details);
+                                toast.success("Payment successful!")
 
-                            <div className="order-info-buttons">
-                                <button className="btn-secondarys">Continue Shopping</button>
-                                <button className="btn-primarys">Checkout</button>
-                            </div>
-                        </div>
-                    </div>
+                                // Send to backend if needed
+                                // await fetch("https://admin.kmiroofing.com/api/ecommerce/transactions", {
+                                //     method: "POST",
+                                //     headers: {
+                                //         "Content-Type": "application/json",
+                                //         "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                                //     },
+                                //     body: JSON.stringify({
+                                //         paypal_order_id: details.id,
+                                //         payer_id: details.payer.payer_id
+                                //     })
+                                // });
+
+                                clearCarts();
+                            }}
+                            onCancel={() => {
+                                alert("Payment cancelled");
+                            }}
+                        />
+                    </PayPalScriptProvider>
+                )}
+
                 </div>
+
+                
             </div>
 
 

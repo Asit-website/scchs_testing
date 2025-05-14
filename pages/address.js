@@ -121,11 +121,11 @@ export default function Cart(props) {
     const getAddress = async () => {
 
         try {
-            const response = await fetch("https://admin.instacertify.com/api/listalladdress", {
+            const response = await fetch("https://admin.kmiroofing.com/api/listalladdress", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
                 }
             });
 
@@ -167,12 +167,12 @@ export default function Cart(props) {
         e.preventDefault();
         try {
             const response = await fetch(
-                "https://admin.instacertify.com/api/createaddress",
+                "https://admin.kmiroofing.com/api/createaddress",
                 {
                     method: 'POST',
                     headers: {
                         "content-type": "application/json",
-                        "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+                        "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
 
                     },
                     body: JSON.stringify(addressDetail),
@@ -207,12 +207,12 @@ export default function Cart(props) {
         e.preventDefault();
         try {
             const response = await fetch(
-                `https://admin.instacertify.com/api/updateaddress/${datas[0].id}`,
+                `https://admin.kmiroofing.com/api/updateaddress/${datas[0].id}`,
                 {
                     method: 'PUT',
                     headers: {
                         "content-type": "application/json",
-                        "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+                        "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
 
                     },
                     body: JSON.stringify({ ...addressDetail1 }),
@@ -247,7 +247,7 @@ export default function Cart(props) {
 
     useEffect(() => {
         if (typeof window !== "undefined") { // Ensures code only runs in the browser
-            const storedInstaUser = localStorage.getItem("insta_User");
+            const storedInstaUser = localStorage.getItem("scchs_User");
             setInstaUser(storedInstaUser ? JSON.parse(storedInstaUser) : null);
         }
     }, []);

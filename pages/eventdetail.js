@@ -16,7 +16,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import ShoppingCollections from "../components/common/shopping/collections";
 import Head from "next/head";
 import HeadSEO1 from "../components/common/Head/head1";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 
 var settingsMorePhotos = {
@@ -42,6 +42,12 @@ export default function eventdetail(pageProp) {
     const product = pageProp.page_content.product;
     const customFields = product?.customFields;
 
+    const [showModal, setShowModal] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [direction, setDirection] = useState('');
+
+
+
     const router = useRouter();
     const { id } = router.query;
 
@@ -52,7 +58,7 @@ export default function eventdetail(pageProp) {
     const fetchnewsbyycat = async (name) => {
         try {
 
-            const resp = await fetch(`https://admin.kmiroofing.com/api/get-news-details/${id}`, {
+            const resp = await fetch(`https://admin.kmiroofing.com/api/get-event-details/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +68,8 @@ export default function eventdetail(pageProp) {
             if (resp.status === 200) {
                 const formateddata = await resp.json();
                 console.log("formare ", formateddata);
-                setaboutnew(formateddata?.news);
+                console.log(formateddata?.event?.image[0])
+                setaboutnew(formateddata?.event);
 
             }
 
@@ -73,6 +80,96 @@ export default function eventdetail(pageProp) {
         }
     }
 
+    useEffect(() => {
+
+        if (id) {
+            // fetchProductDetails();
+            fetchnewsbyycat();
+        }
+        else {
+            console.log("error");
+        }
+
+    }, [id]);
+
+    // ============slider=========
+
+    const openModal = () => {
+        // setCurrentIndex(index);
+        setShowModal(true);
+    };
+
+    const nextSlide = () => {
+        setDirection('right');
+        setCurrentIndex((prev) => (prev + 1) % aboutnew.image.length);
+    };
+
+    const prevSlide = () => {
+        setDirection('left');
+        setCurrentIndex((prev) => (prev - 1 + aboutnew.image.length) % aboutnew.image.length);
+    };
+
+    const arrowStyle = (side) => ({
+        position: 'absolute',
+        top: '50%',
+        [side]: 10,
+        transform: 'translateY(-50%)',
+        background: '#AB0535',
+        color: 'white',
+        border: 'none',
+        fontSize: 30,
+        width: 35,
+        height: 35,
+        // padding: '5px 10px',
+        cursor: 'pointer',
+        borderRadius: '50%',
+        zIndex: 10,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+    });
+
+    // =================slider end===============
+
+    function formatDateToLongLabel(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            weekday: 'long',   // Saturday
+            month: 'long',     // March
+            day: 'numeric'     // 29
+        });
+    }
+
+    const formatTime = (timeStr) => {
+        if (!timeStr || !timeStr.includes(':')) return '';
+        const [hour, minute] = timeStr.split(':');
+        const date = new Date();
+        date.setHours(hour);
+        date.setMinutes(minute);
+
+        return new Intl.DateTimeFormat('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+        }).format(date);
+    };
+
+
+    // ===========for auto slide============
+    //     useEffect(() => {
+    //   if (!showModal) return;
+
+    //   const interval = setInterval(() => {
+    //     setDirection('right');
+    //     setCurrentIndex(prev =>
+    //       (prev + 1) % (aboutnew?.image?.length || 1)
+    //     );
+    //   }, 3000); // every 3 seconds
+
+    //   return () => clearInterval(interval); // clear on close or unmount
+    // }, [showModal, aboutnew?.image?.length]);
+
+
     return (
         <div className="page_shopping_list sop">
             <HeadSEO title={product?.seo?.pageTitle == "" ? product?.name : product?.seo?.pageTitle} description={product?.seo?.metaDescription} image={null} />
@@ -81,21 +178,26 @@ export default function eventdetail(pageProp) {
 
             <div className="event_system_main">
                 <div className="event_main">
+                    
                     <div className="event_details_main">
+                       <Link style={{textDecoration:"none"}} href={"/event"}><button className="event_det_back">Back</button></Link>
                         <div className="event-page">
                             <div className="event-header">
                                 <div className="event-info">
-                                    <h1>Rock n Roll Bingo (Special Event)</h1>
-                                    <h2>Saturday, March 29</h2>
+                                    <h1>{aboutnew?.title}</h1>
+                                    {/* <h2>Saturday, March 29</h2> */}
+                                    <h2>{formatDateToLongLabel(aboutnew?.start_date)}</h2>
 
                                     <div className="timing-box">
                                         <div className="item">
                                             <h4>Doors open at</h4>
-                                            <p>Sat, March 29, 6:00 PM</p>
+                                            {/* <p>Sat, March 29, 6:00 PM</p> */}
+                                            <p>{formatDateToLongLabel(aboutnew?.start_date)}, {formatTime(aboutnew?.start_time)}</p>
                                         </div>
                                         <div className="item">
                                             <h4>Event Starts</h4>
-                                            <p>Sat, March 29, At 7:00 PM</p>
+                                            {/* <p>Sat, March 29, At 7:00 PM</p> */}
+                                            <p>{formatDateToLongLabel(aboutnew?.start_date)}, {formatTime(aboutnew?.start_time)}</p>
                                         </div>
                                     </div>
 
@@ -110,7 +212,8 @@ export default function eventdetail(pageProp) {
                                             </span>
                                             <div className="text">
                                                 <span>Date and time</span><br />
-                                                <p>Sat, March 29, 6:00 PM – Sat, March 29, 10:00 PM</p>
+                                                {/* <p>Sat, March 29, 6:00 PM – Sat, March 29, 10:00 PM</p> */}
+                                                <p>{formatDateToLongLabel(aboutnew?.start_date)}, {formatTime(aboutnew?.start_time)} - {formatDateToLongLabel(aboutnew?.start_date) || formatDateToLongLabel(aboutnew?.end_date)}, {formatTime(aboutnew?.end_time)} </p>
                                             </div>
                                         </div>
 
@@ -122,21 +225,41 @@ export default function eventdetail(pageProp) {
                                             </span>
                                             <div className="text">
                                                 <span>Location</span><br />
-                                                <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p>
+                                                {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
+                                                <p>{aboutnew?.location}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="event-gallery-main">
+
                                     <div className="event-gallery">
                                         <div className="main-photo">
-                                            <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282766/image_s8otec.png" alt="Main Event" />
+                                            {/* <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282766/image_s8otec.png" alt="Main Event" /> */}
+
+                                            {/* <img src={aboutnew?.image[0]} alt="main event"/> */}
+                                            {aboutnew?.image?.length > 0 && (
+                                                <img src={aboutnew.image[0]} alt="main event" />
+                                            )}
                                         </div>
 
                                         <div className="side-photos">
+                                            {
+                                                aboutnew?.image?.length > 3 && <div onClick={() => openModal(true)} className="slider_more">
+                                                    <img width={18} height={18} src="https://res.cloudinary.com/dgif730br/image/upload/v1747139017/grid_view_sxuxqh.svg" />
+                                                    <p>Show More Photos</p>
+                                                </div>
+                                            }
+
                                             <div className="thumbs">
-                                                <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282766/image_1_vctfyt.png" alt="Thumb 1" />
-                                                <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282765/image_2_yqkqjg.png" alt="Thumb 2" />
+                                                {/* <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282766/image_1_vctfyt.png" alt="Thumb 1" /> */}
+                                                {aboutnew?.image?.length > 0 && (
+                                                    <img src={aboutnew.image[1]} alt="main event" />
+                                                )}
+                                                {/* <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282765/image_2_yqkqjg.png" alt="Thumb 2" /> */}
+                                                {aboutnew?.image?.length > 0 && (
+                                                    <img src={aboutnew.image[2]} alt="main event" />
+                                                )}
                                             </div>
 
                                             {/* Wrap this to include both button and text */}
@@ -186,6 +309,67 @@ export default function eventdetail(pageProp) {
                         </div>
                     </div>
                 </div>
+
+                <div>
+                    {showModal && (
+                        <div style={{
+                            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                            backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex',
+                            justifyContent: 'center', alignItems: 'center', zIndex: 9999,
+                        }}>
+                            {/* style={{ position: 'relative', width: '80%', maxWidth: 800 }} */}
+                            <div >
+                                <button
+                                    onClick={() => setShowModal(false)}
+                                    style={{
+                                        position: 'absolute', top: 10, right: 10, background: '#AB0535',
+                                        border: 'none', padding: '5px 10px', cursor: 'pointer', color: "white", borderRadius: "50%", zIndex: 100
+                                    }}
+                                >
+                                    ✕
+                                </button>
+
+                                <button onClick={prevSlide} style={arrowStyle('left')}><img style={{ filter: "invert(1)" }} width={20} height={20} src="https://res.cloudinary.com/dgif730br/image/upload/v1747138065/left-arrow_dztds9.png" /></button>
+                                <img
+                                    key={currentIndex}
+                                    src={aboutnew?.image[currentIndex]}
+                                    className={`slide-image ${direction}`}
+                                    alt={`img-${currentIndex}`}
+                                    style={{ width: 450, borderRadius: 8, height: 450, objectFit: "cover" }}
+                                />
+                                <button onClick={nextSlide} style={arrowStyle('right')}><img style={{ filter: "invert(1)" }} width={20} height={20} src="https://res.cloudinary.com/dgif730br/image/upload/v1747138347/right-arrow_rgmiww.png" /></button>
+                            </div>
+                            <style>{`
+            .slide-image {
+              opacity: 0;
+              animation: fadeIn 0.3s ease forwards;
+            }
+
+            .slide-image.left {
+              animation: slideLeft 0.3s ease, fadeIn 0.3s ease forwards;
+            }
+
+            .slide-image.right {
+              animation: slideRight 0.3s ease, fadeIn 0.3s ease forwards;
+            }
+
+            @keyframes fadeIn {
+              to { opacity: 1; }
+            }
+
+            @keyframes slideLeft {
+              from { transform: translateX(-100%); }
+              to { transform: translateX(0); }
+            }
+
+            @keyframes slideRight {
+              from { transform: translateX(100%); }
+              to { transform: translateX(0); }
+            }
+          `}</style>
+                        </div>
+                    )}
+                </div>
             </div>
 
 
@@ -217,4 +401,19 @@ export async function getServerSideProps(context) {
         };
 
     }
+}
+
+function arrowStyle(side) {
+    return {
+        position: 'absolute',
+        top: '50%',
+        [side]: 10,
+        transform: 'translateY(-50%)',
+        background: '#fff',
+        border: 'none',
+        fontSize: 30,
+        padding: '5px 10px',
+        cursor: 'pointer',
+        zIndex: 10,
+    };
 }

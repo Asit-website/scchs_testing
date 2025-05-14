@@ -24,6 +24,26 @@ export default function memberlogin(pageProp) {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
+     const addToCartApi = async (id , access) => {
+
+        const resp = await fetch('https://admin.kmiroofing.com/api/cart/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+             "Authorization":`Bearer ${access}`
+          },
+          body: JSON.stringify({
+            product_id: id,
+            quantity: 1,
+          }),
+        })
+          .then(response => response.json())
+         
+          .catch(error => console.error('Error:', error));
+    
+      }
+
+
     const submitLogin = async (e) => {
         e.preventDefault();
 
@@ -61,12 +81,12 @@ export default function memberlogin(pageProp) {
             localStorage.setItem("scchs_User", JSON.stringify(data?.user?.user_info));
 
             // added the carts into the user carts 
-            // let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+            let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 
-            // for(let cart of allCarts){
-            //      console.log("cart" , cart);
-            //     await addToCartApi(cart?.id , data?.user?.access_token);
-            // }
+            for(let cart of allCarts){
+                 console.log("cart" , cart);
+                await addToCartApi(cart?.id , data?.user?.access_token);
+            }
             toast.success(data?.message);
             window.location.href = "/join/memberplan";
             setUserName('');

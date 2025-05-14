@@ -291,7 +291,7 @@ export default function Navbar(props) {
 
 
   useEffect(() => {
-    const isLoggedIn = JSON?.parse(localStorage.getItem("insta_Access"));
+    const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
     if (isLoggedIn) {
       getCarts(); // Call getCarts if logged in
     } else {

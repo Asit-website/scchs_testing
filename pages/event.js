@@ -110,11 +110,6 @@ export default function events(pageProp) {
 
 
 
-    const [allNewsCat, setAllNewsCat] = useState([]);
-    const [alnews, setalnews] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(6);
 
 
 
@@ -191,6 +186,29 @@ export default function events(pageProp) {
     // console.log("allnew ", alnews)
 
     const [cards, setCards] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [allEvents, setAllEvents] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
+
+
+    const fetchCategory = async () => {
+        try {
+            const resp = await fetch(`https://admin.kmiroofing.com/api/get-event-category`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            const data = await resp.json();
+            setCategories(data?.categories);
+            console.log(data);
+        } catch (error) {
+            console.error("There was an error fetching the news:", error);
+        }
+    };
+
+
 
     const fetchAllNews = async () => {
         try {
@@ -204,6 +222,7 @@ export default function events(pageProp) {
             if (resp.status === 200) {
                 const formateddata = await resp.json();
                 setCards(formateddata?.events);
+                setAllEvents(formateddata?.events)
                 // setTotalPages(Math.ceil(formateddata?.news?.length / itemsPerPage)); // Calculate total pages
             }
         } catch (error) {
@@ -212,8 +231,40 @@ export default function events(pageProp) {
     };
 
     useEffect(() => {
+        fetchCategory();
         fetchAllNews();
     }, [])
+
+
+    const handleCategoryChange = (e) => {
+        const selected = e.target.value;
+        const categoryId = parseInt(selected);
+        setSelectedCategory(categoryId);
+
+        if (!categoryId) {
+            setCards(allEvents);
+            return;
+        }
+
+        const filtered = allEvents.filter(event => {
+            let ids = event.category_ids;
+
+            console.log(ids)
+
+            if (!ids) return false;
+
+            // Ensure it's an array of numbers
+            const idNumbers = ids.map(id => parseInt(id));
+
+            return idNumbers.includes(categoryId);
+        });
+
+        console.log(filtered);
+
+        setCards(filtered);
+    };
+
+
 
     const formatTime = (timeStr) => {
         const [hour, minute] = timeStr.split(':');
@@ -243,8 +294,12 @@ export default function events(pageProp) {
                         <div>
                             <div className="filters-left">
                                 <div className="custom_drop">
-                                    <select className="dropdown">
-                                        <option>Filter by Category</option>
+                                    <select onChange={handleCategoryChange}
+                                        value={selectedCategory} className="dropdown">
+                                        <option value="">Filter by Category</option>
+                                        {categories.map(cat => (
+                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                        ))}
                                     </select>
                                 </div>
 
@@ -286,32 +341,38 @@ export default function events(pageProp) {
 
                     {/* slice(0, visibleCount) */}
                     <div className="card-grid">
-                        {cards.map((card, index) => (
-                            <div className="event-card" key={index}>
-                                <div className="card-header">
-                                    <span>{
-                                        new Intl.DateTimeFormat('en-GB', {
-                                            day: 'numeric',
-                                            month: 'long',
-                                            year: 'numeric',
-                                        }).format(new Date(card.date))
-                                    }
-                                    </span>
-                                    <span>{
-                                        formatTime(card?.start_time)
-                                    }
-                                        - {formatTime(card?.end_time)}</span>
+                        {cards.length === 0 ? (
+                            <p>No events found.</p>
+                        ) : (
+                            cards.map((card, index) => (
+                                <div className="event-card" key={index}>
+                                    <div className="card-header">
+                                        <span>
+                                            {new Intl.DateTimeFormat('en-GB', {
+                                                day: 'numeric',
+                                                month: 'long',
+                                                year: 'numeric',
+                                            }).format(new Date(card.date))}
+                                        </span>
+                                        <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
+                                    </div>
+                                    <img
+                                        src={`https://admin.kmiroofing.com/backend/admin/images/event_management/events/${card?.images[0]}`}
+                                        alt="Event"
+                                        className="card-image"
+                                    />
+                                    <div className="card-content">
+                                        <h3>{card.title}</h3>
+                                        <p>{card.short_description}</p>
+                                        <Link href={`/eventdetail?id=${card?.slug}`}>
+                                            <button className="info-btn">
+                                                More Info <span className="arrow-icon"></span>
+                                            </button>
+                                        </Link>
+                                    </div>
                                 </div>
-                                <img src={`https://admin.kmiroofing.com/backend/admin/images/event_management/events/${card?.images[0]}`} alt="Event" className="card-image" />
-                                <div className="card-content">
-                                    <h3>{card.title}</h3>
-                                    <p>{card.short_description}</p>
-                                    <Link href="/eventdetail"><button className="info-btn">
-                                        More Info <span className="arrow-icon"></span>
-                                    </button></Link>
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                     {/* {
                         visibleCount < cards.length && (

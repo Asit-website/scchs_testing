@@ -17,7 +17,7 @@ import ShoppingCollections from "../components/common/shopping/collections";
 import Head from "next/head";
 import HeadSEO1 from "../components/common/Head/head1";
 import { useRouter } from 'next/router';
-
+import { toast } from "react-toastify";
 
 
 var settingsMorePhotos = {
@@ -43,6 +43,8 @@ const ITEMS_PER_PAGE = 3;
 
 export default function store(pageProp) {
 
+    const { toggleBoolValue } = pageProp;
+
     const [allProduct, setAllProduct] = useState([]);
     const [allCategory, setAllCategory] = useState([]);
     const [selectedSlug, setSelectedSlug] = useState('');
@@ -63,7 +65,7 @@ export default function store(pageProp) {
 
             if (resp.status === 200) {
                 const formateddata = await resp.json();
-                console.log(formateddata);
+                console.log(formateddata?.products[0]?.image);
                 setAllProduct(formateddata?.products);
             }
 
@@ -102,8 +104,6 @@ export default function store(pageProp) {
         fetchProduct();
     }, [])
 
-
-
     const fetchProductByCat = async () => {
         if (!selectedSlug) return;
         setHasSearched(true);
@@ -124,7 +124,7 @@ export default function store(pageProp) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+                "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
             },
             body: JSON.stringify({
                 product_id: id,
@@ -134,15 +134,14 @@ export default function store(pageProp) {
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                alert(data?.message)
+                toast.success(data?.message);
+                router.push("/storeorder");
                 toggleBoolValue();
             })
             .catch(error => console.error('Error:', error));
 
         // alert(resp)
     }
-
-
 
     return (
         <div className="page_shopping_list sop">
@@ -220,7 +219,7 @@ export default function store(pageProp) {
                                 <Link href={`/storedetail?id=${product?.slug}`}><img
                                     className="custom-card-image"
                                     // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
-                                    src={`https://admin.kmiroofing.com//public//ecommerce/products/1746447817-WhatsApp%20Image%202025-05-02%20at%203.59.27%20PM.jpeg`}
+                                    src={product?.image}
                                     alt="Product"
                                 /></Link>
                                 <div className="custom-card-content">
@@ -234,23 +233,35 @@ export default function store(pageProp) {
 
                                     </p>
                                     <button
-                                        onClick={() => {
+                                        //  out-stock
+                                        className="custom-card-button"
+                                        onClick={async () => {
+                                            const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
                                             const productId = product?.id;
-                                            const cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 
-                                            const productExit = cartItems?.some(item => item.id === productId);
+                                            if (isLoggedIn) {
+                                                await addToCartApi(productId);
+                                            }
+                                            else {
+                                                const cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 
-                                            if (!productExit) {
-                                                product.quantity = 1;
-                                                cartItems.push(product);
+                                                const productExit = cartItems?.some(item => item.id === productId);
+
+                                                if (!productExit) {
+                                                    product.quantity = 1;
+                                                    cartItems.push(product);
+                                                }
+
+                                                sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
+                                                toast.success("Product successfuly added");
+                                                router.push("/storeorder");
+                                                toggleBoolValue();
+
                                             }
 
-                                            sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
-                                            alert("Product successfuly added");
-                                            router.push("/cart")
+
+
                                         }}
-                                        className={`custom-card-button ${!product.inStock ? "out-stock" : ""
-                                            }`}
                                     >
                                         {product.inStock ? "Out of Stock" : "Add to Cart"}
                                     </button>

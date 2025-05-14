@@ -17,6 +17,7 @@ import ShoppingCollections from "../components/common/shopping/collections";
 import Head from "next/head";
 import HeadSEO1 from "../components/common/Head/head1";
 import { useRouter } from 'next/router';
+import { toast } from "react-toastify";
 
 
 var settingsMorePhotos = {
@@ -31,6 +32,8 @@ var settingsMorePhotos = {
 
 export default function storedetail(pageProp) {
     const [quantity, setQuantity] = useState(1);
+
+    const {toggleBoolValue} = pageProp;
 
     const increase = () => setQuantity(prev => prev + 1);
     const decrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
@@ -73,6 +76,31 @@ export default function storedetail(pageProp) {
     }, [id])
 
 
+    const addToCartApi = async (id) => {
+
+        const resp = await fetch('https://admin.kmiroofing.com/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+            },
+            body: JSON.stringify({
+                product_id: id,
+                quantity: quantity,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                toast.success(data?.message);
+                router.push("/storeorder");
+                toggleBoolValue();
+            })
+            .catch(error => console.error('Error:', error));
+
+        // alert(resp)
+    }
+
+
     return (
         <div className="page_shopping_list sop">
             <HeadSEO title={"Store"} description={"This is store"} image={null} />
@@ -112,7 +140,34 @@ export default function storedetail(pageProp) {
                                         <button onClick={increase}>+</button>
                                     </div>
 
-                                    <button className="add-to-cart-btn">Add To Cart</button>
+                                    <button onClick={async () => {
+                                        const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+                                        const productId = productdetail?.id;
+
+                                        if (isLoggedIn) {
+                                            await addToCartApi(productId);
+                                        }
+                                        else {
+                                            const cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+
+                                            const productExit = cartItems?.some(item => item.id === productId);
+
+                                            if (!productExit) {
+                                                productdetail.quantity = 1;
+                                                cartItems.push(productdetail);
+                                            }
+
+                                            sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
+                                            // alert("Product successfuly added");
+                                            toast.success("Product successfuly added");
+                                            router.push("/storeorder");
+                                            toggleBoolValue();
+
+                                        }
+
+
+
+                                    }} className="add-to-cart-btn">Add To Cart</button>
                                 </div>
                             </div>
                         </div>
