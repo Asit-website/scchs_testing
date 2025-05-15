@@ -559,7 +559,8 @@ export default function storeorder(pageProp) {
                                 onApprove={async (data, actions) => {
                                     const details = await actions.order.capture();
                                     console.log("Payment successful!", details);
-                                    toast.success("Payment successful!")
+                                    toast.success("Payment successful!");
+                                    clearCarts();
 
                                     // Send to backend if needed
                                     await fetch("https://admin.scchs.co.in/api/ecommerce/transactions", {

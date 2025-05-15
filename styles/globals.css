@@ -5461,7 +5461,9 @@ justify-content: center !important;
   /* max-height: 300px; */
   object-fit: cover;
 }
-
+.nams_group label{
+  margin-bottom: 5px;
+}
 .card-content {
   padding: 20px 16px;
   flex-grow: 1;

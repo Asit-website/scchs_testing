@@ -82,16 +82,27 @@ export default function Cart(props) {
 
 
     const [addressDetail, setAddressDetail] = useState({
-        name: "",
-        state: "",
-        city: "",
-        status: "",
+        first_name: "",
+        last_name: "",
         address1: "",
         address2: "",
-        pincode: "",
-        landmark: "",
+        country: "",
         phone: "",
-        address_type: ""
+        city: "",
+        state: "",
+        address_type: "",
+        zipcode: "",
+        status: "",
+        email: "",
+        // state: "",
+        // city: "",
+        // status: "",
+        // address1: "",
+        // address2: "",
+        // pincode: "",
+        // landmark: "",
+        // phone: "",
+        // address_type: ""
     });
 
     const [addressDetail1, setAddressDetail1] = useState({});
@@ -261,62 +272,73 @@ export default function Cart(props) {
             />
             <div className="container">
                 {
-                    datas[0]?.id ?   <div className="">
+                    datas[0]?.id ? <div className="">
 
-                    <h1>Update Address</h1>
+                        <h1 style={{textAlign:"center"}}>Update Address</h1>
 
-                    <div className="form_address suing">
-                        <form className="form_add" onSubmit={updateAddressHandler}>
+                        <div className="form_address suing">
+                            <form className="form_add nameform-container" onSubmit={updateAddressHandler}>
 
-                            <div className="address_flex">
-                                <div className="address_input">
-                                    <label htmlFor="name">Name</label>
-                                    <input id="name" name="name" onChange={handleAddressChange1} value={ addressDetail1?.name ? addressDetail1?.name : datas[0]?.name} className="form-control" type="text" placeholder="Name" />
+                                <div className="">
+                                    <div className="address_input nameform-group nams_group">
+                                        <label htmlFor="first_name">First Name</label>
+                                        <input id="first_name" name="first_name" onChange={handleAddressChange1} value={addressDetail1?.first_name ? addressDetail1?.first_name : datas[0]?.first_name} className="nameform-input" type="text" placeholder="First Name" />
+                                    </div>
+                                    <div className="address_input nameform-group nams_group">
+                                        <label htmlFor="last_name">LastName</label>
+                                        <input id="last_name" name="last_name" onChange={handleAddressChange1} value={addressDetail1?.last_name ? addressDetail1?.last_name : datas[0]?.last_name} type="text" placeholder="Landmark" className="nameform-input" />
+                                    </div>
                                 </div>
-                                <div className="address_input">
-                                    <label htmlFor="landmark">Landmark</label>
-                                    <input id="landmark" name="landmark" onChange={handleAddressChange1} value={addressDetail1?.landmark ? addressDetail1?.landmark : datas[0]?.landmark} type="text" placeholder="Landmark" />
+                                <div className="">
+
+                                    <div className=" address_input nameform-group nams_group">
+                                        <label htmlFor="address1">Address1</label>
+                                        <textarea className="nameform-input" id="address1" name="address1" onChange={handleAddressChange1} value={addressDetail1?.address1 ? addressDetail1.address1 : datas[0]?.address1} placeholder="Address1" />
+                                    </div>
+                                    <div className="address_input nameform-group nams_group">
+                                        <label htmlFor="address2">Address2</label>
+                                        <textarea className="nameform-input" name="address2" onChange={handleAddressChange1} value={addressDetail1?.address2 ? addressDetail1?.address2 : datas[0]?.address2} placeholder="Address2" />
+                                    </div>
+                                    <div className="address_input nameform-group nams_group">
+                                        <label htmlFor="country">Country</label>
+                                        <select className="nameform-input" name="country" onChange={handleAddressChange1} value={addressDetail1.country ? addressDetail1?.country : datas[0]?.country}>
+                                            <option value={""}>Select Country</option>
+                                            <option>United State Of America</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="address_flex">
 
-                                <div className="address_input">
-                                    <label htmlFor="address1">Address1</label>
-                                    <textarea id="address1" name="address1" onChange={handleAddressChange1} value={addressDetail1?.address1 ? addressDetail1.address1 : datas[0]?.address1} placeholder="Address1" />
+
+
+                                <div className="">
+                                    <div className="address_input nameform-group nams_group">
+                                        <label htmlFor="phone">Phone</label>
+                                        <input className="nameform-input" id="phone" name="phone" value={addressDetail1?.phone ? addressDetail1?.phone : datas[0]?.phone} onChange={handleAddressChange1} type="number" placeholder="Phone Number" />
+                                    </div>
+                                    <div className="address_input nameform-group nams_group">
+                                        <label htmlFor="city">City</label>
+                                        <input className="nameform-input" id="city" name="city" onChange={handleAddressChange1} value={addressDetail1?.city ? addressDetail1?.city : datas[0]?.city} type="text" placeholder="City" />
+                                    </div>
                                 </div>
-                                <div className="address_input">
-                                    <label htmlFor="address2">Address2</label>
-                                    <textarea name="address2" onChange={handleAddressChange1} value={addressDetail1?.address2 ? addressDetail1?.address2 : datas[0]?.address2} placeholder="Address2" />
+
+
+                                <div className="">
+                                    <div className="address_input nameform-group nams_group">
+                                        <label htmlFor="state">State</label>
+                                        <input className="nameform-input" id="state" name="state" onChange={handleAddressChange1} value={addressDetail1?.state ? addressDetail1?.state : datas[0]?.state} type="text" placeholder="State" />
+                                    </div>
+                                    <div className="address_input nameform-group nams_group">
+                                        <label htmlFor="zipcode">ZipCode</label>
+                                        <input className="nameform-input" id="zipcode" value={addressDetail1?.zipcode ? addressDetail1?.zipcode : datas[0]?.zipcode} name="zipcode" onChange={handleAddressChange1} type="text" placeholder="ZipCode" />
+                                    </div>
+                                    {/* <div className="address_input nameform-group nams_group">
+                                        <label htmlFor="email">Email</label>
+                                        <input className="nameform-input" id="email" value={addressDetail1?.email ? addressDetail1?.email : datas[0]?.email} name="email" onChange={handleAddressChange1} type="text" placeholder="email" />
+                                    </div> */}
                                 </div>
-                            </div>
 
 
-
-                            <div className="address_flex">
-                                <div className="address_input">
-                                    <label htmlFor="phone">Phone</label>
-                                    <input id="phone" name="phone" value={addressDetail1?.phone ? addressDetail1?.phone : datas[0]?.phone} onChange={handleAddressChange1} type="number" placeholder="Phone Number" />
-                                </div>
-                                <div className="address_input">
-                                    <label htmlFor="city">City</label>
-                                    <input id="city" name="city" onChange={handleAddressChange1} value={addressDetail1?.city ? addressDetail1?.city : datas[0]?.city} type="text" placeholder="City" />
-                                </div>
-                            </div>
-
-
-                            <div className="address_flex">
-                                <div className="address_input">
-                                    <label htmlFor="state">State</label>
-                                    <input id="state" name="state" onChange={handleAddressChange1} value={addressDetail1?.state ? addressDetail1?.state : datas[0]?.state} type="text" placeholder="State" />
-                                </div>
-                                <div className="address_input">
-                                    <label htmlFor="pincode">PinCode</label>
-                                    <input id="pincode" value={addressDetail1?.pincode ? addressDetail1?.pincode : datas[0]?.pincode} name="pincode" onChange={handleAddressChange1} type="text" placeholder="PinCode" />
-                                </div>
-                            </div>
-
-
-                            {/* <div className="address_flex">
+                                {/* <div className="address_flex">
                             <div className="address_input">
                                 <input name="address_type" value={addressDetail?.address_type} onChange={handleAddressChange} type="text" placeholder="Address_type" />
                             </div>
@@ -325,83 +347,83 @@ export default function Cart(props) {
                             </div>
                         </div> */}
 
-                            <button type="submit" className="btn save_address">Update Address</button>
+                                <button type="submit" className="scchs_hj_btn">Update Address</button>
 
-                        </form>
+                            </form>
 
-                    </div>
-                </div>
-                :
-                <div className="form_address">
-                <form className="form_add" onSubmit={createAddressHandler}>
-
-                    <div className="address_flex">
-                        <div className="address_input">
-                            <label htmlFor="name">Name</label>
-                            <input id="name" name="name" onChange={handleAddressChange} value={addressDetail?.name} className="form-control" type="text" placeholder="Name" />
-                        </div>
-                        <div className="address_input">
-                            <label htmlFor="landmark">Landmark</label>
-                            <input id="landmark" name="landmark" onChange={handleAddressChange} value={addressDetail?.landmark} type="text" placeholder="Landmark" />
                         </div>
                     </div>
-                    <div className="address_flex">
+                        :
+                        <div className="form_address">
+                            <form className="form_add nameform-container" onSubmit={createAddressHandler}>
 
-                        <div className="address_input">
-                            <label htmlFor="address1">Address1</label>
-                            <textarea id="address1" name="address1" onChange={handleAddressChange} value={addressDetail?.address1} placeholder="Address1" />
+                                <div className="address_flex">
+                                    <div className="address_input">
+                                        <label htmlFor="first_name">First Name</label>
+                                        <input className="nameform-input" id="first_name" name="first_name" onChange={handleAddressChange} value={addressDetail?.first_name}  type="text" placeholder="First Name" />
+                                    </div>
+                                    <div className="address_input">
+                                        <label htmlFor="last_name">LastName</label>
+                                        <input className="nameform-input" id="last_name" name="last_name" onChange={handleAddressChange} value={addressDetail?.last_name} type="text" placeholder="Last Name" />
+                                    </div>
+                                </div>
+                                <div className="address_flex">
+
+                                    <div className="address_input">
+                                        <label htmlFor="address1">Address1</label>
+                                        <textarea className="nameform-input" id="address1" name="address1" onChange={handleAddressChange} value={addressDetail?.address1} placeholder="Address1" />
+                                    </div>
+                                    <div className="address_input">
+                                        <label htmlFor="address2">Address2</label>
+                                        <textarea className="nameform-input" name="address2" onChange={handleAddressChange} value={addressDetail?.address2} placeholder="Address2" />
+                                    </div>
+                                    <div className="address_input">
+                                        <label htmlFor="country">Country</label>
+                                        <select className="nameform-input" id="country" name="country" onChange={handleAddressChange} value={addressDetail?.country}>
+                                            <option value={""}>Select Country</option>
+                                            <option>United State Of America</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                                <div className="address_flex">
+                                    <div className="address_input">
+                                        <label htmlFor="phone">Phone</label>
+                                        <input className="nameform-input" id="phone" name="phone" value={addressDetail?.phone} onChange={handleAddressChange} type="number" placeholder="Phone Number" />
+                                    </div>
+                                    <div className="address_input">
+                                        <label htmlFor="city">City</label>
+                                        <input className="nameform-input" id="city" name="city" onChange={handleAddressChange} value={addressDetail?.city} type="text" placeholder="City" />
+                                    </div>
+                                </div>
+
+
+                                <div className="address_flex">
+                                    <div className="address_input">
+                                        <label htmlFor="state">State</label>
+                                        <input className="nameform-input" id="state" name="state" onChange={handleAddressChange} value={addressDetail?.state} type="text" placeholder="State" />
+                                    </div>
+                                    <div className="address_input">
+                                        <label htmlFor="zipcode">ZipCode</label>
+                                        <input className="nameform-input" id="zipcode" value={addressDetail?.zipcode} name="zipcode" onChange={handleAddressChange} type="text" placeholder="ZipCode" />
+                                    </div>
+                                    {/* <div className="address_input">
+                                        <label htmlFor="email">Email</label>
+                                        <input className="nameform-input" id="email" value={addressDetail?.email} name="email" onChange={handleAddressChange} type="email" placeholder="email" />
+                                    </div> */}
+                                </div>
+                                <button type="submit" className="btn save_address">Save Address</button>
+
+                            </form>
+
                         </div>
-                        <div className="address_input">
-                            <label htmlFor="address2">Address2</label>
-                            <textarea id="address2" name="address2" onChange={handleAddressChange} value={addressDetail?.address2} placeholder="Address2" />
-                        </div>
-                    </div>
-
-
-
-                    <div className="address_flex">
-                        <div className="address_input">
-                            <label htmlFor="phone">Phone</label>
-                            <input id="phone" name="phone" value={addressDetail?.phone} onChange={handleAddressChange} type="number" placeholder="Phone Number" />
-                        </div>
-                        <div className="address_input">
-                            <label htmlFor="city">City</label>
-                            <input id="city" name="city" onChange={handleAddressChange} value={addressDetail?.city} type="text" placeholder="City" />
-                        </div>
-                    </div>
-
-
-                    <div className="address_flex">
-                        <div className="address_input">
-                            <label htmlFor="state">State</label>
-                            <input id="state" name="state" onChange={handleAddressChange} value={addressDetail?.state} type="text" placeholder="State" />
-                        </div>
-                        <div className="address_input">
-                            <label htmlFor="pincode">PinCode</label>
-                            <input id="pincode" value={addressDetail?.pincode} name="pincode" onChange={handleAddressChange} type="text" placeholder="PinCode" />
-                        </div>
-                    </div>
-
-
-                    <div className="address_flex">
-                        <div className="address_input">
-                            <input name="address_type" value={addressDetail?.address_type} onChange={handleAddressChange} type="text" placeholder="Address_type" />
-                        </div>
-                        <div className="address_input">
-                            <input name="status" value={addressDetail?.status} onChange={handleAddressChange} type="text" placeholder="Status" />
-                        </div>
-                    </div>
-
-                    <button type="submit" className="btn save_address">Save Address</button>
-
-                </form>
-
-            </div>
                 }
-              
+
 
                 {/* ===============update========= */}
-               
+
             </div>
         </div>
     );
