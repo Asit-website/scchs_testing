@@ -544,48 +544,56 @@ export default function storeorder(pageProp) {
                     }
 
                     {payNow && payment?.grand_sale_price && (
-                    <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency:"USD" }}>
-                        <PayPalButtons
-                            style={{ layout: "vertical" }}
-                            createOrder={(data, actions) => {
-                                return actions.order.create({
-                                    purchase_units: [{
-                                        amount: {
-                                            value: payment?.grand_sale_price?.toString(),
-                                        }
-                                    }]
-                                });
-                            }}
-                            onApprove={async (data, actions) => {
-                                const details = await actions.order.capture();
-                                console.log("Payment successful!", details);
-                                toast.success("Payment successful!")
+                        <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency: "USD" }}>
+                            <PayPalButtons
+                                style={{ layout: "vertical" }}
+                                createOrder={(data, actions) => {
+                                    return actions.order.create({
+                                        purchase_units: [{
+                                            amount: {
+                                                value: payment?.grand_sale_price?.toString(),
+                                            }
+                                        }]
+                                    });
+                                }}
+                                onApprove={async (data, actions) => {
+                                    const details = await actions.order.capture();
+                                    console.log("Payment successful!", details);
+                                    toast.success("Payment successful!")
 
-                                // Send to backend if needed
-                                // await fetch("https://admin.scchs.co.in/api/ecommerce/transactions", {
-                                //     method: "POST",
-                                //     headers: {
-                                //         "Content-Type": "application/json",
-                                //         "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-                                //     },
-                                //     body: JSON.stringify({
-                                //         paypal_order_id: details.id,
-                                //         payer_id: details.payer.payer_id
-                                //     })
-                                // });
+                                    // Send to backend if needed
+                                    await fetch("https://admin.scchs.co.in/api/ecommerce/transactions", {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                                        },
+                                        body: JSON.stringify({
+                                            user_id: parseInt(instaUser.id),
+                                            order_id: payment?.order_id,
+                                            transaction_id: details.id,
+                                            payer_id: details.payer.payer_id,
+                                            amount: payment?.grand_sale_price?.toString(),
+                                            status: details?.status,
+                                            currency: "USD",
+                                            payment_gateway: "paypal"
+                                        })
+                                    });
 
-                                clearCarts();
-                            }}
-                            onCancel={() => {
-                                alert("Payment cancelled");
-                            }}
-                        />
-                    </PayPalScriptProvider>
-                )}
+                                    alert("success");
+
+                                    // clearCarts();
+                                }}
+                                onCancel={() => {
+                                    alert("Payment cancelled");
+                                }}
+                            />
+                        </PayPalScriptProvider>
+                    )}
 
                 </div>
 
-                
+
             </div>
 
 

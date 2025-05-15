@@ -20,6 +20,37 @@ export default function loginchange(pageProp) {
     const [showLogin, setShowLogin] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState(null);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus('loading');
+
+        try {
+            const res = await fetch('https://admin.scchs.co.in/api/forgot-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await res.json();
+
+            console.log(data)
+
+            if (res.ok) {
+                setStatus('success');
+            } else {
+                setStatus(data.message || 'Something went wrong');
+            }
+        } catch (error) {
+            setStatus('error');
+            console.error('Error:', error);
+        }
+    };
+
     return (
         <div className="page_shopping_list sop">
             <HeadSEO title={"login"} description={"this is member login page"} image={null} />
@@ -28,22 +59,23 @@ export default function loginchange(pageProp) {
 
 
             <div className="scchs-login-wrapper scchs-dev-card">
-              <Link href="/member/memberlogin"><button className="black_set">Back</button></Link> 
+                <Link href="/member/memberlogin"><button className="black_set">Back</button></Link>
                 <div className="scchs-login-card scchs-reset-card">
-                    <form>
-                    {/* <p className="scchs-info-text">
+                    <form onSubmit={handleSubmit}>
+                        {/* <p className="scchs-info-text">
                         If you are a member, please enter your login information below. If you are not a member, and would like more information about becoming one, please{" "}
                         <span className="scchs-click-here">CLICK HERE.</span>
                     </p>
                     <h2 className="scchs-login-title">Sign in</h2> */}
 
-                    <div className="scchs-input-group">
-                        <input type="email" placeholder="Registered Email Address" />
-                        {/* <p className="login_change_para">(Valid Characters: letters, numbers, underscore, dash,
+                        <div className="scchs-input-group">
+                            <input value={email}
+                                onChange={(e) => setEmail(e.target.value)} required name="email" type="email" placeholder="Registered Email Address" />
+                            {/* <p className="login_change_para">(Valid Characters: letters, numbers, underscore, dash,
                             period and @ symbol</p> */}
-                             {/* <p className="login_change_para">(Valid Characters: letters, numbers, underscore, dash,
+                            {/* <p className="login_change_para">(Valid Characters: letters, numbers, underscore, dash,
                             period and @ symbol</p> */}
-                        {/* <span
+                            {/* <span
                             onClick={() => setShowLogin(!showLogin)}
                             className="scchs-eye-icon"
                         >
@@ -52,21 +84,26 @@ export default function loginchange(pageProp) {
                             </svg>
 
                         </span> */}
-                    </div>
+                        </div>
 
-                    {/* <div className="scchs-input-group">
+                        {/* <div className="scchs-input-group">
                         <input
                             type={showPassword ? "text" : "password"}
                             placeholder="Current Password"
                         />
                         
                     </div> */}
-                    <div className="reset_flex">
-                    <button className="scchs-reset-button1">Cancel & Close</button>
-                    <button className="scchs-reset-button2">Submit</button>
-                    
-                    </div>
+                        <div className="reset_flex">
+                            <button type="button" className="scchs-reset-button1">Cancel & Close</button>
+                            <button type="submit" className="scchs-reset-button2">Submit</button>
+
+                        </div>
                     </form>
+                     {status === 'loading' && <p>Sending...</p>}
+      {status === 'success' && <p className="text-green-600">Reset link sent to your email!</p>}
+      {status && status !== 'loading' && status !== 'success' && (
+        <p className="text-red-600">{status}</p>
+      )}
                 </div>
             </div>
             {/* <div className="login_problem">
