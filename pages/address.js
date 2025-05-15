@@ -121,7 +121,7 @@ export default function Cart(props) {
     const getAddress = async () => {
 
         try {
-            const response = await fetch("https://admin.kmiroofing.com/api/listalladdress", {
+            const response = await fetch("https://admin.scchs.co.in/api/listalladdress", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -167,7 +167,7 @@ export default function Cart(props) {
         e.preventDefault();
         try {
             const response = await fetch(
-                "https://admin.kmiroofing.com/api/createaddress",
+                "https://admin.scchs.co.in/api/createaddress",
                 {
                     method: 'POST',
                     headers: {
@@ -207,7 +207,7 @@ export default function Cart(props) {
         e.preventDefault();
         try {
             const response = await fetch(
-                `https://admin.kmiroofing.com/api/updateaddress/${datas[0].id}`,
+                `https://admin.scchs.co.in/api/updateaddress/${datas[0].id}`,
                 {
                     method: 'PUT',
                     headers: {

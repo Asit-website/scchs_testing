@@ -405,7 +405,7 @@ export default function register1(pageProp) {
 
 
         try {
-            const response = await fetch('https://admin.kmiroofing.com/api/registration', {
+            const response = await fetch('https://admin.scchs.co.in/api/registration', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

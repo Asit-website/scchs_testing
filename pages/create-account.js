@@ -176,7 +176,7 @@ export default function CreateAccount() {
         }
 
 
-        const url = "https://admin.kmiroofing.com/api/registration"
+        const url = "https://admin.scchs.co.in/api/registration"
         const payload = {
             name: name,
             email: email,

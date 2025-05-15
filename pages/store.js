@@ -55,7 +55,7 @@ export default function store(pageProp) {
     const router = useRouter();
     const fetchProduct = async () => {
         try {
-            const resp = await fetch(`https://admin.kmiroofing.com/api/products?limit=${limit}&offset=0&all=1`, {
+            const resp = await fetch(`https://admin.scchs.co.in/api/products?limit=${limit}&offset=0&all=1`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export default function store(pageProp) {
     const fetchCategory = async () => {
         try {
 
-            const resp = await fetch("https://admin.kmiroofing.com/api/categories", {
+            const resp = await fetch("https://admin.scchs.co.in/api/categories", {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ export default function store(pageProp) {
         if (!selectedSlug) return;
         setHasSearched(true);
         try {
-            const res = await fetch(`https://admin.kmiroofing.com/api/products/category/${selectedSlug}?&offset=0`);
+            const res = await fetch(`https://admin.scchs.co.in/api/products/category/${selectedSlug}?&offset=0`);
             const data = await res.json();
             console.log(data);
             setAllProduct(data?.products || []);
@@ -120,7 +120,7 @@ export default function store(pageProp) {
 
     const addToCartApi = async (id) => {
 
-        const resp = await fetch('https://admin.kmiroofing.com/api/cart/add', {
+        const resp = await fetch('https://admin.scchs.co.in/api/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -190,7 +190,7 @@ export default function store(pageProp) {
                                             console.log(newLimit)
                                             // Category select ho chuki ho tabhi fetch karo
                                             if (selectedSlug) {
-                                                fetch(`https://admin.kmiroofing.com/api/products/category/${selectedSlug}?limit=${newLimit}&offset=0`)
+                                                fetch(`https://admin.scchs.co.in/api/products/category/${selectedSlug}?limit=${newLimit}&offset=0`)
                                                     .then(res => res.json())
                                                     .then(data => {
                                                         console.log(data)

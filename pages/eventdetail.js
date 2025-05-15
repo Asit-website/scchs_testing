@@ -58,7 +58,7 @@ export default function eventdetail(pageProp) {
     const fetchnewsbyycat = async (name) => {
         try {
 
-            const resp = await fetch(`https://admin.kmiroofing.com/api/get-event-details/${id}`, {
+            const resp = await fetch(`https://admin.scchs.co.in/api/get-event-details/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

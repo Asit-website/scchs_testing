@@ -227,7 +227,7 @@ window.location.href = "/";
     const submitLogin = async (e) => {
         e.preventDefault(); 
     
-        const url = `https://admin.kmiroofing.com/api/login`;
+        const url = `https://admin.scchs.co.in/api/login`;
         const payload = {
             email: email, 
             password: password 

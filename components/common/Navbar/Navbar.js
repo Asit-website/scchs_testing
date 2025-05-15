@@ -536,7 +536,7 @@ export default function Navbar(props) {
         if (!instaUser?.id) return;
 
         try {
-          const res = await fetch(`https://admin.kmiroofing.com/api/user-memberships/${instaUser.id}`);
+          const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
           const data = await res.json();
 
           const today = new Date();

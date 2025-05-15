@@ -67,7 +67,7 @@ export default function storeorder(pageProp) {
     const getCarts = async () => {
 
         try {
-            const response = await fetch("https://admin.kmiroofing.com/api/cart", {
+            const response = await fetch("https://admin.scchs.co.in/api/cart", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export default function storeorder(pageProp) {
 
     const removeCarts = async (id, qty) => {
         try {
-            const response = await fetch("https://admin.kmiroofing.com/api/cart/remove", {
+            const response = await fetch("https://admin.scchs.co.in/api/cart/remove", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -125,7 +125,7 @@ export default function storeorder(pageProp) {
         if (!result.isConfirmed) return;
 
         try {
-            const response = await fetch("https://admin.kmiroofing.com/api/cart/clear", {
+            const response = await fetch("https://admin.scchs.co.in/api/cart/clear", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -150,7 +150,7 @@ export default function storeorder(pageProp) {
     const getAddress = async () => {
 
         try {
-            const response = await fetch("https://admin.kmiroofing.com/api/listalladdress", {
+            const response = await fetch("https://admin.scchs.co.in/api/listalladdress", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -171,7 +171,7 @@ export default function storeorder(pageProp) {
     const fetchOrders = async () => {
         try {
 
-            const resp = await fetch("https://admin.kmiroofing.com/api/orders", {
+            const resp = await fetch("https://admin.scchs.co.in/api/orders", {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -241,7 +241,7 @@ export default function storeorder(pageProp) {
 
     // const paymentHandler = async () => {
 
-    //     const response = await fetch("https://admin.kmiroofing.com/api/order/create",
+    //     const response = await fetch("https://admin.scchs.co.in/api/order/create",
     //         {
     //             method: "POST",
     //             headers: {
@@ -290,7 +290,7 @@ export default function storeorder(pageProp) {
     //             //     clearCarts();
     //             //   }
 
-    //             const resp = await fetch("https://admin.kmiroofing.com/api/ecommerce/transactions", {
+    //             const resp = await fetch("https://admin.scchs.co.in/api/ecommerce/transactions", {
     //                 method: "POST",
     //                 headers: {
     //                     "content-type": "application/json",
@@ -340,7 +340,7 @@ export default function storeorder(pageProp) {
 
     const paymentHandler = async () => {
         try {
-            const response = await fetch("https://admin.kmiroofing.com/api/order/create", {
+            const response = await fetch("https://admin.scchs.co.in/api/order/create", {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
@@ -562,7 +562,7 @@ export default function storeorder(pageProp) {
                                 toast.success("Payment successful!")
 
                                 // Send to backend if needed
-                                // await fetch("https://admin.kmiroofing.com/api/ecommerce/transactions", {
+                                // await fetch("https://admin.scchs.co.in/api/ecommerce/transactions", {
                                 //     method: "POST",
                                 //     headers: {
                                 //         "Content-Type": "application/json",

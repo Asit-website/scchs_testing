@@ -46,7 +46,7 @@ export default function storedetail(pageProp) {
     const fetchProductDetails = async () => {
         try {
 
-            const resp = await fetch(`https://admin.kmiroofing.com/api/products/${id}`, {
+            const resp = await fetch(`https://admin.scchs.co.in/api/products/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export default function storedetail(pageProp) {
 
     const addToCartApi = async (id) => {
 
-        const resp = await fetch('https://admin.kmiroofing.com/api/cart/add', {
+        const resp = await fetch('https://admin.scchs.co.in/api/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
