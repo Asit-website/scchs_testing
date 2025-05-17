@@ -549,7 +549,7 @@ export default function storeorder(pageProp) {
 
                                                 <div className="price-col with-border">
                                                     <div className="price-line">
-                                                        <span>Price :</span>
+                                                        <span>{membershipStatus === "active" ? "Membership Price" :"Price"} :</span>
                                                         <strong>${membershipStatus === "active" ? val?.
                                                             membership_price
                                                             * val?.quantity : val?.price * val?.quantity}</strong>

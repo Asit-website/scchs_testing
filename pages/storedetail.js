@@ -164,7 +164,7 @@ export default function storedetail(pageProp) {
                                 <div className="price-box">
 
                                     <p>
-                                        <span>Price :</span> ${membershipStatus === "active" ? productdetail?.membership_price * quantity : productdetail?.price * quantity
+                                        <span>{membershipStatus === "active" ? "Membership Price" :"Price"} :</span> ${membershipStatus === "active" ? productdetail?.membership_price * quantity : productdetail?.price * quantity
                                             
                                         }
                                     </p>
