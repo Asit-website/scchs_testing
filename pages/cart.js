@@ -378,7 +378,7 @@ export default function Cart(props) {
                           </td>
 
                           <td className={style.item_td_2}>
-                            <span>₹{val?.price}</span>
+                            <span>${val?.price}</span>
                           </td>
 
                           <td className={style.item_td_3}>
@@ -417,7 +417,7 @@ export default function Cart(props) {
 
                           <td className={style.item_td_4}>
                             {/* <span className={style.eleTitle}>Total:</span> */}
-                            <span>₹{val?.price * val?.quantity}</span>
+                            <span>${val?.price * val?.quantity}</span>
                           </td>
                         </>
 
