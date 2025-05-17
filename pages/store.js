@@ -65,7 +65,7 @@ export default function store(pageProp) {
 
             if (resp.status === 200) {
                 const formateddata = await resp.json();
-                console.log(formateddata?.products[0]?.image);
+                console.log(formateddata);
                 setAllProduct(formateddata?.products);
             }
 

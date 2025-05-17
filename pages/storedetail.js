@@ -33,13 +33,49 @@ var settingsMorePhotos = {
 export default function storedetail(pageProp) {
     const [quantity, setQuantity] = useState(1);
 
-    const {toggleBoolValue} = pageProp;
+    const { toggleBoolValue } = pageProp;
 
     const increase = () => setQuantity(prev => prev + 1);
     const decrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
     const router = useRouter();
     const { id } = router.query;
+
+    const [instaUser, setInstaUser] = useState(null);
+    const [membershipStatus, setMembershipStatus] = useState("loading");
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("scchs_User");
+        if (storedUser) {
+            setInstaUser(JSON.parse(storedUser));
+        }
+    }, []);
+
+    useEffect(() => {
+        const fetchMembership = async () => {
+            if (!instaUser?.id) return;
+
+            try {
+                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const data = await res.json();
+
+                const today = new Date();
+
+                const activePlan = data?.data?.find(plan => {
+                    const isActive = plan.status === "active";
+                    const endDate = new Date(plan.end_date);
+                    return isActive && endDate >= today;
+                });
+
+                setMembershipStatus(activePlan ? "active" : "none");
+            } catch (err) {
+                console.error("Error fetching membership:", err);
+                setMembershipStatus("none");
+            }
+        };
+
+        fetchMembership();
+    }, [instaUser]);
 
     const [productdetail, setProductDetails] = useState({});
 
@@ -55,6 +91,7 @@ export default function storedetail(pageProp) {
 
             if (resp.status === 200) {
                 const formateddata = await resp.json();
+                console.log(formateddata)
                 setProductDetails(formateddata?.product);
                 // setReviews(formateddata?.reviews);
 
@@ -125,11 +162,14 @@ export default function storedetail(pageProp) {
                                 </p>
 
                                 <div className="price-box">
+
                                     <p>
-                                        <span>Price :</span> ${productdetail?.price}
+                                        <span>Price :</span> ${membershipStatus === "active" ? productdetail?.membership_price * quantity : productdetail?.price * quantity
+                                            
+                                        }
                                     </p>
                                     <p>
-                                        <span>Shipping / Handling :</span> ${productdetail?.sale_price}
+                                        <span>Shipping / Handling :</span> $10
                                     </p>
                                 </div>
 

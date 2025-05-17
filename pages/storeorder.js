@@ -64,6 +64,11 @@ export default function storeorder(pageProp) {
     const [payment, setPayment] = useState(null);
     const [payNow, setPayNow] = useState(false);
 
+    //  const [instaUser, setInstaUser] = useState(null);
+    const [membershipStatus, setMembershipStatus] = useState("loading");
+
+
+
     const getCarts = async () => {
 
         try {
@@ -236,6 +241,39 @@ export default function storeorder(pageProp) {
         }
     }, []);
 
+    useEffect(() => {
+        const storedUser = localStorage.getItem("scchs_User");
+        if (storedUser) {
+            setInstaUser(JSON.parse(storedUser));
+        }
+    }, []);
+
+    useEffect(() => {
+        const fetchMembership = async () => {
+            if (!instaUser?.id) return;
+
+            try {
+                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const data = await res.json();
+
+                const today = new Date();
+
+                const activePlan = data?.data?.find(plan => {
+                    const isActive = plan.status === "active";
+                    const endDate = new Date(plan.end_date);
+                    return isActive && endDate >= today;
+                });
+
+                setMembershipStatus(activePlan ? "active" : "none");
+            } catch (err) {
+                console.error("Error fetching membership:", err);
+                setMembershipStatus("none");
+            }
+        };
+
+        fetchMembership();
+    }, [instaUser]);
+
 
 
 
@@ -364,36 +402,75 @@ export default function storeorder(pageProp) {
         }
     };
 
-    const updateQuantity = (productId, direction) => {
-        setCartData((prev) => {
-            const updatedCart = prev.cart.map((item) => {
-                if (item.id === productId || item.product_id === productId) {
-                    const newQty = direction === "inc"
-                        ? item.quantity + 1
-                        : Math.max(1, item.quantity - 1);
+    // const updateQuantity = (productId, direction) => {
+    //     setCartData((prev) => {
+    //         const updatedCart = prev.cart.map((item) => {
+    //             if (item.id === productId || item.product_id === productId) {
+    //                 const newQty = direction === "inc"
+    //                     ? item.quantity + 1
+    //                     : Math.max(1, item.quantity - 1);
 
-                    return { ...item, quantity: newQty };
-                }
-                return item;
-            });
+    //                 return { ...item, quantity: newQty };
+    //             }
+    //             return item;
+    //         });
 
-            const total_amount = updatedCart.reduce(
-                (sum, item) => sum + item.price * item.quantity,
-                0
-            );
+    //         const total_amount = updatedCart.reduce(
+    //             (sum, item) => sum + item.price * item.quantity,
+    //             0
+    //         );
 
-            const shipping_cost = parseFloat(prev.shipping_cost); // static or you can update dynamically
-            const grand_total = total_amount + shipping_cost;
+    //         const shipping_cost = parseFloat(prev.shipping_cost); // static or you can update dynamically
+    //         const grand_total = total_amount + shipping_cost;
 
-            return {
-                ...prev,
-                cart: updatedCart,
-                total_amount,
-                grand_total,
-            };
+    //         return {
+    //             ...prev,
+    //             cart: updatedCart,
+    //             total_amount,
+    //             grand_total,
+    //         };
+    //     });
+    // };
+
+   const updateQuantity = (productId, direction) => {
+    setCartData((prev) => {
+        const prevCart = prev?.cart || [];
+
+        const updatedCart = prevCart.map((item) => {
+            const match = item.id === productId || item.product_id === productId;
+            const currentQty = parseInt(item.quantity) || 1;
+
+            if (match) {
+                const newQty = direction === "inc"
+                    ? currentQty + 1
+                    : Math.max(1, currentQty - 1);
+
+                return { ...item, quantity: newQty };
+            }
+            return item;
         });
-    };
 
+        const total_amount = updatedCart.reduce((sum, item) => {
+            const itemPrice = membershipStatus === "active"
+                ? parseFloat(item.membership_price || item.price)
+                : parseFloat(item.price);
+
+            return sum + itemPrice * item.quantity;
+        }, 0);
+
+        const shipping_cost = parseFloat(prev?.shipping_cost || 0);
+        const grand_total = total_amount + shipping_cost;
+
+        return {
+            ...prev,
+            cart: updatedCart,
+            total_amount: total_amount.toFixed(2),
+            grand_total: grand_total.toFixed(2),
+        };
+    });
+};
+
+ 
 
     return (
         <div className="page_shopping_list sop">
@@ -411,7 +488,7 @@ export default function storeorder(pageProp) {
                                 cartData?.cart?.length > 0 && <div className="order-info-containerr">
                                     <h2 className="order-info-title">Order Information</h2>
                                     <button onClick={clearCarts} className="order-btnn">Empty Cart</button>
-                                    <button className="order-btnn">Back</button>
+                                   <Link href={"/store"}><button className="order-btnn">Back</button></Link>
                                 </div>
                             }
 
@@ -472,8 +549,10 @@ export default function storeorder(pageProp) {
 
                                                 <div className="price-col with-border">
                                                     <div className="price-line">
-                                                        <span>@ ${price.toFixed(2)} :</span>
-                                                        <strong>${val?.price * val?.quantity}</strong>
+                                                        <span>Price :</span>
+                                                        <strong>${membershipStatus === "active" ? val?.
+                                                            membership_price
+                                                            * val?.quantity : val?.price * val?.quantity}</strong>
                                                     </div>
                                                     <div className="price-line price-line2">
                                                         <span>S & H :</span>
@@ -543,7 +622,7 @@ export default function storeorder(pageProp) {
                             </div>
                     }
 
-                    {payNow && payment?.grand_sale_price && (
+                    {payNow &&  (
                         <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency: "USD" }}>
                             <PayPalButtons
                                 style={{ layout: "vertical" }}
@@ -551,7 +630,7 @@ export default function storeorder(pageProp) {
                                     return actions.order.create({
                                         purchase_units: [{
                                             amount: {
-                                                value: payment?.grand_sale_price?.toString(),
+                                                value: membershipStatus === "active" ? payment?.order_amount_m : payment?.order_amount,
                                             }
                                         }]
                                     });
@@ -560,7 +639,7 @@ export default function storeorder(pageProp) {
                                     const details = await actions.order.capture();
                                     console.log("Payment successful!", details);
                                     toast.success("Payment successful!");
-                                    clearCarts();
+                                    // clearCarts();
 
                                     // Send to backend if needed
                                     await fetch("https://admin.scchs.co.in/api/ecommerce/transactions", {
@@ -574,16 +653,18 @@ export default function storeorder(pageProp) {
                                             order_id: payment?.order_id,
                                             transaction_id: details.id,
                                             payer_id: details.payer.payer_id,
-                                            amount: payment?.grand_sale_price?.toString(),
+                                            // amount: payment?.grand_sale_price?.toString(),
+                                            // amount: cartData?.grand_total?.toString(),
+                                            amount: membershipStatus === "active" ? payment?.order_amount_m : payment?.order_amount,
                                             status: details?.status,
-                                            currency: "USD",
-                                            payment_gateway: "paypal"
+                                            // currency: "USD",
+                                            // payment_gateway: "paypal"
                                         })
                                     });
 
-                                    alert("success");
+                                    toast.success("payment done successfully");
 
-                                    // clearCarts();
+                                    clearCarts();
                                 }}
                                 onCancel={() => {
                                     alert("Payment cancelled");
