@@ -437,7 +437,7 @@ export default function register1(pageProp) {
         } catch (error) {
             console.error('Error:', error);
             //   alert(error.message || 'Something went wrong!');
-            toast.error("error");
+            toast.error("username already purchased");
         }
     };
 

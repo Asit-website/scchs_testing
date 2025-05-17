@@ -329,7 +329,7 @@ export default function Navbar(props) {
 
   console.log(accessToken);
   console.log(instaUser);
-  
+
 
   if (typeof props.navbarProps == "undefined" || props.navbarProps == false) {
     return "";
@@ -520,9 +520,9 @@ export default function Navbar(props) {
     }, [openDropdownIndex]);
 
 
-   
 
-//  =====plan purchased or not=============
+
+    //  =====plan purchased or not=============
     useEffect(() => {
       const storedUser = localStorage.getItem("scchs_User");
       if (storedUser) {
@@ -530,7 +530,7 @@ export default function Navbar(props) {
       }
     }, []);
 
-    
+
     useEffect(() => {
       const fetchMembership = async () => {
         if (!instaUser?.id) return;
@@ -644,18 +644,18 @@ export default function Navbar(props) {
                     <div onClick={handleDropdownToggle7} ref={dropdownRef7} className="tyino">
                       <p>SCCHS Publications Archives</p>
                       {/* {isDropdownOpen7 && */}
-                        <svg
-                          width="10"
-                          height="6"
-                          viewBox="0 0 13 8"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M5.66016 7.19531L0.328125 1.89062C0.0820312 1.61719 0.0820312 1.20703 0.328125 0.960938L0.957031 0.332031C1.20312 0.0859375 1.61328 0.0859375 1.88672 0.332031L6.125 4.54297L10.3359 0.332031C10.6094 0.0859375 11.0195 0.0859375 11.2656 0.332031L11.8945 0.960938C12.1406 1.20703 12.1406 1.61719 11.8945 1.89062L6.5625 7.19531C6.31641 7.44141 5.90625 7.44141 5.66016 7.19531Z"
-                            fill="white"
-                          />
-                        </svg>
+                      <svg
+                        width="10"
+                        height="6"
+                        viewBox="0 0 13 8"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5.66016 7.19531L0.328125 1.89062C0.0820312 1.61719 0.0820312 1.20703 0.328125 0.960938L0.957031 0.332031C1.20312 0.0859375 1.61328 0.0859375 1.88672 0.332031L6.125 4.54297L10.3359 0.332031C10.6094 0.0859375 11.0195 0.0859375 11.2656 0.332031L11.8945 0.960938C12.1406 1.20703 12.1406 1.61719 11.8945 1.89062L6.5625 7.19531C6.31641 7.44141 5.90625 7.44141 5.66016 7.19531Z"
+                          fill="white"
+                        />
+                      </svg>
                       {/* } */}
                       {
                         isDropdownOpen7 &&
@@ -677,10 +677,10 @@ export default function Navbar(props) {
                       toast.success("Logout successfully");
                       window.location.href = "/"
                     }} className="logout"><p>Logout</p></div>
-                    
-                      <a href="/research"><div><p>Research</p></div></a>
-                      <a style={{paddingRight:"0px"}} href="/cementry"><div><p>Cemetery Records</p></div></a>
-                   
+
+                    <a href="/research"><div><p>Research</p></div></a>
+                    <a style={{ paddingRight: "0px" }} href="/cementry"><div><p>Cemetery Records</p></div></a>
+
                   </div>
                 )}
               </div>
@@ -766,7 +766,14 @@ export default function Navbar(props) {
               ))}
 
               <li className="test_sign">
-                <Link href="/member/memberlogin"><button>SIGN IN</button></Link>
+                {instaUser ? <button onClick={() => {
+                  localStorage.removeItem("scchs_Access");
+                  localStorage.removeItem("scchs_User");
+                  setAccessToken(null)
+                  setInstaUser(null)
+                  toast.success("Logout successfully");
+                  window.location.href = "/"
+                }}>Logout</button> : <Link href="/member/memberlogin"><button>SIGN IN</button></Link>}
               </li>
             </ul>
           </div>
