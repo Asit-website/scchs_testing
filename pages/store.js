@@ -152,7 +152,7 @@ export default function store(pageProp) {
             <div className="event_system_main">
                 <div className="store_heading">
                     <h2>SCCHS Store</h2>
-                    <p>Members must be logged-in to receive a 10% or greater discount on items in the bookstore. The discount does not apply to events. If you are not a member and would like information about becoming one <Link href="/member/memberlogin"><span>CLICK HERE</span></Link></p>
+                    <p>Members must be logged-in to receive a 10% or greater discount on items in the bookstore. The discount does not apply to events. If you are not a member and would like information about becoming one <Link href="/membership-information-join-us"><span>CLICK HERE</span></Link></p>
                 </div>
                 <div className="event_main">
                     <div className="filters-container">
@@ -223,12 +223,13 @@ export default function store(pageProp) {
                                     alt="Product"
                                 /></Link>
                                 <div className="custom-card-content">
-                                    <h3 className="custom-card-title">{product.name}</h3>
-                                    <p className="custom-card-subtitle">{product.slug}</p>
+                                  <Link style={{textDecoration: "none"}}  href={`/storedetail?id=${product?.slug}`}> 
+                                    <h3 className="custom-card-title">{product.name}</h3></Link> 
+                                    <p className="custom-card-subtitle">{product.product_specification}</p>
                                     {/* <p className="custom-card-location">{product.location}</p> */}
                                     <p className="custom-card-location">MO 1918</p>
                                     <p className="custom-card-updated">
-                                        <span>Last Updated:</span> 11 December 2021
+                                        <span>Last Updated:</span> {product.updated_at}
                                         {/* {product.updated} */}
 
                                     </p>

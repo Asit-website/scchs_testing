@@ -221,6 +221,7 @@ export default function events(pageProp) {
 
             if (resp.status === 200) {
                 const formateddata = await resp.json();
+                console.log(formateddata)
                 setCards(formateddata?.events);
                 setAllEvents(formateddata?.events)
                 // setTotalPages(Math.ceil(formateddata?.news?.length / itemsPerPage)); // Calculate total pages

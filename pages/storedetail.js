@@ -158,7 +158,7 @@ export default function storedetail(pageProp) {
                                 <h2 className="product-title">{productdetail?.product_name}</h2>
                                 <p className="product-subtitle">
                                     {/* Street car (interurban) terminal, St.Charles, */}
-                                    {productdetail?.slug}
+                                    {productdetail?.product_specification}
                                 </p>
 
                                 <div className="price-box">
