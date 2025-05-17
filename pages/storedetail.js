@@ -169,7 +169,8 @@ export default function storedetail(pageProp) {
                                         }
                                     </p>
                                     <p>
-                                        <span>Shipping / Handling :</span> $10
+                                        <span>Shipping / Handling :</span> ${productdetail?.
+shipping_cost}
                                     </p>
                                 </div>
 
