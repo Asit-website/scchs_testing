@@ -432,7 +432,45 @@ export default function storeorder(pageProp) {
     //     });
     // };
 
-   const updateQuantity = (productId, direction) => {
+    // const updateQuantity = (productId, direction) => {
+    //     setCartData((prev) => {
+    //         const prevCart = prev?.cart || [];
+
+    //         const updatedCart = prevCart.map((item) => {
+    //             const match = item.id === productId || item.product_id === productId;
+    //             const currentQty = parseInt(item.quantity) || 1;
+
+    //             if (match) {
+    //                 const newQty = direction === "inc"
+    //                     ? currentQty + 1
+    //                     : Math.max(1, currentQty - 1);
+
+    //                 return { ...item, quantity: newQty };
+    //             }
+    //             return item;
+    //         });
+
+    //         const total_amount = updatedCart.reduce((sum, item) => {
+    //             const itemPrice = membershipStatus === "active"
+    //                 ? parseFloat(item.membership_price || item.price)
+    //                 : parseFloat(item.price);
+
+    //             return sum + itemPrice * item.quantity;
+    //         }, 0);
+
+    //         const shipping_cost = parseFloat(prev?.shipping_cost || 0);
+    //         const grand_total = total_amount + shipping_cost;
+
+    //         return {
+    //             ...prev,
+    //             cart: updatedCart,
+    //             total_amount: total_amount.toFixed(2),
+    //             grand_total: grand_total.toFixed(2),
+    //         };
+    //     });
+    // };
+
+    const updateQuantity = (productId, direction) => {
     setCartData((prev) => {
         const prevCart = prev?.cart || [];
 
@@ -450,27 +488,43 @@ export default function storeorder(pageProp) {
             return item;
         });
 
+        // Use updatedCart to recalculate totals based on current membership
         const total_amount = updatedCart.reduce((sum, item) => {
-            const itemPrice = membershipStatus === "active"
-                ? parseFloat(item.membership_price || item.price)
-                : parseFloat(item.price);
+            const memberPrice = parseFloat(item.membership_price || item.price);
+            const normalPrice = parseFloat(item.price);
+            const priceToUse =
+                membershipStatus?.toLowerCase() === "active" ? memberPrice : normalPrice;
 
-            return sum + itemPrice * item.quantity;
+            return sum + priceToUse * item.quantity;
         }, 0);
 
         const shipping_cost = parseFloat(prev?.shipping_cost || 0);
         const grand_total = total_amount + shipping_cost;
+
+        // Also update grand_total_m if needed (optional)
+        const grand_total_m = updatedCart.reduce((sum, item) => {
+            const memberPrice = parseFloat(item.membership_price || item.price);
+            return sum + memberPrice * item.quantity;
+        }, 0) + shipping_cost;
 
         return {
             ...prev,
             cart: updatedCart,
             total_amount: total_amount.toFixed(2),
             grand_total: grand_total.toFixed(2),
+            grand_total_m: grand_total_m.toFixed(2), // optional
         };
     });
 };
 
- 
+useEffect(() => {
+    if (cartData) {
+        updateQuantity(null, null); // Trigger recalc with no quantity change
+    }
+}, [membershipStatus]);
+
+
+
 
     return (
         <div className="page_shopping_list sop">
@@ -487,8 +541,21 @@ export default function storeorder(pageProp) {
                             {
                                 cartData?.cart?.length > 0 && <div className="order-info-containerr">
                                     <h2 className="order-info-title">Order Information</h2>
-                                    <button onClick={clearCarts} className="order-btnn">Empty Cart</button>
-                                   <Link href={"/store"}><button className="order-btnn">Back</button></Link>
+                                    <button onClick={() => {
+
+                                        const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+                                        if (isLoggedIn) {
+                                            clearCarts();
+
+                                        }
+                                        else {
+                                            sessionStorage.setItem("cartItems", JSON.stringify([]));
+                                            setCartData([]);
+                                            toggleBoolValue();
+                                        }
+
+                                    }} className="order-btnn">Empty Cart</button>
+                                    <Link href={"/store"}><button className="order-btnn">Back</button></Link>
                                 </div>
                             }
 
@@ -549,7 +616,7 @@ export default function storeorder(pageProp) {
 
                                                 <div className="price-col with-border">
                                                     <div className="price-line">
-                                                        <span>{membershipStatus === "active" ? "Membership Price" :"Price"} :</span>
+                                                        <span>{membershipStatus === "active" ? "Membership Price" : "Price"} :</span>
                                                         <strong>${membershipStatus === "active" ? val?.
                                                             membership_price
                                                             * val?.quantity : val?.price * val?.quantity}</strong>
@@ -570,7 +637,7 @@ export default function storeorder(pageProp) {
                                     }
 
                                     <div className="total-due">
-                                        Total Due: <strong>${parseFloat(cartData.grand_total).toFixed(2)}</strong>
+                                        Total Due: <strong>${ membershipStatus === "active" ? parseFloat(cartData.grand_total_m).toFixed(2) : parseFloat(cartData.grand_total).toFixed(2) }</strong>
                                     </div>
                                 </div> :
                                     <div className="container">
@@ -588,7 +655,7 @@ export default function storeorder(pageProp) {
                             <div className="order-info-footer">
                                 {
                                     cartData?.cart?.length > 0 && <div className="order-info-buttons">
-                                        <button className="btn-secondarys">Continue Shopping</button>
+                                      <Link href={"/store"}><button className="btn-secondarys">Continue Shopping</button></Link>
                                         <button onClick={() => {
 
                                             const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
@@ -622,7 +689,7 @@ export default function storeorder(pageProp) {
                             </div>
                     }
 
-                    {payNow &&  (
+                    {payNow && (
                         <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency: "USD" }}>
                             <PayPalButtons
                                 style={{ layout: "vertical" }}
@@ -662,7 +729,7 @@ export default function storeorder(pageProp) {
                                         })
                                     });
 
-                                    toast.success("payment done successfully");
+                                    // toast.success("payment done successfully");
 
                                     clearCarts();
                                 }}

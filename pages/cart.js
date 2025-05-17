@@ -479,7 +479,7 @@ export default function Cart(props) {
                 // paymentHandler();
               }
               else {
-                router.push('/login');
+                router.push('/member/memberlogin');
               }
 
             }} className="site-button site_button1">Checkout</button>

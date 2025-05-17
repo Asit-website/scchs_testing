@@ -201,7 +201,7 @@ shipping_cost}
                                             sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
                                             // alert("Product successfuly added");
                                             toast.success("Product successfuly added");
-                                            router.push("/storeorder");
+                                            router.push("/cart");
                                             toggleBoolValue();
 
                                         }
