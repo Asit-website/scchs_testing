@@ -156,21 +156,21 @@ export default function storedetail(pageProp) {
 
                             <div className="product-detail-info">
                                 <h2 className="product-title">{productdetail?.product_name}</h2>
-                                <p className="product-subtitle">
+                                {/* <p className="product-subtitle"> */}
                                     {/* Street car (interurban) terminal, St.Charles, */}
-                                    {productdetail?.product_specification}
-                                </p>
+                                   <div className="product-subtitle"  dangerouslySetInnerHTML={{ __html: productdetail?.product_detail }} />
+                                {/* </p> */}
 
                                 <div className="price-box">
 
                                     <p>
-                                        <span>{membershipStatus === "active" ? "Membership Price" :"Price"} :</span> ${membershipStatus === "active" ? productdetail?.membership_price * quantity : productdetail?.price * quantity
-                                            
+                                        <span>{membershipStatus === "active" ? "Membership Price" : "Price"} :</span> ${membershipStatus === "active" ? productdetail?.membership_price * quantity : productdetail?.price * quantity
+
                                         }
                                     </p>
                                     <p>
                                         <span>Shipping / Handling :</span> ${productdetail?.
-shipping_cost}
+                                            shipping_cost}
                                     </p>
                                 </div>
 

@@ -623,7 +623,7 @@ useEffect(() => {
                                                     </div>
                                                     <div className="price-line price-line2">
                                                         <span>S & H :</span>
-                                                        <strong>${parseFloat(cartData.shipping_cost).toFixed(2)}</strong>
+                                                        <strong>${parseFloat(val.shipping_cost).toFixed(2)}</strong>
                                                     </div>
                                                     <div className="price-line">
                                                         <span>Item Total:</span>
