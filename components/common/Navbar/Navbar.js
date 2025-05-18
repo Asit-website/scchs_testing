@@ -775,6 +775,7 @@ export default function Navbar(props) {
                   window.location.href = "/"
                 }}>Logout</button> : <Link href="/member/memberlogin"><button>SIGN IN</button></Link>}
               </li>
+            {instaUser && <li><Link href={"/storeorder"}>View Cart</Link></li>}  
             </ul>
           </div>
         </div>

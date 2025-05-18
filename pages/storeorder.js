@@ -52,7 +52,8 @@ export default function storeorder(pageProp) {
     const [cartLoad, setCartLoad] = useState(true);
     const [cartEnpty, setCartEnpty] = useState(false);
     const [cartUpdate, setCartUpdate] = useState(false);
-    const [cartData, setCartData] = useState([]);
+    // const [cartData, setCartData] = useState([]);
+     const [cartData, setCartData] = useState({ cart: [], total_amount: 0, grand_total: 0 });
     const { data: session, status } = useSession();
     const nx_cart_id = Cookies.get("nx_cart_id");
 
@@ -217,9 +218,96 @@ export default function storeorder(pageProp) {
         else {
             let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
             console.log("alllca0", allCarts);
-            setCartData(allCarts);
+            // setCartData(allCarts);
+             calculateTotals(allCarts);
         }
     }, [boolValue])
+
+// ==============suri===========
+   const calculateTotals = (cartItems) => {
+  const total_amount = cartItems.reduce((sum, item) => {
+    const price = membershipStatus === "active"
+      ? parseFloat(item.membership_price || item.price || 0)
+      : parseFloat(item.price || 0);
+    return sum + price * (item.quantity || 1);
+  }, 0);
+
+  const shipping_cost = cartItems.reduce((sum, item) => {
+    const cost = parseFloat(item.shipping_cost || 0); // default to 0 if undefined
+    return sum + cost;
+  }, 0);
+
+  const grand_total = total_amount + shipping_cost;
+
+  setCartData({
+    cart: cartItems,
+    total_amount: total_amount.toFixed(2),
+    grand_total: grand_total.toFixed(2),
+    shipping_cost: shipping_cost.toFixed(2), // optional if you want to show this separately
+  });
+};
+
+
+
+
+
+  const updateQuantity = (productId, direction) => {
+    const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+
+    if (isLoggedIn) {
+      // Call backend update if needed
+      // You can add API call here to sync backend if required
+    }
+
+    setCartData((prev) => {
+      const updatedCart = prev.cart.map((item) => {
+        const match = item.id === productId || item.product_id === productId;
+        const qty = parseInt(item.quantity) || 1;
+        if (match) {
+          const newQty = direction === "inc" ? qty + 1 : Math.max(1, qty - 1);
+          return { ...item, quantity: newQty };
+        }
+        return item;
+      });
+
+      if (!isLoggedIn) {
+        sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+      }
+
+      calculateTotals(updatedCart);
+      return { ...prev, cart: updatedCart };
+    });
+  };
+
+  const handleAddToCart = (item) => {
+    const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+    const existing = cartData.cart.find((cartItem) =>
+      (cartItem.id || cartItem.product_id) === (item.id || item.product_id)
+    );
+
+    let updatedCart;
+
+    if (existing) {
+      updatedCart = cartData.cart.map((cartItem) =>
+        (cartItem.id || cartItem.product_id) === (item.id || item.product_id)
+          ? { ...cartItem, quantity: cartItem.quantity + 1 }
+          : cartItem
+      );
+    } else {
+      updatedCart = [...cartData.cart, { ...item, quantity: 1 }];
+    }
+
+    if (!isLoggedIn) {
+      sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+    }
+
+    calculateTotals(updatedCart);
+    setCartData({ ...cartData, cart: updatedCart });
+  };
+
+
+
+    // ==============end===========
 
     useEffect(() => {
         const loadRazorpayScript = async () => {
@@ -474,58 +562,58 @@ export default function storeorder(pageProp) {
     //     });
     // };
 
-    const updateQuantity = (productId, direction) => {
-        setCartData((prev) => {
-            const prevCart = prev?.cart || [];
+    // const updateQuantity = (productId, direction) => {
+    //     setCartData((prev) => {
+    //         const prevCart = prev?.cart || [];
 
-            const updatedCart = prevCart.map((item) => {
-                const match = item.id === productId || item.product_id === productId;
-                const currentQty = parseInt(item.quantity) || 1;
+    //         const updatedCart = prevCart.map((item) => {
+    //             const match = item.id === productId || item.product_id === productId;
+    //             const currentQty = parseInt(item.quantity) || 1;
 
-                if (match) {
-                    const newQty = direction === "inc"
-                        ? currentQty + 1
-                        : Math.max(1, currentQty - 1);
+    //             if (match) {
+    //                 const newQty = direction === "inc"
+    //                     ? currentQty + 1
+    //                     : Math.max(1, currentQty - 1);
 
-                    return { ...item, quantity: newQty };
-                }
-                return item;
-            });
+    //                 return { ...item, quantity: newQty };
+    //             }
+    //             return item;
+    //         });
 
-            // Use updatedCart to recalculate totals based on current membership
-            const total_amount = updatedCart.reduce((sum, item) => {
-                const memberPrice = parseFloat(item.membership_price || item.price);
-                const normalPrice = parseFloat(item.price);
-                const priceToUse =
-                    membershipStatus?.toLowerCase() === "active" ? memberPrice : normalPrice;
+    //         // Use updatedCart to recalculate totals based on current membership
+    //         const total_amount = updatedCart.reduce((sum, item) => {
+    //             const memberPrice = parseFloat(item.membership_price || item.price);
+    //             const normalPrice = parseFloat(item.price);
+    //             const priceToUse =
+    //                 membershipStatus?.toLowerCase() === "active" ? memberPrice : normalPrice;
 
-                return sum + priceToUse * item.quantity;
-            }, 0);
+    //             return sum + priceToUse * item.quantity;
+    //         }, 0);
 
-            const shipping_cost = parseFloat(prev?.shipping_cost || 0);
-            const grand_total = total_amount + shipping_cost;
+    //         const shipping_cost = parseFloat(prev?.shipping_cost || 0);
+    //         const grand_total = total_amount + shipping_cost;
 
-            // Also update grand_total_m if needed (optional)
-            const grand_total_m = updatedCart.reduce((sum, item) => {
-                const memberPrice = parseFloat(item.membership_price || item.price);
-                return sum + memberPrice * item.quantity;
-            }, 0) + shipping_cost;
+    //         // Also update grand_total_m if needed (optional)
+    //         const grand_total_m = updatedCart.reduce((sum, item) => {
+    //             const memberPrice = parseFloat(item.membership_price || item.price);
+    //             return sum + memberPrice * item.quantity;
+    //         }, 0) + shipping_cost;
 
-            return {
-                ...prev,
-                cart: updatedCart,
-                total_amount: total_amount.toFixed(2),
-                grand_total: grand_total.toFixed(2),
-                grand_total_m: grand_total_m.toFixed(2), // optional
-            };
-        });
-    };
+    //         return {
+    //             ...prev,
+    //             cart: updatedCart,
+    //             total_amount: total_amount.toFixed(2),
+    //             grand_total: grand_total.toFixed(2),
+    //             grand_total_m: grand_total_m.toFixed(2), // optional
+    //         };
+    //     });
+    // };
 
-    useEffect(() => {
-        if (cartData) {
-            updateQuantity(null, null); // Trigger recalc with no quantity change
-        }
-    }, [membershipStatus]);
+    // useEffect(() => {
+    //     if (cartData) {
+    //         updateQuantity(null, null); // Trigger recalc with no quantity change
+    //     }
+    // }, [membershipStatus]);
 
 
 
@@ -581,7 +669,7 @@ export default function storeorder(pageProp) {
                                                         <div className="item-title">{val?.name || val?.product_name}</div>
                                                       
                                                         <div className="item-desc">{val?.short_description}</div>
-                                                          <button style={{color:"#AB0635",marginTop:"10px"}} onClick={() => {
+                                                       {instaUser && <button style={{color:"#AB0635",marginTop:"10px"}} onClick={() => {
                                                             const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
                                                             if (isLoggedIn) {
                                                                 removeCarts(val.product_id, val.quantity);
@@ -594,7 +682,7 @@ export default function storeorder(pageProp) {
 
                                                             }
 
-                                                        }} type="button">Remove</button>
+                                                        }} type="button">Remove</button>}   
                                                     </div>
                                                     
                                                 </div>
@@ -641,10 +729,11 @@ export default function storeorder(pageProp) {
                                                             membership_price
                                                             * val?.quantity : val?.price * val?.quantity}</strong>
                                                     </div>
-                                                    <div className="price-line price-line2">
+                                                    
+                                                 {instaUser && <div className="price-line price-line2">
                                                         <span>S & H :</span>
                                                         <strong>${parseFloat(val.shipping_cost).toFixed(2)}</strong>
-                                                    </div>
+                                                    </div>}   
                                                     <div className="price-line">
                                                         <span>Item Total:</span>
                                                         <strong>{val?.quantity}</strong>
@@ -657,7 +746,8 @@ export default function storeorder(pageProp) {
                                     }
 
                                     <div className="total-due">
-                                        Total Due: <strong>${membershipStatus === "active" ? parseFloat(cartData.grand_total_m).toFixed(2) : parseFloat(cartData.grand_total).toFixed(2)}</strong>
+                                          Total Due: <strong>${ parseFloat(cartData.grand_total).toFixed(2)}</strong>
+                                        {/* Total Due: <strong>${membershipStatus === "active" ? parseFloat(cartData.grand_total_m).toFixed(2) : parseFloat(cartData.grand_total).toFixed(2)}</strong> */}
                                     </div>
                                 </div> :
                                     <div className="container">
@@ -666,7 +756,7 @@ export default function storeorder(pageProp) {
                                                 <path d="M10 24c0 1.094-0.906 2-2 2s-2-0.906-2-2 0.906-2 2-2 2 0.906 2 2zM24 24c0 1.094-0.906 2-2 2s-2-0.906-2-2 0.906-2 2-2 2 0.906 2 2zM26 7v8c0 0.5-0.391 0.938-0.891 1l-16.312 1.906c0.078 0.359 0.203 0.719 0.203 1.094 0 0.359-0.219 0.688-0.375 1h14.375c0.547 0 1 0.453 1 1s-0.453 1-1 1h-16c-0.547 0-1-0.453-1-1 0-0.484 0.703-1.656 0.953-2.141l-2.766-12.859h-3.187c-0.547 0-1-0.453-1-1s0.453-1 1-1h4c1.047 0 1.078 1.25 1.234 2h18.766c0.547 0 1 0.453 1 1z"></path>
                                             </svg>
                                             <h2>Your cart is empty</h2>
-                                            <Link href={"/"}>Go to Home</Link>
+                                            <Link href={"/store"}>Go to Store</Link>
                                         </div>
                                     </div>
                             }
@@ -704,7 +794,7 @@ export default function storeorder(pageProp) {
                                         <path d="M10 24c0 1.094-0.906 2-2 2s-2-0.906-2-2 0.906-2 2-2 2 0.906 2 2zM24 24c0 1.094-0.906 2-2 2s-2-0.906-2-2 0.906-2 2-2 2 0.906 2 2zM26 7v8c0 0.5-0.391 0.938-0.891 1l-16.312 1.906c0.078 0.359 0.203 0.719 0.203 1.094 0 0.359-0.219 0.688-0.375 1h14.375c0.547 0 1 0.453 1 1s-0.453 1-1 1h-16c-0.547 0-1-0.453-1-1 0-0.484 0.703-1.656 0.953-2.141l-2.766-12.859h-3.187c-0.547 0-1-0.453-1-1s0.453-1 1-1h4c1.047 0 1.078 1.25 1.234 2h18.766c0.547 0 1 0.453 1 1z"></path>
                                     </svg>
                                     <h2>Your cart is empty</h2>
-                                    <Link href={"/"}>Go to Home</Link>
+                                    <Link href={"/store"}>Go to Store</Link>
                                 </div>
                             </div>
                     }
@@ -752,6 +842,10 @@ export default function storeorder(pageProp) {
                                     // toast.success("payment done successfully");
 
                                     clearCarts();
+                                    setTimeout(()=>{
+                                         window.location.href="/store";
+                                    },2000)
+                                   
                                 }}
                                 onCancel={() => {
                                     alert("Payment cancelled");

@@ -232,7 +232,7 @@ export default function storedetail(pageProp) {
                                             sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
                                             // alert("Product successfuly added");
                                             toast.success("Product successfuly added");
-                                            router.push("/cart");
+                                            router.push("/storeorder");
                                             toggleBoolValue();
 
                                         }

@@ -23,61 +23,61 @@ export default function userlogin(pageProp) {
 
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
-     const [membershipStatus, setMembershipStatus] = useState("loading");
+    const [membershipStatus, setMembershipStatus] = useState("loading");
     const [instaUser, setInstaUser] = useState(null);
 
-     useEffect(() => {
-          const storedUser = localStorage.getItem("scchs_User");
-          if (storedUser) {
+    useEffect(() => {
+        const storedUser = localStorage.getItem("scchs_User");
+        if (storedUser) {
             setInstaUser(JSON.parse(storedUser));
-          }
-        }, []);
-    
-    
-        useEffect(() => {
-          const fetchMembership = async () => {
-            if (!instaUser?.id) return;
-    
-            try {
-              const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
-              const data = await res.json();
-    
-              const today = new Date();
-    
-              const activePlan = data?.data?.find(plan => {
-                const isActive = plan.status === "active";
-                const endDate = new Date(plan.end_date);
-                return isActive && endDate >= today;
-              });
-    
-              setMembershipStatus(activePlan ? "active" : "none");
-            } catch (err) {
-              console.error("Error fetching membership:", err);
-              setMembershipStatus("none");
-            }
-          };
-    
-          fetchMembership();
-        }, [instaUser]);
+        }
+    }, []);
 
-     const addToCartApi = async (id , access) => {
+
+    useEffect(() => {
+        const fetchMembership = async () => {
+            if (!instaUser?.id) return;
+
+            try {
+                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const data = await res.json();
+
+                const today = new Date();
+
+                const activePlan = data?.data?.find(plan => {
+                    const isActive = plan.status === "active";
+                    const endDate = new Date(plan.end_date);
+                    return isActive && endDate >= today;
+                });
+
+                setMembershipStatus(activePlan ? "active" : "none");
+            } catch (err) {
+                console.error("Error fetching membership:", err);
+                setMembershipStatus("none");
+            }
+        };
+
+        fetchMembership();
+    }, [instaUser]);
+
+    const addToCartApi = async (id, access) => {
 
         const resp = await fetch('https://admin.scchs.co.in/api/cart/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-             "Authorization":`Bearer ${access}`
-          },
-          body: JSON.stringify({
-            product_id: id,
-            quantity: 1,
-          }),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${access}`
+            },
+            body: JSON.stringify({
+                product_id: id,
+                quantity: 1,
+            }),
         })
-          .then(response => response.json())
-         
-          .catch(error => console.error('Error:', error));
-    
-      }
+            .then(response => response.json())
+
+            .catch(error => console.error('Error:', error));
+
+    }
 
 
     const submitLogin = async (e) => {
@@ -105,12 +105,12 @@ export default function userlogin(pageProp) {
 
             const data = await response.json();
             console.log(data);
-            
-          if(data.status === false){
-            toast.error(data.message);
-            return
-          }
-         
+
+            if (data.status === false) {
+                toast.error(data.message);
+                return
+            }
+
 
 
             localStorage.setItem("scchs_Access", JSON.stringify(data?.user?.access_token));
@@ -119,9 +119,9 @@ export default function userlogin(pageProp) {
             // added the carts into the user carts 
             let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
 
-            for(let cart of allCarts){
-                 console.log("cart" , cart);
-                await addToCartApi(cart?.id , data?.user?.access_token);
+            for (let cart of allCarts) {
+                console.log("cart", cart);
+                await addToCartApi(cart?.id, data?.user?.access_token);
             }
             toast.success(data?.message);
             window.location.href = "/";
@@ -144,8 +144,11 @@ export default function userlogin(pageProp) {
             <div className="scchs-login-wrapper">
                 <div className="scchs-login-card">
                     <p className="scchs-info-text">
-                        If you are a new user 
-                        <Link href="/join/register"><span className="scchs-click-here">CLICK HERE.</span></Link>
+                        {/* if you are a new user you can  <Link href="/join/register"> <span className="scchs-click-here"> Sign up free  </span> </Link>
+                        If you are member then login in */}
+
+                        <Link href="/join/register"> <span className="scchs-click-here"> Sign up for free  </span> </Link> if you’re new. Already a member? Log in here.
+                       
                     </p>
                     <h2 className="scchs-login-title">Sign in</h2>
                     <form onSubmit={submitLogin}>

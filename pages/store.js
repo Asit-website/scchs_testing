@@ -255,7 +255,7 @@ export default function store(pageProp) {
 
                                                 sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
                                                 toast.success("Product successfuly added");
-                                                router.push("/cart");
+                                                router.push("/storeorder");
                                                 toggleBoolValue();
 
                                             }
