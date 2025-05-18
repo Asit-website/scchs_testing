@@ -43,6 +43,8 @@ export default function storeorder(pageProp) {
     const increase = () => setQuantity(q => q + 1);
     const decrease = () => setQuantity(q => (q > 1 ? q - 1 : 1));
 
+    const [showPaypal,setShowPaypal] = useState(true)
+
     // ====================
 
     const { toggleBoolValue, boolValue } = pageProp;
@@ -142,6 +144,8 @@ export default function storeorder(pageProp) {
             Swal.fire('Cleared!', data?.message || 'Your cart has been cleared.', 'success');
             setCartData(data?.cart);
             toggleBoolValue();
+
+            
 
         } catch (error) {
             Swal.fire('Error', 'Failed to clear the cart. Please try again.', 'error');
@@ -471,57 +475,57 @@ export default function storeorder(pageProp) {
     // };
 
     const updateQuantity = (productId, direction) => {
-    setCartData((prev) => {
-        const prevCart = prev?.cart || [];
+        setCartData((prev) => {
+            const prevCart = prev?.cart || [];
 
-        const updatedCart = prevCart.map((item) => {
-            const match = item.id === productId || item.product_id === productId;
-            const currentQty = parseInt(item.quantity) || 1;
+            const updatedCart = prevCart.map((item) => {
+                const match = item.id === productId || item.product_id === productId;
+                const currentQty = parseInt(item.quantity) || 1;
 
-            if (match) {
-                const newQty = direction === "inc"
-                    ? currentQty + 1
-                    : Math.max(1, currentQty - 1);
+                if (match) {
+                    const newQty = direction === "inc"
+                        ? currentQty + 1
+                        : Math.max(1, currentQty - 1);
 
-                return { ...item, quantity: newQty };
-            }
-            return item;
+                    return { ...item, quantity: newQty };
+                }
+                return item;
+            });
+
+            // Use updatedCart to recalculate totals based on current membership
+            const total_amount = updatedCart.reduce((sum, item) => {
+                const memberPrice = parseFloat(item.membership_price || item.price);
+                const normalPrice = parseFloat(item.price);
+                const priceToUse =
+                    membershipStatus?.toLowerCase() === "active" ? memberPrice : normalPrice;
+
+                return sum + priceToUse * item.quantity;
+            }, 0);
+
+            const shipping_cost = parseFloat(prev?.shipping_cost || 0);
+            const grand_total = total_amount + shipping_cost;
+
+            // Also update grand_total_m if needed (optional)
+            const grand_total_m = updatedCart.reduce((sum, item) => {
+                const memberPrice = parseFloat(item.membership_price || item.price);
+                return sum + memberPrice * item.quantity;
+            }, 0) + shipping_cost;
+
+            return {
+                ...prev,
+                cart: updatedCart,
+                total_amount: total_amount.toFixed(2),
+                grand_total: grand_total.toFixed(2),
+                grand_total_m: grand_total_m.toFixed(2), // optional
+            };
         });
+    };
 
-        // Use updatedCart to recalculate totals based on current membership
-        const total_amount = updatedCart.reduce((sum, item) => {
-            const memberPrice = parseFloat(item.membership_price || item.price);
-            const normalPrice = parseFloat(item.price);
-            const priceToUse =
-                membershipStatus?.toLowerCase() === "active" ? memberPrice : normalPrice;
-
-            return sum + priceToUse * item.quantity;
-        }, 0);
-
-        const shipping_cost = parseFloat(prev?.shipping_cost || 0);
-        const grand_total = total_amount + shipping_cost;
-
-        // Also update grand_total_m if needed (optional)
-        const grand_total_m = updatedCart.reduce((sum, item) => {
-            const memberPrice = parseFloat(item.membership_price || item.price);
-            return sum + memberPrice * item.quantity;
-        }, 0) + shipping_cost;
-
-        return {
-            ...prev,
-            cart: updatedCart,
-            total_amount: total_amount.toFixed(2),
-            grand_total: grand_total.toFixed(2),
-            grand_total_m: grand_total_m.toFixed(2), // optional
-        };
-    });
-};
-
-useEffect(() => {
-    if (cartData) {
-        updateQuantity(null, null); // Trigger recalc with no quantity change
-    }
-}, [membershipStatus]);
+    useEffect(() => {
+        if (cartData) {
+            updateQuantity(null, null); // Trigger recalc with no quantity change
+        }
+    }, [membershipStatus]);
 
 
 
@@ -575,8 +579,24 @@ useEffect(() => {
                                                     <div className="order-info-details">
                                                         {/* <div className="item-title">Print "The Meeting Place"</div> */}
                                                         <div className="item-title">{val?.name || val?.product_name}</div>
-                                                        <div className="item-desc">Street car (interurban) terminal,<br />St.Charles, MO</div>
+                                                      
+                                                        <div className="item-desc">{val?.short_description}</div>
+                                                          <button style={{color:"#AB0635",marginTop:"10px"}} onClick={() => {
+                                                            const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+                                                            if (isLoggedIn) {
+                                                                removeCarts(val.product_id, val.quantity);
+                                                            }
+                                                            else {
+                                                                const filterdata = cartData?.filter(data => data?.id !== val?.id);
+                                                                setCartData(filterdata);
+                                                                sessionStorage.setItem("cartItems", JSON.stringify(filterdata));
+                                                                toggleBoolValue();
+
+                                                            }
+
+                                                        }} type="button">Remove</button>
                                                     </div>
+                                                    
                                                 </div>
 
                                                 <div className="qty-col with-border">
@@ -637,7 +657,7 @@ useEffect(() => {
                                     }
 
                                     <div className="total-due">
-                                        Total Due: <strong>${ membershipStatus === "active" ? parseFloat(cartData.grand_total_m).toFixed(2) : parseFloat(cartData.grand_total).toFixed(2) }</strong>
+                                        Total Due: <strong>${membershipStatus === "active" ? parseFloat(cartData.grand_total_m).toFixed(2) : parseFloat(cartData.grand_total).toFixed(2)}</strong>
                                     </div>
                                 </div> :
                                     <div className="container">
@@ -655,7 +675,7 @@ useEffect(() => {
                             <div className="order-info-footer">
                                 {
                                     cartData?.cart?.length > 0 && <div className="order-info-buttons">
-                                      <Link href={"/store"}><button className="btn-secondarys">Continue Shopping</button></Link>
+                                        <Link href={"/store"}><button className="btn-secondarys">Continue Shopping</button></Link>
                                         <button onClick={() => {
 
                                             const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));

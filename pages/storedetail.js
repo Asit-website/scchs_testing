@@ -19,6 +19,12 @@ import HeadSEO1 from "../components/common/Head/head1";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Navigation, Pagination } from 'swiper/modules';
+
 
 var settingsMorePhotos = {
     arrows: true,
@@ -148,17 +154,42 @@ export default function storedetail(pageProp) {
                 <div className="event_main">
                     <div className="product-detail-wrapper">
                         <div className="product-detail-container">
-                            <img
+                            {
+                                productdetail?.images?.length > 1 
+                                ?
+                                  <Swiper
+                                modules={[Navigation, Pagination]}
+                                spaceBetween={20}
+                                slidesPerView={1}
+                                navigation
+                                pagination={{ clickable: true }}
+                                className="product-image-slider"
+                            >
+                                {productdetail?.images?.map((img, index) => (
+                                    <SwiperSlide key={index}>
+                                        <img
+                                            className="product-detail-image"
+                                            src={img}
+                                            alt={`Print ${index + 1}`}
+                                        />
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                             :  <img
                                 className="product-detail-image"
                                 src={productdetail?.images}
                                 alt="Print"
                             />
 
+                            }
+                            
+
+                          
                             <div className="product-detail-info">
                                 <h2 className="product-title">{productdetail?.product_name}</h2>
                                 {/* <p className="product-subtitle"> */}
-                                    {/* Street car (interurban) terminal, St.Charles, */}
-                                   <div className="product-subtitle"  dangerouslySetInnerHTML={{ __html: productdetail?.product_detail }} />
+                                {/* Street car (interurban) terminal, St.Charles, */}
+                                <div className="product-subtitle" dangerouslySetInnerHTML={{ __html: productdetail?.product_detail }} />
                                 {/* </p> */}
 
                                 <div className="price-box">
