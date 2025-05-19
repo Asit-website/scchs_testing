@@ -773,7 +773,7 @@ export default function Navbar(props) {
                   setInstaUser(null)
                   toast.success("Logout successfully");
                   window.location.href = "/"
-                }}>Logout</button> : <Link href="/member/memberlogin"><button>SIGN IN</button></Link>}
+                }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
               </li>
             {instaUser && <li><Link href={"/storeorder"}>View Cart</Link></li>}  
             </ul>

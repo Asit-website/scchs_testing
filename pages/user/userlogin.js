@@ -148,7 +148,7 @@ export default function userlogin(pageProp) {
                         If you are member then login in */}
 
                         <Link href="/join/register"> <span className="scchs-click-here"> Sign up for free  </span> </Link> if you’re new. Already a member? Log in here.
-                       
+
                     </p>
                     <h2 className="scchs-login-title">Sign in</h2>
                     <form onSubmit={submitLogin}>
@@ -185,7 +185,7 @@ export default function userlogin(pageProp) {
                             </span>
                         </div>
 
-                        <Link style={{ textDecoration: "none" }} href="/user/loginchange"><p className="scchs-forgot-link">Forgot Username or Password?</p></Link>
+                        <Link style={{ textDecoration: "none" }} href="/user/loginchange"><p className="scchs-forgot-link">Forgot Password?</p></Link>
 
                         <button type="submit" className="scchs-login-button">Login</button>
                     </form>

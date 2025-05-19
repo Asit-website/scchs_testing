@@ -116,6 +116,26 @@ export default function Cart(props) {
   }
 };
 
+const clearCarts1 = async () => {
+    try {
+      const response = await fetch("https://admin.scchs.co.in/api/cart/clear", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+        },
+
+      });
+      const data = await response.json();
+      alert(data?.message)
+      setCartData(data);
+      toggleBoolValue();
+
+
+    } catch (error) {
+    }
+  }
+
   const [datas, setDatas] = useState([]);
 
   const [order,setOrder] = useState([]);

@@ -153,6 +153,26 @@ export default function storeorder(pageProp) {
         }
     };
 
+    const clearCarts1 = async () => {
+    try {
+      const response = await fetch("https://admin.scchs.co.in/api/cart/clear", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+        },
+
+      });
+      const data = await response.json();
+      toast.success(data?.message)
+      setCartData(data);
+      toggleBoolValue();
+
+
+    } catch (error) {
+    }
+  }
+
     const [datas, setDatas] = useState([]);
 
     const [order, setOrder] = useState([]);
@@ -282,19 +302,6 @@ export default function storeorder(pageProp) {
   });
 };
 
-
-
-    useEffect(() => {
-    if (cartData?.cart?.length && membershipStatus) {
-        calculateTotals(cartData.cart);
-    }
-}, [membershipStatus]);
-
-
-
-
-
-
     const updateQuantity = (productId, direction) => {
         const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
 
@@ -322,6 +329,14 @@ export default function storeorder(pageProp) {
             return { ...prev, cart: updatedCart };
         });
     };
+
+
+
+   useEffect(() => {
+    if (cartData?.cart?.length && membershipStatus) {
+        calculateTotals(cartData.cart);
+    }
+}, [membershipStatus]);
 
     const handleAddToCart = (item) => {
         const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
@@ -707,7 +722,7 @@ export default function storeorder(pageProp) {
                                             return <div key={index} className="order-info-row">
                                                 <div className="item-col">
                                                     {/* https://res.cloudinary.com/dgif730br/image/upload/v1745412566/image_3_qhe6b5.png */}
-                                                    <img src={val?.image || val?.images} alt="print" className="order-info-image" />
+                                                    <img src={val?.image || val?.images[0]} alt="print" className="order-info-image" />
                                                     <div className="order-info-details">
                                                         {/* <div className="item-title">Print "The Meeting Place"</div> */}
                                                         <div className="item-title">{val?.name || val?.product_name}</div>
@@ -776,7 +791,7 @@ export default function storeorder(pageProp) {
 
                                                     <div className="price-line price-line2">
                                                         <span>S & H :</span>
-                                                        <strong>${parseFloat(val.shipping_cost).toFixed(2)}</strong>
+                                                        <strong>${parseFloat(val?.shipping_cost).toFixed(2)}</strong>
                                                     </div>
                                                     <div className="price-line">
                                                         <span>Item Total:</span>
@@ -885,10 +900,12 @@ export default function storeorder(pageProp) {
 
                                     // toast.success("payment done successfully");
 
-                                    clearCarts();
-                                    setTimeout(() => {
-                                        window.location.href = "/store";
-                                    }, 2000)
+                                    clearCarts1();
+                                    // setTimeout(() => {
+                                    //     window.location.href = "/store";
+                                    // }, 2000)
+
+                                     router.push(`/paymentsuccess?orderId=${payment?.order_id}`);
 
                                 }}
                                 onCancel={() => {
