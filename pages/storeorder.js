@@ -43,7 +43,7 @@ export default function storeorder(pageProp) {
     const increase = () => setQuantity(q => q + 1);
     const decrease = () => setQuantity(q => (q > 1 ? q - 1 : 1));
 
-    const [showPaypal,setShowPaypal] = useState(true)
+    const [showPaypal, setShowPaypal] = useState(true)
 
     // ====================
 
@@ -53,7 +53,7 @@ export default function storeorder(pageProp) {
     const [cartEnpty, setCartEnpty] = useState(false);
     const [cartUpdate, setCartUpdate] = useState(false);
     // const [cartData, setCartData] = useState([]);
-     const [cartData, setCartData] = useState({ cart: [], total_amount: 0, grand_total: 0 });
+    const [cartData, setCartData] = useState({ cart: [], total_amount: 0, grand_total: 0 });
     const { data: session, status } = useSession();
     const nx_cart_id = Cookies.get("nx_cart_id");
 
@@ -110,7 +110,7 @@ export default function storeorder(pageProp) {
             const data = await response.json();
             console.log(data);
             toggleBoolValue();
-            setCartData(data?.cart);
+            setCartData(data);
 
             // } 
         } catch (error) {
@@ -146,7 +146,7 @@ export default function storeorder(pageProp) {
             setCartData(data?.cart);
             toggleBoolValue();
 
-            
+
 
         } catch (error) {
             Swal.fire('Error', 'Failed to clear the cart. Please try again.', 'error');
@@ -219,91 +219,135 @@ export default function storeorder(pageProp) {
             let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
             console.log("alllca0", allCarts);
             // setCartData(allCarts);
-             calculateTotals(allCarts);
+            calculateTotals(allCarts);
         }
     }, [boolValue])
 
-// ==============suri===========
-   const calculateTotals = (cartItems) => {
-  const total_amount = cartItems.reduce((sum, item) => {
-    const price = membershipStatus === "active"
-      ? parseFloat(item.membership_price || item.price || 0)
-      : parseFloat(item.price || 0);
-    return sum + price * (item.quantity || 1);
-  }, 0);
+    // ==============suri===========
+    // const calculateTotals = (cartItems) => {
+    //     const total_amount = cartItems.reduce((sum, item) => {
+    //         const price = membershipStatus === "active"
+    //             ? parseFloat(item.membership_price || item.price || 0)
+    //             : parseFloat(item.price || 0);
+    //         return sum + price * (item.quantity || 1);
+    //     }, 0);
+
+    //     const shipping_cost = cartItems.reduce((sum, item) => {
+    //         const cost = parseFloat(item.shipping_cost || 0); // default to 0 if undefined
+    //         return sum + cost;
+    //     }, 0);
+
+    //     console.log(shipping_cost);
+
+    //     const grand_total = total_amount + shipping_cost;
+
+    //     setCartData({
+    //         cart: cartItems,
+    //         total_amount: total_amount.toFixed(2),
+    //         grand_total: grand_total.toFixed(2),
+    //         shipping_cost: shipping_cost.toFixed(2), // optional if you want to show this separately
+    //     });
+    // };
+
+  const calculateTotals = (cartItems) => {
+  const isMember = membershipStatus?.toLowerCase() === "active";
+
+  let total_amount = 0;
+  let grand_total_m = 0;
+
+  cartItems.forEach((item) => {
+    const quantity = parseInt(item.quantity) || 1;
+
+    const normalPrice = parseFloat(item.price ?? 0);
+    const memberPrice = parseFloat(item.membership_price ?? item.price ?? 0);
+    const shippingCost = parseFloat(item.shipping_cost ?? 0);
+
+    total_amount += normalPrice * quantity;
+    grand_total_m += (memberPrice * quantity) + shippingCost;
+  });
 
   const shipping_cost = cartItems.reduce((sum, item) => {
-    const cost = parseFloat(item.shipping_cost || 0); // default to 0 if undefined
+    const cost = parseFloat(item.shipping_cost ?? 0);
     return sum + cost;
   }, 0);
 
-  const grand_total = total_amount + shipping_cost;
+  const grand_total = isMember ? grand_total_m : total_amount + shipping_cost;
 
   setCartData({
     cart: cartItems,
     total_amount: total_amount.toFixed(2),
     grand_total: grand_total.toFixed(2),
-    shipping_cost: shipping_cost.toFixed(2), // optional if you want to show this separately
+    grand_total_m: grand_total_m.toFixed(2),
+    shipping_cost: shipping_cost.toFixed(2),
   });
 };
 
 
 
-
-
-  const updateQuantity = (productId, direction) => {
-    const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
-
-    if (isLoggedIn) {
-      // Call backend update if needed
-      // You can add API call here to sync backend if required
+    useEffect(() => {
+    if (cartData?.cart?.length && membershipStatus) {
+        calculateTotals(cartData.cart);
     }
+}, [membershipStatus]);
 
-    setCartData((prev) => {
-      const updatedCart = prev.cart.map((item) => {
-        const match = item.id === productId || item.product_id === productId;
-        const qty = parseInt(item.quantity) || 1;
-        if (match) {
-          const newQty = direction === "inc" ? qty + 1 : Math.max(1, qty - 1);
-          return { ...item, quantity: newQty };
+
+
+
+
+
+    const updateQuantity = (productId, direction) => {
+        const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+
+        if (isLoggedIn) {
+            // Call backend update if needed
+            // You can add API call here to sync backend if required
         }
-        return item;
-      });
 
-      if (!isLoggedIn) {
-        sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
-      }
+        setCartData((prev) => {
+            const updatedCart = prev.cart.map((item) => {
+                const match = item.id === productId || item.product_id === productId;
+                const qty = parseInt(item.quantity) || 1;
+                if (match) {
+                    const newQty = direction === "inc" ? qty + 1 : Math.max(1, qty - 1);
+                    return { ...item, quantity: newQty };
+                }
+                return item;
+            });
 
-      calculateTotals(updatedCart);
-      return { ...prev, cart: updatedCart };
-    });
-  };
+            if (!isLoggedIn) {
+                sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+            }
 
-  const handleAddToCart = (item) => {
-    const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
-    const existing = cartData.cart.find((cartItem) =>
-      (cartItem.id || cartItem.product_id) === (item.id || item.product_id)
-    );
+            calculateTotals(updatedCart);
+            return { ...prev, cart: updatedCart };
+        });
+    };
 
-    let updatedCart;
+    const handleAddToCart = (item) => {
+        const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+        const existing = cartData.cart.find((cartItem) =>
+            (cartItem.id || cartItem.product_id) === (item.id || item.product_id)
+        );
 
-    if (existing) {
-      updatedCart = cartData.cart.map((cartItem) =>
-        (cartItem.id || cartItem.product_id) === (item.id || item.product_id)
-          ? { ...cartItem, quantity: cartItem.quantity + 1 }
-          : cartItem
-      );
-    } else {
-      updatedCart = [...cartData.cart, { ...item, quantity: 1 }];
-    }
+        let updatedCart;
 
-    if (!isLoggedIn) {
-      sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
-    }
+        if (existing) {
+            updatedCart = cartData.cart.map((cartItem) =>
+                (cartItem.id || cartItem.product_id) === (item.id || item.product_id)
+                    ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                    : cartItem
+            );
+        } else {
+            updatedCart = [...cartData.cart, { ...item, quantity: 1 }];
+        }
 
-    calculateTotals(updatedCart);
-    setCartData({ ...cartData, cart: updatedCart });
-  };
+        if (!isLoggedIn) {
+            sessionStorage.setItem("cartItems", JSON.stringify(updatedCart));
+        }
+
+        calculateTotals(updatedCart);
+        setCartData({ ...cartData, cart: updatedCart });
+    };
 
 
 
@@ -667,24 +711,24 @@ export default function storeorder(pageProp) {
                                                     <div className="order-info-details">
                                                         {/* <div className="item-title">Print "The Meeting Place"</div> */}
                                                         <div className="item-title">{val?.name || val?.product_name}</div>
-                                                      
+
                                                         <div className="item-desc">{val?.short_description}</div>
-                                                       {instaUser && <button style={{color:"#AB0635",marginTop:"10px"}} onClick={() => {
+                                                        <button style={{ color: "#AB0635", marginTop: "10px" }} onClick={() => {
                                                             const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
                                                             if (isLoggedIn) {
                                                                 removeCarts(val.product_id, val.quantity);
                                                             }
                                                             else {
-                                                                const filterdata = cartData?.filter(data => data?.id !== val?.id);
+                                                                const filterdata = cartData?.cart?.filter(data => data?.id !== val?.id);
                                                                 setCartData(filterdata);
                                                                 sessionStorage.setItem("cartItems", JSON.stringify(filterdata));
                                                                 toggleBoolValue();
 
                                                             }
 
-                                                        }} type="button">Remove</button>}   
+                                                        }} type="button">Remove</button>
                                                     </div>
-                                                    
+
                                                 </div>
 
                                                 <div className="qty-col with-border">
@@ -729,11 +773,11 @@ export default function storeorder(pageProp) {
                                                             membership_price
                                                             * val?.quantity : val?.price * val?.quantity}</strong>
                                                     </div>
-                                                    
-                                                 {instaUser && <div className="price-line price-line2">
+
+                                                    <div className="price-line price-line2">
                                                         <span>S & H :</span>
                                                         <strong>${parseFloat(val.shipping_cost).toFixed(2)}</strong>
-                                                    </div>}   
+                                                    </div>
                                                     <div className="price-line">
                                                         <span>Item Total:</span>
                                                         <strong>{val?.quantity}</strong>
@@ -746,8 +790,8 @@ export default function storeorder(pageProp) {
                                     }
 
                                     <div className="total-due">
-                                          Total Due: <strong>${ parseFloat(cartData.grand_total).toFixed(2)}</strong>
-                                        {/* Total Due: <strong>${membershipStatus === "active" ? parseFloat(cartData.grand_total_m).toFixed(2) : parseFloat(cartData.grand_total).toFixed(2)}</strong> */}
+                                        {/* Total Due: <strong>${parseFloat(cartData.grand_total).toFixed(2)}</strong> */}
+                                        Total Due: <strong>${membershipStatus === "active" ? parseFloat(cartData.grand_total_m).toFixed(2) : parseFloat(cartData.grand_total).toFixed(2)}</strong>
                                     </div>
                                 </div> :
                                     <div className="container">
@@ -779,7 +823,7 @@ export default function storeorder(pageProp) {
                                                 // paymentHandler();
                                             }
                                             else {
-                                                router.push('/member/memberlogin');
+                                                router.push('/user/userlogin');
                                             }
 
                                         }} className="btn-primarys">Checkout</button>
@@ -842,10 +886,10 @@ export default function storeorder(pageProp) {
                                     // toast.success("payment done successfully");
 
                                     clearCarts();
-                                    setTimeout(()=>{
-                                         window.location.href="/store";
-                                    },2000)
-                                   
+                                    setTimeout(() => {
+                                        window.location.href = "/store";
+                                    }, 2000)
+
                                 }}
                                 onCancel={() => {
                                     alert("Payment cancelled");

@@ -847,13 +847,13 @@ export default function register1(pageProp) {
                                     </div>
 
                                     <div className="do_have">
-                                        <div className="do_left">
+                                        {/* <div className="do_left">
                                             <p>Do you have an alternate "Seasonal" address:</p>
                                             <select>
                                                 <option>Yes</option>
                                                 <option>No</option>
                                             </select>
-                                        </div>
+                                        </div> */}
                                         {
                                             step < 3 && <button type="button" onClick={() => {
                                                 console.log("step", step);
