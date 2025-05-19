@@ -225,9 +225,9 @@ export default function store(pageProp) {
                                 <div className="custom-card-content">
                                   <Link style={{textDecoration: "none"}}  href={`/storedetail?id=${product?.slug}`}> 
                                     <h3 className="custom-card-title">{product.name}</h3></Link> 
-                                    <p className="custom-card-subtitle">{product.product_specification}</p>
+                                    <p className="custom-card-subtitle">{product.short_description}</p>
                                     {/* <p className="custom-card-location">{product.location}</p> */}
-                                    <p className="custom-card-location">MO 1918</p>
+                                    {/* <p className="custom-card-location">MO 1918</p> */}
                                     <p className="custom-card-updated">
                                         <span>Last Updated:</span> {product.updated_at}
                                         {/* {product.updated} */}
