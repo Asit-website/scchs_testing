@@ -190,6 +190,13 @@ export default function events(pageProp) {
     const [allEvents, setAllEvents] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
 
+    // ======for timeframe===========
+    const [timeframe, setTimeframe] = useState('all');
+
+    const [searchField, setSearchField] = useState('title');
+    const [searchInput, setSearchInput] = useState('');
+    const [searchText, setSearchText] = useState(''); // this is what gets used in filter
+
 
     const fetchCategory = async () => {
         try {
@@ -305,27 +312,34 @@ export default function events(pageProp) {
                                 </div>
 
                                 <div className="custom_drop">
-                                    <select className="dropdown">
+                                    <select value={timeframe} onChange={(e) => setTimeframe(e.target.value)} className="dropdown">
                                         <option>Timeframe</option>
+                                        {/* <option value="all">All</option> */}
+                                        <option value="today">Today</option>
+                                        <option value="thisWeek">This Week</option>
+                                        <option value="thisMonth">This Month</option>
                                     </select>
                                 </div>
 
                             </div>
                             <div className="event-title-filter">
                                 <div className="custom_drop">
-                                    <select className="dropdown small">
-                                        <option>Event Title</option>
+                                    <select value={searchField} onChange={(e) => setSearchField(e.target.value)} className="dropdown small">
+                                        {/* <option>Event Title</option> */}
+                                        <option value="title">Event Title</option>
+                                        <option value="title_description">Event Title & Description</option>
                                     </select>
                                 </div>
                                 <span className="for-label">FOR:</span>
-                                <input type="text" className="search-input" />
-                                <button className="search-button">
+                                <input value={searchInput}
+                                    onChange={(e) => setSearchInput(e.target.value)} type="text" className="search-input" />
+                                <button onClick={() => setSearchText(searchInput)} className="search-button">
                                     <img width="28" src="https://res.cloudinary.com/dgif730br/image/upload/v1744279927/Mask_group_zicocm.png" alt="this is search image" />
                                 </button>
                             </div>
                         </div>
 
-                        <div className="filters-right">
+                        {/* <div className="filters-right">
                             <div className="listing">
                                 <label>Listing Per Page</label>
                                 <div className="custom_drop custom_drop1">
@@ -337,7 +351,7 @@ export default function events(pageProp) {
                             <div className="record-info">
                                 Records : <span>1 to 4 of </span> 4
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* slice(0, visibleCount) */}
@@ -345,7 +359,56 @@ export default function events(pageProp) {
                         {cards.length === 0 ? (
                             <p>No events found.</p>
                         ) : (
-                            cards.map((card, index) => (
+                            cards.filter(card => {
+                                const eventDate = new Date(card.date);
+
+                                if (timeframe === 'today') {
+                                    const today = new Date();
+                                    return eventDate.toDateString() === today.toDateString();
+                                }
+
+                                if (timeframe === 'thisWeek') {
+                                    const now = new Date();
+                                    const startOfWeek = new Date(now);
+                                    startOfWeek.setDate(now.getDate() - now.getDay() + 1); // Monday
+
+                                    const endOfWeek = new Date(startOfWeek);
+                                    endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+                                    return eventDate >= startOfWeek && eventDate <= endOfWeek;
+                                }
+
+                                if (timeframe === 'thisMonth') {
+                                    const now = new Date();
+                                    return (
+                                        eventDate.getMonth() === now.getMonth() &&
+                                        eventDate.getFullYear() === now.getFullYear()
+                                    );
+                                }
+
+                                // =======for search==========
+
+                                const search = searchText.toLowerCase();
+
+                                if (!search) return true;
+
+                                const title = card.title?.toLowerCase() || '';
+                                const desc = card.short_description?.toLowerCase() || '';
+
+                                if (searchField === 'title') {
+                                    return title.includes(search);
+                                }
+
+                                if (searchField === 'title_description') {
+                                    return title.includes(search) || desc.includes(search);
+                                }
+
+                                console.log(desc)
+
+
+
+                                return true; // 'all'
+                            }).map((card, index) => (
                                 <div className="event-card" key={index}>
                                     <div className="card-header">
                                         <span>

@@ -155,36 +155,36 @@ export default function storedetail(pageProp) {
                     <div className="product-detail-wrapper">
                         <div className="product-detail-container">
                             {
-                                productdetail?.images?.length > 1 
-                                ?
-                                  <Swiper
-                                modules={[Navigation, Pagination]}
-                                spaceBetween={20}
-                                slidesPerView={1}
-                                navigation
-                                pagination={{ clickable: true }}
-                                className="product-image-slider"
-                            >
-                                {productdetail?.images?.map((img, index) => (
-                                    <SwiperSlide key={index}>
-                                        <img
-                                            className="product-detail-image"
-                                            src={img}
-                                            alt={`Print ${index + 1}`}
-                                        />
-                                    </SwiperSlide>
-                                ))}
-                            </Swiper>
-                             :  <img
-                                className="product-detail-image"
-                                src={productdetail?.images}
-                                alt="Print"
-                            />
+                                productdetail?.images?.length > 1
+                                    ?
+                                    <Swiper
+                                        modules={[Navigation, Pagination]}
+                                        spaceBetween={20}
+                                        slidesPerView={1}
+                                        navigation
+                                        pagination={{ clickable: true }}
+                                        className="product-image-slider"
+                                    >
+                                        {productdetail?.images?.map((img, index) => (
+                                            <SwiperSlide key={index}>
+                                                <img
+                                                    className="product-detail-image"
+                                                    src={img}
+                                                    alt={`Print ${index + 1}`}
+                                                />
+                                            </SwiperSlide>
+                                        ))}
+                                    </Swiper>
+                                    : <img
+                                        className="product-detail-image"
+                                        src={productdetail?.images}
+                                        alt="Print"
+                                    />
 
                             }
-                            
 
-                          
+
+
                             <div className="product-detail-info">
                                 <h2 className="product-title">{productdetail?.product_name}</h2>
                                 {/* <p className="product-subtitle"> */}
@@ -194,11 +194,21 @@ export default function storedetail(pageProp) {
 
                                 <div className="price-box">
 
+                                     {
+                                        membershipStatus === "active" && <p>
+                                            <span>Shell price :</span> ${
+                                                 productdetail?.price * quantity      
+                                            }
+                                        </p>
+                                    }
+
                                     <p>
                                         <span>{membershipStatus === "active" ? "Membership Price" : "Price"} :</span> ${membershipStatus === "active" ? productdetail?.membership_price * quantity : productdetail?.price * quantity
 
                                         }
                                     </p>
+                                   
+
                                     <p>
                                         <span>Shipping / Handling :</span> ${productdetail?.
                                             shipping_cost}

@@ -251,16 +251,20 @@ export default function eventdetail(pageProp) {
                                                 </div>
                                             }
 
-                                            <div className="thumbs">
+                                            {
+                                                aboutnew?.image?.length > 1 &&  <div className="thumbs">
                                                 {/* <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282766/image_1_vctfyt.png" alt="Thumb 1" /> */}
                                                 {aboutnew?.image?.length > 0 && (
-                                                    <img src={aboutnew.image[1]} alt="main event" />
+                                                    <img src={aboutnew.image[1]}  />
                                                 )}
                                                 {/* <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282765/image_2_yqkqjg.png" alt="Thumb 2" /> */}
                                                 {aboutnew?.image?.length > 0 && (
-                                                    <img src={aboutnew.image[2]} alt="main event" />
+                                                    <img src={aboutnew.image[2]}  />
                                                 )}
                                             </div>
+                                            }
+
+                                           
 
                                             {/* Wrap this to include both button and text */}
                                             {/* <div className="show-more-wrapper">

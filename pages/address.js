@@ -12,6 +12,7 @@ import EventDetPlus from "../components/common/svg/eventDetials/plus";
 import GlobalHeaderFooter from "../utils/common/global-header-footer";
 import { constrainedMemory } from "process";
 import { State, City } from 'country-state-city';
+import { toast } from "react-toastify";
 export default function Cart(props) {
 
     // console.log("cartprob",props);
@@ -334,7 +335,8 @@ export default function Cart(props) {
 
             const formattedResponse = await response.json();
             console.log(formattedResponse);
-            alert(formattedResponse?.message)
+            toast.success(formattedResponse?.message);
+            // localStorage.setItem("scchs_addressData", JSON.stringify(formattedResponse.address));
             router.push("/storeorder")
             //  if(formattedResponse.success){
             //   localStorage.removeItem("ecomm_user");
