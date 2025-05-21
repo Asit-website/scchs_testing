@@ -196,7 +196,7 @@ export default function storedetail(pageProp) {
 
                                      {
                                         membershipStatus === "active" && <p>
-                                            <span>Shell price :</span> ${
+                                            <span>Sale price :</span> ${
                                                  productdetail?.price * quantity      
                                             }
                                         </p>
