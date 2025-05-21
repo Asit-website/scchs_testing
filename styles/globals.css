@@ -7099,9 +7099,26 @@ th {
 
 .form_scch_btn button:hover {
   background-color: rgba(171, 6, 53, 1) !important;
-  border: none;
+  border: none !important;
   color: white;
 }
+
+/* .form_scch_btn button {
+  border: 1px solid rgba(171, 6, 53, 1);
+  padding: 10px 30px;
+  border-radius: 6px;
+  color: rgba(8, 13, 23, 1);
+  font-size: 18px;
+  font-family: "Euclid-Regular";
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.form_scch_btn button:hover {
+  background-color: rgba(171, 6, 53, 1);
+  border: 1px solid rgba(171, 6, 53, 1); 
+  color: white;
+} */
 
 .nameform-container h2 {
   color: rgba(10, 36, 63, 1);
@@ -7326,7 +7343,7 @@ th {
 }
 
 .ks-result-title {
-  font-weight: bold;
+  font-weight: 500;
   font-size: 24px;
   margin-bottom: 0.5rem;
 }
@@ -10698,4 +10715,18 @@ ul li>a:hover::after {
 
 .testing_btn111 {
   margin: 30px 0px !important;
+}
+
+
+.footerlastimg img{
+  border: 1px solid black;
+  background: #fff  !important;
+  padding: 10px;
+  position: relative;
+  border-radius: 3px;
+  top: -10%;
+  width: 40px;
+  height: 40px;
+
+
 }

@@ -307,6 +307,15 @@ export default function Footer(footerProps) {
                   <div className='editor-content editor-content11' dangerouslySetInnerHTML={{ __html: data?.footer_3 }} />
                 }
 
+                <div
+                  className='footerlastimg cursor-pointer'
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
+                  <img
+                    src='https://res.cloudinary.com/dal5dlztv/image/upload/v1747851760/arrow_forward_ios_FILL0_wght400_GRAD0_opsz24_1_idvl8i.png'
+                    alt='Scroll to top'
+                  />
+                </div>
 
 
 
@@ -320,39 +329,39 @@ export default function Footer(footerProps) {
           </div>
 
 
-       
+
           <footer className="footer-bottom">
-  <div className="footer-bottom-top-line" />
-  <div className="footer-bottom-content">
-    <div className="footer-bottom-left">
-      <p>
-        © 2025 St. Charles County Historical Society, Designed By
-        Digitalgrowthus
-      </p>
-    </div>
-    <div className="footer-bottom-right">
-      <span className="footer-bottom-connect">Connect:</span>
-      <a href="#">
-        <img
-          src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg"
-          alt="Facebook"
-        />
-      </a>
-      <a href="#">
-        <img
-          src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"
-          alt="Instagram"
-        />
-      </a>
-      <a href="#">
-        <img
-          src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg"
-          alt="YouTube"
-        />
-      </a>
-    </div>
-  </div>
-</footer>
+            <div className="footer-bottom-top-line" />
+            <div className="footer-bottom-content">
+              <div className="footer-bottom-left">
+                <p>
+                  © 2025 St. Charles County Historical Society, Designed By
+                  Digitalgrowthus
+                </p>
+              </div>
+              <div className="footer-bottom-right">
+                <span className="footer-bottom-connect">Connect:</span>
+                <a href="#">
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg"
+                    alt="Facebook"
+                  />
+                </a>
+                <a href="#">
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"
+                    alt="Instagram"
+                  />
+                </a>
+                <a href="#">
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg"
+                    alt="YouTube"
+                  />
+                </a>
+              </div>
+            </div>
+          </footer>
 
 
         </footer >
