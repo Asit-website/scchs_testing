@@ -504,12 +504,12 @@ export default function Cart(props) {
 
                             <div className="address_flex">
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="first_name">First Name</label>
+                                    <label htmlFor="first_name">First Name*</label>
                                     <input className="nameform-input" id="first_name" name="first_name" onChange={handleAddressChange} value={addressDetail?.first_name} type="text" placeholder="First Name" />
                                     {errors.first_name && <p style={{ color: "red" }} className="error-text">{errors.first_name}</p>}
                                 </div>
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="last_name">LastName</label>
+                                    <label htmlFor="last_name">LastName*</label>
                                     <input className="nameform-input" id="last_name" name="last_name" onChange={handleAddressChange} value={addressDetail?.last_name} type="text" placeholder="Last Name" />
                                     {errors.last_name && <p style={{ color: "red" }} className="error-text">{errors.last_name}</p>}
                                 </div>
@@ -517,7 +517,7 @@ export default function Cart(props) {
                             <div className="address_flex">
 
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="address1">Address1</label>
+                                    <label htmlFor="address1">Address1*</label>
                                     <textarea className="nameform-input" id="address1" name="address1" onChange={handleAddressChange} value={addressDetail?.address1} placeholder="Address1" />
                                     {errors.address1 && <p style={{ color: "red" }} className="error-text">{errors.address1}</p>}
                                 </div>
@@ -526,7 +526,7 @@ export default function Cart(props) {
                                     <textarea className="nameform-input" name="address2" onChange={handleAddressChange} value={addressDetail?.address2} placeholder="Address2" />
                                 </div>
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="country">Country</label>
+                                    <label htmlFor="country">Country*</label>
                                     <select className="nameform-input" id="country" name="country" onChange={handleAddressChange} value={addressDetail?.country}>
                                         <option value={""}>Select Country</option>
                                         <option>United State Of America</option>
@@ -539,12 +539,12 @@ export default function Cart(props) {
 
                             <div className="address_flex">
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="phone">Phone</label>
+                                    <label htmlFor="phone">Phone*</label>
                                     <input className="nameform-input" id="phone" name="phone" value={addressDetail?.phone} onChange={handleAddressChange} type="text" placeholder="Phone Number" />
                                     {errors.phone && <p style={{ color: "red" }} className="error-text">{errors.phone}</p>}
                                 </div>
                                   <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="state">State</label>
+                                    <label htmlFor="state">State*</label>
                                     {/* <input className="nameform-input" id="state" name="state" onChange={handleAddressChange} value={addressDetail?.state} type="text" placeholder="State" /> */}
                                     <select name="state" value={addressDetail.state} onChange={handleAddressChange} className="nameform-input">
                                         <option value="">Select State</option>
@@ -564,7 +564,7 @@ export default function Cart(props) {
                             <div className="address_flex">
                               
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="city">City</label>
+                                    <label htmlFor="city">City*</label>
                                     {/* <input className="nameform-input" id="city" name="city" onChange={handleAddressChange} value={addressDetail?.city} type="text" placeholder="City" /> */}
                                      <select name="city" value={addressDetail.city} onChange={handleAddressChange} className="nameform-input">
                                                 <option value="">Select City</option>
@@ -577,7 +577,7 @@ export default function Cart(props) {
                                     {errors.city && <p style={{ color: "red" }} className="error-text">{errors.city}</p>}
                                 </div>
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="zipcode">ZipCode</label>
+                                    <label htmlFor="zipcode">ZipCode*</label>
                                     <input className="nameform-input" id="zipcode" value={addressDetail?.zipcode} name="zipcode" onChange={handleAddressChange} type="text" placeholder="ZipCode" />
                                     {errors.zipcode && <p style={{ color: "red" }} className="error-text">{errors.zipcode}</p>}
                                 </div>
