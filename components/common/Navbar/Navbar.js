@@ -775,7 +775,7 @@ export default function Navbar(props) {
                   window.location.href = "/"
                 }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
               </li>
-            {instaUser && <li><Link href={"/storeorder"}>View Cart</Link></li>}  
+              {instaUser && <li><Link href={"/storeorder"}>View Cart</Link></li>}
             </ul>
           </div>
         </div>
@@ -900,7 +900,9 @@ export default function Navbar(props) {
               </li>
             ))}
             <li className="nav-signin">
-              <button className="signin-btn">SIGN IN</button>
+              <Link href="/user/userlogin">
+                <button className="signin-btn">SIGN IN</button>
+              </Link>
             </li>
           </ul>
         </div>
