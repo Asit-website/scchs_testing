@@ -45,6 +45,34 @@ export default function storeorder(pageProp) {
 
     const [showPaypal, setShowPaypal] = useState(true)
 
+    const [savedAddress, setSavedAddress] = useState(null);
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("scchs_User"));
+        const userId = user?.id;
+
+        if (userId) {
+            const item = localStorage.getItem(`scchs_addressData_${userId}`);
+            if (item) {
+                try {
+                    const addr = JSON.parse(item);
+                    setSavedAddress(addr);
+                } catch (err) {
+                    console.error("Failed to parse address:", err);
+                }
+            }
+        }
+    }, []);
+
+
+    console.log(savedAddress)
+
+
+    const handleEdit = () => {
+        localStorage.setItem("scchs_editing", "true");
+        window.location.href = "/address"; // or use router.push
+    };
+
     // ====================
 
     const { toggleBoolValue, boolValue } = pageProp;
@@ -154,24 +182,24 @@ export default function storeorder(pageProp) {
     };
 
     const clearCarts1 = async () => {
-    try {
-      const response = await fetch("https://admin.scchs.co.in/api/cart/clear", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-        },
+        try {
+            const response = await fetch("https://admin.scchs.co.in/api/cart/clear", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                },
 
-      });
-      const data = await response.json();
-      toast.success(data?.message)
-      setCartData(data);
-      toggleBoolValue();
+            });
+            const data = await response.json();
+            toast.success(data?.message)
+            setCartData(data);
+            toggleBoolValue();
 
 
-    } catch (error) {
+        } catch (error) {
+        }
     }
-  }
 
     const [datas, setDatas] = useState([]);
 
@@ -269,38 +297,38 @@ export default function storeorder(pageProp) {
     //     });
     // };
 
-  const calculateTotals = (cartItems) => {
-  const isMember = membershipStatus?.toLowerCase() === "active";
+    const calculateTotals = (cartItems) => {
+        const isMember = membershipStatus?.toLowerCase() === "active";
 
-  let total_amount = 0;
-  let grand_total_m = 0;
+        let total_amount = 0;
+        let grand_total_m = 0;
 
-  cartItems.forEach((item) => {
-    const quantity = parseInt(item.quantity) || 1;
+        cartItems.forEach((item) => {
+            const quantity = parseInt(item.quantity) || 1;
 
-    const normalPrice = parseFloat(item.price ?? 0);
-    const memberPrice = parseFloat(item.membership_price ?? item.price ?? 0);
-    const shippingCost = parseFloat(item.shipping_cost ?? 0);
+            const normalPrice = parseFloat(item.price ?? 0);
+            const memberPrice = parseFloat(item.membership_price ?? item.price ?? 0);
+            const shippingCost = parseFloat(item.shipping_cost ?? 0);
 
-    total_amount += normalPrice * quantity;
-    grand_total_m += (memberPrice * quantity) + shippingCost;
-  });
+            total_amount += normalPrice * quantity;
+            grand_total_m += (memberPrice * quantity) + shippingCost;
+        });
 
-  const shipping_cost = cartItems.reduce((sum, item) => {
-    const cost = parseFloat(item.shipping_cost ?? 0);
-    return sum + cost;
-  }, 0);
+        const shipping_cost = cartItems.reduce((sum, item) => {
+            const cost = parseFloat(item.shipping_cost ?? 0);
+            return sum + cost;
+        }, 0);
 
-  const grand_total = isMember ? grand_total_m : total_amount + shipping_cost;
+        const grand_total = isMember ? grand_total_m : total_amount + shipping_cost;
 
-  setCartData({
-    cart: cartItems,
-    total_amount: total_amount.toFixed(2),
-    grand_total: grand_total.toFixed(2),
-    grand_total_m: grand_total_m.toFixed(2),
-    shipping_cost: shipping_cost.toFixed(2),
-  });
-};
+        setCartData({
+            cart: cartItems,
+            total_amount: total_amount.toFixed(2),
+            grand_total: grand_total.toFixed(2),
+            grand_total_m: grand_total_m.toFixed(2),
+            shipping_cost: shipping_cost.toFixed(2),
+        });
+    };
 
     const updateQuantity = (productId, direction) => {
         const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
@@ -332,11 +360,11 @@ export default function storeorder(pageProp) {
 
 
 
-   useEffect(() => {
-    if (cartData?.cart?.length && membershipStatus) {
-        calculateTotals(cartData.cart);
-    }
-}, [membershipStatus]);
+    useEffect(() => {
+        if (cartData?.cart?.length && membershipStatus) {
+            calculateTotals(cartData.cart);
+        }
+    }, [membershipStatus]);
 
     const handleAddToCart = (item) => {
         const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
@@ -683,10 +711,35 @@ export default function storeorder(pageProp) {
 
             <HeadSEO1 />
 
+
+
+
+
             {cartUpdate == true ? (<span className='loadingOverlay' style={{ display: 'block', position: 'fixed' }} />) : ""}
 
             <div className="event_system_main">
                 <div className="event_main">
+                    {
+                        savedAddress && (
+                            <div className="saved-address">
+                                <div className="header flex justify-between items-center mb-4">
+                                    <h2>Saved Address</h2>
+                                    <button onClick={handleEdit}>✏️ Edit Address</button>
+                                </div>
+                                <ul className="space-y-1">
+                                    <li><strong>Name:</strong> {savedAddress.first_name} {savedAddress.last_name}</li>
+                                    <li><strong>Address:</strong> {savedAddress.address1}</li>
+                                    {savedAddress.address2 && <li><strong>Address2:</strong> {savedAddress.address2}</li>}
+                                    <li><strong>City:</strong> {savedAddress.city}</li>
+                                    <li><strong>State:</strong> {savedAddress.state}</li>
+                                    <li><strong>Country:</strong> {savedAddress.country}</li>
+                                    <li><strong>Zip Code:</strong> {savedAddress.zipcode}</li>
+                                    <li><strong>Phone:</strong> {savedAddress.phone}</li>
+                                </ul>
+                            </div>
+
+                        )
+                    }
                     {
                         cartEnpty === false ? <div className="order-info-container">
                             {
@@ -905,7 +958,7 @@ export default function storeorder(pageProp) {
                                     //     window.location.href = "/store";
                                     // }, 2000)
 
-                                     router.push(`/paymentsuccess?orderId=${payment?.order_id}`);
+                                    router.push(`/paymentsuccess?orderId=${payment?.order_id}`);
 
                                 }}
                                 onCancel={() => {

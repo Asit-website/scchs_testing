@@ -192,10 +192,10 @@ export default function Cart(props) {
             if (stateObj) {
                 const stateCities = City.getCitiesOfState('US', stateObj.isoCode);
                 setCities(stateCities);
-                setAddressDetail((prev) => ({
-                    ...prev,
-                    city: '', // reset city when state changes
-                }));
+                // setAddressDetail((prev) => ({
+                //     ...prev,
+                //     city: '', // reset city when state changes
+                // }));
             }
         }
     }, [addressDetail.state]);
@@ -292,24 +292,31 @@ export default function Cart(props) {
         getAddress();
     }, [])
 
-    // useEffect(() => {
-    //     const checkUser = localStorage.getItem("insta_User");
-
-    //     if (checkUser) {
-    //       var storedUserObject = JSON.parse(checkUser);
-
-    //       const { name,state,city } = storedUserObject;
-
-    //       setFormData((prev) => ({
-    //         ...prev,
-    //         name: name,
-    //         state: state,
-    //         city: city,
-    //       }));
 
 
-    //     }
-    //   }, []);
+    useEffect(() => {
+        const isEditing = localStorage.getItem("scchs_editing") === "true";
+        const userId = JSON.parse(localStorage.getItem("scchs_User"))?.id;
+
+        if (isEditing && userId) {
+            const savedData = JSON.parse(localStorage.getItem(`scchs_addressData_${userId}`));
+            console.log("Saved address for editing:", savedData); // 👈 check this
+            if (savedData) {
+                setAddressDetail(savedData); // for edit mode
+            }
+        }
+    }, []);
+
+
+    const [isEditing, setIsEditing] = useState(false);
+
+    useEffect(() => {
+        const editFlag = localStorage.getItem("scchs_editing");
+        setIsEditing(editFlag === "true");
+    }, []);
+
+
+
 
     const createAddressHandler = async (e) => {
         // let token = localStorage.getItem("ecomm_userToken");
@@ -336,7 +343,14 @@ export default function Cart(props) {
             const formattedResponse = await response.json();
             console.log(formattedResponse);
             toast.success(formattedResponse?.message);
-            // localStorage.setItem("scchs_addressData", JSON.stringify(formattedResponse.address));
+
+            const userId = JSON.parse(localStorage.getItem("scchs_User"))?.id;
+            const fullAddressData = {
+                ...addressDetail,
+                id: formattedResponse?.data?.id || formattedResponse?.id, // fallback if needed
+            };
+            localStorage.setItem(`scchs_addressData_${userId}`, JSON.stringify(fullAddressData));
+
             router.push("/storeorder")
             //  if(formattedResponse.success){
             //   localStorage.removeItem("ecomm_user");
@@ -357,46 +371,91 @@ export default function Cart(props) {
         }
     }
 
+    //    const updateAddressHandler = async (e) => {
+    //   e.preventDefault();
+
+    //   try {
+    //     const existing = JSON.parse(localStorage.getItem("scchs_addressData"));
+
+    //     const response = await fetch(
+    //       `https://admin.scchs.co.in/api/updateaddress/${existing.id}`,
+    //       {
+    //         method: 'PUT',
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //           "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+    //         },
+    //         body: JSON.stringify(existing), // Or addressDetail1 if you're editing via state
+    //       }
+    //     );
+
+    //     const data = await response.json();
+    //     console.log(data);
+    //     alert(data?.message);
+
+    //     localStorage.removeItem("scchs_editing");
+    //     localStorage.setItem("scchs_addressData", JSON.stringify(addressDetail || existing));
+    //     router.push("/storeorder");
+
+    //   } catch (error) {
+    //     console.error("Update Error:", error);
+    //   }
+    // };
+
     const updateAddressHandler = async (e) => {
-        // let token = localStorage.getItem("ecomm_userToken");
         e.preventDefault();
+
+        const errors = validateAddressForm(addressDetail);
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors); // You must have `const [errors, setErrors] = useState({})`
+            return;
+        }
+
         try {
+            const userId = JSON.parse(localStorage.getItem("scchs_User"))?.id;
+            console.log(userId)
+            const existing = JSON.parse(localStorage.getItem(`scchs_addressData_${userId}`));
+            console.log("Existing address data:", existing);
+
+            if (!existing || !existing.id) {
+                console.error("No valid existing address or id found.");
+                alert("Address ID missing. Please try again.");
+                return;
+            }
+
             const response = await fetch(
-                `https://admin.scchs.co.in/api/updateaddress/${datas[0].id}`,
+                `https://admin.scchs.co.in/api/updateaddress/${existing.id}`,
                 {
                     method: 'PUT',
                     headers: {
-                        "content-type": "application/json",
+                        "Content-Type": "application/json",
                         "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-
                     },
-                    body: JSON.stringify({ ...addressDetail1 }),
+                    body: JSON.stringify(addressDetail || existing), // updated data or fallback
                 }
             );
 
-            const formattedResponse = await response.json();
-            console.log(formattedResponse);
-            alert(formattedResponse?.message);
-            router.push("/storeorder")
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Update failed:", errorData);
+                alert(errorData.message || "Update failed.");
+                return;
+            }
 
-            //  if(formattedResponse.success){
-            //   localStorage.removeItem("ecomm_user");
-            //   var userObjectString = JSON.stringify(formattedResponse.userDetails);
+            const data = await response.json();
+            console.log("Update response:", data);
+            toast.success(data?.message);
 
-            //   localStorage.setItem("ecomm_user" , userObjectString);
-            //   setUserDetails(formattedResponse?.userDetails);
-
-            //   alert("succesfuly Updated the address");
-            //   onNext();
-            //  }
-            //  else{
-            //   alert(formattedResponse.message);
-            //  }
+            localStorage.removeItem("scchs_editing");
+            localStorage.setItem(`scchs_addressData_${userId}`, JSON.stringify(addressDetail || existing));
+            router.push("/storeorder");
 
         } catch (error) {
-            console.log(error);
+            console.error("Update Error:", error);
+            alert("An error occurred during update.");
         }
-    }
+    };
+
 
     const [instaUser, setInstaUser] = useState(null);
 
@@ -500,7 +559,7 @@ export default function Cart(props) {
                     //     :
                     <div className="form_address">
                         <h2 style={{ textAlign: "center" }}>Order Information</h2>
-                        <form className="form_add nameform-container" onSubmit={createAddressHandler}>
+                        <form className="form_add nameform-container" onSubmit={isEditing ? updateAddressHandler : createAddressHandler}>
 
                             <div className="address_flex">
                                 <div className="address_input nameform-group nams_group">
@@ -509,7 +568,7 @@ export default function Cart(props) {
                                     {errors.first_name && <p style={{ color: "red" }} className="error-text">{errors.first_name}</p>}
                                 </div>
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="last_name">LastName*</label>
+                                    <label htmlFor="last_name">Last Name*</label>
                                     <input className="nameform-input" id="last_name" name="last_name" onChange={handleAddressChange} value={addressDetail?.last_name} type="text" placeholder="Last Name" />
                                     {errors.last_name && <p style={{ color: "red" }} className="error-text">{errors.last_name}</p>}
                                 </div>
@@ -543,7 +602,7 @@ export default function Cart(props) {
                                     <input className="nameform-input" id="phone" name="phone" value={addressDetail?.phone} onChange={handleAddressChange} type="text" placeholder="Phone Number" />
                                     {errors.phone && <p style={{ color: "red" }} className="error-text">{errors.phone}</p>}
                                 </div>
-                                  <div className="address_input nameform-group nams_group">
+                                <div className="address_input nameform-group nams_group">
                                     <label htmlFor="state">State*</label>
                                     {/* <input className="nameform-input" id="state" name="state" onChange={handleAddressChange} value={addressDetail?.state} type="text" placeholder="State" /> */}
                                     <select name="state" value={addressDetail.state} onChange={handleAddressChange} className="nameform-input">
@@ -557,23 +616,23 @@ export default function Cart(props) {
 
                                     {errors.state && <p style={{ color: "red" }} className="error-text">{errors.state}</p>}
                                 </div>
-                                
+
                             </div>
 
 
                             <div className="address_flex">
-                              
+
                                 <div className="address_input nameform-group nams_group">
                                     <label htmlFor="city">City*</label>
                                     {/* <input className="nameform-input" id="city" name="city" onChange={handleAddressChange} value={addressDetail?.city} type="text" placeholder="City" /> */}
-                                     <select name="city" value={addressDetail.city} onChange={handleAddressChange} className="nameform-input">
-                                                <option value="">Select City</option>
-                                                {cities.map((city) => (
-                                                    <option key={city.name} value={city.name}>
-                                                        {city.name}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                    <select name="city" value={addressDetail?.city} onChange={handleAddressChange} className="nameform-input">
+                                        <option value="">Select City</option>
+                                        {cities.map((city) => (
+                                            <option key={city.name} value={city.name}>
+                                                {city.name}
+                                            </option>
+                                        ))}
+                                    </select>
                                     {errors.city && <p style={{ color: "red" }} className="error-text">{errors.city}</p>}
                                 </div>
                                 <div className="address_input nameform-group nams_group">
@@ -586,7 +645,7 @@ export default function Cart(props) {
                                         <input className="nameform-input" id="email" value={addressDetail?.email} name="email" onChange={handleAddressChange} type="email" placeholder="email" />
                                     </div> */}
                             </div>
-                            <button type="submit" className="btn save_address scchs_hj_btn">Save Address</button>
+                            <button type="submit" className="btn save_address scchs_hj_btn">{isEditing ? "Update address" : "Saved address"}</button>
 
                         </form>
 
