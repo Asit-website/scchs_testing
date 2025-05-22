@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useSession } from "next-auth/react";
 import HeadSEO from "../components/common/Head/head";
 import GlobalHeaderFooter from "../utils/common/global-header-footer";
+import { FaUser, FaMapMarkedAlt, FaBuilding, FaCity, FaGlobe, FaFlag, FaMapPin, FaPhone } from "react-icons/fa";
 import Navbar from '../components/common/Navbar/Navbar'
 //Slider css files
 import Slider from "react-slick";
@@ -721,22 +722,86 @@ export default function storeorder(pageProp) {
                 <div className="event_main">
                     {
                         savedAddress && (
-                            <div className="saved-address">
-                                <div className="header flex justify-between items-center mb-4">
-                                    <h2>Saved Address</h2>
-                                    <button onClick={handleEdit}>✏️ Edit Address</button>
+                            // <div className="saved-address">
+                            //     <div className="header flex justify-between items-center mb-4">
+                            //         <h2>Saved Address</h2>
+                            //         <button onClick={handleEdit}>✏️ Edit Address</button>
+                            //     </div>
+                            //     <ul className="space-y-1">
+                            //         <li><strong>Name:</strong> {savedAddress.first_name} {savedAddress.last_name}</li>
+                            //         <li><strong>Address:</strong> {savedAddress.address1}</li>
+                            //         {savedAddress.address2 && <li><strong>Address2:</strong> {savedAddress.address2}</li>}
+                            //         <li><strong>City:</strong> {savedAddress.city}</li>
+                            //         <li><strong>State:</strong> {savedAddress.state}</li>
+                            //         <li><strong>Country:</strong> {savedAddress.country}</li>
+                            //         <li><strong>Zip Code:</strong> {savedAddress.zipcode}</li>
+                            //         <li><strong>Phone:</strong> {savedAddress.phone}</li>
+                            //     </ul>
+                            // </div>
+                            //     <div className="saved-address-card">
+                            //     <div className="card-header">
+                            //       <h2>📦 Saved Address</h2>
+                            //       <button onClick={handleEdit}>✏️ Edit</button>
+                            //     </div>
+                            //     <div className="card-content">
+                            //       <div className="row">
+                            //         <span className="label">👤 Name:</span>
+                            //         <span>{savedAddress.first_name} {savedAddress.last_name}</span>
+                            //       </div>
+                            //       <div className="row">
+                            //         <span className="label">🏠 Address:</span>
+                            //         <span>{savedAddress.address1}</span>
+                            //       </div>
+                            //       {savedAddress.address2 && (
+                            //         <div className="row">
+                            //           <span className="label">🏢 Address 2:</span>
+                            //           <span>{savedAddress.address2}</span>
+                            //         </div>
+                            //       )}
+                            //       <div className="row">
+                            //         <span className="label">🏙️ City:</span>
+                            //         <span>{savedAddress.city}</span>
+                            //       </div>
+                            //       <div className="row">
+                            //         <span className="label">🗺️ State:</span>
+                            //         <span>{savedAddress.state}</span>
+                            //       </div>
+                            //       <div className="row">
+                            //         <span className="label">🌍 Country:</span>
+                            //         <span>{savedAddress.country}</span>
+                            //       </div>
+                            //       <div className="row">
+                            //         <span className="label">📮 Zip:</span>
+                            //         <span>{savedAddress.zipcode}</span>
+                            //       </div>
+                            //       <div className="row">
+                            //         <span className="label">📞 Phone:</span>
+                            //         <span>{savedAddress.phone}</span>
+                            //       </div>
+                            //     </div>
+                            //   </div>
+                            <div className="saved-address-card">
+                                <div className="card-header">
+                                    <h2><FaMapMarkedAlt className="icon" /> Saved Address</h2>
+                                    <button onClick={handleEdit}><FaMapPin className="icon" /> Edit</button>
                                 </div>
-                                <ul className="space-y-1">
-                                    <li><strong>Name:</strong> {savedAddress.first_name} {savedAddress.last_name}</li>
-                                    <li><strong>Address:</strong> {savedAddress.address1}</li>
-                                    {savedAddress.address2 && <li><strong>Address2:</strong> {savedAddress.address2}</li>}
-                                    <li><strong>City:</strong> {savedAddress.city}</li>
-                                    <li><strong>State:</strong> {savedAddress.state}</li>
-                                    <li><strong>Country:</strong> {savedAddress.country}</li>
-                                    <li><strong>Zip Code:</strong> {savedAddress.zipcode}</li>
-                                    <li><strong>Phone:</strong> {savedAddress.phone}</li>
-                                </ul>
+                                <div className="card-content">
+                                    <div className="row"><span className="label"><FaUser className="icon" /> Name:</span><span>{savedAddress.first_name} {savedAddress.last_name}</span></div>
+                                    <div className="row"><span className="label"><FaMapMarkedAlt className="icon" /> Address:</span><span>{savedAddress.address1}</span></div>
+                                    {savedAddress.address2 && (
+                                        <div className="row"><span className="label"><FaBuilding className="icon" /> Address 2:</span><span>{savedAddress.address2}</span></div>
+                                    )}
+                                    <div className="row"><span className="label"><FaCity className="icon" /> City:</span><span>{savedAddress.city}</span></div>
+                                    <div className="row"><span className="label"><FaFlag className="icon" /> State:</span><span>{savedAddress.state}</span></div>
+                                    <div className="row"><span className="label"><FaGlobe className="icon" /> Country:</span><span>{savedAddress.country}</span></div>
+                                    <div className="row"><span className="label"><FaMapPin className="icon" /> Zip:</span><span>{savedAddress.zipcode}</span></div>
+                                    <div className="row"><span className="label"><FaPhone className="icon" /> Phone:</span><span>{savedAddress.phone}</span></div>
+                                </div>
                             </div>
+
+
+
+
 
                         )
                     }
