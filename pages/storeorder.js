@@ -781,21 +781,21 @@ export default function storeorder(pageProp) {
                             //     </div>
                             //   </div>
                             <div className="saved-address-card">
-                                <div className="card-header">
+                                <div className="card-headerrss">
                                     <h2><FaMapMarkedAlt className="icon" /> Saved Address</h2>
                                     <button onClick={handleEdit}><FaMapPin className="icon" /> Edit</button>
                                 </div>
-                                <div className="card-content">
-                                    <div className="row"><span className="label"><FaUser className="icon" /> Name:</span><span>{savedAddress.first_name} {savedAddress.last_name}</span></div>
-                                    <div className="row"><span className="label"><FaMapMarkedAlt className="icon" /> Address:</span><span>{savedAddress.address1}</span></div>
+                                <div className="card-contentt">
+                                    <div className="roww"><span className="labells"><FaUser className="icon" /> Name:</span><span>{savedAddress.first_name} {savedAddress.last_name}</span></div>
+                                    <div className="roww"><span className="labells"><FaMapMarkedAlt className="icon" /> Address:</span><span>{savedAddress.address1}</span></div>
                                     {savedAddress.address2 && (
-                                        <div className="row"><span className="label"><FaBuilding className="icon" /> Address 2:</span><span>{savedAddress.address2}</span></div>
+                                        <div className="roww"><span className="labells"><FaBuilding className="icon" /> Address 2:</span><span>{savedAddress.address2}</span></div>
                                     )}
-                                    <div className="row"><span className="label"><FaCity className="icon" /> City:</span><span>{savedAddress.city}</span></div>
-                                    <div className="row"><span className="label"><FaFlag className="icon" /> State:</span><span>{savedAddress.state}</span></div>
-                                    <div className="row"><span className="label"><FaGlobe className="icon" /> Country:</span><span>{savedAddress.country}</span></div>
-                                    <div className="row"><span className="label"><FaMapPin className="icon" /> Zip:</span><span>{savedAddress.zipcode}</span></div>
-                                    <div className="row"><span className="label"><FaPhone className="icon" /> Phone:</span><span>{savedAddress.phone}</span></div>
+                                    <div className="roww"><span className="labells"><FaCity className="icon" /> City:</span><span>{savedAddress.city}</span></div>
+                                    <div className="roww"><span className="labells"><FaFlag className="icon" /> State:</span><span>{savedAddress.state}</span></div>
+                                    <div className="roww"><span className="labells"><FaGlobe className="icon" /> Country:</span><span>{savedAddress.country}</span></div>
+                                    <div className="roww"><span className="labells"><FaMapPin className="icon" /> Zip:</span><span>{savedAddress.zipcode}</span></div>
+                                    <div className="roww"><span className="labells"><FaPhone className="icon" /> Phone:</span><span>{savedAddress.phone}</span></div>
                                 </div>
                             </div>
 

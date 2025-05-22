@@ -10733,6 +10733,10 @@ ul li>a:hover::after {
 }
 
 
+
+/* address new css */
+
+
 .saved-address-card {
   max-width: 1200px;
   margin: 40px auto;
@@ -10745,30 +10749,29 @@ ul li>a:hover::after {
   /* transition: all 0.3s ease; */
 }
 
-/* .saved-address-card:hover {
-  transform: scale(1.01);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-} */
 
-.card-header {
+
+.card-headerrss {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid #e6e6e6;
+  background-color: #002c5f;
+  padding: 14px 20px;
   padding-bottom: 16px;
   margin-bottom: 28px;
   flex-wrap: wrap;
   gap: 12px;
 }
 
-.card-header h2 {
+.card-headerrss h2 {
   font-size: 24px;
   font-weight: 600;
   margin: 0;
   color: #fff;
 }
 
-.card-header button {
+.card-headerrss button {
   background-color: #2563eb;
   color: white;
   border: none;
@@ -10780,17 +10783,17 @@ ul li>a:hover::after {
   transition: background 0.3s ease;
 }
 
-.card-header button:hover {
+.card-headerrss button:hover {
   background-color: #1d4ed8;
 }
 
-.card-content {
+.card-contentt {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px 40px;
 }
 
-.row {
+.roww {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -10802,37 +10805,37 @@ ul li>a:hover::after {
   /* transition: all 0.3s ease; */
 }
 
-.row:hover {
+.roww:hover {
   background-color: #f0f4ff;
 }
 
-.label {
+.labells {
   font-weight: 600;
   font-size: 14px;
   color: #444;
 }
 
-.row span:last-child {
+.roww span:last-child {
   font-size: 15px;
   color: #333;
 }
 
 
 @media (max-width: 768px) {
-  .card-content {
+  .card-contentt {
     grid-template-columns: 1fr;
   }
 
-  .card-header {
+  .card-headerrss {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .card-header h2 {
+  .card-headerrss h2 {
     font-size: 20px;
   }
 
-  .card-header button {
+  .card-headerrss button {
     align-self: flex-end;
     margin-top: 8px;
   }
