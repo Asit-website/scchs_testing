@@ -7,6 +7,7 @@ import GlobalHeaderFooter from "../../utils/common/global-header-footer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../../components/common/Head/head1";
+import { useRouter } from "next/router";
 import "../css/login.module.scss";
 var settingsMorePhotos = {
     arrows: true,
@@ -19,6 +20,8 @@ var settingsMorePhotos = {
 export default function loginchange(pageProp) {
     const [showLogin, setShowLogin] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
+    const router = useRouter();
 
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState(null);
@@ -94,7 +97,7 @@ export default function loginchange(pageProp) {
                         
                     </div> */}
                         <div className="reset_flex">
-                            <button type="button" className="scchs-reset-button1">Cancel & Close</button>
+                          <button onClick={()=> router.push("/member/memberlogin") } type="button" className="scchs-reset-button1">Cancel & Close</button>
                             <button type="submit" className="scchs-reset-button2">Submit</button>
 
                         </div>

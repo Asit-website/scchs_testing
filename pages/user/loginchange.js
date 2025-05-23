@@ -6,6 +6,7 @@ import HeadSEO from "../../components/common/Head/head";
 import GlobalHeaderFooter from "../../utils/common/global-header-footer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useRouter } from "next/router";
 import HeadSEO1 from "../../components/common/Head/head1";
 import "../css/login.module.scss";
 var settingsMorePhotos = {
@@ -16,9 +17,12 @@ var settingsMorePhotos = {
     slidesToScroll: 1
 };
 
+
 export default function loginchange(pageProp) {
     const [showLogin, setShowLogin] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
+    const router = useRouter();
 
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState(null);
@@ -94,7 +98,7 @@ export default function loginchange(pageProp) {
                         
                     </div> */}
                         <div className="reset_flex">
-                            <button type="button" className="scchs-reset-button1">Cancel & Close</button>
+                            <button onClick={()=> router.push("/user/userlogin") } type="button" className="scchs-reset-button1">Cancel & Close</button>
                             <button type="submit" className="scchs-reset-button2">Submit</button>
 
                         </div>

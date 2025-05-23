@@ -8,8 +8,12 @@ import HeadSEO1 from "../../components/common/Head/head1";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { State, City } from 'country-state-city';
+import { Country, State, City } from 'country-state-city';
 import zipcodes from 'us-zips';
+
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import CreatableSelect from 'react-select/creatable';
 // import { format } from "path";
 
 var settingsMorePhotos = {
@@ -19,19 +23,6 @@ var settingsMorePhotos = {
     slidesToShow: 1,
     slidesToScroll: 1
 };
-
-const plans = [
-    { name: 'Individual', for: 'person(s)person(s)', members: '1', fee: '$30.00', description: 'See JOIN US > Member Benefits section.' },
-    // { name: 'Individual - Facebook Group Member', for: 'person(s)', members: '1', fee: '$25.00', description: 'See JOIN US > Member Benefits section' },
-    { name: 'Family', for: 'person(s)', members: '2', fee: '$45.00', description: 'See JOIN US > Member Benefits section.' },
-    // { name: 'Family - Facebook Group Member', for: 'person(s)', members: '2', fee: '$40.00', description: 'See JOIN US > Member Benefits section' },
-    { name: 'Blanchette', for: 'person(s)', members: '2', fee: '$100.00', description: 'See JOIN US > Member Benefits section.' },
-    { name: 'DuSable', for: 'person(s)', members: '2', fee: '$175.00', description: 'See JOIN US > Member Benefits section.' },
-    { name: 'Boone', for: 'person(s)', members: '2', fee: '$250.00', description: 'See JOIN US > Member Benefits section.' },
-    { name: 'Alexander McNair', for: 'person(s)', members: '2', fee: '$1000.00', description: 'See JOIN US > Member Benefits section.' },
-    { name: 'Business', for: 'person(s)', members: '1', fee: '$150.00', description: 'See JOIN US > Member Benefits section.' },
-];
-
 
 
 // const itemsPerPage = 10;
@@ -69,6 +60,12 @@ export default function register1(pageProp) {
     const [passwordError, setPasswordError] = useState("");
     const [passwordError1, setPasswordError1] = useState("");
 
+    // const [showEmail, setShowEmail] = useState(true);
+
+    // const handleCheckboxChange = (e) => {
+    //     setShowEmail(!e.target.checked); // If checkbox is checked, hide email
+    // };
+
 
 
     const handleChange = (e) => {
@@ -84,20 +81,20 @@ export default function register1(pageProp) {
 
 
     // ===========for phone number============
-    const handlePhoneChange = (e) => {
-        let value = e.target.value;
-        // Remove non-numeric characters
-        value = value.replace(/\D/g, '');
-        if (value.length === 0) {
-            setFormData((prev) => ({ ...prev, mobile_number: '' }));
-        }
-        else if (value.length <= 3) {
-            value = `(${value}`;
-        } else if (value.length <= 6) {
-            value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
-        } else {
-            value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
-        }
+    const handlePhoneChange = (value) => {
+        // let value = e.target.value;
+
+        // value = value.replace(/\D/g, '');
+        // if (value.length === 0) {
+        //     setFormData((prev) => ({ ...prev, mobile_number: '' }));
+        // }
+        // else if (value.length <= 3) {
+        //     value = `(${value}`;
+        // } else if (value.length <= 6) {
+        //     value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+        // } else {
+        //     value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+        // }
 
         setFormData((prev) => ({
             ...prev,
@@ -109,20 +106,20 @@ export default function register1(pageProp) {
         }));
     };
 
-    const handleCellPhoneChange = (e) => {
-        let value = e.target.value;
-        // Remove non-numeric characters
-        value = value.replace(/\D/g, '');
-        if (value.length === 0) {
-            setFormData((prev) => ({ ...prev, cell_phone: '' }));
-        }
-        else if (value.length <= 3) {
-            value = `(${value}`;
-        } else if (value.length <= 6) {
-            value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
-        } else {
-            value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
-        }
+    const handleCellPhoneChange = (value) => {
+        // let value = e.target.value;
+
+        // value = value.replace(/\D/g, '');
+        // if (value.length === 0) {
+        //     setFormData((prev) => ({ ...prev, cell_phone: '' }));
+        // }
+        // else if (value.length <= 3) {
+        //     value = `(${value}`;
+        // } else if (value.length <= 6) {
+        //     value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+        // } else {
+        //     value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+        // }
 
         setFormData((prev) => ({
             ...prev,
@@ -139,69 +136,76 @@ export default function register1(pageProp) {
     // =================end================
 
     // ============for usa state city=========
+    const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
 
-    useEffect(() => {
-        const usStates = State.getStatesOfCountry('US');
-        setStates(usStates);
-    }, []);
-
+    // useEffect(() => {
+    //     const usStates = State.getStatesOfCountry('US');
+    //     setStates(usStates);
+    // }, []);
 
     // useEffect(() => {
     //     if (formData.state) {
-    //         const stateCities = City.getCitiesOfState('US', formData.state);
-    //         setCities(stateCities);
-    //         setFormData((prev) => ({
-    //             ...prev,
-    //             city: '', // reset city when state changes
-    //         }));
+    //         const stateObj = State.getStatesOfCountry('US').find(
+    //             (s) => s.name === formData.state
+    //         );
+
+    //         if (stateObj) {
+    //             const stateCities = City.getCitiesOfState('US', stateObj.isoCode);
+    //             setCities(stateCities);
+    //             setFormData((prev) => ({
+    //                 ...prev,
+    //                 city: '', // reset city when state changes
+    //             }));
+    //         }
     //     }
-        
     // }, [formData.state]);
 
+
     useEffect(() => {
-    if (formData.state) {
-        // find isoCode from state name
-        const stateObj = State.getStatesOfCountry('US').find(
-            (s) => s.name === formData.state
-        );
+        setCountries(Country.getAllCountries());
+    }, []);
 
-        if (stateObj) {
-            const stateCities = City.getCitiesOfState('US', stateObj.isoCode);
-            setCities(stateCities);
-            setFormData((prev) => ({
-                ...prev,
-                city: '', // reset city when state changes
-            }));
+    useEffect(() => {
+        if (formData.country) {
+            // Get ISO code of country by name
+            const selectedCountry = countries.find(
+                (c) => c.name === formData.country
+            );
+
+            if (selectedCountry) {
+                const countryStates = State.getStatesOfCountry(selectedCountry.isoCode);
+                setStates(countryStates);
+                setFormData((prev) => ({ ...prev, state: '', city: '' }));
+            }
         }
-    }
-}, [formData.state]);
+    }, [formData.country, countries]);
 
-// ===================fetch postal code============
-//  const getZipFromCity = (stateCode, cityName) => {
-//   const match = Object.entries(zipcodes).find(([zip, data]) => {
-//   console.log("Checking:", zip, data); // Add this
-//   return data.state === stateCode.toUpperCase() &&
-//          data.city.toLowerCase() === cityName.toLowerCase();
-// });
-//   console.log(match);
-//   console.log(zipcodes);
-//   return match?.[0] || '';
-// };
+    useEffect(() => {
+        if (formData.country && formData.state) {
+            const selectedCountry = countries.find(
+                (c) => c.name === formData.country
+            );
+            const selectedState = State.getStatesOfCountry(selectedCountry?.isoCode).find(
+                (s) => s.name === formData.state
+            );
 
-// useEffect(() => {
-//   if (formData.state && formData.city) {
-//     const zip = getZipFromCity(formData.state, formData.city);
-//     if (zip) {
-//       setFormData((prev) => ({ ...prev, postal_code: zip }));
-//     }
-//   }
-// }, [formData.state, formData.city]);
+            if (selectedCountry && selectedState) {
+                const stateCities = City.getCitiesOfState(selectedCountry.isoCode, selectedState.isoCode);
+                setCities(stateCities);
+                setFormData((prev) => ({ ...prev, city: '' }));
+            }
+        }
+    }, [formData.state, formData.country, countries]);
+
+    const toOptions = (list, key = 'name') =>
+        list.map((item) => ({ label: item[key], value: item[key] }));
+
 
     // ==============================end=================
 
-  
+
 
 
     const validateStep = (step) => {
@@ -215,8 +219,9 @@ export default function register1(pageProp) {
         if (step === 2) {
             if (!formData.email.trim()) {
                 newErrors.email = 'Email is required';
-               
-            } else {
+
+            }
+            else {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(formData.email)) {
                     newErrors.email = 'Invalid email format';
@@ -226,18 +231,20 @@ export default function register1(pageProp) {
             // Phone validation (must be US format like (XXX) XXX-XXXX)
             if (!formData.mobile_number.trim()) {
                 newErrors.mobile_number = 'Phone number is required';
-            } else {
-                const cleanPhone = formData.mobile_number.replace(/\D/g, '');
-
-                if (cleanPhone.length !== 10) {
-                    newErrors.mobile_number = 'Phone number must be exactly 10 digits';
-                } else {
-                    const formattedRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
-                    if (!formattedRegex.test(formData.mobile_number)) {
-                        newErrors.mobile_number = 'Format as (XXX) XXX-XXXX';
-                    }
-                }
             }
+
+            // else {
+            //     const cleanPhone = formData.mobile_number.replace(/\D/g, '');
+
+            //     if (cleanPhone.length !== 10) {
+            //         newErrors.mobile_number = 'Phone number must be exactly 10 digits';
+            //     } else {
+            //         const formattedRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
+            //         if (!formattedRegex.test(formData.mobile_number)) {
+            //             newErrors.mobile_number = 'Format as (XXX) XXX-XXXX';
+            //         }
+            //     }
+            // }
 
             // ================cell phone validation=============
 
@@ -245,12 +252,12 @@ export default function register1(pageProp) {
             // const cleanPhone1 = formData.cell_phone.replace(/\D/g, '');
 
 
-            if (formData.cell_phone.trim()) {
-                const formattedRegex1 = /^\(\d{3}\) \d{3}-\d{4}$/;
-                if (!formattedRegex1.test(formData.cell_phone)) {
-                    newErrors.cell_phone = 'Format as (XXX) XXX-XXXX';
-                }
-            }
+            // if (formData.cell_phone.trim()) {
+            //     const formattedRegex1 = /^\(\d{3}\) \d{3}-\d{4}$/;
+            //     if (!formattedRegex1.test(formData.cell_phone)) {
+            //         newErrors.cell_phone = 'Format as (XXX) XXX-XXXX';
+            //     }
+            // }
 
 
             if (!formData.address) newErrors.address = "Address is required";
@@ -365,7 +372,7 @@ export default function register1(pageProp) {
     // };
 
 
- 
+
 
 
 
@@ -432,7 +439,7 @@ export default function register1(pageProp) {
                 username: '', password: '', password_confirmation: ''
             });
 
-            router.push("/member/memberlogin");
+            router.push("/user/userlogin");
 
         } catch (error) {
             console.error('Error:', error);
@@ -445,7 +452,7 @@ export default function register1(pageProp) {
 
     return (
         <div className="page_shopping_list sop">
-            <HeadSEO title={"memberlogin"} description={"this member is login"} image={null} />
+            <HeadSEO title={"userlogin"} description={"this user is login"} image={null} />
 
             <HeadSEO1 />
 
@@ -455,46 +462,46 @@ export default function register1(pageProp) {
                         {
                             // step === 1 && <div className="scchs-wrapper">
 
-                            //     <div className="scchs-new-membership">
-                            //         <h2 className="scchs-title">New Membership</h2>
+                            //     <div className="scchs-new-usership">
+                            //         <h2 className="scchs-title">New usership</h2>
                             //         <p className="scchs-non-refundable">
-                            //             ANNUAL MEMBERSHIP DUES ARE NOT REFUNDABLE
+                            //             ANNUAL userSHIP DUES ARE NOT REFUNDABLE
                             //         </p>
                             //         <p className="scchs-note">
-                            //             NOTE: If you are already a member you should{" "}
+                            //             NOTE: If you are already a user you should{" "}
                             //             <a href="/signin" className="scchs-sign-in-link">
                             //                 SIGN IN
                             //             </a>{" "}
                             //             and do an Online Renew instead of an Online Join.
                             //         </p>
                             //         <p className="scchs-business-note">
-                            //             If you are purchasing a <strong>Business Membership</strong>, please
+                            //             If you are purchasing a <strong>Business usership</strong>, please
                             //             enter the name of your company when asked to do so. Otherwise, please
                             //             enter N/A as a company name.
                             //         </p>
                             //         <button type="button" onClick={handleNext} className="scchs-next-btn">Next</button>
                             //     </div>
 
-                            //     <div className="scchs-membership-plan">
-                            //         <h3 className="scchs-plan-title">Membership Plan</h3>
+                            //     <div className="scchs-usership-plan">
+                            //         <h3 className="scchs-plan-title">usership Plan</h3>
                             //         <select className="scchs-plan-dropdown">
-                            //             <option>Select Membership Plan</option>
-                            //             <option>Individual Membership</option>
-                            //             <option>Business Membership</option>
+                            //             <option>Select usership Plan</option>
+                            //             <option>Individual usership</option>
+                            //             <option>Business usership</option>
                             //         </select>
                             //     </div>
 
                             //     <div className="table-container">
-                            //         <h2 className="table-title">Membership Plans Offered</h2>
+                            //         <h2 className="table-title">usership Plans Offered</h2>
 
 
                             //         <div className="scch-table-container scch_sety">
-                            //             <table className="scch-member-table ss_mem_tb">
+                            //             <table className="scch-user-table ss_mem_tb">
                             //                 <thead>
                             //                     <tr>
                             //                         <th className="nh1">Plan Name</th>
                             //                         <th className="nh1">For</th>
-                            //                         <th>Maximum Associated Members</th>
+                            //                         <th>Maximum Associated users</th>
                             //                         <th>Annual Fee</th>
                             //                         {/* <th>Description</th> */}
                             //                     </tr>
@@ -505,7 +512,7 @@ export default function register1(pageProp) {
                             //                             <td>{item.name}</td>
                             //                             <td>{item.for}</td>
                             //                             <td>
-                            //                                 {item?.members}
+                            //                                 {item?.users}
                             //                             </td>
                             //                             <td>
                             //                                 {item?.fee}
@@ -602,6 +609,7 @@ export default function register1(pageProp) {
                                             <input onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
                                             <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
                                         </div>
+                                        <p style={{ color: "green", fontSize: "18px" }}>Please enter your birth date</p>
                                     </div>
                                     {
                                         step < 3 && <button type="button" onClick={() => {
@@ -617,7 +625,7 @@ export default function register1(pageProp) {
                             step === 2 && (
                                 <>
                                     <div className="form_scch_btn">
-                                        <h2>New Membership</h2>
+                                        <h2>New Member</h2>
                                         {step > 1 && <button type="button" onClick={handlePrevious}>Back</button>}
                                     </div>
                                     <div className="nameform-container">
@@ -637,10 +645,28 @@ export default function register1(pageProp) {
 
                                         <div className="nameform-group">
                                             {/* <input name="country" onChange={handleChange} value={formData?.country} className="nameform-input" type="text" placeholder="Country" /> */}
-                                            <select name="country" onChange={handleChange} value={formData?.country} className="nameform-input">
+                                            {/* <select name="country" onChange={handleChange} value={formData?.country} className="nameform-input">
                                                 <option value={""}>Country</option>
-                                                <option>United States of America</option>
-                                            </select>
+                                                {countries.map((country) => (
+                                                    <option key={country.isoCode} value={country.name}>
+                                                        {country.name}
+                                                    </option>
+                                                ))}
+                                            </select> */}
+                                            <CreatableSelect
+                                                placeholder="Select or type country"
+                                                options={toOptions(countries)}
+                                                value={formData.country ? { label: formData.country, value: formData.country } : null}
+                                                onChange={(selected) =>
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        country: selected?.value || '',
+                                                        state: '',
+                                                        city: '',
+                                                    }))
+                                                }
+                                            />
+
                                         </div>
 
                                         <div className="nameform-group">
@@ -700,14 +726,30 @@ export default function register1(pageProp) {
                                                 <option>Wyoming</option>
                                             </select> */}
 
-                                            <select name="state" value={formData.state} onChange={handleChange} className="nameform-input">
+                                            {/* <select name="state" value={formData.state} onChange={handleChange} className="nameform-input">
                                                 <option value="">Select State</option>
                                                 {states.map((state) => (
                                                     <option key={state.name} value={state.name}>
                                                         {state.name}
                                                     </option>
-                                                ))}  
-                                            </select>
+                                                ))}
+                                            </select> */}
+
+                                            <CreatableSelect
+                                                
+                                                placeholder="Select or type state"
+                                                // isDisabled={!states.length}
+                                                options={toOptions(states)}
+                                                value={formData.state ? { label: formData.state, value: formData.state } : null}
+                                                onChange={(selected) =>
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        state: selected?.value || '',
+                                                        city: '',
+                                                    }))
+                                                }
+                                            />
+
 
                                             {errors.state && <p className="text_red">{errors.state}</p>}
                                         </div>
@@ -768,14 +810,27 @@ export default function register1(pageProp) {
                                                 <option>Tucson</option>
                                                 <option>Augusta</option>
                                             </select> */}
-                                            <select name="city" value={formData.city} onChange={handleChange} className="nameform-input">
+                                            {/* <select name="city" value={formData.city} onChange={handleChange} className="nameform-input">
                                                 <option value="">Select City</option>
                                                 {cities.map((city) => (
                                                     <option key={city.name} value={city.name}>
                                                         {city.name}
                                                     </option>
                                                 ))}
-                                            </select>
+                                            </select> */}
+
+                                            <CreatableSelect
+                                                placeholder="Select or type city"
+                                                // isDisabled={!cities.length}
+                                                options={toOptions(cities)}
+                                                value={formData.city ? { label: formData.city, value: formData.city } : null}
+                                                onChange={(selected) =>
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        city: selected?.value || '',
+                                                    }))
+                                                }
+                                            />
                                             {errors.city && <p className="text_red">{errors.city}</p>}
                                         </div>
 
@@ -790,7 +845,7 @@ export default function register1(pageProp) {
 
 
                                         <div className="nameform-group nameformis nameformis1">
-                                            <input maxLength={14}
+                                            {/* <input maxLength={14}
                                                 onChange={handlePhoneChange}
                                                 name="mobile_number"
                                                 value={formData?.mobile_number}
@@ -798,17 +853,47 @@ export default function register1(pageProp) {
                                                 type="text"
                                                 placeholder="Phone"
 
-                                            />
+                                            /> */}
+                                            <div>
+                                                <label style={{ marginBottom: "10px" }}>Phone*</label>
+                                                <PhoneInput
+
+                                                    country={'us'}
+                                                    value={formData.mobile_number}
+                                                    onChange={handlePhoneChange}
+                                                    //  className="nameform-input"
+                                                    inputProps={{
+                                                        name: 'mobile_number',
+                                                        required: true,
+                                                        autoFocus: false,
+                                                    }}
+                                                />
+                                            </div>
                                             {
-                                                !errors.mobile_number ? <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span> :
-                                                    <p style={{ marginLeft: "10px" }} className="text_red">{errors.mobile_number}</p>
+                                                // !errors.mobile_number ? <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span> :
+                                                errors.mobile_number && <p style={{ marginLeft: "10px" }} className="text_red">{errors.mobile_number}</p>
                                             }
 
                                             {/* {errors.phone && } */}
                                         </div>
                                         <div className="nameform-group nameformis nameformis1" >
-                                            <input maxLength={14}
-                                                onChange={handleCellPhoneChange} name="cell_phone" value={formData?.cell_phone} className="nameform-input" type="text" placeholder="Cell Phone" />
+                                            {/* <input maxLength={14}
+                                                onChange={handleCellPhoneChange} name="cell_phone" value={formData?.cell_phone} className="nameform-input" type="text" placeholder="Cell Phone" /> */}
+                                            <div>
+                                                <label style={{ marginBottom: "10px" }}>Cell Phone</label>
+                                                <PhoneInput
+
+                                                    country={'us'}
+                                                    value={formData.cell_phone}
+                                                    onChange={handleCellPhoneChange}
+                                                    //  className="nameform-input"
+                                                    inputProps={{
+                                                        name: 'cell_phone',
+                                                        required: true,
+                                                        autoFocus: false,
+                                                    }}
+                                                />
+                                            </div>
                                             {errors.cell_phone && <p className="text_red">{errors.cell_phone}</p>}
                                             {/* <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span> */}
                                         </div>
@@ -832,8 +917,12 @@ export default function register1(pageProp) {
                                         </div> */}
 
                                         <div className="nameform-group">
+
                                             <input name="email" onChange={handleChange} value={formData?.email} className="nameform-input" type="email" placeholder="Email*" />
+
+
                                             {errors.email && <p className="text_red">{errors.email}</p>}
+
                                         </div>
 
                                         <div className="nameform-group">
@@ -847,7 +936,7 @@ export default function register1(pageProp) {
                                     </div>
 
                                     <div className="do_have">
-                                        {/* <div style={{visibility:"hidden"}} className="do_left">
+                                        {/* <div className="do_left">
                                             <p>Do you have an alternate "Seasonal" address:</p>
                                             <select>
                                                 <option>Yes</option>
@@ -869,11 +958,11 @@ export default function register1(pageProp) {
                             step === 3 && (
                                 <>
                                     <div className="form_scch_btn">
-                                        <h2>New Membership</h2>
+                                        <h2>New Member</h2>
                                         {step > 1 && <button type="button" onClick={handlePrevious}>Back</button>}
                                     </div>
                                     <div className="nameform-container">
-                                        <h2>Primary Member Information</h2>
+                                        <h2>Primary user Information</h2>
                                         <div className="nameform-group nams_group">
                                             <input required onChange={handleChange} name="username" value={formData?.username} className="nameform-input" type="text" placeholder="UserName" />
                                             {errors?.username && <p className="text_red">{errors.username}</p>}

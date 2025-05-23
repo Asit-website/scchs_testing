@@ -2,7 +2,7 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import style from "./css/shoppings-lists.module.scss";
 import Link from "next/link";
-
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import HeadSEO from "../components/common/Head/head";
 import GlobalHeaderFooter from "../utils/common/global-header-footer";
 import Navbar from '../components/common/Navbar/Navbar'
@@ -46,6 +46,10 @@ export default function eventdetail(pageProp) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState('');
 
+    // ================paypal==============
+
+
+
 
 
     const router = useRouter();
@@ -54,6 +58,74 @@ export default function eventdetail(pageProp) {
     console.log(id);
 
     const [aboutnew, setaboutnew] = useState({});
+
+    const [showModal1, setShowModal1] = useState(false);
+
+    const [qty, setQty] = useState('');
+    const [orderAmount, setOrderAmount] = useState(null); // Store order amount
+  const [showPayPal, setShowPayPal] = useState(false);
+  const [orderId, setOrderId] = useState(null); // Optional: track internal order
+
+
+    const closeModal = () => {
+        setShowModal1(false);
+    setQty('');
+    setOrderAmount(null);
+    setShowPayPal(false);
+    setOrderId(null);
+    }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`https://admin.scchs.co.in/api/events/${aboutnew.id}/orders`, {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json' ,
+            "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+        },
+        body: JSON.stringify({ qty: Number(qty) }),
+      });
+
+      if (!res.ok) throw new Error('Order API failed');
+
+      const data = await res.json();
+
+      // Use API amount for PayPal
+      setOrderAmount(data.amount);
+      setOrderId(data.id); // optional
+      setShowPayPal(true); // now show PayPal button
+    } catch (err) {
+      console.error(err);
+      alert('Failed to place order');
+    }
+  };
+
+    // useEffect(() => {
+    //     if (orderSuccess && window.paypal && paypalRef.current) {
+    //          const script = document.createElement('script');
+    //     script.src = "https://www.paypal.com/sdk/js?client-id=AQUoEi-7BxQtfIAz4ulCu1obszrCBZ5NXJQriaMbotUhBEa0_7yJLUrYG7QbTqpOJM-FyoViTuYduBZz";
+    //     script.addEventListener("load", () => {
+    //         window.paypal.Buttons({
+    //             createOrder: (data, actions) => {
+    //                 return actions.order.create({
+    //                     purchase_units: [{
+    //                         amount: {
+    //                             value: '10.00'
+    //                         }
+    //                     }]
+    //                 });
+    //             },
+    //             onApprove: async (data, actions) => {
+    //                 const order = await actions.order.capture();
+    //                 console.log(order);
+    //                 // Send order data to your backend if needed
+    //             }
+    //         }).render('#paypal-button-container');
+    //     });
+    //     document.body.appendChild(script);
+    //     }
+    // }, [orderSuccess]);
 
     const fetchnewsbyycat = async (name) => {
         try {
@@ -178,9 +250,85 @@ export default function eventdetail(pageProp) {
 
             <div className="event_system_main">
                 <div className="event_main">
-                    
+
+                    {/* {showModal1 && (
+                        <div className="modal-overlay" onClick={closeModal}>
+                            <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+                                <h2>Purchase Tickets</h2>
+                                <p>Number of avilable tickets : {aboutnew.
+                                    number_of_tickets}</p>
+
+                                <form onSubmit={handleSubmit}>
+                                    <input type="number"
+                                        placeholder="Enter Quantity"
+                                        required
+                                        value={qty}
+                                        onChange={(e) => setQty(e.target.value)} />
+
+                                    <button type="submit" className="modal-submit">Procede</button>
+                                </form>
+                                <button onClick={() => setShowModal1(false)} className="modal-close">Close</button>
+                            </div>
+                        </div>
+                    )} */}
+
+                    <PayPalScriptProvider options={{ clientId: 'AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy', currency: 'USD' }}>
+      <div>
+        <button onClick={() => setShowModal1(true)} className="ticket-btn">Purchase Tickets</button>
+
+        {showModal1 && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+              <h2>Buy Tickets</h2>
+
+              {!showPayPal ? (
+                <form onSubmit={handleSubmit}>
+                  <input
+                    type="number"
+                    placeholder="Enter Quantity"
+                    required
+                    value={qty}
+                    onChange={(e) => setQty(e.target.value)}
+                  />
+                  <button type="submit" className="modal-submit">Proceed</button>
+                </form>
+              ) : (
+                <div className="paypal-box">
+                  <h3>Pay ${orderAmount}</h3>
+                  <PayPalButtons
+                    style={{ layout: 'vertical' }}
+                    createOrder={(data, actions) => {
+                      return actions.order.create({
+                        purchase_units: [{
+                          amount: {
+                            value: String(orderAmount),
+                          },
+                        }],
+                      });
+                    }}
+                    onApprove={async (data, actions) => {
+                      const details = await actions.order.capture();
+                      alert('Payment completed successfully!');
+                      closeModal();
+                    }}
+                    onError={(err) => {
+                      console.error('PayPal error:', err);
+                      alert('Payment failed');
+                    }}
+                  />
+                </div>
+              )}
+
+              <button onClick={closeModal} className="modal-close">Close</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </PayPalScriptProvider>
+
+
                     <div className="event_details_main">
-                       <Link style={{textDecoration:"none"}} href={"/event"}><button className="event_det_back">Back</button></Link>
+                        <Link style={{ textDecoration: "none" }} href={"/event"}><button className="event_det_back">Back</button></Link>
                         <div className="event-page">
                             <div className="event-header">
                                 <div className="event-info">
@@ -252,19 +400,19 @@ export default function eventdetail(pageProp) {
                                             }
 
                                             {
-                                                aboutnew?.image?.length > 1 &&  <div className="thumbs">
-                                                {/* <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282766/image_1_vctfyt.png" alt="Thumb 1" /> */}
-                                                {aboutnew?.image?.length > 0 && (
-                                                    <img src={aboutnew.image[1]}  />
-                                                )}
-                                                {/* <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282765/image_2_yqkqjg.png" alt="Thumb 2" /> */}
-                                                {aboutnew?.image?.length > 0 && (
-                                                    <img src={aboutnew.image[2]}  />
-                                                )}
-                                            </div>
+                                                aboutnew?.image?.length > 1 && <div className="thumbs">
+                                                    {/* <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282766/image_1_vctfyt.png" alt="Thumb 1" /> */}
+                                                    {aboutnew?.image?.length > 0 && (
+                                                        <img src={aboutnew.image[1]} />
+                                                    )}
+                                                    {/* <img src="https://res.cloudinary.com/dgif730br/image/upload/v1744282765/image_2_yqkqjg.png" alt="Thumb 2" /> */}
+                                                    {aboutnew?.image?.length > 0 && (
+                                                        <img src={aboutnew.image[2]} />
+                                                    )}
+                                                </div>
                                             }
 
-                                           
+
 
                                             {/* Wrap this to include both button and text */}
                                             {/* <div className="show-more-wrapper">
@@ -303,7 +451,7 @@ export default function eventdetail(pageProp) {
                             <h3>Payment in advance is greatly appreciated, table hosts are responsible <br /> for ensuring full payment at or prior to event</h3>
                         </div>
                         <div className="payment_right">
-                            <button>Purchase Tickets</button>
+                            <button onClick={() => setShowModal1(true)}>Purchase Tickets</button>
                         </div>
                         <div className="payment_right">
                             <button>Download</button>

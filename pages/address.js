@@ -292,84 +292,75 @@ export default function Cart(props) {
         getAddress();
     }, [])
 
-
-
-    useEffect(() => {
-        const isEditing = localStorage.getItem("scchs_editing") === "true";
-        const userId = JSON.parse(localStorage.getItem("scchs_User"))?.id;
-
-        if (isEditing && userId) {
-            const savedData = JSON.parse(localStorage.getItem(`scchs_addressData_${userId}`));
-            console.log("Saved address for editing:", savedData); // 👈 check this
-            if (savedData) {
-                setAddressDetail(savedData); // for edit mode
-            }
-        }
-    }, []);
-
-
     const [isEditing, setIsEditing] = useState(false);
 
-    useEffect(() => {
-        const editFlag = localStorage.getItem("scchs_editing");
-        setIsEditing(editFlag === "true");
-    }, []);
+// useEffect(() => {
+//     const editFlag = localStorage.getItem("scchs_editing") === "true";
+//     setIsEditing(editFlag);
+// }, []);
 
+  useEffect(() => {
+    const isEditing = router.query.edit === "true"; // now based on query param
+    setIsEditing(isEditing);
 
-
-
-    const createAddressHandler = async (e) => {
-        // let token = localStorage.getItem("ecomm_userToken");
-        e.preventDefault();
-        const errors = validateAddressForm(addressDetail);
-        if (Object.keys(errors).length > 0) {
-            setErrors(errors); // You must have `const [errors, setErrors] = useState({})`
-            return;
-        }
-        try {
-            const response = await fetch(
-                "https://admin.scchs.co.in/api/createaddress",
-                {
-                    method: 'POST',
-                    headers: {
-                        "content-type": "application/json",
-                        "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-
-                    },
-                    body: JSON.stringify(addressDetail),
-                }
-            );
-
-            const formattedResponse = await response.json();
-            console.log(formattedResponse);
-            toast.success(formattedResponse?.message);
-
-            const userId = JSON.parse(localStorage.getItem("scchs_User"))?.id;
-            const fullAddressData = {
-                ...addressDetail,
-                id: formattedResponse?.data?.id || formattedResponse?.id, // fallback if needed
-            };
-            localStorage.setItem(`scchs_addressData_${userId}`, JSON.stringify(fullAddressData));
-
-            router.push("/storeorder")
-            //  if(formattedResponse.success){
-            //   localStorage.removeItem("ecomm_user");
-            //   var userObjectString = JSON.stringify(formattedResponse.userDetails);
-
-            //   localStorage.setItem("ecomm_user" , userObjectString);
-            //   setUserDetails(formattedResponse?.userDetails);
-
-            //   alert("succesfuly Updated the address");
-            //   onNext();
-            //  }
-            //  else{
-            //   alert(formattedResponse.message);
-            //  }
-
-        } catch (error) {
-            console.log(error);
-        }
+    if (isEditing) {
+        fetchAddressForEditing();
     }
+}, []);
+
+console.log(isEditing)
+
+const fetchAddressForEditing = async () => {
+    try {
+        const token = JSON.parse(localStorage.getItem("scchs_Access"));
+        const res = await fetch("https://admin.scchs.co.in/api/listalladdress", {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        const data = await res.json();
+        if (data?.data?.length > 0) {
+            setAddressDetail(data.data[0]); // assuming first address is default/editable
+        }
+    } catch (err) {
+        console.error("Fetch error:", err);
+    }
+};
+
+
+   
+
+
+
+
+   const createAddressHandler = async (e) => {
+    e.preventDefault();
+
+    const errors = validateAddressForm(addressDetail);
+    if (Object.keys(errors).length > 0) {
+        setErrors(errors);
+        return;
+    }
+
+    try {
+        const token = JSON.parse(localStorage.getItem("scchs_Access"));
+        const response = await fetch("https://admin.scchs.co.in/api/createaddress", {
+            method: 'POST',
+            headers: {
+                "content-type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(addressDetail),
+        });
+
+        const formattedResponse = await response.json();
+        console.log("Create Response:", formattedResponse);
+        toast.success(formattedResponse?.message);
+        // router.push("/storeorder");
+    } catch (error) {
+        console.error("Create Error:", error);
+    }
+};
 
     //    const updateAddressHandler = async (e) => {
     //   e.preventDefault();
@@ -402,59 +393,50 @@ export default function Cart(props) {
     //   }
     // };
 
-    const updateAddressHandler = async (e) => {
-        e.preventDefault();
+   const updateAddressHandler = async (e) => {
+    e.preventDefault();
 
-        const errors = validateAddressForm(addressDetail);
-        if (Object.keys(errors).length > 0) {
-            setErrors(errors); // You must have `const [errors, setErrors] = useState({})`
+    const errors = validateAddressForm(addressDetail);
+    if (Object.keys(errors).length > 0) {
+        setErrors(errors);
+        return;
+    }
+
+    try {
+        const token = JSON.parse(localStorage.getItem("scchs_Access"));
+        if (!addressDetail?.id) {
+            toast.error("Address ID missing. Cannot update.");
             return;
         }
 
-        try {
-            const userId = JSON.parse(localStorage.getItem("scchs_User"))?.id;
-            console.log(userId)
-            const existing = JSON.parse(localStorage.getItem(`scchs_addressData_${userId}`));
-            console.log("Existing address data:", existing);
-
-            if (!existing || !existing.id) {
-                console.error("No valid existing address or id found.");
-                alert("Address ID missing. Please try again.");
-                return;
+        const response = await fetch(
+            `https://admin.scchs.co.in/api/updateaddress/${addressDetail.id}`,
+            {
+                method: 'PUT',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({addressDetail}),
             }
+        );
 
-            const response = await fetch(
-                `https://admin.scchs.co.in/api/updateaddress/${existing.id}`,
-                {
-                    method: 'PUT',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-                    },
-                    body: JSON.stringify(addressDetail || existing), // updated data or fallback
-                }
-            );
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error("Update failed:", errorData);
-                alert(errorData.message || "Update failed.");
-                return;
-            }
-
-            const data = await response.json();
-            console.log("Update response:", data);
-            toast.success(data?.message);
-
-            localStorage.removeItem("scchs_editing");
-            localStorage.setItem(`scchs_addressData_${userId}`, JSON.stringify(addressDetail || existing));
-            router.push("/storeorder");
-
-        } catch (error) {
-            console.error("Update Error:", error);
-            alert("An error occurred during update.");
+        const data = await response.json();
+        console.log(data);
+        console.log(data)
+        if (!response.ok) {
+            toast.error(data?.message || "Update failed.");
+            return;
         }
-    };
+
+        toast.success(data?.message);
+        router.push("/storeorder");
+    } catch (error) {
+        console.error("Update Error:", error);
+        toast.error("Something went wrong.");
+    }
+};
+
 
 
     const [instaUser, setInstaUser] = useState(null);
@@ -563,12 +545,12 @@ export default function Cart(props) {
 
                             <div className="address_flex">
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="first_name">First Name*</label>
+                                    <label htmlFor="first_name">First Name</label>
                                     <input className="nameform-input" id="first_name" name="first_name" onChange={handleAddressChange} value={addressDetail?.first_name} type="text" placeholder="First Name" />
                                     {errors.first_name && <p style={{ color: "red" }} className="error-text">{errors.first_name}</p>}
                                 </div>
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="last_name">Last Name*</label>
+                                    <label htmlFor="last_name">LastName</label>
                                     <input className="nameform-input" id="last_name" name="last_name" onChange={handleAddressChange} value={addressDetail?.last_name} type="text" placeholder="Last Name" />
                                     {errors.last_name && <p style={{ color: "red" }} className="error-text">{errors.last_name}</p>}
                                 </div>
@@ -576,7 +558,7 @@ export default function Cart(props) {
                             <div className="address_flex">
 
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="address1">Address1*</label>
+                                    <label htmlFor="address1">Address1</label>
                                     <textarea className="nameform-input" id="address1" name="address1" onChange={handleAddressChange} value={addressDetail?.address1} placeholder="Address1" />
                                     {errors.address1 && <p style={{ color: "red" }} className="error-text">{errors.address1}</p>}
                                 </div>
@@ -585,7 +567,7 @@ export default function Cart(props) {
                                     <textarea className="nameform-input" name="address2" onChange={handleAddressChange} value={addressDetail?.address2} placeholder="Address2" />
                                 </div>
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="country">Country*</label>
+                                    <label htmlFor="country">Country</label>
                                     <select className="nameform-input" id="country" name="country" onChange={handleAddressChange} value={addressDetail?.country}>
                                         <option value={""}>Select Country</option>
                                         <option>United State Of America</option>
@@ -598,12 +580,12 @@ export default function Cart(props) {
 
                             <div className="address_flex">
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="phone">Phone*</label>
+                                    <label htmlFor="phone">Phone</label>
                                     <input className="nameform-input" id="phone" name="phone" value={addressDetail?.phone} onChange={handleAddressChange} type="text" placeholder="Phone Number" />
                                     {errors.phone && <p style={{ color: "red" }} className="error-text">{errors.phone}</p>}
                                 </div>
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="state">State*</label>
+                                    <label htmlFor="state">State</label>
                                     {/* <input className="nameform-input" id="state" name="state" onChange={handleAddressChange} value={addressDetail?.state} type="text" placeholder="State" /> */}
                                     <select name="state" value={addressDetail.state} onChange={handleAddressChange} className="nameform-input">
                                         <option value="">Select State</option>
@@ -623,7 +605,7 @@ export default function Cart(props) {
                             <div className="address_flex">
 
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="city">City*</label>
+                                    <label htmlFor="city">City</label>
                                     {/* <input className="nameform-input" id="city" name="city" onChange={handleAddressChange} value={addressDetail?.city} type="text" placeholder="City" /> */}
                                     <select name="city" value={addressDetail?.city} onChange={handleAddressChange} className="nameform-input">
                                         <option value="">Select City</option>
@@ -636,7 +618,7 @@ export default function Cart(props) {
                                     {errors.city && <p style={{ color: "red" }} className="error-text">{errors.city}</p>}
                                 </div>
                                 <div className="address_input nameform-group nams_group">
-                                    <label htmlFor="zipcode">ZipCode*</label>
+                                    <label htmlFor="zipcode">ZipCode</label>
                                     <input className="nameform-input" id="zipcode" value={addressDetail?.zipcode} name="zipcode" onChange={handleAddressChange} type="text" placeholder="ZipCode" />
                                     {errors.zipcode && <p style={{ color: "red" }} className="error-text">{errors.zipcode}</p>}
                                 </div>

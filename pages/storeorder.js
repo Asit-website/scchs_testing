@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import { useSession } from "next-auth/react";
 import HeadSEO from "../components/common/Head/head";
 import GlobalHeaderFooter from "../utils/common/global-header-footer";
-import { FaUser, FaMapMarkedAlt, FaBuilding, FaCity, FaGlobe, FaFlag, FaMapPin, FaPhone } from "react-icons/fa";
 import Navbar from '../components/common/Navbar/Navbar'
 //Slider css files
 import Slider from "react-slick";
@@ -22,6 +21,8 @@ import HeadSEO1 from "../components/common/Head/head1";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { FaUser, FaMapMarkedAlt, FaBuilding, FaCity, FaGlobe, FaFlag, FaMapPin, FaPhone } from "react-icons/fa";
+
 import { toast } from "react-toastify";
 
 
@@ -48,30 +49,37 @@ export default function storeorder(pageProp) {
 
     const [savedAddress, setSavedAddress] = useState(null);
 
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("scchs_User"));
-        const userId = user?.id;
-
-        if (userId) {
-            const item = localStorage.getItem(`scchs_addressData_${userId}`);
-            if (item) {
-                try {
-                    const addr = JSON.parse(item);
-                    setSavedAddress(addr);
-                } catch (err) {
-                    console.error("Failed to parse address:", err);
+  useEffect(() => {
+    const fetchSavedAddress = async () => {
+        try {
+            const token = JSON.parse(localStorage.getItem("scchs_Access"));
+            const res = await fetch("https://admin.scchs.co.in/api/listalladdress", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
                 }
+            });
+
+            const data = await res.json();
+            console.log(data);
+            if (data?.data?.length > 0) {
+                setSavedAddress(data.data[0]); // assuming first address is the main one
+            } else {
+                setSavedAddress(null);
             }
+        } catch (err) {
+            console.error("API fetch error:", err);
         }
-    }, []);
+    };
+
+    fetchSavedAddress();
+}, []);
 
 
     console.log(savedAddress)
 
 
     const handleEdit = () => {
-        localStorage.setItem("scchs_editing", "true");
-        window.location.href = "/address"; // or use router.push
+      router.push(`address?edit=true`)
     };
 
     // ====================
@@ -722,64 +730,7 @@ export default function storeorder(pageProp) {
                 <div className="event_main">
                     {
                         savedAddress && (
-                            // <div className="saved-address">
-                            //     <div className="header flex justify-between items-center mb-4">
-                            //         <h2>Saved Address</h2>
-                            //         <button onClick={handleEdit}>✏️ Edit Address</button>
-                            //     </div>
-                            //     <ul className="space-y-1">
-                            //         <li><strong>Name:</strong> {savedAddress.first_name} {savedAddress.last_name}</li>
-                            //         <li><strong>Address:</strong> {savedAddress.address1}</li>
-                            //         {savedAddress.address2 && <li><strong>Address2:</strong> {savedAddress.address2}</li>}
-                            //         <li><strong>City:</strong> {savedAddress.city}</li>
-                            //         <li><strong>State:</strong> {savedAddress.state}</li>
-                            //         <li><strong>Country:</strong> {savedAddress.country}</li>
-                            //         <li><strong>Zip Code:</strong> {savedAddress.zipcode}</li>
-                            //         <li><strong>Phone:</strong> {savedAddress.phone}</li>
-                            //     </ul>
-                            // </div>
-                            //     <div className="saved-address-card">
-                            //     <div className="card-header">
-                            //       <h2>📦 Saved Address</h2>
-                            //       <button onClick={handleEdit}>✏️ Edit</button>
-                            //     </div>
-                            //     <div className="card-content">
-                            //       <div className="row">
-                            //         <span className="label">👤 Name:</span>
-                            //         <span>{savedAddress.first_name} {savedAddress.last_name}</span>
-                            //       </div>
-                            //       <div className="row">
-                            //         <span className="label">🏠 Address:</span>
-                            //         <span>{savedAddress.address1}</span>
-                            //       </div>
-                            //       {savedAddress.address2 && (
-                            //         <div className="row">
-                            //           <span className="label">🏢 Address 2:</span>
-                            //           <span>{savedAddress.address2}</span>
-                            //         </div>
-                            //       )}
-                            //       <div className="row">
-                            //         <span className="label">🏙️ City:</span>
-                            //         <span>{savedAddress.city}</span>
-                            //       </div>
-                            //       <div className="row">
-                            //         <span className="label">🗺️ State:</span>
-                            //         <span>{savedAddress.state}</span>
-                            //       </div>
-                            //       <div className="row">
-                            //         <span className="label">🌍 Country:</span>
-                            //         <span>{savedAddress.country}</span>
-                            //       </div>
-                            //       <div className="row">
-                            //         <span className="label">📮 Zip:</span>
-                            //         <span>{savedAddress.zipcode}</span>
-                            //       </div>
-                            //       <div className="row">
-                            //         <span className="label">📞 Phone:</span>
-                            //         <span>{savedAddress.phone}</span>
-                            //       </div>
-                            //     </div>
-                            //   </div>
+                           
                             <div className="saved-address-card">
                                 <div className="card-headerrss">
                                     <h2><FaMapMarkedAlt className="icon" /> Saved Address</h2>
@@ -798,11 +749,6 @@ export default function storeorder(pageProp) {
                                     <div className="roww"><span className="labells"><FaPhone className="icon" /> Phone:</span><span>{savedAddress.phone}</span></div>
                                 </div>
                             </div>
-
-
-
-
-
                         )
                     }
                     {
