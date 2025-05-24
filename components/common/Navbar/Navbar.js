@@ -40,6 +40,9 @@ export default function Navbar(props) {
 
   const [membershipStatus, setMembershipStatus] = useState("loading");
 
+  
+
+
 
   // ==========this is for mobile responsive=============
   useEffect(() => {
@@ -534,6 +537,53 @@ export default function Navbar(props) {
     }, [openDropdownIndex]);
 
 
+// ============for renew=============
+  const [subscription, setSubscription] = useState(null);
+  const [daysLeft, setDaysLeft] = useState(null);
+   const [endDateFormatted, setEndDateFormatted] = useState('');
+  // const router = useRouter();
+
+ useEffect(() => {
+    const fetchSubscription = async () => {
+      try {
+        const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+
+        const result = await res.json();
+        console.log(result)
+        const data = result.data;
+        console.log(data)
+        setSubscription(data);
+
+        const end = new Date(data.end_date);
+        const today = new Date();
+        const diffInDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+        setDaysLeft(diffInDays);
+
+        // Format end date to readable form (e.g., "May 27, 2025")
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formatted = end.toLocaleDateString('en-US', options);
+        setEndDateFormatted(formatted);
+
+      } catch (err) {
+        console.error('Error fetching subscription:', err);
+      }
+    };
+
+    fetchSubscription();
+  }, []);
+
+  const handleRenewClick = () => {
+    console.log("HI")
+    if (daysLeft !== null) {
+      if (daysLeft <= 2) {
+        router.push('/join/memberplan'); // Replace with your payment route
+      } else {
+        alert(`You are allowed to renew 2 days before end of your subscription.`);
+      }
+    }
+  };
+
+
 
 
     //  =====plan purchased or not=============
@@ -571,9 +621,17 @@ export default function Navbar(props) {
       fetchMembership();
     }, [instaUser]);
 
+
+    // ===============for renew=========
+
+  
+
     const handleMember = () => {
       membershipStatus != "active" && toast.error("Please purchase membership plan");
     }
+
+
+
 
     return (
       <>
@@ -797,6 +855,7 @@ export default function Navbar(props) {
                       <a href="/orderhistory">📦 Order History</a>
                       <a href="/eventhistory">🎫 Event Orders</a>
                       <a href="/storeorder">🛒 View Cart</a>
+                    {membershipStatus === "active" && <p style={{cursor:"pointer"}} onClick={handleRenewClick}>🎫 RENEW ONLINE</p>}   
                     </div>
 
                   )}
@@ -830,8 +889,16 @@ export default function Navbar(props) {
           color: #333;
           font-size: 14px;
         }
+          .dropdown-menusss p {
+          display: block;
+          padding: 10px 15px;
+          text-decoration: none;
+          color: #333;
+          font-size: 14px;
+          font-weight:500
+        }
 
-        .dropdown-menusss a:hover {
+        .dropdown-menusss a:hover, .dropdown-menusss p:hover {
           background-color: #f5f5f5;
         }
 
