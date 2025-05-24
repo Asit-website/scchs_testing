@@ -490,12 +490,12 @@ export default function eventdetail(pageProp) {
                         <div className="payment_right">
                             <button onClick={() => setShowModal1(true)}>Purchase Tickets</button>
                         </div>
-                        <div className="payment_right">
+                        {/* <div className="payment_right">
                             <button>Download</button>
                         </div>
                         <div className="payment_right">
                             <button>Reserve Seats</button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
