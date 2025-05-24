@@ -161,7 +161,7 @@ export default function store(pageProp) {
                             </div>
                             <div className="event-title-filter ev_tight_fill">
                                 <div className="custom_drop">
-                                    <select value={selectedSlug} onChange={(e) => setSelectedSlug(e.target.value)} className="dropdown small">
+                                    <select value={selectedSlug} onChange={(e) => setSelectedSlug(e.target.value)} className="dropdown small" id="dropdownnn">
                                         <option>Filter by category</option>
                                         {
                                             allCategory?.map((item, index) => {

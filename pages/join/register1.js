@@ -383,7 +383,7 @@ export default function register1(pageProp) {
             setStep((prev) => prev + 1);
         }
         else {
-            toast.error("fix the form first");
+            toast.error("Please fill out the form first");
         }
 
     }
