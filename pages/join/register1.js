@@ -265,9 +265,10 @@ export default function register1(pageProp) {
             if (!formData.state) newErrors.state = "State is required";
             if (!formData.postal_code) {
                 newErrors.postal_code = "Postal code is required";
-            } else if (!/^\d{5}$/.test(formData.postal_code)) {
-                newErrors.postal_code = "Postal code must be exactly 5 digits and should be number";
-            }
+            } 
+            // else if (!/^\d{5}$/.test(formData.postal_code)) {
+            //     newErrors.postal_code = "Postal code must be exactly 5 digits and should be number";
+            // }
 
             if (formData.website?.trim()) {
                 const websiteRegex = /^https?:\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/[\w\-./?%&=]*)?$/;
@@ -609,7 +610,7 @@ export default function register1(pageProp) {
                                             <input onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
                                             <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
                                         </div>
-                                        <p style={{ color: "green", fontSize: "18px" }}>Please enter your birth date</p>
+                                        <p style={{ color: "green", fontSize: "18px" }}>Please enter your date of birth</p>
                                     </div>
                                     {
                                         step < 3 && <button type="button" onClick={() => {
@@ -839,6 +840,7 @@ export default function register1(pageProp) {
                                         <div className="nameform-group">
 
                                             <input name="postal_code" onChange={handleChange} value={formData?.postal_code} className="nameform-input" type="text" placeholder="Postal Code*" />
+                                            <p style={{marginTop:"6px"}}>Please mention applicable postal code zip code pin code postcode</p>
                                             {errors.postal_code && <p className="text_red">{errors.postal_code}</p>}
                                         </div>
 
@@ -930,7 +932,7 @@ export default function register1(pageProp) {
                                             {errors.website && <p className="text_red">{errors.website}</p>}
                                         </div>
 
-                                        <p className="format">Format URL above as <span>https://sitename.com</span> or <span>https://sitename.com</span>/dir/file.html</p>
+                                         <p className="format">Please fill above as <span>https://sitename.com</span> or <span>https://sitename.com</span>/dir/file.html</p>
 
 
                                     </div>
