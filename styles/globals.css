@@ -9236,7 +9236,87 @@ label {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
+.order-history-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: Arial, sans-serif;
+}
 
+.order-history-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.order-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.order-card-header {
+  display: flex;
+  gap: 16px;
+}
+
+.order-event-image {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.order-event-info {
+  flex: 1;
+}
+
+.order-event-title {
+  font-size: 20px;
+  margin: 0 0 4px;
+}
+
+.order-event-desc {
+  color: #555;
+  margin: 0 0 4px;
+}
+
+.order-date {
+  font-size: 12px;
+  color: #888;
+}
+
+.order-card-body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.order-status.paid {
+  color: green;
+  font-weight: bold;
+}
+
+.order-status.unpaid,
+.order-status.failed {
+  color: red;
+  font-weight: bold;
+}
+
+.order-history-loading {
+  padding: 40px;
+  text-align: center;
+  font-size: 18px;
+}
+.test_inpuy{
+  width: 100% !important;
+}
 
 /* ===================order css end============= */
 

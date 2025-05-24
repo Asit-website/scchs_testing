@@ -95,6 +95,20 @@ export default function Navbar(props) {
 
   // ============dropdown==============
 
+  const [open, setOpen] = useState(false);
+  const dropdownRef12 = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutsides = (event) => {
+      if (dropdownRef12.current && !dropdownRef12.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutsides);
+    return () => document.removeEventListener('mousedown', handleClickOutsides);
+  }, []);
+
 
   useEffect(() => {
     if (userSession?.user.error === "invalid-version") {
@@ -775,7 +789,66 @@ export default function Navbar(props) {
                   window.location.href = "/"
                 }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
               </li>
-              {instaUser && <li><Link href={"/storeorder"}>View Cart</Link></li>}
+              {
+                instaUser && <li onClick={() => setOpen(!open)} ><Link href={"/storeorder"}><img width={35} height={35} src="https://res.cloudinary.com/dgif730br/image/upload/v1748089475/user_xegqs3.png" /></Link>
+
+                  {open && (
+                    <div ref={dropdownRef12} className="dropdown-menusss">
+                      <a href="/orderhistory">📦 Order History</a>
+                      <a href="/eventhistory">🎫 Event Orders</a>
+                      <a href="/storeorder">🛒 View Cart</a>
+                    </div>
+
+                  )}
+                  <style jsx>{`
+        .dropdown-toggle {
+          background: #fff;
+          border: 1px solid #ccc;
+          padding: 6px 10px;
+          font-size: 20px;
+          border-radius: 6px;
+          cursor: pointer;
+        }
+
+        .dropdown-menusss {
+          position: absolute;
+          top: 66px;
+          right: 20px;
+          background: white;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          min-width: 160px;
+          z-index: 999;
+          animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .dropdown-menusss a {
+          display: block;
+          padding: 10px 15px;
+          text-decoration: none;
+          color: #333;
+          font-size: 14px;
+        }
+
+        .dropdown-menusss a:hover {
+          background-color: #f5f5f5;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-5px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+                </li>
+
+              }
             </ul>
           </div>
         </div>

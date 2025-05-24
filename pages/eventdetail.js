@@ -17,6 +17,7 @@ import ShoppingCollections from "../components/common/shopping/collections";
 import Head from "next/head";
 import HeadSEO1 from "../components/common/Head/head1";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 
 var settingsMorePhotos = {
@@ -49,6 +50,22 @@ export default function eventdetail(pageProp) {
     // ================paypal==============
 
 
+    const [instaUser, setInstaUser] = useState(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") { // Ensures code only runs in the browser
+            const storedInstaUser = localStorage.getItem("scchs_User");
+            setInstaUser(storedInstaUser ? JSON.parse(storedInstaUser) : null);
+        }
+    }, []);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("scchs_User");
+        if (storedUser) {
+            setInstaUser(JSON.parse(storedUser));
+        }
+    }, []);
+
 
 
 
@@ -63,44 +80,47 @@ export default function eventdetail(pageProp) {
 
     const [qty, setQty] = useState('');
     const [orderAmount, setOrderAmount] = useState(null); // Store order amount
-  const [showPayPal, setShowPayPal] = useState(false);
-  const [orderId, setOrderId] = useState(null); // Optional: track internal order
+    const [showPayPal, setShowPayPal] = useState(false);
+    const [orderId, setOrderId] = useState(null); // Optional: track internal order
 
 
     const closeModal = () => {
         setShowModal1(false);
-    setQty('');
-    setOrderAmount(null);
-    setShowPayPal(false);
-    setOrderId(null);
+        setQty('');
+        setOrderAmount(null);
+        setShowPayPal(false);
+        setOrderId(null);
     }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`https://admin.scchs.co.in/api/events/${aboutnew.id}/orders`, {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json' ,
-            "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-        },
-        body: JSON.stringify({ qty: Number(qty) }),
-      });
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await fetch(`https://admin.scchs.co.in/api/events/${aboutnew.id}/orders`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                },
+                body: JSON.stringify({ qty: Number(qty) }),
+            });
 
-      if (!res.ok) throw new Error('Order API failed');
+            if (!res.ok) throw new Error('Order API failed');
 
-      const data = await res.json();
+            const data = await res.json();
 
-      // Use API amount for PayPal
-      setOrderAmount(data.amount);
-      setOrderId(data.id); // optional
-      setShowPayPal(true); // now show PayPal button
-    } catch (err) {
-      console.error(err);
-      alert('Failed to place order');
-    }
-  };
+            console.log(data)
 
+            // Use API amount for PayPal
+            setOrderAmount(data.amount);
+            setOrderId(data.order_id); // optional
+            setShowPayPal(true); // now show PayPal button
+        } catch (err) {
+            console.error(err);
+            alert('Failed to place order');
+        }
+
+    };
+    console.log(orderId);
     // useEffect(() => {
     //     if (orderSuccess && window.paypal && paypalRef.current) {
     //          const script = document.createElement('script');
@@ -273,58 +293,75 @@ export default function eventdetail(pageProp) {
                     )} */}
 
                     <PayPalScriptProvider options={{ clientId: 'AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy', currency: 'USD' }}>
-      <div>
-        <button onClick={() => setShowModal1(true)} className="ticket-btn">Purchase Tickets</button>
+                        <div>
+                            <button onClick={() => setShowModal1(true)} className="ticket-btn">Purchase Tickets</button>
 
-        {showModal1 && (
-          <div className="modal-overlay" onClick={closeModal}>
-            <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-              <h2>Buy Tickets</h2>
+                            {showModal1 && (
+                                <div className="modal-overlay" onClick={closeModal}>
+                                    <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+                                        <h2>Buy Tickets</h2>
 
-              {!showPayPal ? (
-                <form onSubmit={handleSubmit}>
-                  <input
-                    type="number"
-                    placeholder="Enter Quantity"
-                    required
-                    value={qty}
-                    onChange={(e) => setQty(e.target.value)}
-                  />
-                  <button type="submit" className="modal-submit">Proceed</button>
-                </form>
-              ) : (
-                <div className="paypal-box">
-                  <h3>Pay ${orderAmount}</h3>
-                  <PayPalButtons
-                    style={{ layout: 'vertical' }}
-                    createOrder={(data, actions) => {
-                      return actions.order.create({
-                        purchase_units: [{
-                          amount: {
-                            value: String(orderAmount),
-                          },
-                        }],
-                      });
-                    }}
-                    onApprove={async (data, actions) => {
-                      const details = await actions.order.capture();
-                      alert('Payment completed successfully!');
-                      closeModal();
-                    }}
-                    onError={(err) => {
-                      console.error('PayPal error:', err);
-                      alert('Payment failed');
-                    }}
-                  />
-                </div>
-              )}
+                                        <p>Avilable Tickets: <span>{aboutnew?.number_of_tickets}</span></p>
 
-              <button onClick={closeModal} className="modal-close">Close</button>
-            </div>
-          </div>
-        )}
-      </div>
-    </PayPalScriptProvider>
+                                        {!showPayPal ? (
+                                            <form onSubmit={handleSubmit}>
+                                                <input
+                                                    type="number"
+                                                    placeholder="Enter Quantity"
+                                                    required
+                                                    value={qty}
+                                                    onChange={(e) => setQty(e.target.value)}
+                                                />
+                                                <button type="submit" className="modal-submit">Proceed</button>
+                                            </form>
+                                        ) : (
+                                            <div className="paypal-box">
+                                                <h3>Pay ${orderAmount}</h3>
+                                                <PayPalButtons
+                                                    style={{ layout: 'vertical' }}
+                                                    createOrder={(data, actions) => {
+                                                        return actions.order.create({
+                                                            purchase_units: [{
+                                                                amount: {
+                                                                    value: orderAmount
+                                                                },
+                                                            }],
+                                                        });
+                                                    }}
+                                                    onApprove={async (data, actions) => {
+                                                        const details = await actions.order.capture();
+                                                        console.log(details);
+                                                        const captureId = details?.purchase_units?.[0]?.payments?.captures?.[0]?.id;
+                                                        await fetch(`https://admin.scchs.co.in/api/orders/${orderId}/confirm`, {
+                                                            method: "POST",
+                                                            headers: {
+                                                                "Content-Type": "application/json",
+                                                                "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                                                            },
+                                                            body: JSON.stringify({
+                                                                paypal_order_id: details.id,
+                                                                paypal_capture_id: captureId,
+                                                                paypal_payload: details
+                                                            })
+                                                        });
+                                                        toast.success("Payment completed successfully!")
+                                                        closeModal();
+                                                         router.push(`/eventpayment?orderId=${orderId}`);
+                                                    }}
+                                                    onError={(err) => {
+                                                        console.error('PayPal error:', err);
+                                                        alert('Payment failed');
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+
+                                        <button onClick={closeModal} className="modal-close">Close</button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </PayPalScriptProvider>
 
 
                     <div className="event_details_main">

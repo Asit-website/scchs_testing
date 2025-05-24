@@ -339,6 +339,37 @@ export default function storeorder(pageProp) {
         });
     };
 
+//     const calculateTotals = (cartItems) => {
+//     const isMember = membershipStatus?.toLowerCase() === "active";
+
+//     let total_amount = 0;
+//     let grand_total_m = 0;
+//     let shipping_cost = 0;
+
+//     cartItems.forEach((item) => {
+//         const quantity = parseInt(item.quantity) || 1;
+
+//         const normalPrice = parseFloat(item.price ?? 0);
+//         const memberPrice = parseFloat(item.membership_price ?? item.price ?? 0);
+//         const itemShipping = parseFloat(item.shipping_cost ?? 0);
+
+//         total_amount += normalPrice * quantity;
+//         grand_total_m += (memberPrice * quantity) + (itemShipping * quantity);
+//         shipping_cost += itemShipping * quantity;
+//     });
+
+//     const grand_total = isMember ? grand_total_m : total_amount + shipping_cost;
+
+//     setCartData({
+//         cart: cartItems,
+//         total_amount: total_amount.toFixed(2),
+//         grand_total: grand_total.toFixed(2),
+//         grand_total_m: grand_total_m.toFixed(2),
+//         shipping_cost: shipping_cost.toFixed(2),
+//     });
+// };
+
+
     const updateQuantity = (productId, direction) => {
         const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
 
@@ -368,12 +399,16 @@ export default function storeorder(pageProp) {
     };
 
 
-
-    useEffect(() => {
-        if (cartData?.cart?.length && membershipStatus) {
-            calculateTotals(cartData.cart);
-        }
-    }, [membershipStatus]);
+useEffect(() => {
+    if (cartData.cart?.length) {
+        calculateTotals(cartData.cart);
+    }
+}, [cartData.cart]);
+    // useEffect(() => {
+    //     if (cartData?.cart?.length && membershipStatus) {
+    //         calculateTotals(cartData.cart);
+    //     }
+    // }, [membershipStatus]);
 
     const handleAddToCart = (item) => {
         const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
