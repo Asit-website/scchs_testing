@@ -466,14 +466,15 @@ export default function eventdetail(pageProp) {
                             </div>
                             <div className="event-about">
                                 <h4>About this event</h4>
-                                <ul>
+                                {/* <ul>
                                     <li>1) <b>$200</b> per table of 8 or <b>$25</b> per person</li>
                                     <li>2) Free soda and water, BYO snacks and adult beverages</li>
                                     <li>3) <b>50/50</b> raffle drawing, silent auction, game of Dead or Alive</li>
                                     <li><span style={{ textTransform: "uppercase" }}>To reserve a table</span>: Please call, visit or mail in the attached form to:<br />
                                         Saint Charles County Historical Society 101 S. Main Street, St. Charles, MO <b>63301</b>
                                         <b>636-946-9828</b> sccshs.org</li>
-                                </ul>
+                                </ul> */}
+                                <div className="makepoppinsfont" dangerouslySetInnerHTML={{ __html: aboutnew?.description }} />
                             </div>
                             <div className="event_payment">
                                 <h3>Payment can be made by check or phone with a credit card. Make checks payable to SCCHS</h3>
