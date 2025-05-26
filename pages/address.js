@@ -459,7 +459,7 @@ export default function Cart(props) {
             const formattedResponse = await response.json();
             console.log("Create Response:", formattedResponse);
             toast.success(formattedResponse?.message);
-            // router.push("/storeorder");
+            router.push("/storeorder");
         } catch (error) {
             console.error("Create Error:", error);
         }
