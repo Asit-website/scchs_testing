@@ -554,6 +554,7 @@ export default function Navbar(props) {
       const data = result.data;
       console.log(data);
       setSubscription(data);
+      
 
       const end = new Date(data.end_date);
       const today = new Date();
