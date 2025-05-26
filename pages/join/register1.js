@@ -840,7 +840,7 @@ export default function register1(pageProp) {
                                         <div className="nameform-group">
 
                                             <input name="postal_code" onChange={handleChange} value={formData?.postal_code} className="nameform-input" type="text" placeholder="Postal Code*" />
-                                            <p style={{marginTop:"6px"}}>Please mention applicable postal code zip code pin code postcode</p>
+                                            <p style={{marginTop:"6px"}}>Please mention applicable postal code, zip code, pin code, postcode</p>
                                             {errors.postal_code && <p className="text_red">{errors.postal_code}</p>}
                                         </div>
 
