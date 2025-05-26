@@ -46,7 +46,7 @@ export default function eventhistory(pageProp) {
 
     if (loading) return <p className="order-history-loading">Loading order history...</p>;
 
-    if (orders.length === 0) return <p className="order-history-loading">No order history found.</p>;
+    if (orders.length === 0) return <p className="order-history-loading">No event history found.</p>;
 
     return (
         <div className="page_shopping_list sop">

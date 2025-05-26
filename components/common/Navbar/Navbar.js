@@ -574,7 +574,7 @@ export default function Navbar(props) {
       if (daysLeft <= 2) {
         router.push('/join/memberplan'); // Replace with your payment route
       } else {
-        alert(`You are allowed to renew 2 days before end of your subscription.`);
+        toast.error(`You are allowed to renew 2 days before end of your subscription.`);
       }
     }
   };
