@@ -544,36 +544,32 @@ export default function Navbar(props) {
   // const router = useRouter();
 
  useEffect(() => {
-    const fetchSubscription = async () => {
-      try {
-        const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+  if (!instaUser || !instaUser.id) return; // 👈 prevent fetch if instaUser is null
 
-        const result = await res.json();
-        console.log(result)
-        const data = result.data;
-        console.log(data)
-        setSubscription(data);
+  const fetchSubscription = async () => {
+    try {
+      const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+      const result = await res.json();
+      console.log(result);
+      const data = result.data;
+      console.log(data);
+      setSubscription(data);
 
-        const end = new Date(data.end_date);
-        const today = new Date();
-        const diffInDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
-        setDaysLeft(diffInDays);
+      const end = new Date(data.end_date);
+      const today = new Date();
+      const diffInDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+      setDaysLeft(diffInDays);
+    } catch (err) {
+      console.error('Error fetching subscription:', err);
+    }
+  };
 
-        // Format end date to readable form (e.g., "May 27, 2025")
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const formatted = end.toLocaleDateString('en-US', options);
-        setEndDateFormatted(formatted);
+  fetchSubscription();
+}, [instaUser]); // 👈 dependency to re-run when instaUser changes
 
-      } catch (err) {
-        console.error('Error fetching subscription:', err);
-      }
-    };
-
-    fetchSubscription();
-  }, []);
 
   const handleRenewClick = () => {
-    console.log("HI")
+    console.log("HI");
     if (daysLeft !== null) {
       if (daysLeft <= 2) {
         router.push('/join/memberplan'); // Replace with your payment route

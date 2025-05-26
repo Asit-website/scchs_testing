@@ -137,26 +137,30 @@ export default function contribute(pageProp) {
                                 <div className="donation-label">State / Province</div>
                                 <div className="donation-separator">:</div>
                                 <div className="donation-value">
-                                MO
+                                    MO
                                 </div>
                                 <div className="donation-label">Postal Code</div>
                                 <div className="donation-separator">:</div>
                                 <div className="donation-value">
-                                63376
+                                    63376
                                 </div>
                                 <div className="donation-label">Country</div>
                                 <div className="donation-separator">:</div>
                                 <div className="donation-value">
-                                United States
+                                    United States
                                 </div>
                             </div>
 
                             <hr className="donation-divider" />
                             <div className="donation-checkbox">
-                                <input type="checkbox"/>
+                                <input type="checkbox" />
                                 <p>I am not a robot</p>
                             </div>
+                            
                         </div>
+                        <div className="submit_donation">
+                                <button>Confirm & Pay with Paypal</button>
+                            </div>
                     </div>
                 </div>
             </div>
