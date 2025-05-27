@@ -850,7 +850,8 @@ export default function Navbar(props) {
                   {open && (
                     <div ref={dropdownRef12} className="dropdown-menusss">
                       <a href="/orderhistory">📦 Order History</a>
-                      <a href="/eventhistory">🎫 Event Orders</a>
+                      {/* <a href="/eventhistory">🎫 Event Orders</a> */}
+                      <a href="/eventhistory">💳 Payment History</a>
                       <a href="/storeorder">🛒 View Cart</a>
                     {membershipStatus === "active" && <p style={{cursor:"pointer"}} onClick={handleRenewClick}>🎫 RENEW ONLINE</p>}   
                     </div>
