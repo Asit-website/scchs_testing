@@ -9,6 +9,8 @@ import { Country, State, City } from 'country-state-city';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import CreatableSelect from 'react-select/creatable';
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 
 var settingsMorePhotos = {
@@ -22,6 +24,8 @@ var settingsMorePhotos = {
 
 const itemsPerPage = 10;
 export default function donation(pageProp) {
+
+    const router = useRouter();
 
     const [formdata, setFormData] = useState({
         first_name: '',
@@ -120,12 +124,7 @@ export default function donation(pageProp) {
             errors.email = 'Email is required';
 
         }
-        else {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(errors.email)) {
-                errors.email = 'Invalid email format';
-            }
-        }
+       
 
         if (!addressDetail.address1?.trim()) {
             errors.address1 = 'Address1 is required';
@@ -170,6 +169,10 @@ export default function donation(pageProp) {
         }
 
         console.log({ ...formdata });
+
+        localStorage.setItem('donationFormData', JSON.stringify(formdata));
+        router.push("/support/contribute");
+        toast.success("form submitted successfully");
     }
 
     return (

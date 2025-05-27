@@ -48,13 +48,16 @@ console.log(records);
 const itemsPerPage = 10;
 export default function contribute(pageProp) {
 
-    const [contribute, setContribute] = useState(false);
+    const [savedData, setSavedData] = useState(null);
 
-    const handleContribute = () => {
-        const filterContribute = setContribute(Math.random());
-        const assignMember = setContribute(filterContribute);
-        console.log(assignMember);
-    }
+    useEffect(() => {
+        const data = JSON.parse(localStorage.getItem('donationFormData'));
+        if (data) {
+            setSavedData(data);
+        }
+    }, []);
+
+    console.log(savedData);
 
 
     return (
@@ -74,31 +77,31 @@ export default function contribute(pageProp) {
                             <div className="donation-grid">
                                 <div className="donation-label">First Name</div>
                                 <div className="donation-separator">:</div>
-                                <div className="donation-value">G</div>
+                                <div className="donation-value">{savedData?.first_name}</div>
 
                                 <div className="donation-label">Last Name</div>
                                 <div className="donation-separator">:</div>
-                                <div className="donation-value">Walker</div>
+                                <div className="donation-value">{savedData?.last_name}</div>
 
                                 <div className="donation-label">Organization</div>
                                 <div className="donation-separator">:</div>
-                                <div className="donation-value">Digital Growth</div>
+                                <div className="donation-value">{savedData?.organization}</div>
 
                                 <div className="donation-label">Email Address</div>
                                 <div className="donation-separator">:</div>
-                                <div className="donation-value">tkwalther56@gmail.com</div>
+                                <div className="donation-value">{savedData?.email}</div>
 
                                 <div className="donation-label">Phone</div>
                                 <div className="donation-separator">:</div>
-                                <div className="donation-value">(314) 226-3144</div>
+                                <div className="donation-value">{savedData?.phone}</div>
 
                                 <div className="donation-label">Donation Amount (USD)</div>
                                 <div className="donation-separator">:</div>
-                                <div className="donation-value">10.00</div>
+                                <div className="donation-value">{savedData?.donation_amount}</div>
 
                                 <div className="donation-label">Donation Type</div>
                                 <div className="donation-separator">:</div>
-                                <div className="donation-value">One Time</div>
+                                <div className="donation-value">{savedData?.donation_type}</div>
                             </div>
 
                             <hr className="donation-divider" />
@@ -112,7 +115,7 @@ export default function contribute(pageProp) {
                                 <div className="donation-label">Donor Comments:</div>
                                 <div className="donation-separator">:</div>
                                 <div className="donation-value">
-                                    Hello
+                                    {savedData?.comment}
                                 </div>
                             </div>
 
@@ -122,32 +125,32 @@ export default function contribute(pageProp) {
                                 <div className="donation-label">Address</div>
                                 <div className="donation-separator">:</div>
                                 <div className="donation-value">
-                                    36 Shadowridge Drive
+                                    {savedData?.address1}
                                 </div>
                                 <div className="donation-label">Address 2</div>
                                 <div className="donation-separator">:</div>
                                 <div className="donation-value">
-                                    false
+                                    {savedData?.address2 ? savedData?.address2 : "false"}
                                 </div>
                                 <div className="donation-label">City</div>
                                 <div className="donation-separator">:</div>
                                 <div className="donation-value">
-                                    St Peters
+                                    {savedData?.city}
                                 </div>
                                 <div className="donation-label">State / Province</div>
                                 <div className="donation-separator">:</div>
                                 <div className="donation-value">
-                                    MO
+                                    {savedData?.state}
                                 </div>
                                 <div className="donation-label">Postal Code</div>
                                 <div className="donation-separator">:</div>
                                 <div className="donation-value">
-                                    63376
+                                    {savedData?.postal_code}
                                 </div>
                                 <div className="donation-label">Country</div>
                                 <div className="donation-separator">:</div>
                                 <div className="donation-value">
-                                    United States
+                                    {savedData?.country}
                                 </div>
                             </div>
 
@@ -156,11 +159,11 @@ export default function contribute(pageProp) {
                                 <input type="checkbox" />
                                 <p>I am not a robot</p>
                             </div>
-                            
+
                         </div>
                         <div className="submit_donation">
-                                <button>Confirm & Pay with Paypal</button>
-                            </div>
+                            <button>Confirm & Pay with Paypal</button>
+                        </div>
                     </div>
                 </div>
             </div>
