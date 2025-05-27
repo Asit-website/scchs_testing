@@ -5,7 +5,10 @@ import GlobalHeaderFooter from "../../utils/common/global-header-footer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../../components/common/Head/head1";
-
+import { Country, State, City } from 'country-state-city';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import CreatableSelect from 'react-select/creatable';
 
 
 var settingsMorePhotos = {
@@ -17,48 +20,157 @@ var settingsMorePhotos = {
 };
 
 
-const records = [
-    { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
-    { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
-    { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
-    { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
-    { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
-    { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
-    { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
-    { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
-    { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
-    { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
-    { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
-    { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
-    { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
-    { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
-    { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
-    { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
-    { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
-    { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
-    { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
-    { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
-    { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
-    { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
-    { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
-    { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
-    // Add more for testing pagination
-];
-
 const itemsPerPage = 10;
 export default function donation(pageProp) {
 
-    // const [currentPage, setCurrentPage] = useState(1);
+    const [formdata, setFormData] = useState({
+        first_name: '',
+        last_name: '',
+        organization: '',
+        email: '',
+        phone: '',
+        donation_amount: '',
+        donation_type: '',
+        comment: '',
+        address1: '',
+        address2: '',
+        city: '',
+        state: '',
+        postal_code: '',
+        country: '',
+    })
 
-    // const totalPages = Math.ceil(records.length / itemsPerPage);
-    // const startIndex = (currentPage - 1) * itemsPerPage;
-    // const currentItems = records.slice(startIndex, startIndex + itemsPerPage);
+    const [errors, setErrors] = useState({});
 
-    // const handleClick = (page) => {
-    //     if (page >= 1 && page <= totalPages) {
-    //         setCurrentPage(page);
-    //     }
-    // };
+    const handleChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+        setErrors((prev) => ({
+            ...prev,
+            [e.target.name]: '',
+        }));
+    };
+
+    const handlePhoneChange = (value) => {
+        setFormData((prev) => ({
+            ...prev,
+            phone: value,
+        }));
+    };
+
+    // ============for country state city=======
+
+    const [countries, setCountries] = useState([]);
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
+
+    useEffect(() => {
+        setCountries(Country.getAllCountries());
+    }, []);
+
+    useEffect(() => {
+        if (formdata.country) {
+            // Get ISO code of country by name
+            const selectedCountry = countries.find(
+                (c) => c.name === formdata.country
+            );
+
+            if (selectedCountry) {
+                const countryStates = State.getStatesOfCountry(selectedCountry.isoCode);
+                setStates(countryStates);
+                setFormData((prev) => ({ ...prev, state: '', city: '' }));
+            }
+        }
+    }, [formdata.country, countries]);
+
+    useEffect(() => {
+        if (formdata.country && formdata.state) {
+            const selectedCountry = countries.find(
+                (c) => c.name === formdata.country
+            );
+            const selectedState = State.getStatesOfCountry(selectedCountry?.isoCode).find(
+                (s) => s.name === formdata.state
+            );
+
+            if (selectedCountry && selectedState) {
+                const stateCities = City.getCitiesOfState(selectedCountry.isoCode, selectedState.isoCode);
+                setCities(stateCities);
+                setFormData((prev) => ({ ...prev, city: '' }));
+            }
+        }
+    }, [formdata.state, formdata.country, countries]);
+
+    const toOptions = (list, key = 'name') =>
+        list.map((item) => ({ label: item[key], value: item[key] }));
+
+    const validateAddressForm = (addressDetail) => {
+        const errors = {};
+
+        if (!addressDetail.first_name?.trim()) {
+            errors.first_name = 'First name is required';
+        }
+
+        if (!addressDetail.last_name?.trim()) {
+            errors.last_name = 'Last name is required';
+        }
+
+        if (!addressDetail.email.trim()) {
+            errors.email = 'Email is required';
+
+        }
+        else {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(errors.email)) {
+                errors.email = 'Invalid email format';
+            }
+        }
+
+        if (!addressDetail.address1?.trim()) {
+            errors.address1 = 'Address1 is required';
+        }
+
+        if (!addressDetail.country?.trim()) {
+            errors.country = 'Country is required';
+        }
+
+        if (!addressDetail.city?.trim()) {
+            errors.city = 'City is required';
+        }
+
+        if (!addressDetail.state?.trim()) {
+            errors.state = 'State is required';
+        }
+
+        if (!addressDetail.postal_code?.trim()) {
+            errors.postal_code = 'postal code is required';
+        }
+
+        // else if (!/^\d{5}$/.test(addressDetail.zipcode)) {
+        //     errors.zipcode = 'ZipCode must be exactly 5 digits and numeric';
+        // }
+
+        if (addressDetail.donation_amount === undefined || addressDetail.donation_amount === null || addressDetail.donation_amount === '') {
+            errors.donation_amount = 'Donation amount is required';
+        } else if (isNaN(addressDetail.donation_amount) || Number(addressDetail.donation_amount) < 10) {
+            errors.donation_amount = 'Minimum donation amount is $10';
+        }
+
+
+        return errors;
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const errors = validateAddressForm(formdata);
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors);
+            return;
+        }
+
+        console.log({ ...formdata });
+    }
 
     return (
         <div className="page_shopping_list sop">
@@ -66,155 +178,251 @@ export default function donation(pageProp) {
 
             <HeadSEO1 />
             <div className="terros">
-            <div className="container111">
-                <h2 className="donation-heading">Donations</h2>
-                <p className="donation-paragraph">
-                    The primary mission of the St. Charles County Historical Society is to
-                    preserve, interpret and make publicly available the rich historical record
-                    of St. Charles County. Up until 2016 the Society has accepted donations of
-                    items of all sorts that are historically significant to St. Charles
-                    County. Over the sixty years of our existence we have accumulated an
-                    enormous collection of artifacts ranging from quilts to uniforms to type
-                    frames to theater ephemera. This is in addition to the many photographs,
-                    letters, family histories, church vital records, maps, census records and
-                    other official records of the county such as circuit court and immigration
-                    documents. Because of space limitations and our inability to display the
-                    objects in our collection, we have decided to de-accession these items and
-                    transfer them to the St. Charles County Heritage Museum where it is hoped
-                    they will be available for public viewing on a more regular basis.
-                </p>
-                <p className="welcome-your-donation">
-                    <strong>
-                        We are a 501(c)(3) non-profit organization and welcome your donations.
-                    </strong>
-                </p>
-                <div className="box_1">
-                    <p className="box-paragraph">You may make an online donation.</p>
-                    <a href="#fghj">Click Here</a>
-                </div>
-                <p className="donation-of-papers">
-                    Donations of papers, photographs, books and other miscellaneous documents
-                    will be gladly accepted as they pertain to St. Charles County. People
-                    desiring to donate historical artifacts will now be referred to the
-                    Heritage Museum. We stand ready and willing to assist parties in making
-                    such donations as our interest in the preservation of St. Charles County
-                    history remains undiminished.
-                </p>
-                <p className="we-all-accept">
-                    We also accept financial donations in a variety of forms from cash to
-                    equities to real estate. In fact, we rely on these types of donations for
-                    a substantial portion of our yearly operating revenue.
-                </p>
-            </div>
-            <section className="scchs-contribution">
-                <div className="note-section">
-                    <h3>SCCHS Contributions</h3>
-                    <p className="note">
-                        Please complete the form below to make an online CONTRIBUTION.
+                <div className="container111">
+                    <h2 className="donation-heading">Donations</h2>
+                    <p className="donation-paragraph">
+                        The primary mission of the St. Charles County Historical Society is to
+                        preserve, interpret and make publicly available the rich historical record
+                        of St. Charles County. Up until 2016 the Society has accepted donations of
+                        items of all sorts that are historically significant to St. Charles
+                        County. Over the sixty years of our existence we have accumulated an
+                        enormous collection of artifacts ranging from quilts to uniforms to type
+                        frames to theater ephemera. This is in addition to the many photographs,
+                        letters, family histories, church vital records, maps, census records and
+                        other official records of the county such as circuit court and immigration
+                        documents. Because of space limitations and our inability to display the
+                        objects in our collection, we have decided to de-accession these items and
+                        transfer them to the St. Charles County Heritage Museum where it is hoped
+                        they will be available for public viewing on a more regular basis.
                     </p>
-                    <p className="note">
-                        <strong>NOTE:</strong> If you are trying to{" "}
-                        <strong>become a member</strong> please exit this section and click on{" "}
-                        <strong>JOIN</strong> at the top of the HOME page. If you are trying{" "}
-                        <br /> to <strong>renew your membership</strong> please exit this
-                        section and click on <strong>SIGN IN</strong> at the top of the HOME
-                        page
+                    <p className="welcome-your-donation">
+                        <strong>
+                            We are a 501(c)(3) non-profit organization and welcome your donations.
+                        </strong>
+                    </p>
+                    <div className="box_1">
+                        <p className="box-paragraph">You may make an online donation.</p>
+                        <a href="#fghj">Click Here</a>
+                    </div>
+                    <p className="donation-of-papers">
+                        Donations of papers, photographs, books and other miscellaneous documents
+                        will be gladly accepted as they pertain to St. Charles County. People
+                        desiring to donate historical artifacts will now be referred to the
+                        Heritage Museum. We stand ready and willing to assist parties in making
+                        such donations as our interest in the preservation of St. Charles County
+                        history remains undiminished.
+                    </p>
+                    <p className="we-all-accept">
+                        We also accept financial donations in a variety of forms from cash to
+                        equities to real estate. In fact, we rely on these types of donations for
+                        a substantial portion of our yearly operating revenue.
                     </p>
                 </div>
-                <form>
-                <div className="container-1"id="fghj">
-                    <div className="form-title">Place a Donation:</div>
-                    {/* <form> */}
-                        <input
-                            className="donation-input"
-                            type="text"
-                            id="name"
-                            placeholder="First Name*"
-                        />
-                        <input
-                            className="donation-input"
-                            type="text"
-                            id="name"
-                            placeholder="Last Name*"
-                        />
-                        <input
-                            className="donation-input"
-                            type="text"
-                            placeholder="Organization"
-                        />
-                        <input
-                            className="donation-input"
-                            type="text"
-                            id="name"
-                            placeholder="Email Address* "
-                        />
-                        <input className="small-input-1" type="text" placeholder="Phone" />
-                        <div className="warning">Required, formatted as (000) 000-0000</div>
-                        <input
-                            className="small-input"
-                            type="text"
-                            placeholder="Donation Amount (USD):"
-                        />
-                        <div className="warning">
-                            Required, $10.00 Minimum Donation, Format as 123.45
+                <section className="scchs-contribution">
+                    <div className="note-section">
+                        <h3>SCCHS Contributions</h3>
+                        <p className="note">
+                            Please complete the form below to make an online CONTRIBUTION.
+                        </p>
+                        <p className="note">
+                            <strong>NOTE:</strong> If you are trying to{" "}
+                            <strong>become a member</strong> please exit this section and click on{" "}
+                            <strong>JOIN</strong> at the top of the HOME page. If you are trying{" "}
+                            <br /> to <strong>renew your membership</strong> please exit this
+                            section and click on <strong>SIGN IN</strong> at the top of the HOME
+                            page
+                        </p>
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className="container-1" id="fghj">
+                            <div className="form-title">Place a Donation:</div>
+                            {/* <form> */}
+                            <input
+                                className="donation-input"
+                                type="text"
+                                id="name"
+                                placeholder="First Name*"
+                                name="first_name"
+                                onChange={handleChange}
+                                value={formdata?.first_name}
+                            />
+                            {errors.first_name && <p className="text_red">{errors.first_name}</p>}
+                            <input
+                                className="donation-input"
+                                type="text"
+                                id="name"
+                                placeholder="Last Name*"
+                                name="last_name"
+                                value={formdata?.last_name}
+                                onChange={handleChange}
+                            />
+                            {errors.last_name && <p className="text_red">{errors.last_name}</p>}
+                            <input
+                                className="donation-input"
+                                type="text"
+                                placeholder="Organization"
+                                value={formdata?.organization}
+                                name="organization"
+                                onChange={handleChange}
+                            />
+                            <input
+                                className="donation-input"
+                                type="text"
+                                id="name"
+                                placeholder="Email Address* "
+                                name="email"
+                                value={formdata?.email}
+                                onChange={handleChange}
+                            />
+                            {errors.email && <p className="text_red">{errors.email}</p>}
+                            {/* <input
+                                name="phone"
+                                value={formdata?.phone}
+                                onChange={handleChange}
+                                className="small-input-1"
+                                type="text"
+                                placeholder="Phone"
+                            /> */}
+                            <PhoneInput
+                                // className="small-input-1"
+                                country={'us'}
+                                value={formdata.phone}
+                                onChange={handlePhoneChange}
+                                //  className="nameform-input"
+                                inputProps={{
+                                    name: 'phone',
+                                    required: true,
+                                    autoFocus: false,
+                                }}
+                            />
+                            {/* <div className="warning">Required, formatted as (000) 000-0000</div> */}
+                            <input
+                                style={{ marginTop: "20px" }}
+                                className="small-input"
+                                type="text"
+                                placeholder="Donation Amount (USD):"
+                                name="donation_amount"
+                                value={formdata?.donation_amount}
+                                onChange={handleChange}
+                            />
+                            <div className="warning">
+                                Required, $10.00 Minimum Donation, Format as 123.45
+                            </div>
+                            {errors.donation_amount && <p className="text_red">{errors.donation_amount}</p>}
+                            <select name="donation_type" value={formdata?.donation_type} onChange={handleChange} className="hgjg">
+                                <option>Donation Type</option>
+                                <option>One Time</option>
+                            </select>
+                            <textarea
+                                className="textarea"
+                                name="comment"
+                                id="comment"
+                                value={formdata?.comment}
+                                onChange={handleChange}
+                                placeholder="Donor Comments"
+                                defaultValue={""}
+                            />
+                            <div className="chek-box-parent">
+                                <input className="checkbox" type="checkbox" />
+                                <span>
+                                    I would like to make this donation anonymously. Please do not
+                                    publish my name.
+                                </span>
+                            </div>
+                            {/* </form> */}
                         </div>
-                        <select className="hgjg">
-                            <option>Donation Type</option>
-                            <option>Phone</option>
-                            <option>Cell</option>
-                            <option>Int'l</option>
-                        </select>
-                        <textarea
-                            className="textarea"
-                            name=""
-                            id=""
-                            placeholder="Donor Comments"
-                            defaultValue={""}
-                        />
-                        <div className="chek-box-parent">
-                            <input className="checkbox" type="checkbox" />
-                            <span>
-                                I would like to make this donation anonymously. Please do not
-                                publish my name.
-                            </span>
+                        <div className="container-2">
+                            {/* <form action=""> */}
+                            <input
+                                className="donation-input"
+                                type="text"
+                                id="address1"
+                                placeholder="Address*"
+                                value={formdata?.address1}
+                                onChange={handleChange}
+                                name="address1"
+                            />
+                            {errors.address1 && <p className="text_red">{errors.address1}</p>}
+                            <input value={formdata?.address2} onChange={handleChange} name="address2" className="donation-input" type="text" placeholder="Address 2" />
+                            {/* <input name="country" onChange={handleChange} value={formdata?.country} className="donation-input" type="text" placeholder="Country" /> */}
+                            <CreatableSelect
+                                placeholder="Select or type country"
+                                options={toOptions(countries)}
+                                value={formdata.country ? { label: formdata.country, value: formdata.country } : null}
+                                onChange={(selected) =>
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        country: selected?.value || '',
+                                        state: '',
+                                        city: '',
+                                    }))
+                                }
+                            />
+                            {/* <input
+                                className="donation-input"
+                                type="text"
+                                id="state"
+                                placeholder="State / Province*"
+                                name="state"
+                                value={formdata?.state}
+                                onChange={handleChange}
+                            /> */}
+                            <CreatableSelect
+
+                                placeholder="Select or type state"
+                                // isDisabled={!states.length}
+                                options={toOptions(states)}
+                                value={formdata.state ? { label: formdata.state, value: formdata.state } : null}
+                                onChange={(selected) =>
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        state: selected?.value || '',
+                                        city: '',
+                                    }))
+                                }
+                            />
+                            {errors.state && <p className="text_red">{errors.state}</p>}
+                            {/* <input
+                                className="donation-input"
+                                type="text"
+                                id="city"
+                                name="city"
+                                onChange={handleChange}
+                                value={formdata?.city}
+                                placeholder="City*"
+                            /> */}
+                            <CreatableSelect
+                                placeholder="Select or type city"
+                                // isDisabled={!cities.length}
+                                options={toOptions(cities)}
+                                value={formdata.city ? { label: formdata.city, value: formdata.city } : null}
+                                onChange={(selected) =>
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        city: selected?.value || '',
+                                    }))
+                                }
+                            />
+                            {errors.city && <p className="text_red">{errors.city}</p>}
+
+                            <input
+                                className="donation-input"
+                                type="text"
+                                id="postal_code"
+                                name="postal_code"
+                                placeholder="Postal Code*"
+                                value={formdata?.postal_code}
+                                onChange={handleChange}
+                            />
+                            {errors.postal_code && <p className="text_red">{errors.postal_code}</p>}
+
+                            {/* </form> */}
                         </div>
-                    {/* </form> */}
-                </div>
-                <div className="container-2">
-                    {/* <form action=""> */}
-                        <input
-                            className="donation-input"
-                            type="text"
-                            id="name"
-                            placeholder="Address*"
-                        />
-                        <input className="donation-input" type="text" placeholder="Address 2" />
-                        <input
-                            className="donation-input"
-                            type="text"
-                            id="name"
-                            placeholder="City*"
-                        />
-                        <input
-                            className="donation-input"
-                            type="text"
-                            id="name"
-                            placeholder="State / Province*"
-                        />
-                        <input
-                            className="donation-input"
-                            type="text"
-                            id="name"
-                            placeholder="Postal Code*"
-                        />
-                        <input className="donation-input" type="text" placeholder="Country" />
-                    {/* </form> */}
-                </div>
-                   <div className="submit_donation">
-                        <button>Submit Donation</button>
-                   </div>
-                </form>
-            </section>
+                        <div className="submit_donation">
+                            <button type="submit">Submit Donation</button>
+                        </div>
+                    </form>
+                </section>
             </div>
         </div>
     );

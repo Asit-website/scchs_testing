@@ -9325,7 +9325,9 @@ label {
   font-size: 12px;
   color: #888;
 }
-
+.terros .css-13cymwt-control{
+  margin: 15px 0px !important;
+}
 .order-card-body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
