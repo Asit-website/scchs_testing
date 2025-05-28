@@ -283,9 +283,11 @@ export default function Cart(props) {
 
         if (!addressDetail.zipcode?.trim()) {
             errors.zipcode = 'ZipCode is required';
-        } else if (!/^\d{5}$/.test(addressDetail.zipcode)) {
-            errors.zipcode = 'ZipCode must be exactly 5 digits and numeric';
         }
+
+        // else if (!/^\d{5}$/.test(addressDetail.zipcode)) {
+        //     errors.zipcode = 'ZipCode must be exactly 5 digits and numeric';
+        // }
 
         return errors;
     };
@@ -719,6 +721,7 @@ export default function Cart(props) {
                             <div className="address_input nameform-group nams_group">
                                 <label htmlFor="zipcode">ZipCode</label>
                                 <input className="nameform-input" id="zipcode" value={addressDetail?.zipcode} name="zipcode" onChange={handleAddressChange} type="text" placeholder="ZipCode" />
+                                <p style={{ marginTop: "6px" }}>Please mention applicable postal code, zip code, pin code, postcode</p>
                                 {errors.zipcode && <p style={{ color: "red" }} className="error-text">{errors.zipcode}</p>}
                             </div>
                             {/* <div className="address_input">

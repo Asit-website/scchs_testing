@@ -42,6 +42,7 @@ export default function donation(pageProp) {
         state: '',
         postal_code: '',
         country: '',
+        anonymous: false
     })
 
     const [isEditMode, setIsEditMode] = useState(false);
@@ -185,6 +186,9 @@ export default function donation(pageProp) {
         if (!addressDetail.postal_code?.trim()) {
             errors.postal_code = 'postal code is required';
         }
+        if (!addressDetail.phone.trim()) {
+            errors.phone = 'Phone number is required';
+        }
 
         // else if (!/^\d{5}$/.test(addressDetail.zipcode)) {
         //     errors.zipcode = 'ZipCode must be exactly 5 digits and numeric';
@@ -214,13 +218,21 @@ export default function donation(pageProp) {
         // router.push("/support/contribute");
         // toast.success("form submitted successfully");
 
-        localStorage.setItem('donationFormData', JSON.stringify(formdata));
+        let finalFormData = { ...formdata };
+
+        if (formdata.anonymous) {
+            finalFormData.first_name = 'Anonymous';
+            finalFormData.last_name = 'Anonymous';
+        }
+
+        // localStorage.setItem('donationFormData', JSON.stringify(formdata));
+         localStorage.setItem('donationFormData', JSON.stringify(finalFormData));
 
         if (isEditMode) {
-            toast.success('Edited form submitted', formdata);
+            toast.success('Edited form submitted');
             router.push("/support/contribute")
         } else {
-            toast.success('New form submitted', formdata);
+            toast.success('New form submitted');
             router.push("/support/contribute")
         }
 
@@ -247,36 +259,36 @@ export default function donation(pageProp) {
         }
     }, []);
 
-//     useEffect(() => {
-//   const mode = localStorage.getItem('donationFormMode');
-//   const saved = localStorage.getItem('donationFormData');
+    //     useEffect(() => {
+    //   const mode = localStorage.getItem('donationFormMode');
+    //   const saved = localStorage.getItem('donationFormData');
 
-//   if (mode === 'edit' && saved) {
-//     setFormData(JSON.parse(saved));
-//     setIsEditMode(true);
-//   } else {
-//     // New entry: clear everything
-//     localStorage.removeItem('donationFormData');
-//     localStorage.removeItem('donationFormMode');
-//     setIsEditMode(false);
-//     setFormData({
-//       first_name: '',
-//       last_name: '',
-//       organization: '',
-//       email: '',
-//       phone: '',
-//       donation_amount: '',
-//       donation_type: '',
-//       comment: '',
-//       address1: '',
-//       address2: '',
-//       city: '',
-//       state: '',
-//       postal_code: '',
-//       country: '',
-//     });
-//   }
-// }, []);
+    //   if (mode === 'edit' && saved) {
+    //     setFormData(JSON.parse(saved));
+    //     setIsEditMode(true);
+    //   } else {
+    //     // New entry: clear everything
+    //     localStorage.removeItem('donationFormData');
+    //     localStorage.removeItem('donationFormMode');
+    //     setIsEditMode(false);
+    //     setFormData({
+    //       first_name: '',
+    //       last_name: '',
+    //       organization: '',
+    //       email: '',
+    //       phone: '',
+    //       donation_amount: '',
+    //       donation_type: '',
+    //       comment: '',
+    //       address1: '',
+    //       address2: '',
+    //       city: '',
+    //       state: '',
+    //       postal_code: '',
+    //       country: '',
+    //     });
+    //   }
+    // }, []);
 
 
 
@@ -406,6 +418,7 @@ export default function donation(pageProp) {
                                     autoFocus: false,
                                 }}
                             />
+                            {errors.phone && <p className="text_red">{errors.phone}</p>}
                             {/* <div className="warning">Required, formatted as (000) 000-0000</div> */}
                             <input
                                 style={{ marginTop: "20px" }}
@@ -434,7 +447,13 @@ export default function donation(pageProp) {
                                 defaultValue={""}
                             />
                             <div className="chek-box-parent">
-                                <input className="checkbox" type="checkbox" />
+                                <input className="checkbox" type="checkbox" checked={formdata.anonymous}
+                                    onChange={(e) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            anonymous: e.target.checked,
+                                        }))
+                                    } />
                                 <span>
                                     I would like to make this donation anonymously. Please do not
                                     publish my name.
