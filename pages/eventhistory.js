@@ -59,8 +59,8 @@ export default function eventhistory(pageProp) {
                 <h1 className="order-history-title">Event Order History</h1>
 
                 {/*  */}
-                <div className="tabss">
-                <button
+                {/* <div className="tabss">
+                   <button
                         className={`tabs-button ${activeTab === "All" ? "active" : ""}`}
                         onClick={() => setActiveTab("All")}
                     >
@@ -84,7 +84,7 @@ export default function eventhistory(pageProp) {
                     >
                         Donation History
                     </button>
-                </div>
+                </div> */}
                 {/*  */}
                 {orders.map(order => (
                     // <div key={order.id} className="order-card">

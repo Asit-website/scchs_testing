@@ -44,6 +44,9 @@ export default function donation(pageProp) {
         country: '',
     })
 
+    const [isEditMode, setIsEditMode] = useState(false);
+
+
     const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
@@ -74,34 +77,71 @@ export default function donation(pageProp) {
         setCountries(Country.getAllCountries());
     }, []);
 
+    // useEffect(() => {
+    //     if (formdata.country) {
+    //         // Get ISO code of country by name
+    //         const selectedCountry = countries.find(
+    //             (c) => c.name === formdata.country
+    //         );
+
+    //         if (selectedCountry) {
+    //             const countryStates = State.getStatesOfCountry(selectedCountry.isoCode);
+    //             setStates(countryStates);
+    //             setFormData((prev) => ({ ...prev, state: '', city: '' }));
+    //         }
+    //     }
+    // }, [formdata.country, countries]);
+
     useEffect(() => {
         if (formdata.country) {
-            // Get ISO code of country by name
-            const selectedCountry = countries.find(
-                (c) => c.name === formdata.country
-            );
-
+            const selectedCountry = countries.find((c) => c.name === formdata.country);
             if (selectedCountry) {
                 const countryStates = State.getStatesOfCountry(selectedCountry.isoCode);
                 setStates(countryStates);
-                setFormData((prev) => ({ ...prev, state: '', city: '' }));
+
+                // 🔒 Only reset state and city if current state is NOT in new list
+                const isStateValid = countryStates.some((s) => s.name === formdata.state);
+                if (!isStateValid) {
+                    setFormData((prev) => ({ ...prev, state: '', city: '' }));
+                }
             }
         }
     }, [formdata.country, countries]);
 
+
+
+    // useEffect(() => {
+    //     if (formdata.country && formdata.state) {
+    //         const selectedCountry = countries.find(
+    //             (c) => c.name === formdata.country
+    //         );
+    //         const selectedState = State.getStatesOfCountry(selectedCountry?.isoCode).find(
+    //             (s) => s.name === formdata.state
+    //         );
+
+    //         if (selectedCountry && selectedState) {
+    //             const stateCities = City.getCitiesOfState(selectedCountry.isoCode, selectedState.isoCode);
+    //             setCities(stateCities);
+    //             setFormData((prev) => ({ ...prev, city: '' }));
+    //         }
+    //     }
+    // }, [formdata.state, formdata.country, countries]);
+
     useEffect(() => {
         if (formdata.country && formdata.state) {
-            const selectedCountry = countries.find(
-                (c) => c.name === formdata.country
-            );
-            const selectedState = State.getStatesOfCountry(selectedCountry?.isoCode).find(
-                (s) => s.name === formdata.state
-            );
+            const selectedCountry = countries.find((c) => c.name === formdata.country);
+            const selectedState = State.getStatesOfCountry(selectedCountry?.isoCode)
+                .find((s) => s.name === formdata.state);
 
             if (selectedCountry && selectedState) {
                 const stateCities = City.getCitiesOfState(selectedCountry.isoCode, selectedState.isoCode);
                 setCities(stateCities);
-                setFormData((prev) => ({ ...prev, city: '' }));
+
+                // 🔒 Only reset city if current city is not in the list
+                const isCityValid = stateCities.some((c) => c.name === formdata.city);
+                if (!isCityValid) {
+                    setFormData((prev) => ({ ...prev, city: '' }));
+                }
             }
         }
     }, [formdata.state, formdata.country, countries]);
@@ -124,7 +164,7 @@ export default function donation(pageProp) {
             errors.email = 'Email is required';
 
         }
-       
+
 
         if (!addressDetail.address1?.trim()) {
             errors.address1 = 'Address1 is required';
@@ -168,12 +208,80 @@ export default function donation(pageProp) {
             return;
         }
 
-        console.log({ ...formdata });
+        // console.log({ ...formdata });
+
+        // localStorage.setItem('donationFormData', JSON.stringify(formdata));
+        // router.push("/support/contribute");
+        // toast.success("form submitted successfully");
 
         localStorage.setItem('donationFormData', JSON.stringify(formdata));
-        router.push("/support/contribute");
-        toast.success("form submitted successfully");
+
+        if (isEditMode) {
+            toast.success('Edited form submitted', formdata);
+            router.push("/support/contribute")
+        } else {
+            toast.success('New form submitted', formdata);
+            router.push("/support/contribute")
+        }
+
+        // localStorage.removeItem('donationFormMode');
     }
+
+    // useEffect(() => {
+    //     const saved = localStorage.getItem('donationFormData');
+    //     if (saved) {
+    //         setFormData(JSON.parse(saved));
+    //     }
+    // }, []);
+
+
+    useEffect(() => {
+        const mode = localStorage.getItem('donationFormMode');
+        if (mode === 'edit') {
+            const saved = localStorage.getItem('donationFormData');
+            if (saved) {
+                setFormData(JSON.parse(saved));
+                setIsEditMode(true);
+            }
+            localStorage.removeItem('donationFormMode');
+        }
+    }, []);
+
+//     useEffect(() => {
+//   const mode = localStorage.getItem('donationFormMode');
+//   const saved = localStorage.getItem('donationFormData');
+
+//   if (mode === 'edit' && saved) {
+//     setFormData(JSON.parse(saved));
+//     setIsEditMode(true);
+//   } else {
+//     // New entry: clear everything
+//     localStorage.removeItem('donationFormData');
+//     localStorage.removeItem('donationFormMode');
+//     setIsEditMode(false);
+//     setFormData({
+//       first_name: '',
+//       last_name: '',
+//       organization: '',
+//       email: '',
+//       phone: '',
+//       donation_amount: '',
+//       donation_type: '',
+//       comment: '',
+//       address1: '',
+//       address2: '',
+//       city: '',
+//       state: '',
+//       postal_code: '',
+//       country: '',
+//     });
+//   }
+// }, []);
+
+
+
+
+
 
     return (
         <div className="page_shopping_list sop">
@@ -270,7 +378,7 @@ export default function donation(pageProp) {
                             />
                             <input
                                 className="donation-input"
-                                type="text"
+                                type="email"
                                 id="name"
                                 placeholder="Email Address* "
                                 name="email"
@@ -422,7 +530,7 @@ export default function donation(pageProp) {
                             {/* </form> */}
                         </div>
                         <div className="submit_donation">
-                            <button type="submit">Submit Donation</button>
+                            <button type="submit">{isEditMode ? 'Edit' : 'Submit'}</button>
                         </div>
                     </form>
                 </section>

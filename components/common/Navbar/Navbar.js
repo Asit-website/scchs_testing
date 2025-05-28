@@ -845,15 +845,16 @@ export default function Navbar(props) {
                 }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
               </li>
               {
-                instaUser && <li onClick={() => setOpen(!open)} ><Link href={"/storeorder"}><img width={35} height={35} src="https://res.cloudinary.com/dgif730br/image/upload/v1748089475/user_xegqs3.png" /></Link>
+                instaUser && <li onClick={() => setOpen(!open)} ><Link href={"#"}><img width={35} height={35} src="https://res.cloudinary.com/dgif730br/image/upload/v1748089475/user_xegqs3.png" /></Link>
 
                   {open && (
                     <div ref={dropdownRef12} className="dropdown-menusss">
-                      <a href="/orderhistory">📦 Order History</a>
+                      <a href="/orderhistory">Order History</a>
                       {/* <a href="/eventhistory">🎫 Event Orders</a> */}
-                      <a href="/eventhistory">💳 Payment History</a>
-                      <a href="/storeorder">🛒 View Cart</a>
-                    {membershipStatus === "active" && <p style={{cursor:"pointer"}} onClick={handleRenewClick}>🎫 RENEW ONLINE</p>}   
+                      <a href="/eventhistory">Event Order History</a>
+                       <a href="/donationhistory">Donation History</a>
+                      <a href="/storeorder">View Cart</a>
+                    {membershipStatus === "active" && <p style={{cursor:"pointer"}} onClick={handleRenewClick}>RENEW ONLINE</p>}   
                     </div>
 
                   )}

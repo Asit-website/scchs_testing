@@ -5,7 +5,9 @@ import GlobalHeaderFooter from "../../utils/common/global-header-footer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../../components/common/Head/head1";
-
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 
 var settingsMorePhotos = {
@@ -48,6 +50,9 @@ console.log(records);
 const itemsPerPage = 10;
 export default function contribute(pageProp) {
 
+    const router = useRouter();
+
+
     const [savedData, setSavedData] = useState(null);
 
     useEffect(() => {
@@ -58,6 +63,81 @@ export default function contribute(pageProp) {
     }, []);
 
     console.log(savedData);
+
+    const handleEditClick = () => {
+        // localStorage.setItem('donationFormMode', 'edit');
+        //  localStorage.setItem('donationFormData', JSON.stringify(formdata));
+        localStorage.setItem('donationFormMode', 'edit');
+        router.push('/support/donation');
+    };
+
+    const paypalRef = useRef();
+    const [showPayPal, setShowPayPal] = useState(false);
+
+    useEffect(() => {
+        if (showPayPal && window.paypal) {
+            window.paypal.Buttons({
+                createOrder: (data, actions) => {
+                    return actions.order.create({
+                        purchase_units: [
+                            {
+                                amount: {
+                                    value: String(savedData?.donation_amount || "10.00"),
+                                },
+                            },
+                        ],
+                    });
+                },
+                onApprove: async (data, actions) => {
+                    const details = await actions.order.capture();
+
+                    const payload = {
+                        ...savedData,
+                        transaction_id: details.id,
+                        payment_status: details.status.toLowerCase(),
+                        payment_method: "paypal",
+                        payload: JSON.stringify(details),
+                    };
+
+                    try {
+                        const res = await fetch("https://admin.scchs.co.in/api/donations", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                            },
+                            body: JSON.stringify(payload),
+                        });
+
+                        if (!res.ok) {
+                            throw new Error("Failed to submit donation.");
+                        }
+
+                        const donationId = details.id;
+                        console.log(donationId);
+                        router.push(`/thankyou?id=${donationId}`);
+                        toast.success("Donation successful! Thank you!");
+                    } catch (error) {
+                        console.error("Donation API error:", error);
+                        toast.error("Donation succeeded but failed to store in database.");
+                    }
+                },
+            }).render(paypalRef.current);
+        }
+    }, [showPayPal, savedData]);
+
+    useEffect(() => {
+        // Load PayPal SDK
+        const script = document.createElement("script");
+        script.src = `https://www.paypal.com/sdk/js?client-id=AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy&currency=USD`;
+        script.addEventListener("load", () => {
+            if (showPayPal) {
+                window.paypal?.Buttons().render(paypalRef.current);
+            }
+        });
+        document.body.appendChild(script);
+    }, []);
+
 
 
     return (
@@ -162,7 +242,16 @@ export default function contribute(pageProp) {
 
                         </div>
                         <div className="submit_donation">
-                            <button>Confirm & Pay with Paypal</button>
+                            {/* <button>Confirm & Pay with Paypal</button> */}
+                            {!showPayPal ? (
+                                <>
+                                    <button onClick={handleEditClick}>Edit Save</button>
+                                    <button onClick={() => setShowPayPal(true)}>Confirm & Pay with Paypal</button>
+
+                                </>
+                            ) : (
+                                <div ref={paypalRef}></div>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -8486,7 +8486,12 @@ label {
   height: 300px;
   outline: none;
 }
-
+.submit_donation{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0px;
+}
 .submit_donation button {
   padding: 20px 20px;
   background-color: rgba(0, 49, 92, 1);
@@ -8565,6 +8570,67 @@ label {
   color: rgb(84, 85, 86);
   font-size: 19px;
 }
+
+/* ===========donation amount========== */
+
+.donation-payment-history-wrapper {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.donation-payment-history-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.donation-payment-history-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.donation-payment-history-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.donation-payment-history-amount {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #2d7a2d;
+  margin-bottom: 0.5rem;
+}
+
+.donation-payment-history-info div {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.status-success {
+  color: green;
+  font-weight: bold;
+}
+
+.status-failed {
+  color: red;
+  font-weight: bold;
+}
+
+.donation-payment-history-date {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 0.5rem;
+}
+
 
 @media (max-width:951px) {
   .small-input {
@@ -9765,7 +9831,7 @@ label {
 
 @media only screen and (max-width:1100px) {
   .navbar-wrapper {
-    height: 100%;
+    /* height: 100%; */
     display: block;
     position: fixed;
     width: 100%;
