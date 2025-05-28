@@ -55,6 +55,7 @@ export default function eventhistory(pageProp) {
                 <h1 className="donation-payment-history-title">Donation Payment History</h1>
                 <div className="donation-payment-history-grid">
                     {donations.map((donation) => (
+
                         <div key={donation.id} className="donation-payment-history-card">
                             <div className="donation-payment-history-amount">₹ {donation.donation_amount}</div>
                             <div className="donation-payment-history-info">
@@ -76,6 +77,7 @@ export default function eventhistory(pageProp) {
 
                             </div>
                         </div>
+                        
                     ))}
                 </div>
             </div>
