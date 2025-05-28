@@ -334,7 +334,7 @@ const phottos = [
         recordType: "Library",
         buttonText: "Know More",
         imagePlaceholder: true,
-    },   
+    },
     {
         title: "20th Century Bookkeeping and Accounting - 657.2",
         description: "Baker, James W.",
@@ -519,17 +519,17 @@ export default function contribute(pageProp) {
     };
 
     // ===============for archieve================
-    const [currentPage, setCurrentPage] = useState(1)   ;
+    const [currentPage, setCurrentPage] = useState(1);
 
 
-    const totalPages = Math.ceil((activeTab === "Photos" ? photos.length : (activeTab === "Libraries"? phottos.length : records.length)) / itemsPerPage);
+    const totalPages = Math.ceil((activeTab === "Photos" ? photos.length : (activeTab === "Libraries" ? phottos.length : records.length)) / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = (activeTab === "Photos" ? photos : (activeTab === "Libraries"? phottos : records)).slice(startIndex, startIndex + itemsPerPage);
-  
-// const items = activeTab === "Photos" ? phottos : records;
-// const totalPagess = Math.ceil(items.length / itemsPerPage);
-// const startIndexx = (currentPage - 1) * itemsPerPage;
-// const currentItemss = items.slice(startIndex, startIndex + itemsPerPage);
+    const currentItems = (activeTab === "Photos" ? photos : (activeTab === "Libraries" ? phottos : records)).slice(startIndex, startIndex + itemsPerPage);
+
+    // const items = activeTab === "Photos" ? phottos : records;
+    // const totalPagess = Math.ceil(items.length / itemsPerPage);
+    // const startIndexx = (currentPage - 1) * itemsPerPage;
+    // const currentItemss = items.slice(startIndex, startIndex + itemsPerPage);
 
 
     // ======================for photo============
@@ -693,77 +693,94 @@ export default function contribute(pageProp) {
                             )
                         }
                         {
+                            // activeTab === "Archives" && (
+                            //     <>
+                            //         <div className="ks-search-bar">
+                            //             <h2 className="ks-title">Keyword Search</h2>
+                            //             <div className="ks-input-group">
+                            //                 <input className="ks-input" type="text" placeholder="Enter Search Criteria Here" />
+                            //                 <button className="ks-search-button">
+                            //                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            //                         <path d="M14.7547 13.7078V13.9149L14.9012 14.0614L19.4113 18.5713L18.5724 19.4111L14.0604 14.9006L13.7497 14.59L13.4017 14.8581C11.7892 16.1004 9.76435 16.6824 7.73832 16.4858C5.71229 16.2893 3.83703 15.329 2.49341 13.7999C1.14979 12.2709 0.438561 10.2878 0.504167 8.25341C0.569772 6.21901 1.40729 4.28585 2.84664 2.84656C4.28598 1.40727 6.21921 0.56977 8.2537 0.504166C10.2882 0.438563 12.2714 1.14977 13.8005 2.49335C15.3295 3.83692 16.2899 5.7121 16.4864 7.73805C16.683 9.764 16.101 11.7888 14.8587 13.4012L14.7547 13.5361V13.7064V13.7078ZM18.724 19.5626L18.7236 19.5622C18.7238 19.5625 18.724 19.5627 18.7242 19.5629L18.724 19.5626ZM8.50489 15.9684C9.48508 15.9684 10.4557 15.7753 11.3612 15.4002C12.2668 15.0251 13.0897 14.4754 13.7828 13.7823C14.4759 13.0892 15.0257 12.2664 15.4008 11.3609C15.7759 10.4553 15.9689 9.48475 15.9689 8.50459C15.9689 7.52443 15.7759 6.55386 15.4008 5.64831C15.0257 4.74276 14.4759 3.91996 13.7828 3.22688C13.0897 2.53381 12.2668 1.98403 11.3612 1.60894C10.4557 1.23385 9.48508 1.04079 8.50489 1.04079C6.52531 1.04079 4.6268 1.82715 3.22702 3.22688C1.82724 4.62661 1.04085 6.52506 1.04085 8.50459C1.04085 10.4841 1.82724 12.3826 3.22702 13.7823C4.6268 15.182 6.52531 15.9684 8.50489 15.9684Z" fill="#FD605D" stroke="white" />
+                            //                     </svg>
+
+                            //                 </button>
+                            //             </div>
+                            //             <label className="ks-checkbox-label">
+                            //                 <input type="checkbox" className="ks-checkbox" />
+                            //                 Items with Images Only
+                            //             </label>
+                            //             <p className="ks-hint">
+                            //                 <strong>Search Hints:</strong> To search by phrase wrap your criteria in quotes. ex: "Find me"
+                            //             </p>
+                            //             <p className="ks-result-count">
+                            //                 <strong>3627</strong> Results found. Records searched: <strong>3627</strong>
+                            //             </p>
+                            //         </div>
+
+                            //         <div className="archieve_suing">
+                            //             <div className="ks-page ks_pages11">
+                            //                 {
+                            //                     currentItems.map((item, idx) => {
+                            //                         return (
+                            //                             <div key={idx} className="ks-result-card">
+                            //                                 <div className="ks-result-text">
+                            //                                     <h3 className="ks-result-title">{archive[(currentPage-1)*itemsPerPage + idx]?.title}</h3>
+                            //                                     <p className="ks-result-desc">{archive[(currentPage-1)*itemsPerPage + idx]?.description}</p>
+                            //                                     <p className="ks-record-type"><strong>Record Type:</strong>{archive[(currentPage-1)*itemsPerPage + idx]?.recordType}</p>
+                            //                                     <Link href={"/photos/archieverecord"}><button className="ks-more-button">{archive[(currentPage-1)*itemsPerPage + idx]?.buttonText}</button></Link>
+                            //                                 </div>
+                            //                                 <div className="ks-result-image-placeholder"></div>
+                            //                             </div>
+                            //                         )
+                            //                     })
+                            //                 }
+
+                            //             </div>
+
+                            //             <div className="custom-pagination">
+                            //                 {[...Array(totalPages)].map((_, i) => (
+                            //                     <button
+                            //                         key={i}
+                            //                         className={`page-btn ${currentPage === i + 1 ? 'active' : ''}`}
+                            //                         onClick={() => handleClick(i + 1)}
+                            //                     >
+                            //                         {i + 1}
+                            //                     </button>
+                            //                 ))}
+
+                            //                 <button
+                            //                     className="page-btn next-btn1"
+                            //                     onClick={() => handleClick(currentPage + 1)}
+                            //                     disabled={currentPage === totalPages}
+                            //                 >
+                            //                     <span>Next</span>
+                            //                     <svg width="6" height="12" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            //                         <path d="M2.13115 0.5L0.368652 2.2625L6.09365 8L0.368652 13.7375L2.13115 15.5L9.63115 8L2.13115 0.5Z" fill="#666D76" />
+                            //                     </svg>
+
+                            //                 </button>
+                            //             </div>
+
+                            //         </div>
+
+                            //     </>
+                            // )
                             activeTab === "Archives" && (
                                 <>
-                                    <div className="ks-search-bar">
-                                        <h2 className="ks-title">Keyword Search</h2>
-                                        <div className="ks-input-group">
-                                            <input className="ks-input" type="text" placeholder="Enter Search Criteria Here" />
-                                            <button className="ks-search-button">
-                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M14.7547 13.7078V13.9149L14.9012 14.0614L19.4113 18.5713L18.5724 19.4111L14.0604 14.9006L13.7497 14.59L13.4017 14.8581C11.7892 16.1004 9.76435 16.6824 7.73832 16.4858C5.71229 16.2893 3.83703 15.329 2.49341 13.7999C1.14979 12.2709 0.438561 10.2878 0.504167 8.25341C0.569772 6.21901 1.40729 4.28585 2.84664 2.84656C4.28598 1.40727 6.21921 0.56977 8.2537 0.504166C10.2882 0.438563 12.2714 1.14977 13.8005 2.49335C15.3295 3.83692 16.2899 5.7121 16.4864 7.73805C16.683 9.764 16.101 11.7888 14.8587 13.4012L14.7547 13.5361V13.7064V13.7078ZM18.724 19.5626L18.7236 19.5622C18.7238 19.5625 18.724 19.5627 18.7242 19.5629L18.724 19.5626ZM8.50489 15.9684C9.48508 15.9684 10.4557 15.7753 11.3612 15.4002C12.2668 15.0251 13.0897 14.4754 13.7828 13.7823C14.4759 13.0892 15.0257 12.2664 15.4008 11.3609C15.7759 10.4553 15.9689 9.48475 15.9689 8.50459C15.9689 7.52443 15.7759 6.55386 15.4008 5.64831C15.0257 4.74276 14.4759 3.91996 13.7828 3.22688C13.0897 2.53381 12.2668 1.98403 11.3612 1.60894C10.4557 1.23385 9.48508 1.04079 8.50489 1.04079C6.52531 1.04079 4.6268 1.82715 3.22702 3.22688C1.82724 4.62661 1.04085 6.52506 1.04085 8.50459C1.04085 10.4841 1.82724 12.3826 3.22702 13.7823C4.6268 15.182 6.52531 15.9684 8.50489 15.9684Z" fill="#FD605D" stroke="white" />
-                                                </svg>
-
-                                            </button>
+                                <div className="about-holdings">
+                                    <h2 className="holdings-title">About Our Holdings</h2>
+                                    <p className="holdings-text">
+                                    The St. Charles County Historical Society's Archives has an extensive collection of documents, maps, books, photographs, manuscripts, and other records pertaining to St. Charles County history and Genealogy dating from 1800 to today. We maintain and preserve much of the historical records of both our county and our city. With a collection of over 50 years of diaries, journals, scrapbooks, and personal papers that have been&nbsp;donated to us we&nbsp;have a wealth of personal information on former residents useful in family history research. We maintain records on historic properties in the City and;County including tax and assessor records as well as source period photographs that assist those seeking to document the history of their property.&nbsp;
+                                    </p>
+                                    
+                                </div>
+                                <div className="online-research-cta">
+                                        <div className="cta-wrapper">
+                                            <p className="cta-text">To begin your online research experience</p>
+                                            <button className="cta-button">Click Here</button>
                                         </div>
-                                        <label className="ks-checkbox-label">
-                                            <input type="checkbox" className="ks-checkbox" />
-                                            Items with Images Only
-                                        </label>
-                                        <p className="ks-hint">
-                                            <strong>Search Hints:</strong> To search by phrase wrap your criteria in quotes. ex: "Find me"
-                                        </p>
-                                        <p className="ks-result-count">
-                                            <strong>3627</strong> Results found. Records searched: <strong>3627</strong>
-                                        </p>
                                     </div>
-
-                                    <div className="archieve_suing">
-                                        <div className="ks-page ks_pages11">
-                                            {
-                                                currentItems.map((item, idx) => {
-                                                    return (
-                                                        <div key={idx} className="ks-result-card">
-                                                            <div className="ks-result-text">
-                                                                <h3 className="ks-result-title">{archive[(currentPage-1)*itemsPerPage + idx]?.title}</h3>
-                                                                <p className="ks-result-desc">{archive[(currentPage-1)*itemsPerPage + idx]?.description}</p>
-                                                                <p className="ks-record-type"><strong>Record Type:</strong>{archive[(currentPage-1)*itemsPerPage + idx]?.recordType}</p>
-                                                                <Link href={"/photos/archieverecord"}><button className="ks-more-button">{archive[(currentPage-1)*itemsPerPage + idx]?.buttonText}</button></Link>
-                                                            </div>
-                                                            <div className="ks-result-image-placeholder"></div>
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-
-                                        </div>
-
-                                        <div className="custom-pagination">
-                                            {[...Array(totalPages)].map((_, i) => (
-                                                <button
-                                                    key={i}
-                                                    className={`page-btn ${currentPage === i + 1 ? 'active' : ''}`}
-                                                    onClick={() => handleClick(i + 1)}
-                                                >
-                                                    {i + 1}
-                                                </button>
-                                            ))}
-
-                                            <button
-                                                className="page-btn next-btn1"
-                                                onClick={() => handleClick(currentPage + 1)}
-                                                disabled={currentPage === totalPages}
-                                            >
-                                                <span>Next</span>
-                                                <svg width="6" height="12" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M2.13115 0.5L0.368652 2.2625L6.09365 8L0.368652 13.7375L2.13115 15.5L9.63115 8L2.13115 0.5Z" fill="#666D76" />
-                                                </svg>
-
-                                            </button>
-                                        </div>
-
-                                    </div>
-
                                 </>
                             )
                         }
@@ -800,12 +817,12 @@ export default function contribute(pageProp) {
                                                     return (
                                                         <div key={idx} className="ks-result-card">
                                                             <div className="ks-result-text">
-                                                                <h3 className="ks-result-title">{photos[(currentPage-1)*itemsPerPage + idx]?.title}</h3>
-                                                                <p className="ks-result-desc">{photos[(currentPage-1)*itemsPerPage + idx]?.description}</p>
-                                                                <p className="ks-record-type"><strong>Record Type:</strong>{photos[(currentPage-1)*itemsPerPage + idx]?.recordType}</p>
-                                                                <Link href={"/photos/photodetail"}><button className="ks-more-button">{photos[(currentPage-1)*itemsPerPage + idx]?.buttonText}</button></Link>
+                                                                <h3 className="ks-result-title">{photos[(currentPage - 1) * itemsPerPage + idx]?.title}</h3>
+                                                                <p className="ks-result-desc">{photos[(currentPage - 1) * itemsPerPage + idx]?.description}</p>
+                                                                <p className="ks-record-type"><strong>Record Type:</strong>{photos[(currentPage - 1) * itemsPerPage + idx]?.recordType}</p>
+                                                                <Link href={"/photos/photodetail"}><button className="ks-more-button">{photos[(currentPage - 1) * itemsPerPage + idx]?.buttonText}</button></Link>
                                                             </div>
-                                                            <img className="test_photo_img" src={imagess[(currentPage-1)*itemsPerPage + idx].src} />
+                                                            <img className="test_photo_img" src={imagess[(currentPage - 1) * itemsPerPage + idx].src} />
                                                         </div>
                                                     )
                                                 })
@@ -874,10 +891,10 @@ export default function contribute(pageProp) {
                                                     return (
                                                         <div key={idx} className="ks-result-card">
                                                             <div className="ks-result-text">
-                                                                <h3 className="ks-result-title">{phottos[(currentPage-1)*itemsPerPage + idx]?.title}</h3>
-                                                                <p className="ks-result-desc">{phottos[(currentPage-1)*itemsPerPage + idx]?.description}</p>
-                                                                <p className="ks-record-type"><strong>Record Type:</strong>{phottos[(currentPage-1)*itemsPerPage + idx]?.recordType}</p>
-                                                                <Link href={`/photos/librarydetail?id=${(currentPage - 1) * itemsPerPage + idx}`}><button className="ks-more-button">{phottos[(currentPage-1)*itemsPerPage + idx]?.buttonText}</button></Link>
+                                                                <h3 className="ks-result-title">{phottos[(currentPage - 1) * itemsPerPage + idx]?.title}</h3>
+                                                                <p className="ks-result-desc">{phottos[(currentPage - 1) * itemsPerPage + idx]?.description}</p>
+                                                                <p className="ks-record-type"><strong>Record Type:</strong>{phottos[(currentPage - 1) * itemsPerPage + idx]?.recordType}</p>
+                                                                <Link href={`/photos/librarydetail?id=${(currentPage - 1) * itemsPerPage + idx}`}><button className="ks-more-button">{phottos[(currentPage - 1) * itemsPerPage + idx]?.buttonText}</button></Link>
                                                             </div>
                                                             <div className="ks-result-image-placeholder"></div>
                                                         </div>

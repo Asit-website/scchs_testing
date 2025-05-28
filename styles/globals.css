@@ -58,9 +58,9 @@ body {
   box-sizing: border-box;
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 12px;
-}
+} */
 
 ::-webkit-scrollbar-thumb {
   background: #a9a9a9;
@@ -4833,7 +4833,8 @@ justify-content: center !important;
 }
 
 .allaboutoverall {
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
+  position: relative;
 }
 
 .footerformarea {
@@ -5027,7 +5028,7 @@ justify-content: center !important;
 .test_drop div,
 .test_drop1 div {
   /* margin: 12px 0px; */
-  padding: 15px 25px;
+  padding: 12px 25px;
   margin-right: 15px;
 }
 
@@ -8475,7 +8476,7 @@ label {
 
 @media(max-width:835px) {
   .small-input-1 {
-    width: 100%;
+    width: 100% !important;
   }
 }
 
@@ -8584,7 +8585,7 @@ label {
 
 .donation-payment-history-wrapper {
   background-color: #f8f9fa;
-  padding: 2rem;
+  padding: 1.8rem;
   min-height: 100vh;
   font-family: Arial, sans-serif;
 }
@@ -8597,13 +8598,139 @@ label {
   color: #333;
 }
 
-.donation-payment-history-grid {
+/* .donation-payment-history-grid {
   display: grid;
-  gap: 1.5rem;
+  gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
+} */
 
 .donation-payment-history-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 6px solid rgb(0, 49, 91);
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+.donation-payment-history-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.donation-payment-history-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(0, 49, 91);
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.donation-payment-history-info {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 20px;
+}
+
+.donation-payment-history-info div {
+  display: flex;
+  gap: 2px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.donation-payment-history-info div strong {
+  margin-right: 6px;
+  color: #111;
+  min-width: 60px;
+}
+
+.donation-payment-history-date {
+  grid-column: span 2;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 10px;
+}
+
+.status-success {
+  color: rgb(0, 49, 91);
+  background-color: #e3f2fd; /* soft light blue background */
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-failed {
+  color: #c62828;
+  background-color: #ffebee;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .donation-payment-history-info {
+    grid-template-columns: 1fr;
+    font-size: 0.95rem;
+  }
+
+  .donation-payment-history-card {
+    padding: 20px;
+  }
+
+  .donation-payment-history-amount {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .donation-payment-history-card {
+    padding: 16px;
+  }
+
+  .donation-payment-history-amount {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  .donation-payment-history-info {
+    font-size: 0.95rem;
+  }
+
+  .donation-payment-history-info div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .donation-payment-history-info div strong {
+    margin-bottom: 2px;
+  }
+
+  .donation-payment-history-date {
+    text-align: center;
+  }
+}
+@media(max-width:356px){
+  .donation-payment-history-info div {
+    font-size: 13px;
+  }
+}
+
+
+/* .donation-payment-history-card {
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 12px;
@@ -8739,7 +8866,7 @@ label {
   .container-2 {
     padding: 20px 20px;
   }
-}
+} */
 
 /* =================================donation page css end======================== */
 
@@ -9873,7 +10000,11 @@ label {
   .navbar-wrapper {
     /* height: 100%; */
     display: block;
-    position: fixed;
+    position: sticky;
+    /* min-height: 100vh; */
+    top: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     overflow: scroll;
   }
@@ -9899,6 +10030,7 @@ label {
 
   .nav-list.open {
     display: flex;
+    min-height: calc(100vh - 70px);
   }
 
   .nav-item {
@@ -11541,4 +11673,154 @@ ul li>a:hover::after {
   .tabs-button {
     font-size: 15px;
   }
+}
+
+/* our holding */
+.about-holdings {
+    padding: 20px 70px;
+    background-color: #ffffff;
+    font-family: "Euclid-Light" !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.about-holdings-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.holdings-title {
+    font-size: 2rem;
+    font-family: "Euclid-Light" !important;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1a1a1a;
+}
+
+.holdings-text {
+    font-size: 1.05rem;
+    font-family: "Euclid-Light" !important;
+    line-height: 1.8;
+    color: #333;
+    white-space: pre-line;
+}
+
+/* Responsive Typography & Padding */
+@media (max-width: 768px) {
+    .holdings-title {
+        font-size: 1.5rem;
+    }
+    .about-holdings {
+      padding: 30px;
+    }
+
+    .holdings-text {
+        font-size: 1rem;
+    }
+
+    .about-holdings-section {
+        padding: 30px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .holdings-title {
+        font-size: 1.25rem;
+    }
+
+    .holdings-text {
+        font-size: 0.95rem;
+    }
+
+    .about-holdings-wrapper {
+        padding: 10px;
+    }
+}
+
+
+.online-research-cta {
+  background-color: #003366; 
+  padding: 30px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 30px;
+}
+
+.cta-wrapper {
+  max-width: 1370px;
+  font-family: "Euclid-Light" !important;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.cta-text {
+  color: white;
+  font-family: "Euclid-Light" !important;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.cta-button {
+  background-color: white;
+  color: #003366;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #e6e6e6;
+}
+
+
+@media (max-width: 600px) {
+  .cta-wrapper {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+  .cta-wrapper p{
+    text-align: center;
+    margin: auto;
+  }
+
+  .cta-text {
+      font-size: 1rem;
+      text-align: center;
+  }
+
+  .cta-button {
+      margin: auto;
+      text-align: center;
+  }
+}
+/* enddd */
+
+/*  */
+/* .react-tel-input{
+  padding: 20px;
+} */
+
+
+.react-tel-input .form-control{
+  padding: 30px 0px;
+  width: 100% !important;
+}
+@media(max-width:768px){
+  .react-tel-input .form-control{
+  width: 100%;
+  }
+  .small-input{
+    width: 100%;
+    font-size: 16px;
+  }
+
 }

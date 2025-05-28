@@ -411,11 +411,13 @@ export default function donation(pageProp) {
                                 country={'us'}
                                 value={formdata.phone}
                                 onChange={handlePhoneChange}
+                                className="rect-input"
                                 //  className="nameform-input"
                                 inputProps={{
                                     name: 'phone',
                                     required: true,
                                     autoFocus: false,
+                                  
                                 }}
                             />
                             {errors.phone && <p className="text_red">{errors.phone}</p>}
