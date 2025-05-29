@@ -49,37 +49,37 @@ export default function storeorder(pageProp) {
 
     const [savedAddress, setSavedAddress] = useState(null);
 
-  useEffect(() => {
-    const fetchSavedAddress = async () => {
-        try {
-            const token = JSON.parse(localStorage.getItem("scchs_Access"));
-            const res = await fetch("https://admin.scchs.co.in/api/listalladdress", {
-                headers: {
-                    "Authorization": `Bearer ${token}`
+    useEffect(() => {
+        const fetchSavedAddress = async () => {
+            try {
+                const token = JSON.parse(localStorage.getItem("scchs_Access"));
+                const res = await fetch("https://admin.scchs.co.in/api/listalladdress", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                const data = await res.json();
+                console.log(data);
+                if (data?.data?.length > 0) {
+                    setSavedAddress(data.data[0]); // assuming first address is the main one
+                } else {
+                    setSavedAddress(null);
                 }
-            });
-
-            const data = await res.json();
-            console.log(data);
-            if (data?.data?.length > 0) {
-                setSavedAddress(data.data[0]); // assuming first address is the main one
-            } else {
-                setSavedAddress(null);
+            } catch (err) {
+                console.error("API fetch error:", err);
             }
-        } catch (err) {
-            console.error("API fetch error:", err);
-        }
-    };
+        };
 
-    fetchSavedAddress();
-}, []);
+        fetchSavedAddress();
+    }, []);
 
 
     console.log(savedAddress)
 
 
     const handleEdit = () => {
-      router.push(`address?edit=true`)
+        router.push(`address?edit=true`)
     };
 
     // ====================
@@ -306,27 +306,57 @@ export default function storeorder(pageProp) {
     //     });
     // };
 
+    // const calculateTotals = (cartItems) => {
+    //     const isMember = membershipStatus?.toLowerCase() === "active";
+
+    //     let total_amount = 0;
+    //     let grand_total_m = 0;
+
+    //     cartItems.forEach((item) => {
+    //         const quantity = parseInt(item.quantity) || 1;
+
+    //         const normalPrice = parseFloat(item.price ?? 0);
+    //         const memberPrice = parseFloat(item.membership_price ?? item.price ?? 0);
+    //         const shippingCost = parseFloat(item.shipping_cost ?? 0);
+
+    //         total_amount += normalPrice * quantity;
+    //         grand_total_m += (memberPrice * quantity) + shippingCost;
+    //     });
+
+    //     const shipping_cost = cartItems.reduce((sum, item) => {
+    //         const cost = parseFloat(item.shipping_cost ?? 0);
+    //         return sum + cost;
+    //     }, 0);
+
+    //     const grand_total = isMember ? grand_total_m : total_amount + shipping_cost;
+
+    //     setCartData({
+    //         cart: cartItems,
+    //         total_amount: total_amount.toFixed(2),
+    //         grand_total: grand_total.toFixed(2),
+    //         grand_total_m: grand_total_m.toFixed(2),
+    //         shipping_cost: shipping_cost.toFixed(2),
+    //     });
+    // };
+
     const calculateTotals = (cartItems) => {
         const isMember = membershipStatus?.toLowerCase() === "active";
 
         let total_amount = 0;
         let grand_total_m = 0;
+        let shipping_cost = 0;
 
         cartItems.forEach((item) => {
             const quantity = parseInt(item.quantity) || 1;
 
             const normalPrice = parseFloat(item.price ?? 0);
             const memberPrice = parseFloat(item.membership_price ?? item.price ?? 0);
-            const shippingCost = parseFloat(item.shipping_cost ?? 0);
+            const itemShipping = parseFloat(item.shipping_cost ?? 0);
 
             total_amount += normalPrice * quantity;
-            grand_total_m += (memberPrice * quantity) + shippingCost;
+            grand_total_m += (memberPrice * quantity) + (itemShipping * quantity);
+            shipping_cost += itemShipping * quantity;
         });
-
-        const shipping_cost = cartItems.reduce((sum, item) => {
-            const cost = parseFloat(item.shipping_cost ?? 0);
-            return sum + cost;
-        }, 0);
 
         const grand_total = isMember ? grand_total_m : total_amount + shipping_cost;
 
@@ -338,36 +368,6 @@ export default function storeorder(pageProp) {
             shipping_cost: shipping_cost.toFixed(2),
         });
     };
-
-//     const calculateTotals = (cartItems) => {
-//     const isMember = membershipStatus?.toLowerCase() === "active";
-
-//     let total_amount = 0;
-//     let grand_total_m = 0;
-//     let shipping_cost = 0;
-
-//     cartItems.forEach((item) => {
-//         const quantity = parseInt(item.quantity) || 1;
-
-//         const normalPrice = parseFloat(item.price ?? 0);
-//         const memberPrice = parseFloat(item.membership_price ?? item.price ?? 0);
-//         const itemShipping = parseFloat(item.shipping_cost ?? 0);
-
-//         total_amount += normalPrice * quantity;
-//         grand_total_m += (memberPrice * quantity) + (itemShipping * quantity);
-//         shipping_cost += itemShipping * quantity;
-//     });
-
-//     const grand_total = isMember ? grand_total_m : total_amount + shipping_cost;
-
-//     setCartData({
-//         cart: cartItems,
-//         total_amount: total_amount.toFixed(2),
-//         grand_total: grand_total.toFixed(2),
-//         grand_total_m: grand_total_m.toFixed(2),
-//         shipping_cost: shipping_cost.toFixed(2),
-//     });
-// };
 
 
     const updateQuantity = (productId, direction) => {
@@ -399,11 +399,11 @@ export default function storeorder(pageProp) {
     };
 
 
-useEffect(() => {
-    if (cartData.cart?.length) {
-        calculateTotals(cartData.cart);
-    }
-}, [cartData.cart]);
+    useEffect(() => {
+        if (cartData.cart?.length) {
+            calculateTotals(cartData.cart);
+        }
+    }, [cartData.cart]);
     // useEffect(() => {
     //     if (cartData?.cart?.length && membershipStatus) {
     //         calculateTotals(cartData.cart);
@@ -765,7 +765,7 @@ useEffect(() => {
                 <div className="event_main">
                     {
                         savedAddress && (
-                           
+
                             <div className="saved-address-card">
                                 <div className="card-headerrss">
                                     <h2><FaMapMarkedAlt className="icon" /> Saved Address</h2>
@@ -890,7 +890,7 @@ useEffect(() => {
 
                                                     <div className="price-line price-line2">
                                                         <span>S & H :</span>
-                                                        <strong>${parseFloat(val?.shipping_cost).toFixed(2)}</strong>
+                                                        <strong>${parseFloat(val?.shipping_cost).toFixed(2) * val?.quantity}</strong>
                                                     </div>
                                                     <div className="price-line">
                                                         <span>Item Total:</span>

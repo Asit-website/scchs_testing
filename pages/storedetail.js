@@ -41,8 +41,7 @@ export default function storedetail(pageProp) {
 
     const { toggleBoolValue } = pageProp;
 
-    const increase = () => setQuantity(prev => prev + 1);
-    const decrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+
 
     const router = useRouter();
     const { id } = router.query;
@@ -119,6 +118,9 @@ export default function storedetail(pageProp) {
     }, [id])
 
 
+
+
+
     const addToCartApi = async (id) => {
 
         const resp = await fetch('https://admin.scchs.co.in/api/cart/add', {
@@ -142,6 +144,25 @@ export default function storedetail(pageProp) {
 
         // alert(resp)
     }
+
+    // ========new add==========
+
+    useEffect(() => {
+        const savedQty = sessionStorage.getItem(`product_qty_${productdetail.id}`);
+        if (savedQty) {
+            setQuantity(parseInt(savedQty));
+        }
+    }, [productdetail.id]);
+
+    useEffect(() => {
+        sessionStorage.setItem(`product_qty_${productdetail.id}`, quantity);
+    }, [quantity, productdetail.id]);
+
+    // const increase = () => setQuantity(prev => prev + 1);
+    // const decrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+
+    const increaseQuantity = () => setQuantity(prev => prev + 1);
+    const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
 
     return (
@@ -194,10 +215,10 @@ export default function storedetail(pageProp) {
 
                                 <div className="price-box">
 
-                                     {
+                                    {
                                         membershipStatus === "active" && <p>
                                             <span>Sale price :</span> ${
-                                                 productdetail?.price * quantity      
+                                                productdetail?.price * quantity
                                             }
                                         </p>
                                     }
@@ -207,22 +228,22 @@ export default function storedetail(pageProp) {
 
                                         }
                                     </p>
-                                   
+
 
                                     <p>
                                         <span>Shipping / Handling :</span> ${productdetail?.
-                                            shipping_cost}
+                                            shipping_cost * quantity}
                                     </p>
                                 </div>
 
                                 <div className="quantity-row">
                                     <div className="qty-selector">
-                                        <button onClick={decrease}>−</button>
+                                        <button onClick={decreaseQuantity}>−</button>
                                         <span>{quantity}</span>
-                                        <button onClick={increase}>+</button>
+                                        <button onClick={increaseQuantity}>+</button>
                                     </div>
 
-                                    <button onClick={async () => {
+                                    {/* <button onClick={async () => {
                                         const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
                                         const productId = productdetail?.id;
 
@@ -249,7 +270,40 @@ export default function storedetail(pageProp) {
 
 
 
-                                    }} className="add-to-cart-btn">Add To Cart</button>
+                                    }} className="add-to-cart-btn">Add To Cart</button> */}
+
+                                    <button
+                                        onClick={async () => {
+                                            const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+                                            const productId = productdetail?.id;
+
+                                            if (isLoggedIn) {
+                                                await addToCartApi(productId, quantity); // Make sure your API supports quantity
+                                            } else {
+                                                const cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+                                                const existingProduct = cartItems.find(item => item.id === productId);
+
+                                                if (existingProduct) {
+                                                    // Increase quantity by selected amount
+                                                    existingProduct.quantity += quantity;
+                                                } else {
+                                                    cartItems.push({ ...productdetail, quantity });
+                                                }
+
+                                                sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
+                                                toast.success("Product successfully added");
+                                                router.push("/storeorder");
+                                                toggleBoolValue();
+                                            }
+
+                                            // Optional: Clear saved quantity after adding to cart
+                                            sessionStorage.removeItem(`product_qty_${productId}`);
+                                        }}
+                                        className="add-to-cart-btn"
+                                    >
+                                        Add To Cart
+                                    </button>
+
                                 </div>
                             </div>
                         </div>
