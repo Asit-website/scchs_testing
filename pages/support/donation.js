@@ -311,7 +311,7 @@ export default function donation(pageProp) {
         <div className="page_shopping_list sop">
             <HeadSEO title={"memberlogin"} description={"this member is login"} image={null} />
 
-            <HeadSEO1 />
+         <HeadSEO1 />
             <div className="terros">
                 <div className="container111">
                     <h2 className="donation-heading">Donations</h2>
@@ -489,6 +489,7 @@ export default function donation(pageProp) {
                             {errors.address1 && <p className="text_red">{errors.address1}</p>}
                             <input value={formdata?.address2} onChange={handleChange} name="address2" className="donation-input" type="text" placeholder="Address 2" />
                             {/* <input name="country" onChange={handleChange} value={formdata?.country} className="donation-input" type="text" placeholder="Country" /> */}
+                            <div style={{ marginBottom: '20px', }}>
                             <CreatableSelect
                                 placeholder="Select or type country"
                                 options={toOptions(countries)}
@@ -501,7 +502,25 @@ export default function donation(pageProp) {
                                         city: '',
                                     }))
                                 }
+                                styles={{
+                                    input: (provided) => ({
+                                      ...provided,
+                                      minHeight: '48px', 
+                                    }),
+                                    control: (provided) => ({
+                                      ...provided,
+                                      minHeight: '48px',
+                                      fontSize: '18px', 
+                                      border: '2px solid #888'
+                                
+                                    }),
+                                    placeholder: (provided) => ({
+                                      ...provided,
+                                  
+                                    }),
+                                  }}
                             />
+                            </div>
                             {/* <input
                                 className="donation-input"
                                 type="text"
@@ -511,6 +530,7 @@ export default function donation(pageProp) {
                                 value={formdata?.state}
                                 onChange={handleChange}
                             /> */}
+                            <div style={{ marginBottom: '20px', }}>
                             <CreatableSelect
 
                                 placeholder="Select or type state"
@@ -524,7 +544,24 @@ export default function donation(pageProp) {
                                         city: '',
                                     }))
                                 }
+                                styles={{
+                                    input: (provided) => ({
+                                      ...provided,
+                                      minHeight: '48px', // make sure input height is normal
+                                    }),
+                                    control: (provided) => ({
+                                      ...provided,
+                                      minHeight: '48px', // default or adjust as needed
+                                      fontSize: '18px',
+                                      border: '2px solid #888'
+                                    }),
+                                    placeholder: (provided) => ({
+                                      ...provided,
+                                     
+                                    }),
+                                  }}
                             />
+                            </div>
                             {errors.state && <p className="text_red">{errors.state}</p>}
                             {/* <input
                                 className="donation-input"
@@ -535,8 +572,10 @@ export default function donation(pageProp) {
                                 value={formdata?.city}
                                 placeholder="City*"
                             /> */}
+                            <div style={{ marginBottom: '20px',  }}>
                             <CreatableSelect
                                 placeholder="Select or type city"
+                                 className="select-margin"
                                 // isDisabled={!cities.length}
                                 options={toOptions(cities)}
                                 value={formdata.city ? { label: formdata.city, value: formdata.city } : null}
@@ -546,7 +585,28 @@ export default function donation(pageProp) {
                                         city: selected?.value || '',
                                     }))
                                 }
+                                styles={{
+                                    input: (provided) => ({
+                                      ...provided,
+                                      
+                                      minHeight: '48px', 
+                                    }),
+                                    control: (provided) => ({
+                                      ...provided,
+                                      minHeight: '48px',
+                                      fontSize: '18px',
+                                    border: '2px solid #888'
+                                     
+                                                                        }),
+                                    placeholder: (provided) => ({
+                                      ...provided,
+                                   
+                                      
+                                    }),
+                                  }}
                             />
+                            </div>
+
                             {errors.city && <p className="text_red">{errors.city}</p>}
 
                             <input
