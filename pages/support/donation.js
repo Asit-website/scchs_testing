@@ -50,6 +50,14 @@ export default function donation(pageProp) {
 
     const [errors, setErrors] = useState({});
 
+    const [instaUser, setInstaUser] = useState(null);
+    useEffect(() => {
+        const storedUser = localStorage.getItem("scchs_User");
+        if (storedUser) {
+            setInstaUser(JSON.parse(storedUser));
+        }
+    }, []);
+
     const handleChange = (e) => {
         setFormData((prev) => ({
             ...prev,
@@ -206,6 +214,10 @@ export default function donation(pageProp) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!instaUser) {
+            window.location.href = "/user/userlogin"; // or use router.push if using Next.js Router
+            return;
+        }
         const errors = validateAddressForm(formdata);
         if (Object.keys(errors).length > 0) {
             setErrors(errors);
@@ -226,7 +238,7 @@ export default function donation(pageProp) {
         }
 
         // localStorage.setItem('donationFormData', JSON.stringify(formdata));
-         localStorage.setItem('donationFormData', JSON.stringify(finalFormData));
+        localStorage.setItem('donationFormData', JSON.stringify(finalFormData));
 
         if (isEditMode) {
             toast.success('Edited form submitted');
@@ -417,7 +429,7 @@ export default function donation(pageProp) {
                                     name: 'phone',
                                     required: true,
                                     autoFocus: false,
-                                  
+
                                 }}
                             />
                             {errors.phone && <p className="text_red">{errors.phone}</p>}

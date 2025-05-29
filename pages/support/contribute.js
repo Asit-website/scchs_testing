@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../../components/common/Head/head1";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import ReCAPTCHA from 'react-google-recaptcha';
 import Link from "next/link";
 
 
@@ -51,6 +52,19 @@ const itemsPerPage = 10;
 export default function contribute(pageProp) {
 
     const router = useRouter();
+
+    const [isVerified, setIsVerified] = useState(false);
+
+    // const handleRecaptchaChange = (value) => {
+    //   console.log('Captcha value:', value);
+    // };
+
+    const handleRecaptchaChange = (token) => {
+        if (token) {
+            setIsVerified(true); // CAPTCHA passed
+        }
+    };
+
 
 
     const [savedData, setSavedData] = useState(null);
@@ -235,10 +249,12 @@ export default function contribute(pageProp) {
                             </div>
 
                             <hr className="donation-divider" />
-                            <div className="donation-checkbox">
+                            {/* <div className="donation-checkbox">
                                 <input type="checkbox" />
                                 <p>I am not a robot</p>
-                            </div>
+                            </div> */}
+
+                            <ReCAPTCHA className='hghglol' size='normal' sitekey="6LfCVJ0qAAAAANSJX8eycxotMBzwuCHuMndZOSbY" onChange={handleRecaptchaChange} />
 
                         </div>
                         <div className="submit_donation">
@@ -246,7 +262,14 @@ export default function contribute(pageProp) {
                             {!showPayPal ? (
                                 <>
                                     <button onClick={handleEditClick}>Edit Save</button>
-                                    <button onClick={() => setShowPayPal(true)}>Confirm & Pay with Paypal</button>
+                                    <button
+                                        onClick={() => setShowPayPal(true)}
+                                        disabled={!isVerified}
+                                        style={{
+                                            opacity: isVerified ? 1 : 0.5,
+                                            cursor: isVerified ? "pointer" : "not-allowed"
+                                        }}
+                                    >Confirm & Pay with Paypal</button>
 
                                 </>
                             ) : (
