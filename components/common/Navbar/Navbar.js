@@ -20,7 +20,7 @@ import GlobalCart from "../svg/global/cart";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import { toast } from "react-toastify";
-
+import { ShoppingCart } from 'lucide-react';
 
 
 export default function Navbar(props) {
@@ -40,7 +40,7 @@ export default function Navbar(props) {
 
   const [membershipStatus, setMembershipStatus] = useState("loading");
 
-  
+
 
 
 
@@ -291,11 +291,11 @@ export default function Navbar(props) {
   const getCarts = async () => {
 
     try {
-      const response = await fetch("https://admin.instacertify.com/api/cart", {
+      const response = await fetch("https://admin.scchs.co.in/api/cart", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("insta_Access"))}`
+          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
         }
       });
 
@@ -537,48 +537,48 @@ export default function Navbar(props) {
     }, [openDropdownIndex]);
 
 
-// ============for renew=============
-  const [subscription, setSubscription] = useState(null);
-  const [daysLeft, setDaysLeft] = useState(null);
-   const [endDateFormatted, setEndDateFormatted] = useState('');
-  // const router = useRouter();
+    // ============for renew=============
+    const [subscription, setSubscription] = useState(null);
+    const [daysLeft, setDaysLeft] = useState(null);
+    const [endDateFormatted, setEndDateFormatted] = useState('');
+    // const router = useRouter();
 
- useEffect(() => {
-  if (!instaUser || !instaUser.id) return; // 👈 prevent fetch if instaUser is null
+    useEffect(() => {
+      if (!instaUser || !instaUser.id) return; // 👈 prevent fetch if instaUser is null
 
-  const fetchSubscription = async () => {
-    try {
-      const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
-      const result = await res.json();
-      console.log(result);
-      const data = result.data;
-      console.log(data);
-      setSubscription(data);
-      
-
-      const end = new Date(data.end_date);
-      const today = new Date();
-      const diffInDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
-      setDaysLeft(diffInDays);
-    } catch (err) {
-      console.error('Error fetching subscription:', err);
-    }
-  };
-
-  fetchSubscription();
-}, [instaUser]); // 👈 dependency to re-run when instaUser changes
+      const fetchSubscription = async () => {
+        try {
+          const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+          const result = await res.json();
+          console.log(result);
+          const data = result.data;
+          console.log(data);
+          setSubscription(data);
 
 
-  const handleRenewClick = () => {
-    console.log("HI");
-    if (daysLeft !== null) {
-      if (daysLeft <= 2) {
-        router.push('/join/memberplan'); // Replace with your payment route
-      } else {
-        toast.error(`You are allowed to renew 2 days before end of your subscription.`);
+          const end = new Date(data.end_date);
+          const today = new Date();
+          const diffInDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+          setDaysLeft(diffInDays);
+        } catch (err) {
+          console.error('Error fetching subscription:', err);
+        }
+      };
+
+      fetchSubscription();
+    }, [instaUser]); // 👈 dependency to re-run when instaUser changes
+
+
+    const handleRenewClick = () => {
+      console.log("HI");
+      if (daysLeft !== null) {
+        if (daysLeft <= 2) {
+          router.push('/join/memberplan'); // Replace with your payment route
+        } else {
+          toast.error(`You are allowed to renew 2 days before end of your subscription.`);
+        }
       }
-    }
-  };
+    };
 
 
 
@@ -621,7 +621,7 @@ export default function Navbar(props) {
 
     // ===============for renew=========
 
-  
+
 
     const handleMember = () => {
       membershipStatus != "active" && toast.error("Please purchase membership plan");
@@ -844,6 +844,46 @@ export default function Navbar(props) {
                   window.location.href = "/"
                 }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
               </li>
+              <li>
+               <Link href={"/storeorder"}><div className="cart-container">
+                  {/* <svg className="cart-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 6h15l-1.5 9h-13z" stroke="black" strokeWidth="2" />
+                    <circle cx="9" cy="21" r="1" fill="black" />
+                    <circle cx="18" cy="21" r="1" fill="black" />
+                  </svg> */}
+                  <ShoppingCart/>
+                  {countCart > 0 && <span className="cart-count">{countCart}</span>}
+
+                </div></Link>
+                <style jsx>{`
+  .cart-container {
+    position: relative;
+    width: 40px;
+    height: 40px;
+  }
+
+  .cart-icon {
+    width: 100%;
+    height: 100%;
+  }
+
+  .cart-count {
+    position: absolute;
+    top: -6px;
+    right: 7px;
+    background-color: rgba(0, 49, 92, 1);
+    color: white;
+    font-size: 10px;
+     width:18px;
+    height:18px;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+  }
+                    `}</style>
+              </li>
               {
                 instaUser && <li onClick={() => setOpen(!open)} ><Link href={"#"}><img width={35} height={35} src="https://res.cloudinary.com/dgif730br/image/upload/v1748089475/user_xegqs3.png" /></Link>
 
@@ -852,9 +892,9 @@ export default function Navbar(props) {
                       <a href="/orderhistory">Order History</a>
                       {/* <a href="/eventhistory">🎫 Event Orders</a> */}
                       <a href="/eventhistory">Event Order History</a>
-                       <a href="/donationhistory">Donation History</a>
+                      <a href="/donationhistory">Donation History</a>
                       <a href="/storeorder">View Cart</a>
-                    {membershipStatus === "active" && <p style={{cursor:"pointer"}} onClick={handleRenewClick}>RENEW ONLINE</p>}   
+                      {membershipStatus === "active" && <p style={{ cursor: "pointer" }} onClick={handleRenewClick}>RENEW ONLINE</p>}
                     </div>
 
                   )}
@@ -1038,11 +1078,53 @@ export default function Navbar(props) {
                 )}
               </li>
             ))}
+          
+               <Link style={{marginLeft:"auto"}} href={"/storeorder"}><div className="cart-container">
+                  {/* <svg className="cart-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 6h15l-1.5 9h-13z" stroke="black" strokeWidth="2" />
+                    <circle cx="9" cy="21" r="1" fill="black" />
+                    <circle cx="18" cy="21" r="1" fill="black" />
+                  </svg> */}
+                  <ShoppingCart/>
+                  {countCart > 0 && <span className="cart-count">{countCart}</span>}
+
+                </div></Link>
+                <style jsx>{`
+  .cart-container {
+    position: relative;
+    width: 40px;
+    height: 40px;
+  }
+
+  .cart-icon {
+    width: 100%;
+    height: 100%;
+  }
+
+  .cart-count {
+    position: absolute;
+    top: -6px;
+    right: 7px;
+    background-color: rgba(0, 49, 92, 1);
+    color: white;
+    font-size: 12px;
+    width:20px;
+    height:20px;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+  }
+                    `}</style>
+           
             <li className="nav-signin">
               <Link href="/user/userlogin">
                 <button className="signin-btn">SIGN IN</button>
               </Link>
             </li>
+            
+
           </ul>
         </div>
         {/* end======================= */}

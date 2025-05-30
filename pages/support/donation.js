@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
 
+
 var settingsMorePhotos = {
     arrows: true,
     dots: false,
@@ -311,10 +312,12 @@ export default function donation(pageProp) {
         <div className="page_shopping_list sop">
             <HeadSEO title={"memberlogin"} description={"this member is login"} image={null} />
 
-         <HeadSEO1 />
+            <HeadSEO1 />
             <div className="terros">
                 <div className="container111">
                     <h2 className="donation-heading">Donations</h2>
+                   
+
                     <p className="donation-paragraph">
                         The primary mission of the St. Charles County Historical Society is to
                         preserve, interpret and make publicly available the rich historical record
@@ -490,36 +493,36 @@ export default function donation(pageProp) {
                             <input value={formdata?.address2} onChange={handleChange} name="address2" className="donation-input" type="text" placeholder="Address 2" />
                             {/* <input name="country" onChange={handleChange} value={formdata?.country} className="donation-input" type="text" placeholder="Country" /> */}
                             <div style={{ marginBottom: '20px', }}>
-                            <CreatableSelect
-                                placeholder="Select or type country"
-                                options={toOptions(countries)}
-                                value={formdata.country ? { label: formdata.country, value: formdata.country } : null}
-                                onChange={(selected) =>
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        country: selected?.value || '',
-                                        state: '',
-                                        city: '',
-                                    }))
-                                }
-                                styles={{
-                                    input: (provided) => ({
-                                      ...provided,
-                                      minHeight: '48px', 
-                                    }),
-                                    control: (provided) => ({
-                                      ...provided,
-                                      minHeight: '48px',
-                                      fontSize: '18px', 
-                                      border: '2px solid #888'
-                                
-                                    }),
-                                    placeholder: (provided) => ({
-                                      ...provided,
-                                  
-                                    }),
-                                  }}
-                            />
+                                <CreatableSelect
+                                    placeholder="Select or type country"
+                                    options={toOptions(countries)}
+                                    value={formdata.country ? { label: formdata.country, value: formdata.country } : null}
+                                    onChange={(selected) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            country: selected?.value || '',
+                                            state: '',
+                                            city: '',
+                                        }))
+                                    }
+                                    styles={{
+                                        input: (provided) => ({
+                                            ...provided,
+                                            minHeight: '48px',
+                                        }),
+                                        control: (provided) => ({
+                                            ...provided,
+                                            minHeight: '48px',
+                                            fontSize: '18px',
+                                            border: '2px solid #888'
+
+                                        }),
+                                        placeholder: (provided) => ({
+                                            ...provided,
+
+                                        }),
+                                    }}
+                                />
                             </div>
                             {/* <input
                                 className="donation-input"
@@ -531,36 +534,36 @@ export default function donation(pageProp) {
                                 onChange={handleChange}
                             /> */}
                             <div style={{ marginBottom: '20px', }}>
-                            <CreatableSelect
+                                <CreatableSelect
 
-                                placeholder="Select or type state"
-                                // isDisabled={!states.length}
-                                options={toOptions(states)}
-                                value={formdata.state ? { label: formdata.state, value: formdata.state } : null}
-                                onChange={(selected) =>
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        state: selected?.value || '',
-                                        city: '',
-                                    }))
-                                }
-                                styles={{
-                                    input: (provided) => ({
-                                      ...provided,
-                                      minHeight: '48px', // make sure input height is normal
-                                    }),
-                                    control: (provided) => ({
-                                      ...provided,
-                                      minHeight: '48px', // default or adjust as needed
-                                      fontSize: '18px',
-                                      border: '2px solid #888'
-                                    }),
-                                    placeholder: (provided) => ({
-                                      ...provided,
-                                     
-                                    }),
-                                  }}
-                            />
+                                    placeholder="Select or type state"
+                                    // isDisabled={!states.length}
+                                    options={toOptions(states)}
+                                    value={formdata.state ? { label: formdata.state, value: formdata.state } : null}
+                                    onChange={(selected) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            state: selected?.value || '',
+                                            city: '',
+                                        }))
+                                    }
+                                    styles={{
+                                        input: (provided) => ({
+                                            ...provided,
+                                            minHeight: '48px', // make sure input height is normal
+                                        }),
+                                        control: (provided) => ({
+                                            ...provided,
+                                            minHeight: '48px', // default or adjust as needed
+                                            fontSize: '18px',
+                                            border: '2px solid #888'
+                                        }),
+                                        placeholder: (provided) => ({
+                                            ...provided,
+
+                                        }),
+                                    }}
+                                />
                             </div>
                             {errors.state && <p className="text_red">{errors.state}</p>}
                             {/* <input
@@ -572,39 +575,39 @@ export default function donation(pageProp) {
                                 value={formdata?.city}
                                 placeholder="City*"
                             /> */}
-                            <div style={{ marginBottom: '20px',  }}>
-                            <CreatableSelect
-                                placeholder="Select or type city"
-                                 className="select-margin"
-                                // isDisabled={!cities.length}
-                                options={toOptions(cities)}
-                                value={formdata.city ? { label: formdata.city, value: formdata.city } : null}
-                                onChange={(selected) =>
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        city: selected?.value || '',
-                                    }))
-                                }
-                                styles={{
-                                    input: (provided) => ({
-                                      ...provided,
-                                      
-                                      minHeight: '48px', 
-                                    }),
-                                    control: (provided) => ({
-                                      ...provided,
-                                      minHeight: '48px',
-                                      fontSize: '18px',
-                                    border: '2px solid #888'
-                                     
-                                                                        }),
-                                    placeholder: (provided) => ({
-                                      ...provided,
-                                   
-                                      
-                                    }),
-                                  }}
-                            />
+                            <div style={{ marginBottom: '20px', }}>
+                                <CreatableSelect
+                                    placeholder="Select or type city"
+                                    className="select-margin"
+                                    // isDisabled={!cities.length}
+                                    options={toOptions(cities)}
+                                    value={formdata.city ? { label: formdata.city, value: formdata.city } : null}
+                                    onChange={(selected) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            city: selected?.value || '',
+                                        }))
+                                    }
+                                    styles={{
+                                        input: (provided) => ({
+                                            ...provided,
+
+                                            minHeight: '48px',
+                                        }),
+                                        control: (provided) => ({
+                                            ...provided,
+                                            minHeight: '48px',
+                                            fontSize: '18px',
+                                            border: '2px solid #888'
+
+                                        }),
+                                        placeholder: (provided) => ({
+                                            ...provided,
+
+
+                                        }),
+                                    }}
+                                />
                             </div>
 
                             {errors.city && <p className="text_red">{errors.city}</p>}
