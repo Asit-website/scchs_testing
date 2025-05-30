@@ -11834,3 +11834,7 @@ textarea::placeholder,
 .select-margin{
   color: blue;
 }
+
+.cart-container{
+  top: 11px !important;
+}

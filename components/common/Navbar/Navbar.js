@@ -1086,12 +1086,14 @@ export default function Navbar(props) {
                     <circle cx="18" cy="21" r="1" fill="black" />
                   </svg> */}
                   <ShoppingCart/>
+                  
                   {countCart > 0 && <span className="cart-count">{countCart}</span>}
 
                 </div></Link>
                 <style jsx>{`
   .cart-container {
     position: relative;
+    top:11px !important;
     width: 40px;
     height: 40px;
   }

@@ -59,11 +59,11 @@ export default function contribute(pageProp) {
     //   console.log('Captcha value:', value);
     // };
 
-    const handleRecaptchaChange = (token) => {
-        if (token) {
-            setIsVerified(true); // CAPTCHA passed
-        }
-    };
+    // const handleRecaptchaChange = (token) => {
+    //     if (token) {
+    //         setIsVerified(true);
+    //     }
+    // };
 
 
 
@@ -254,7 +254,9 @@ export default function contribute(pageProp) {
                                 <p>I am not a robot</p>
                             </div> */}
 
-                            <ReCAPTCHA className='hghglol' size='normal' sitekey="6LfCVJ0qAAAAANSJX8eycxotMBzwuCHuMndZOSbY" onChange={handleRecaptchaChange} />
+                          {/*  <ReCAPTCHA className='hghglol' size='normal' sitekey="6LfCVJ0qAAAAANSJX8eycxotMBzwuCHuMndZOSbY" onChange={handleRecaptchaChange} />*/} 
+                            
+                            {/* <ReCAPTCHA className='hghglol' size='normal' sitekey="6Lcng1ArAAAAALCboQHrKS6cNzKdbsLs4E2hTjz6" onChange={handleRecaptchaChange} /> */}
 
                         </div>
                         <div className="submit_donation">
@@ -264,7 +266,7 @@ export default function contribute(pageProp) {
                                     <button onClick={handleEditClick}>Edit Save</button>
                                     <button
                                         onClick={() => setShowPayPal(true)}
-                                        disabled={!isVerified}
+                                        // disabled={!isVerified}
                                         style={{
                                             opacity: isVerified ? 1 : 0.5,
                                             cursor: isVerified ? "pointer" : "not-allowed"

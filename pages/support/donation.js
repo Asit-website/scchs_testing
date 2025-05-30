@@ -6,12 +6,15 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../../components/common/Head/head1";
 import { Country, State, City } from 'country-state-city';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
+// import 'react-phone-input-2/lib/style.css';
 import CreatableSelect from 'react-select/creatable';
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-
+// import 'react-phone-number-input/style.css'
+// import PhoneInput from 'react-phone-input-2';
+// import PhoneInput from 'react-phone-number-input'
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 
 var settingsMorePhotos = {
@@ -70,10 +73,16 @@ export default function donation(pageProp) {
         }));
     };
 
+    // const handlePhoneChange = (value) => {
+    //     setFormData((prev) => ({
+    //         ...prev,
+    //         phone: value,
+    //     }));
+    // };
     const handlePhoneChange = (value) => {
         setFormData((prev) => ({
             ...prev,
-            phone: value,
+            phone: '+' + value, 
         }));
     };
 
@@ -316,7 +325,7 @@ export default function donation(pageProp) {
             <div className="terros">
                 <div className="container111">
                     <h2 className="donation-heading">Donations</h2>
-                   
+
 
                     <p className="donation-paragraph">
                         The primary mission of the St. Charles County Historical Society is to
@@ -421,18 +430,29 @@ export default function donation(pageProp) {
                                 type="text"
                                 placeholder="Phone"
                             /> */}
-                            <PhoneInput
-                                // className="small-input-1"
+                            {/* <PhoneInput
+                                className="small-input-1"
                                 country={'us'}
                                 value={formdata.phone}
                                 onChange={handlePhoneChange}
                                 className="rect-input"
-                                //  className="nameform-input"
+                                 className="nameform-input"
                                 inputProps={{
                                     name: 'phone',
                                     required: true,
                                     autoFocus: false,
 
+                                }}
+                            /> */}
+                            <PhoneInput
+                                country={'us'}
+                                value={formdata.phone.replace('+', ' ')}
+                                onChange={handlePhoneChange}
+                                className="rect-input"
+                                inputProps={{
+                                    name: 'phone',
+                                    required: true,
+                                    autoFocus: false,
                                 }}
                             />
                             {errors.phone && <p className="text_red">{errors.phone}</p>}
