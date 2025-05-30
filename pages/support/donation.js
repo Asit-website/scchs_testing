@@ -10,6 +10,7 @@ import { Country, State, City } from 'country-state-city';
 import CreatableSelect from 'react-select/creatable';
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import Link from 'next/link';
 // import 'react-phone-number-input/style.css'
 // import PhoneInput from 'react-phone-input-2';
 // import PhoneInput from 'react-phone-number-input'
@@ -82,7 +83,7 @@ export default function donation(pageProp) {
     const handlePhoneChange = (value) => {
         setFormData((prev) => ({
             ...prev,
-            phone: '+' + value, 
+            phone: '+' + value,
         }));
     };
 
@@ -383,6 +384,19 @@ export default function donation(pageProp) {
                     <form onSubmit={handleSubmit}>
                         <div className="container-1" id="fghj">
                             <div className="form-title">Place a Donation:</div>
+
+                            <div className="scrolling-text-wrapper">
+                                <div className="scrolling-text">
+                                    Already have an account?&nbsp;
+                                    <Link href="/user/userlogin" className="scroll-link">Sign in</Link>
+                                    &nbsp;to make a donation.&nbsp;&nbsp;|&nbsp;&nbsp;
+                                    New here?&nbsp;
+                                    <Link href="/join/register" className="scroll-link">Create a free account</Link>
+                                    &nbsp;to get started — it's quick and easy!
+                                </div>
+                            </div>
+
+
                             {/* <form> */}
                             <input
                                 className="donation-input"
