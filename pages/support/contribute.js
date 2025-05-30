@@ -267,10 +267,10 @@ export default function contribute(pageProp) {
                                     <button
                                         onClick={() => setShowPayPal(true)}
                                         // disabled={!isVerified}
-                                        style={{
-                                            opacity: isVerified ? 1 : 0.5,
-                                            cursor: isVerified ? "pointer" : "not-allowed"
-                                        }}
+                                        // style={{
+                                        //     opacity: isVerified ? 1 : 0.5,
+                                        //     cursor: isVerified ? "pointer" : "not-allowed"
+                                        // }}
                                     >Confirm & Pay with Paypal</button>
 
                                 </>
