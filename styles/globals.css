@@ -11868,3 +11868,6 @@ textarea::placeholder,
     transform: translateX(-100%);
   }
 }
+.product-description p span{
+  background-color: none !important;
+}
