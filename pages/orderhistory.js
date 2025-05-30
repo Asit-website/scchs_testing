@@ -98,7 +98,7 @@ export default function orderhistory(pageProp) {
               </div>
 
               <div className="product-items">
-                {order.order_items.map((item) => (
+                {order?.order_items?.map((item) => (
                   <div key={item.id} className="product-item">
                     <img
                       src={`https://admin.scchs.co.in//ecommerce/products/${item.product.images[0]}`}
