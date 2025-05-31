@@ -487,7 +487,41 @@ export default function donation(pageProp) {
                             <select name="donation_type" value={formdata?.donation_type} onChange={handleChange} className="hgjg">
                                 <option>Donation Type</option>
                                 <option>One Time</option>
+                                <option>Recur Monthly</option>
                             </select>
+                            {formdata.donation_type === "Recur Monthly" && (
+                                <>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "10px" }}>
+                                        <span>for</span>
+                                        <input
+                                            type="number"
+                                            name="months"
+                                            value={formdata.months}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                              
+                                                if (/^\d{0,3}$/.test(value)) {
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        months: value
+                                                    }));
+                                                }
+                                            }}
+                                            min="0"
+                                            max="999"
+                                            style={{
+                                                width: "60px",
+                                                padding: "3px",
+                                                fontSize: "14px"
+                                            }}
+                                        />
+                                        <span style={{ color: "red" }}>(R)</span>
+                                        <span>months</span>
+                                    </div>
+                                </>
+                            )}
+
+
                             <textarea
                                 className="textarea"
                                 name="comment"
