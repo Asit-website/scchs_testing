@@ -55,15 +55,15 @@ export default function checkout(pageProp) {
                         </form> */}
 
                         {/* {submittedQuery && ( */}
-                            <div style={{ position: "relative" }}>
-  <iframe
-    src={`https://scchs.pastperfectonline.com/Search?search_criteria=${encodeURIComponent(
-      submittedQuery
-    )}&onlyimages=false`}
-    className="pp-iframe"
-    // style={{ width: "100%", height: "600px" }}
-  />
-  {/* <a
+                        <div style={{ position: "relative" }}>
+                            <iframe
+                                src={`https://scchs.pastperfectonline.com/Search?search_criteria=${encodeURIComponent(
+                                    submittedQuery
+                                )}&onlyimages=false`}
+                                className="pp-iframe"
+                            // style={{ width: "100%", height: "600px" }}
+                            />
+                            {/* <a
     href="https://yourcustomlink.com"
     target="_blank"
     rel="noopener noreferrer"
@@ -80,7 +80,7 @@ export default function checkout(pageProp) {
     hiiuuuuu
   
   </a> */}
-</div>
+                        </div>
 
                         {/* )} */}
                     </div>
