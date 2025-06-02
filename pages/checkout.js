@@ -19,29 +19,16 @@ var settingsMorePhotos = {
 
 export default function checkout(pageProp) {
 
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = "https://www.paypal.com/sdk/js?client-id=AQUoEi-7BxQtfIAz4ulCu1obszrCBZ5NXJQriaMbotUhBEa0_7yJLUrYG7QbTqpOJM-FyoViTuYduBZz";
-        script.addEventListener("load", () => {
-            window.paypal.Buttons({
-                createOrder: (data, actions) => {
-                    return actions.order.create({
-                        purchase_units: [{
-                            amount: {
-                                value: '10.00'
-                            }
-                        }]
-                    });
-                },
-                onApprove: async (data, actions) => {
-                    const order = await actions.order.capture();
-                    console.log(order);
-                    // Send order data to your backend if needed
-                }
-            }).render('#paypal-button-container');
-        });
-        document.body.appendChild(script);
-    }, []);
+    const [query, setQuery] = useState('');
+    const [submittedQuery, setSubmittedQuery] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setSubmittedQuery(query); // show iframe only when search is submitted
+    };
+
+
+
 
     return (
         <div className="page_shopping_list sop">
@@ -51,7 +38,52 @@ export default function checkout(pageProp) {
 
             <div className="event_system_main event_system_main1">
                 <div className="event_main">
-                    <div id="paypal-button-container"></div>
+                    <div className="pp-container">
+                        <h1 className="pp-heading">PastPerfect Keyword Search</h1>
+
+                        {/* <form onSubmit={handleSubmit} className="pp-form">
+                            <input
+                                type="text"
+                                placeholder="Enter keyword"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                                className="pp-input"
+                            />
+                            <button type="submit" className="pp-button">
+                                Search
+                            </button>
+                        </form> */}
+
+                        {/* {submittedQuery && ( */}
+                            <div style={{ position: "relative" }}>
+  <iframe
+    src={`https://scchs.pastperfectonline.com/Search?search_criteria=${encodeURIComponent(
+      submittedQuery
+    )}&onlyimages=false`}
+    className="pp-iframe"
+    // style={{ width: "100%", height: "600px" }}
+  />
+  {/* <a
+    href="https://yourcustomlink.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="logo-override"
+    style={{
+      position: "absolute",
+      top: "20px",
+      left: "20px",
+      width: "100px",
+      height: "50px",
+      zIndex: 10,
+    }}
+  >
+    hiiuuuuu
+  
+  </a> */}
+</div>
+
+                        {/* )} */}
+                    </div>
                 </div>
             </div>
 

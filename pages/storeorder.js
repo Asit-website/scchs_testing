@@ -400,10 +400,10 @@ export default function storeorder(pageProp) {
 
 
     useEffect(() => {
-        if (cartData.cart?.length) {
+        if (cartData?.cart?.length) {
             calculateTotals(cartData.cart);
         }
-    }, [cartData.cart]);
+    }, [cartData?.cart]);
     // useEffect(() => {
     //     if (cartData?.cart?.length && membershipStatus) {
     //         calculateTotals(cartData.cart);
@@ -435,9 +435,6 @@ export default function storeorder(pageProp) {
         calculateTotals(updatedCart);
         setCartData({ ...cartData, cart: updatedCart });
     };
-
-
-
     // ==============end===========
 
     useEffect(() => {
