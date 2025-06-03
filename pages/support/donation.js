@@ -182,8 +182,10 @@ export default function donation(pageProp) {
 
         if (!addressDetail.email.trim()) {
             errors.email = 'Email is required';
-
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addressDetail.email)) {
+            errors.email = 'Invalid email format';
         }
+
 
 
         if (!addressDetail.address1?.trim()) {
@@ -428,7 +430,7 @@ export default function donation(pageProp) {
                             />
                             <input
                                 className="donation-input"
-                                type="email"
+                                type="text"
                                 id="name"
                                 placeholder="Email Address* "
                                 name="email"
@@ -499,7 +501,7 @@ export default function donation(pageProp) {
                                             value={formdata.months}
                                             onChange={(e) => {
                                                 const value = e.target.value;
-                                              
+
                                                 if (/^\d{0,3}$/.test(value)) {
                                                     setFormData((prev) => ({
                                                         ...prev,
