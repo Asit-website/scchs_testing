@@ -32,7 +32,7 @@ export default function welcomemember(pageProp) {
                     <div className="member_welcome">
                         <div className="welcome_flex">
                             <h2>Important Notice</h2>
-                            <Link href={"/join/memberplan"}><button>Renew Online</button></Link>
+                            {/* <Link href={"/join/memberplan"}><button>Renew Online</button></Link> */}
                         </div>
                         <div className="welcome_head_para">
                             <p>This information is for members only; please do not share your ID and password with non-members. Names and contact information are provided to assist members in collaborating on society projects and in genealogical research. The use of this information for commercial, political, personal, or religious purposes is strictly forbidden. It would show a lack of respect for the privacy of our members and would reduce their willingness to share contact data. Any violation will be considered a serious offense and will have consequences.</p>

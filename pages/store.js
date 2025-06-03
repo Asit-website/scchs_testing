@@ -104,17 +104,28 @@ export default function store(pageProp) {
         fetchProduct();
     }, [])
 
-    const fetchProductByCat = async () => {
+    // const fetchProductByCat = async () => {
+    //     if (!selectedSlug) return;
+    //     setHasSearched(true);
+    //     try {
+    //         const res = await fetch(`https://admin.scchs.co.in/api/products/category/${selectedSlug}?&offset=0`);
+    //         const data = await res.json();
+    //         console.log(data);
+    //         setAllProduct(data?.products || []);
+    //     } catch (error) {
+    //         console.error('Failed to fetch products:', error);
+    //     }
+    // };
+
+    const fetchProductByCat = () => {
         if (!selectedSlug) return;
-        setHasSearched(true);
-        try {
-            const res = await fetch(`https://admin.scchs.co.in/api/products/category/${selectedSlug}?&offset=0`);
-            const data = await res.json();
-            console.log(data);
-            setAllProduct(data?.products || []);
-        } catch (error) {
-            console.error('Failed to fetch products:', error);
-        }
+
+        fetch(`https://admin.scchs.co.in/api/products/category/${selectedSlug}?limit=${limit}&offset=0`)
+            .then((res) => res.json())
+            .then((data) => {
+                setAllProduct(data?.products || []);
+                setHasSearched(true); // Mark that user searched
+            });
     };
 
 
@@ -187,14 +198,13 @@ export default function store(pageProp) {
                                         onChange={(e) => {
                                             const newLimit = Number(e.target.value);
                                             setLimit(newLimit);
-                                            console.log(newLimit)
-                                            // Category select ho chuki ho tabhi fetch karo
-                                            if (selectedSlug) {
+
+                                            // Only fetch if user already searched once
+                                            if (hasSearched && selectedSlug) {
                                                 fetch(`https://admin.scchs.co.in/api/products/category/${selectedSlug}?limit=${newLimit}&offset=0`)
-                                                    .then(res => res.json())
-                                                    .then(data => {
-                                                        console.log(data)
-                                                        setAllProduct(data?.products || [2]);
+                                                    .then((res) => res.json())
+                                                    .then((data) => {
+                                                        setAllProduct(data?.products || []);
                                                     });
                                             }
                                         }}
@@ -223,8 +233,8 @@ export default function store(pageProp) {
                                     alt="Product"
                                 /></Link>
                                 <div className="custom-card-content">
-                                  <Link style={{textDecoration: "none"}}  href={`/storedetail?id=${product?.slug}`}> 
-                                    <h3 className="custom-card-title">{product.name}</h3></Link> 
+                                    <Link style={{ textDecoration: "none" }} href={`/storedetail?id=${product?.slug}`}>
+                                        <h3 className="custom-card-title">{product.name}</h3></Link>
                                     <p className="custom-card-subtitle">{product.short_description}</p>
                                     {/* <p className="custom-card-location">{product.location}</p> */}
                                     {/* <p className="custom-card-location">MO 1918</p> */}

@@ -214,6 +214,22 @@ export default function register1(pageProp) {
         if (step === 1) {
             if (!formData.first_name) newErrors.first_name = 'First name is required';
             if (!formData.last_name) newErrors.last_name = 'Last name is required';
+
+            const numericRegex = /^\d+$/;
+
+            // Validate dob only if not empty
+            if (formData.dob && (formData.dob.length !== 2 || !numericRegex.test(formData.dob))) {
+                newErrors.dob = 'Day must be 2 digits and numbers only (e.g., 01)';
+            }
+
+            if (formData.dobMonth && (formData.dobMonth.length !== 2 || !numericRegex.test(formData.dobMonth))) {
+                newErrors.dobMonth = 'Month must be 2 digits and numbers only (e.g., 08)';
+            }
+
+            if (formData.dobYear && (formData.dobYear.length !== 4 || !numericRegex.test(formData.dobYear))) {
+                newErrors.dobYear = 'Year must be 4 digits and numbers only (e.g., 1990)';
+            }
+
         }
 
         if (step === 2) {
@@ -265,7 +281,7 @@ export default function register1(pageProp) {
             if (!formData.state) newErrors.state = "State is required";
             if (!formData.postal_code) {
                 newErrors.postal_code = "Postal code is required";
-            } 
+            }
             // else if (!/^\d{5}$/.test(formData.postal_code)) {
             //     newErrors.postal_code = "Postal code must be exactly 5 digits and should be number";
             // }
@@ -384,7 +400,7 @@ export default function register1(pageProp) {
             setStep((prev) => prev + 1);
         }
         else {
-            toast.error("Please fill out the form first");
+            //  toast.error("Please fill out all the required field ");
         }
 
     }
@@ -606,9 +622,18 @@ export default function register1(pageProp) {
                                         </div>
 
                                         <div className="nameform-group nameform-date-group">
-                                            <input onChange={handleChange} name="dobMonth" value={formData?.dobMonth} className="nameform-input" type="text" placeholder="MM" />
-                                            <input onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
-                                            <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
+                                             <div className="dibm">
+                                                <input onChange={handleChange} name="dobMonth" value={formData?.dobMonth} className="nameform-input" type="text" placeholder="MM" />
+                                                {errors.dobMonth && <p className="text_red">{errors.dobMonth}</p>}
+                                            </div>
+                                            <div className="dibm">
+                                                <input  onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
+                                                {errors.dob && <p className="text_red">{errors.dob}</p>}
+                                            </div>
+                                            <div className="dibm">
+                                                <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
+                                                {errors.dobYear && <p className="text_red">{errors.dobYear}</p>}
+                                            </div>
                                         </div>
                                         <p style={{ color: "green", fontSize: "18px" }}>Please enter your date of birth</p>
                                     </div>
@@ -737,7 +762,7 @@ export default function register1(pageProp) {
                                             </select> */}
 
                                             <CreatableSelect
-                                                
+
                                                 placeholder="Select or type state"
                                                 // isDisabled={!states.length}
                                                 options={toOptions(states)}
@@ -840,7 +865,7 @@ export default function register1(pageProp) {
                                         <div className="nameform-group">
 
                                             <input name="postal_code" onChange={handleChange} value={formData?.postal_code} className="nameform-input" type="text" placeholder="Postal Code*" />
-                                            <p style={{marginTop:"6px"}}>Please mention applicable postal code, zip code, pin code, postcode</p>
+                                            <p style={{ marginTop: "6px" }}>Please mention applicable postal code, zip code, pin code, postcode</p>
                                             {errors.postal_code && <p className="text_red">{errors.postal_code}</p>}
                                         </div>
 
@@ -932,7 +957,7 @@ export default function register1(pageProp) {
                                             {errors.website && <p className="text_red">{errors.website}</p>}
                                         </div>
 
-                                         <p className="format">Please fill above as <span>https://sitename.com</span> or <span>https://sitename.com</span>/dir/file.html</p>
+                                        <p className="format">Please fill above as <span>https://sitename.com</span> or <span>https://sitename.com</span>/dir/file.html</p>
 
 
                                     </div>
