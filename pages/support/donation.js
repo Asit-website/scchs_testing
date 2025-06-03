@@ -470,6 +470,7 @@ export default function donation(pageProp) {
                                     required: true,
                                     autoFocus: false,
                                 }}
+                                 countryCodeEditable={false}
                             />
                             {errors.phone && <p className="text_red">{errors.phone}</p>}
                             {/* <div className="warning">Required, formatted as (000) 000-0000</div> */}

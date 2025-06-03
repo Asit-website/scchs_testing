@@ -894,6 +894,7 @@ export default function register1(pageProp) {
                                                         required: true,
                                                         autoFocus: false,
                                                     }}
+                                                     countryCodeEditable={false}
                                                 />
                                             </div>
                                             {
@@ -919,6 +920,7 @@ export default function register1(pageProp) {
                                                         required: true,
                                                         autoFocus: false,
                                                     }}
+                                                     countryCodeEditable={false}
                                                 />
                                             </div>
                                             {errors.cell_phone && <p className="text_red">{errors.cell_phone}</p>}

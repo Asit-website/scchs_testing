@@ -622,6 +622,7 @@ export default function Cart(props) {
                                         required: true,
                                         autoFocus: false,
                                     }}
+                                     countryCodeEditable={false}
                                 />
                                 {errors.phone && <p style={{ color: "red" }} className="error-text">{errors.phone}</p>}
                             </div>
