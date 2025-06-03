@@ -36,34 +36,15 @@ export default function checkout(pageProp) {
 
             <HeadSEO1 />
 
-            <div className="event_system_main event_system_main1">
-                <div className="event_main">
-                    <div className="pp-container">
-                        <h1 className="pp-heading">PastPerfect Keyword Search</h1>
-
-                        {/* <form onSubmit={handleSubmit} className="pp-form">
-                            <input
-                                type="text"
-                                placeholder="Enter keyword"
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                                className="pp-input"
-                            />
-                            <button type="submit" className="pp-button">
-                                Search
-                            </button>
-                        </form> */}
-
-                        {/* {submittedQuery && ( */}
-                        <div style={{ position: "relative" }}>
-                            <iframe
-                                src={`https://scchs.pastperfectonline.com/Search?search_criteria=${encodeURIComponent(
-                                    submittedQuery
-                                )}&onlyimages=false`}
-                                className="pp-iframe"
-                            // style={{ width: "100%", height: "600px" }}
-                            />
-                            {/* <a
+            <div style={{ position: "relative" }}>
+                <iframe
+                    src={`https://scchs.pastperfectonline.com/Search?search_criteria=${encodeURIComponent(
+                        submittedQuery
+                    )}&onlyimages=false`}
+                    className="pp-iframe"
+                // style={{ width: "100%", height: "600px" }}
+                />
+                {/* <a
     href="https://yourcustomlink.com"
     target="_blank"
     rel="noopener noreferrer"
@@ -80,12 +61,33 @@ export default function checkout(pageProp) {
     hiiuuuuu
   
   </a> */}
-                        </div>
+            </div>
 
-                        {/* )} */}
+            {/* <div className="event_system_main event_system_main1">
+                <div className="event_main">
+                    <div className="pp-container">
+                        <h1 className="pp-heading">PastPerfect Keyword Search</h1>
+
+                        <form onSubmit={handleSubmit} className="pp-form">
+                            <input
+                                type="text"
+                                placeholder="Enter keyword"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                                className="pp-input"
+                            />
+                            <button type="submit" className="pp-button">
+                                Search
+                            </button>
+                        </form>
+
+                        {submittedQuery && (
+                        
+
+
                     </div>
                 </div>
-            </div>
+            </div> */}
 
 
         </div>
