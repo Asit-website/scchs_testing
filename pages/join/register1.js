@@ -622,12 +622,12 @@ export default function register1(pageProp) {
                                         </div>
 
                                         <div className="nameform-group nameform-date-group">
-                                             <div className="dibm">
+                                            <div className="dibm">
                                                 <input onChange={handleChange} name="dobMonth" value={formData?.dobMonth} className="nameform-input" type="text" placeholder="MM" />
                                                 {errors.dobMonth && <p className="text_red">{errors.dobMonth}</p>}
                                             </div>
                                             <div className="dibm">
-                                                <input  onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
+                                                <input onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
                                                 {errors.dob && <p className="text_red">{errors.dob}</p>}
                                             </div>
                                             <div className="dibm">
@@ -679,7 +679,7 @@ export default function register1(pageProp) {
                                                     </option>
                                                 ))}
                                             </select> */}
-                                            <CreatableSelect
+                                            {/* <CreatableSelect
                                                 placeholder="Select or type country"
                                                 options={toOptions(countries)}
                                                 value={formData.country ? { label: formData.country, value: formData.country } : null}
@@ -691,7 +691,45 @@ export default function register1(pageProp) {
                                                         city: '',
                                                     }))
                                                 }
+                                            /> */}
+
+                                            <CreatableSelect
+                                                placeholder="Select or type country"
+                                                options={toOptions(countries)}
+                                                value={
+                                                    formData.country
+                                                        ? { label: formData.country, value: formData.country }
+                                                        : null
+                                                }
+                                                onChange={(selected) =>
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        country: selected?.value || '',
+                                                        state: '',
+                                                        city: '',
+                                                    }))
+                                                }
+                                                styles={{
+                                                    control: (base, state) => ({
+                                                        ...base,
+                                                        minHeight: '45px',
+                                                        padding: '10px 4px',
+                                                        borderColor: state.isFocused ? '#3b82f6' : '#888',
+                                                        boxShadow: 'none',
+                                                        '&:hover': {
+                                                            borderColor: '#3b82f6',
+                                                        },
+                                                    }),
+                                                    menu: (base) => ({
+                                                        ...base,
+                                                        zIndex: 9999,
+                                                    }),
+                                                }}
+                                                className="w-full"
                                             />
+
+
+
 
                                         </div>
 
@@ -774,6 +812,23 @@ export default function register1(pageProp) {
                                                         city: '',
                                                     }))
                                                 }
+                                                styles={{
+                                                    control: (base, state) => ({
+                                                        ...base,
+                                                        minHeight: '45px',
+                                                        padding: '10px 4px',
+                                                        borderColor: state.isFocused ? '#3b82f6' : '#888',
+                                                        boxShadow: 'none',
+                                                        '&:hover': {
+                                                            borderColor: '#3b82f6',
+                                                        },
+                                                    }),
+                                                    menu: (base) => ({
+                                                        ...base,
+                                                        zIndex: 9999,
+                                                    }),
+                                                }}
+                                                className="w-full"
                                             />
 
 
@@ -856,6 +911,23 @@ export default function register1(pageProp) {
                                                         city: selected?.value || '',
                                                     }))
                                                 }
+                                                styles={{
+                                                    control: (base, state) => ({
+                                                        ...base,
+                                                        minHeight: '50px',
+                                                        padding: '10px 4px',
+                                                        borderColor: state.isFocused ? '#3b82f6' : '#888',
+                                                        boxShadow: 'none',
+                                                        '&:hover': {
+                                                            borderColor: '#3b82f6',
+                                                        },
+                                                    }),
+                                                    menu: (base) => ({
+                                                        ...base,
+                                                        zIndex: 9999,
+                                                    }),
+                                                }}
+                                                className="w-full"
                                             />
                                             {errors.city && <p className="text_red">{errors.city}</p>}
                                         </div>
@@ -894,7 +966,7 @@ export default function register1(pageProp) {
                                                         required: true,
                                                         autoFocus: false,
                                                     }}
-                                                     countryCodeEditable={false}
+                                                    countryCodeEditable={false}
                                                 />
                                             </div>
                                             {
@@ -920,7 +992,7 @@ export default function register1(pageProp) {
                                                         required: true,
                                                         autoFocus: false,
                                                     }}
-                                                     countryCodeEditable={false}
+                                                    countryCodeEditable={false}
                                                 />
                                             </div>
                                             {errors.cell_phone && <p className="text_red">{errors.cell_phone}</p>}

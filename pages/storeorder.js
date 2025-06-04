@@ -22,6 +22,7 @@ import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { FaUser, FaMapMarkedAlt, FaBuilding, FaCity, FaGlobe, FaFlag, FaMapPin, FaPhone } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
 
 import { toast } from "react-toastify";
 
@@ -766,13 +767,15 @@ export default function storeorder(pageProp) {
                             <div className="saved-address-card">
                                 <div className="card-headerrss">
                                     <h2><FaMapMarkedAlt className="icon" /> Saved Address</h2>
-                                    <button onClick={handleEdit}><FaMapPin className="icon" /> Edit</button>
+                                    {/* <button onClick={handleEdit}><FaMapPin className="icon" /> Edit</button> */}
+
+                                    <button onClick={handleEdit}><MdEdit className="icon" /> Edit</button>
                                 </div>
                                 <div className="card-contentt">
                                     <div className="roww"><span className="labells"><FaUser className="icon" /> Name:</span><span>{savedAddress.first_name} {savedAddress.last_name}</span></div>
                                     <div className="roww"><span className="labells"><FaMapMarkedAlt className="icon" /> Address:</span><span>{savedAddress.address1}</span></div>
                                     {savedAddress.address2 && (
-                                        <div className="roww"><span className="labells"><FaBuilding className="icon" /> Address 2:</span><span>{savedAddress.address2}</span></div>
+                                        <div className="roww"><span className="labells"><FaMapMarkedAlt className="icon" /> Address 2:</span><span>{savedAddress.address2}</span></div>
                                     )}
                                     <div className="roww"><span className="labells"><FaCity className="icon" /> City:</span><span>{savedAddress.city}</span></div>
                                     <div className="roww"><span className="labells"><FaFlag className="icon" /> State:</span><span>{savedAddress.state}</span></div>

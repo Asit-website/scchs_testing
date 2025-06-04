@@ -11582,11 +11582,11 @@ ul li>a:hover::after {
   .card-contentt {
     grid-template-columns: 1fr;
   }
-
-  .card-headerrss {
-    flex-direction: column;
-    align-items: flex-start;
+  .saved-address-card{
+    padding: 10px;
   }
+
+ 
 
   .card-headerrss h2 {
     font-size: 20px;
@@ -11595,6 +11595,11 @@ ul li>a:hover::after {
   .card-headerrss button {
     align-self: flex-end;
     margin-top: 8px;
+  }
+}
+@media(max-width:375px){
+  .card-headerrss {
+   justify-content: center;
   }
 }
 
@@ -11813,7 +11818,13 @@ ul li>a:hover::after {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 15px;
+  padding: 10px;
 }
+/* @media(max-width:910px){
+  .cta-wrapper{
+    padding: 20px;
+  }
+} */
 
 .cta-text {
   color: white;
@@ -11927,4 +11938,42 @@ textarea::placeholder,
 }
 .product-description p span{
   background-color: none !important;
+}
+
+
+
+/* .custom-select__control {
+  min-height: 40px;
+  padding: 2px 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.custom-select__control--is-focused {
+  border-color: #3b82f6;
+  box-shadow: none;
+} */
+
+.select-margin {
+  color: #000 !important;
+}
+@media(max-width:605px){
+  .box_1{
+    flex-direction: column;
+    gap: 20px;
+  }
+  .box-paragraph{
+    text-align: center;
+    
+  }
+
+
+}
+@media(max-width:810px){
+  .checkbox{
+    width: 28%;
+  }
+  .chek-box-parent{
+    align-items: start;
+  }
 }
