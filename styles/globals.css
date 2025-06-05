@@ -12623,7 +12623,6 @@ textarea::placeholder,
 .dropdownnn {
   padding: 0.3rem 0.6rem;
   font-size: 1rem;
-  /* background: url("data:image/svg+xml;utf8,<svg fill='black' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 0.75rem center; */
   background-color: #fff;
   background-size: 1rem;
   border: 1px solid #ccc;
