@@ -600,6 +600,8 @@ export default function Navbar(props) {
           const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
           const data = await res.json();
 
+          console.log(data);
+
           const today = new Date();
 
           const activePlan = data?.data?.find(plan => {
