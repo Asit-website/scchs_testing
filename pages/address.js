@@ -403,15 +403,7 @@ export default function Cart(props) {
         }
     }, [addressDetail.state, addressDetail.country, countries]);
 
-    // This one is no longer needed now that above handles edit case well
-    // ❌ REMOVE this redundant useEffect
-    // useEffect(() => { ... }, [isEditing, ...])
-
-    // Utility remains same
-
-
-
-
+    
     const toOptions = (list, key = 'name') =>
         list.map((item) => ({ label: item[key], value: item[key] }));
 

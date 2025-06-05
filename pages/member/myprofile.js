@@ -6,8 +6,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../../components/common/Head/head1";
 import { toast } from "react-toastify";
-
-
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { Country, State, City } from 'country-state-city';
+import CreatableSelect from 'react-select/creatable';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 var settingsMorePhotos = {
     arrows: true,
@@ -26,11 +30,26 @@ const tabList = [
     "Member Setting"
 ];
 
+const data = [
+    {
+        surname: "Trendley",
+        county: "St Charles",
+        state: "Mo",
+        country: "United States",
+        beginYear: "1771",
+        endYear: "1850"
+    }
+];
+
 export default function myprofile(pageProp) {
 
     // const [activeTab, setActiveTab] = useState("Member Info");
 
     const [activeTab, setActiveTab] = useState(tabList[0]);
+    const [errors, setErrors] = useState({})
+    const [errors1, setErrors1] = useState({})
+    const [errors2, setErrors2] = useState({})
+
 
     useEffect(() => {
         const savedTab = localStorage.getItem("activeTab");
@@ -120,7 +139,8 @@ export default function myprofile(pageProp) {
         city: '',
         state: '',
         postal_code: '',
-        email: ''
+        email: '',
+        country: ''
     });
 
     const userId = instaUser?.id;
@@ -143,6 +163,121 @@ export default function myprofile(pageProp) {
 
     });
 
+
+
+
+
+    const handleChange1 = (e) => {
+        setFormData1(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setErrors((prev) => ({
+            ...prev,
+            [e.target.name]: '',
+        }));
+    };
+
+    const handlePhoneChange = (value) => {
+        setFormData1((prev) => ({
+            ...prev,
+            mobile_number: value,
+        }));
+    };
+
+    const handlePhoneChange1 = (value) => {
+        setFormData1((prev) => ({
+            ...prev,
+            cell_phone: value,
+        }));
+    };
+
+    const handlePhoneChange2 = (value) => {
+        setFormData1((prev) => ({
+            ...prev,
+            int_phone: value,
+        }));
+    };
+
+    const [countries, setCountries] = useState([]);
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
+
+    useEffect(() => {
+        setCountries(Country.getAllCountries());
+    }, []);
+
+    useEffect(() => {
+        if (!formData1.country || !countries.length) return;
+
+        const selectedCountry = countries.find(
+            (c) => c.name === formData1.country
+        );
+
+        if (!selectedCountry) return;
+
+        const countryStates = State.getStatesOfCountry(selectedCountry.isoCode);
+        setStates(countryStates);
+
+        // Reset state/city only if not editing
+        // if (!isEditing) {
+        //     setFormData1((prev) => ({
+        //         ...prev,
+        //         state: '',
+        //         city: '',
+        //     }));
+        // }
+    }, [formData1.country, countries]);
+
+    useEffect(() => {
+        if (!formData1.country || !formData1.state || !countries.length) return;
+
+        const selectedCountry = countries.find(
+            (c) => c.name === formData1.country
+        );
+        if (!selectedCountry) return;
+
+        const selectedState = State.getStatesOfCountry(selectedCountry.isoCode).find(
+            (s) => s.name === formData1.state
+        );
+        if (!selectedState) return;
+
+        const stateCities = City.getCitiesOfState(
+            selectedCountry.isoCode,
+            selectedState.isoCode
+        );
+        setCities(stateCities);
+
+        // Reset city only if not editing
+        // if (!isEditing) {
+        //     setFormData1((prev) => ({
+        //         ...prev,
+        //         city: '',
+        //     }));
+        // }
+    }, [formData1.state, formData1.country, countries]);
+
+
+    const toOptions = (list, key = 'name') =>
+        list.map((item) => ({ label: item[key], value: item[key] }));
+
+    const validateAddressForm = (addressDetail) => {
+        const errors = {};
+
+        if (!addressDetail.email.trim()) {
+            errors.email = 'Email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addressDetail.email)) {
+            errors.email = 'Invalid email format';
+        }
+
+        if (addressDetail.website?.trim()) {
+            const websiteRegex = /^https?:\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/[\w\-./?%&=]*)?$/;
+            if (!websiteRegex.test(addressDetail.website.trim())) {
+                errors.website = 'Invalid website format';
+            }
+        }
+
+        return errors;
+    };
+
+
     const handleEditClick1 = async () => {
         setOpen1(true);
         try {
@@ -154,18 +289,27 @@ export default function myprofile(pageProp) {
 
             if (res.ok) {
                 const data = await res.json();
-                if (data.data) setFormData1(data.data);
+                // if (data.data) setFormData1(data.data);
+                if (data.data) {
+                    const fixedData = {
+                        ...data.data,
+                        mobile_number: data.data.mobile_number ? String(data.data.mobile_number) : '',  // Ensure phone is a string
+                    };
+                    setFormData1(fixedData);
+                }
+
             }
         } catch (err) {
             console.error('Fetch error:', err);
         }
     };
 
-    const handleChange1 = (e) => {
-        setFormData1(prev => ({ ...prev, [e.target.name]: e.target.value }));
-    };
-
     const handleSave1 = async () => {
+        const errors = validateAddressForm(formData1);
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors);
+            return;
+        }
         try {
             const res = await fetch('https://admin.scchs.co.in/api/contact-info', {
                 method: 'POST',
@@ -185,6 +329,9 @@ export default function myprofile(pageProp) {
         }
     };
 
+
+
+    // ========================================alt information logic==================
     const handleEditClick = async () => {
         setOpen(true);
         try {
@@ -202,10 +349,141 @@ export default function myprofile(pageProp) {
             console.error('Fetch error:', err);
         }
     };
+
     const handleChange = (e) => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setErrors1((prev) => ({
+            ...prev,
+            [e.target.name]: '',
+        }));
     };
+
+    const handlePhoneChange3 = (value) => {
+        setFormData((prev) => ({
+            ...prev,
+            phone: value,
+        }));
+    };
+
+    const handlePhoneChange4 = (value) => {
+        setFormData((prev) => ({
+            ...prev,
+            intl_phone: value,
+        }));
+    };
+
+    const validateAddressForm1 = (addressDetail) => {
+        const errors = {};
+
+        if (!addressDetail.email.trim()) {
+            errors.email = 'Email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addressDetail.email)) {
+            errors.email = 'Invalid email format';
+        }
+
+        const numericRegex = /^\d+$/;
+
+        // if (addressDetail.from_day_month && (addressDetail.from_day_month.length !== 2 || !numericRegex.test(addressDetail.from_day_month))) {
+        //     errors.from_day_month = 'Day must be 2 digits and numbers only (e.g., 01)';
+        // }
+
+        if (addressDetail.from_day_month) {
+            if (!numericRegex.test(addressDetail.from_day_month)) {
+                errors.from_day_month = 'Day must be 2 digits and numbers only (e.g., 01)';
+            } else {
+                const day = parseInt(addressDetail.from_day_month, 10);
+                if (day < 1 || day > 31) {
+                    errors.from_day_month = 'Day must be between 01 and 31';
+                }
+            }
+        }
+
+        //  if (addressDetail.to_day_month && (addressDetail.to_day_month.length !== 2 || !numericRegex.test(addressDetail.to_day_month))) {
+        //     errors.to_day_month = 'Day must be 2 digits and numbers only (e.g., 01)';
+        // }
+
+        if (addressDetail.to_day_month) {
+            if (!numericRegex.test(addressDetail.to_day_month)) {
+                errors.to_day_month = 'Day must be 2 digits and numbers only (e.g., 01)';
+            } else {
+                const day = parseInt(addressDetail.to_day_month, 10);
+                if (day < 1 || day > 31) {
+                    errors.to_day_month = 'Day must be between 01 and 31';
+                }
+            }
+        }
+
+        return errors;
+    };
+
+    const [countries1, setCountries1] = useState([]);
+    const [states1, setStates1] = useState([]);
+    const [cities1, setCities1] = useState([]);
+
+    useEffect(() => {
+        setCountries1(Country.getAllCountries());
+    }, []);
+
+    useEffect(() => {
+        if (!formData.country || !countries1.length) return;
+
+        const selectedCountry = countries1.find(
+            (c) => c.name === formData.country
+        );
+
+        if (!selectedCountry) return;
+
+        const countryStates = State.getStatesOfCountry(selectedCountry.isoCode);
+        setStates1(countryStates);
+
+        // Reset state/city only if not editing
+        // if (!isEditing) {
+        //     setFormData1((prev) => ({
+        //         ...prev,
+        //         state: '',
+        //         city: '',
+        //     }));
+        // }
+    }, [formData.country, countries1]);
+
+    useEffect(() => {
+        if (!formData.country || !formData.state || !countries1.length) return;
+
+        const selectedCountry = countries1.find(
+            (c) => c.name === formData.country
+        );
+        if (!selectedCountry) return;
+
+        const selectedState = State.getStatesOfCountry(selectedCountry.isoCode).find(
+            (s) => s.name === formData.state
+        );
+        if (!selectedState) return;
+
+        const stateCities = City.getCitiesOfState(
+            selectedCountry.isoCode,
+            selectedState.isoCode
+        );
+        setCities1(stateCities);
+
+        // Reset city only if not editing
+        // if (!isEditing) {
+        //     setFormData1((prev) => ({
+        //         ...prev,
+        //         city: '',
+        //     }));
+        // }
+    }, [formData.state, formData.country, countries1]);
+
+
+    const toOptions1 = (list, key = 'name') =>
+        list.map((item) => ({ label: item[key], value: item[key] }));
+
     const handleSave = async () => {
+        const errors = validateAddressForm1(formData);
+        if (Object.keys(errors).length > 0) {
+            setErrors1(errors);
+            return;
+        }
         try {
             const res = await fetch(`https://admin.scchs.co.in/api/alt-contact-info`, {
                 method: 'POST',
@@ -215,6 +493,7 @@ export default function myprofile(pageProp) {
 
             if (res.ok) {
                 toast.success('Saved successfully!');
+                window.location.href = "/member/myprofile";
                 setOpen(false);
             } else {
                 toast.error('Failed to save.');
@@ -224,6 +503,434 @@ export default function myprofile(pageProp) {
         }
     };
 
+
+    // ============surename table start=============
+
+    const [data, setData] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editId, setEditId] = useState(null);
+    const [form, setForm] = useState({
+        surname: "",
+        city: "",
+        county: "",
+        state: "",
+        country: "",
+        start_year: "",
+        end_year: "",
+        alt_spelling: "",
+        commant: ""
+    });
+
+    const handleChangeform = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+        setErrors2((prev) => ({
+            ...prev,
+            [e.target.name]: '',
+        }));
+    };
+
+    const validateAddressForm2 = (addressDetail) => {
+        const errors = {};
+        if (!addressDetail.surname?.trim()) {
+            errors.surname = 'Surname is required';
+        }
+        const numericRegex = /^\d+$/;
+
+        if (addressDetail.start_year && (addressDetail.start_year.length !== 4 || !numericRegex.test(addressDetail.start_year))) {
+            errors.start_year = 'Year must be 4 digits and numbers only (e.g., 01)';
+        }
+
+
+
+        if (addressDetail.end_year && (addressDetail.end_year.length !== 4 || !numericRegex.test(addressDetail.end_year))) {
+            errors.end_year = 'Year must be 4 digits and numbers only (e.g., 01)';
+        }
+
+
+        return errors;
+    };
+
+    const [countries2, setCountries2] = useState([]);
+    const [states2, setStates2] = useState([]);
+    const [cities2, setCities2] = useState([]);
+
+    useEffect(() => {
+        setCountries2(Country.getAllCountries());
+    }, []);
+
+    useEffect(() => {
+        if (!form.country || !countries2.length) return;
+
+        const selectedCountry = countries2.find(
+            (c) => c.name === form.country
+        );
+
+        if (!selectedCountry) return;
+
+        const countryStates = State.getStatesOfCountry(selectedCountry.isoCode);
+        setStates2(countryStates);
+
+    }, [form.country, countries2]);
+
+    useEffect(() => {
+        if (!form.country || !form.state || !countries2.length) return;
+
+        const selectedCountry = countries2.find(
+            (c) => c.name === form.country
+        );
+        if (!selectedCountry) return;
+
+        const selectedState = State.getStatesOfCountry(selectedCountry.isoCode).find(
+            (s) => s.name === form.state
+        );
+        if (!selectedState) return;
+
+        const stateCities = City.getCitiesOfState(
+            selectedCountry.isoCode,
+            selectedState.isoCode
+        );
+        setCities2(stateCities);
+
+    }, [form.state, form.country, countries2]);
+
+
+    const toOptions2 = (list, key = 'name') =>
+        list.map((item) => ({ label: item[key], value: item[key] }));
+
+    // const handleAdd = async () => {
+    //     try {
+    //         const res = await fetch('https://admin.scchs.co.in/api/surnames', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+    //             },
+    //             body: JSON.stringify(form)
+    //         });
+
+    //         if (res.ok) {
+    //             const newItem = await res.json();
+    //             setData([...data, newItem.data || form]);
+    //             setForm({
+    //                 surname: "",
+    //                 city: "",
+    //                 county: "",
+    //                 state: "",
+    //                 country: "",
+    //                 start_year: "",
+    //                 end_year: "",
+    //                 alt_spelling: "",
+    //                 commant: ""
+    //             });
+    //             alert("success")
+    //             setShowModal(false);
+
+    //         } else {
+    //             console.error("Failed to add surname entry");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error while adding:", error);
+    //     }
+    // };
+
+    const handleAdd = async () => {
+        const errors = validateAddressForm2(form);
+        if (Object.keys(errors).length > 0) {
+            setErrors2(errors);
+            return;
+        }
+        const method = isEditMode ? 'PUT' : 'POST';
+        const url = isEditMode
+            ? `https://admin.scchs.co.in/api/surnames/${editId}`
+            : `https://admin.scchs.co.in/api/surnames`;
+
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                },
+                body: JSON.stringify(form)
+            });
+
+            if (res.ok) {
+                const responseData = await res.json();
+
+                if (isEditMode) {
+                    setData(prev =>
+                        prev.map(item =>
+                            item.id === editId ? responseData.data || form : item
+                        )
+                    );
+                    toast.success("Surname updated successfully!"); // 🟢 Edit alert
+                } else {
+                    setData([...data, responseData.data || form]);
+                    toast.success("Surname added successfully!"); // 🟢 Add alert
+                }
+
+                // Reset
+                setForm({
+                    surname: "",
+                    city: "",
+                    county: "",
+                    state: "",
+                    country: "",
+                    start_year: "",
+                    end_year: "",
+                    alt_spelling: "",
+                    commant: ""
+                });
+                setIsEditMode(false);
+                setEditId(null);
+                setShowModal(false);
+                window.location.href = "/member/myprofile"
+            } else {
+                const err = await res.json();
+                console.error("API error:", err);
+            }
+        } catch (error) {
+            console.error("Error while saving:", error);
+        }
+    };
+
+
+    const handleDelete = async (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const res = await fetch(`https://admin.scchs.co.in/api/surnames/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                        }
+                    });
+
+                    if (res.ok) {
+                        setData(prev => prev.filter(item => item.id !== id));
+                        Swal.fire(
+                            'Deleted!',
+                            'Surname has been deleted.',
+                            'success'
+                        );
+                        window.location.href = "/member/myprofile"
+                    } else {
+                        Swal.fire(
+                            'Failed!',
+                            'Failed to delete surname.',
+                            'error'
+                        );
+                    }
+                } catch (error) {
+                    console.error("Error while deleting:", error);
+                    Swal.fire(
+                        'Error!',
+                        'Something went wrong.',
+                        'error'
+                    );
+                }
+            }
+        });
+    };
+
+
+    const handleAddClick = () => {
+        setIsEditMode(false);
+        setEditId(null);
+        setForm({});
+        setShowModal(true);
+    };
+
+    // ===================custom setting logic===========
+
+    // const [showMembershipPopup, setShowMembershipPopup] = useState(false);
+    // const [showEmailPopup, setShowEmailPopup] = useState(false);
+    // const [savedSettings, setSavedSettings] = useState(null);
+
+    // const [formData3, setFormData3] = useState({
+    //     general_notices: false,
+    //     event_reminders: false,
+    //     newsletters: false,
+    //     surname_inquiries: false,
+    //     show_name: false,
+    //     address: false,
+    //     telephone: false,
+    //     email_address: false,
+    //     website: false,
+    //     photo: false,
+    // });
+
+    const defaultSettings = {
+        general_notices: false,
+        event_reminders: false,
+        newsletters: false,
+        surname_inquiries: false,
+        show_name: false,
+        address: false,
+        telephone: false,
+        email_address: false,
+        website: false,
+        photo: false,
+    };
+
+    const [formData3, setFormData3] = useState(defaultSettings);
+    const [showMembershipPopup, setShowMembershipPopup] = useState(false);
+    const [showSpecialPopup, setShowSpecialPopup] = useState(false);
+
+
+
+    const specialKeys = [
+        "general_notices",
+        "event_reminders",
+        "newsletters",
+        "surname_inquiries",
+    ];
+
+
+    const handleCheckboxChange = (e) => {
+        const { name, checked } = e.target;
+        setFormData3((prev) => ({ ...prev, [name]: checked }));
+    };
+
+
+    const openMembershipEditPopup = () => {
+        const saved = localStorage.getItem("scchs_MemberSettings");
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setFormData3({ ...defaultSettings, ...parsed }); // Ensure fallback values
+        } else {
+            setFormData3(defaultSettings);
+        }
+        setShowMembershipPopup(true);
+    };
+
+    const openMembershipEditPopup1 = () => {
+        const saved = localStorage.getItem("scchs_MemberSettings");
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setFormData3({ ...defaultSettings, ...parsed }); // Ensure fallback values
+        } else {
+            setFormData3(defaultSettings);
+        }
+        setShowSpecialPopup(true);
+    };
+
+
+
+
+    // const handleSubmit = async () => {
+    //     try {
+    //         const res = await fetch('https://admin.scchs.co.in/api/member-settings-store', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': `Bearer ${JSON.parse(localStorage.getItem("scchs_Access"))}`
+    //             },
+    //             body: JSON.stringify(formData3)
+    //         });
+
+    //         console.log(res)
+
+    //         if (res.ok) {
+    //             Swal.fire('Success', 'Settings updated successfully', 'success');
+    //             setShowMembershipPopup(false);
+    //             setShowEmailPopup(false);
+    //         } else {
+    //             Swal.fire('Error', 'Something went wrong!', 'error');
+    //         }
+    //     } catch (error) {
+    //         Swal.fire('Error', 'Network error', 'error');
+    //     }
+    // };
+
+    const handleSubmit = async () => {
+        try {
+            const res = await fetch('https://admin.scchs.co.in/api/member-settings-store', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${JSON.parse(localStorage.getItem("scchs_Access"))}`
+                },
+                body: JSON.stringify(formData3),
+            });
+
+            if (res.ok) {
+                localStorage.setItem("scchs_MemberSettings", JSON.stringify(formData3));
+                Swal.fire('Success', 'Settings updated successfully', 'success');
+                setShowMembershipPopup(false);
+                setShowSpecialPopup(false);
+                window.location.href = "/member/myprofile"
+            } else {
+                Swal.fire('Error', 'Something went wrong!', 'error');
+            }
+        } catch (error) {
+            Swal.fire('Error', 'Network error', 'error');
+        }
+    };
+
+    const [data1, setData1] = useState(null);
+
+    useEffect(() => {
+        const saved = localStorage.getItem("scchs_MemberSettings");
+        if (saved) {
+            setData1(JSON.parse(saved));
+        }
+    }, []);
+
+
+    const excludeKeys = [
+        "general_notices",
+        "event_reminders",
+        "newsletters",
+        "surname_inquiries",
+    ];
+
+
+
+    // const openMembershipEditPopup = () => {
+    //   const saved = JSON.parse(localStorage.getItem("scchs_MemberSettings"));
+    //   if (saved && typeof saved === 'object') {
+    //     // Ensure defaults for missing keys
+    //     const withDefaults = {
+    //       general_notices: !!saved.general_notices,
+    //       event_reminders: !!saved.event_reminders,
+    //       newsletters: !!saved.newsletters,
+    //       surname_inquiries: !!saved.surname_inquiries,
+    //       show_name: !!saved.show_name,
+    //       address: !!saved.address,
+    //       telephone: !!saved.telephone,
+    //       email_address: !!saved.email_address,
+    //       website: !!saved.website,
+    //       photo: !!saved.photo,
+    //     };
+    //     setFormData3(withDefaults);
+    //   } else {
+    //     // fallback to default values
+    //     setFormData3({
+    //       general_notices: false,
+    //       event_reminders: false,
+    //       newsletters: false,
+    //       surname_inquiries: false,
+    //       show_name: false,
+    //       address: false,
+    //       telephone: false,
+    //       email_address: false,
+    //       website: false,
+    //       photo: false,
+    //     });
+    //   }
+
+    //   setShowMembershipPopup(true);
+    // };
 
 
 
@@ -349,11 +1056,8 @@ export default function myprofile(pageProp) {
                                 <div className="grid-2col">
                                     <div><strong className="lable1">Address:</strong>{memberships[0]?.user?.address}</div>
                                     <div><strong className="lable1">Phone :</strong> {memberships[0]?.user?.mobile_number} <span onClick={handleEditClick1} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div>
-                                    <div>
-                                        <div><strong className="lable1">Address 2:</strong>{memberships[0]?.user?.address2}  </div>
-                                        <div><strong className="lable1">Cell Phone:</strong> {memberships[0]?.user.cell_phone}</div>
-                                    </div>
-
+                                    <div><strong className="lable1">Address 2:</strong>{memberships[0]?.user?.address2}  </div>
+                                    <div><strong className="lable1">Cell Phone:</strong> {memberships[0]?.user.cell_phone}</div>
                                     <div><strong className="lable1">City:</strong>{memberships[0]?.user?.city}</div>
                                     <div><strong className="lable1">Int'l. Phone:</strong>{memberships[0]?.user?.
                                         int_phone
@@ -386,7 +1090,20 @@ export default function myprofile(pageProp) {
                                         </div>
                                         <div className="alt-popup-field">
                                             <label>Phone:</label>
-                                            <input type="text" name="mobile_number" value={formData1?.mobile_number} onChange={handleChange1} className="alt-popup-input" />
+                                            {/* <input type="text" name="mobile_number" value={formData1?.mobile_number} onChange={handleChange1} className="alt-popup-input" /> */}
+                                            <PhoneInput
+                                                className="test_inpuy"
+                                                country={'us'}
+                                                value={formData1.mobile_number}
+                                                onChange={handlePhoneChange}
+                                                //  className="nameform-input"
+                                                inputProps={{
+                                                    name: 'mobile_number',
+                                                    required: true,
+                                                    autoFocus: false,
+                                                }}
+                                                countryCodeEditable={false}
+                                            />
                                         </div>
                                         <div className="alt-popup-field">
                                             <label>Address 2:</label>
@@ -394,39 +1111,123 @@ export default function myprofile(pageProp) {
                                         </div>
                                         <div className="alt-popup-field">
                                             <label>Cell Phone:</label>
-                                            <input type="text" name="cell_phone" value={formData1?.cell_phone} onChange={handleChange1} className="alt-popup-input" />
+                                            {/* <input type="text" name="cell_phone" value={formData1?.cell_phone} onChange={handleChange1} className="alt-popup-input" /> */}
+                                            <PhoneInput
+                                                className="test_inpuy"
+                                                country={'us'}
+                                                value={formData1.cell_phone}
+                                                onChange={handlePhoneChange1}
+                                                //  className="nameform-input"
+                                                inputProps={{
+                                                    name: 'cell_phone',
+                                                    required: true,
+                                                    autoFocus: false,
+                                                }}
+                                                countryCodeEditable={false}
+                                            />
                                         </div>
-                                        <div className="alt-popup-field">
-                                            <label>City:</label>
-                                            <input type="text" name="city" value={formData1?.city} onChange={handleChange1} className="alt-popup-input" />
-                                        </div>
+
                                         <div className="alt-popup-field">
                                             <label>Int'l Phone:</label>
-                                            <input type="text" name="int_phone" value={formData1?.int_phone} onChange={handleChange1} className="alt-popup-input" />
+                                            {/* <input type="text" name="int_phone" value={formData1?.int_phone} onChange={handleChange1} className="alt-popup-input" /> */}
+                                            <PhoneInput
+                                                className="test_inpuy"
+                                                country={'us'}
+                                                value={formData1.int_phone}
+                                                onChange={handlePhoneChange2}
+                                                //  className="nameform-input"
+                                                inputProps={{
+                                                    name: 'int_phone',
+                                                    required: true,
+                                                    autoFocus: false,
+                                                }}
+                                                countryCodeEditable={false}
+                                            />
+                                        </div>
+
+                                        <div className="alt-popup-field">
+                                            <label>Preferred #:</label>
+                                            {/* <input type="text" name="preferred" value={formData1?.preferred} onChange={handleChange1} className="alt-popup-input" /> */}
+                                            <select name="preferred" value={formData1?.preferred} onChange={handleChange1} className="alt-popup-input">
+                                                <option disabled>Select Preferred</option>
+                                                <option>Int'l Phone</option>
+                                                <option>Phone</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="alt-popup-field">
+                                            <label>Country:</label>
+                                            {/* <input type="text" name="country" value={formData1?.country} onChange={handleChange1} className="alt-popup-input" /> */}
+                                            <CreatableSelect
+                                                placeholder="Select or type country"
+                                                options={toOptions(countries)}
+                                                value={
+                                                    formData1.country
+                                                        ? { label: formData1.country, value: formData1.country }
+                                                        : null
+                                                }
+                                                onChange={(selected) =>
+                                                    setFormData1((prev) => ({
+                                                        ...prev,
+                                                        country: selected?.value || '',
+                                                        state: '',
+                                                        city: '',
+                                                    }))
+                                                }
+                                            />
                                         </div>
                                         <div className="alt-popup-field">
                                             <label>State:</label>
-                                            <input type="text" name="state" value={formData1?.state} onChange={handleChange1} className="alt-popup-input" />
+                                            {/* <input type="text" name="state" value={formData1?.state} onChange={handleChange1} className="alt-popup-input" /> */}
+                                            <CreatableSelect
+                                                placeholder="Select or type state"
+                                                options={toOptions(states)}
+                                                value={
+                                                    formData1.state
+                                                        ? { label: formData1.state, value: formData1.state }
+                                                        : null
+                                                }
+                                                onChange={(selected) =>
+                                                    setFormData1((prev) => ({
+                                                        ...prev,
+                                                        state: selected?.value || '',
+                                                        city: '',
+                                                    }))
+                                                }
+                                            />
                                         </div>
                                         <div className="alt-popup-field">
-                                            <label>Preferred #:</label>
-                                            <input type="text" name="preferred" value={formData1?.preferred} onChange={handleChange1} className="alt-popup-input" />
+                                            <label>City:</label>
+                                            {/* <input type="text" name="city" value={formData1?.city} onChange={handleChange1} className="alt-popup-input" /> */}
+                                            <CreatableSelect
+                                                placeholder="Select or type city"
+                                                options={toOptions(cities)}
+                                                value={
+                                                    formData1.city
+                                                        ? { label: formData1.city, value: formData1.city }
+                                                        : null
+                                                }
+                                                onChange={(selected) =>
+                                                    setFormData1((prev) => ({
+                                                        ...prev,
+                                                        city: selected?.value || '',
+                                                    }))
+                                                }
+                                            />
                                         </div>
                                         <div className="alt-popup-field">
                                             <label>Postal Code:</label>
                                             <input type="text" name="postal_code" value={formData1?.postal_code} onChange={handleChange1} className="alt-popup-input" />
                                         </div>
                                         <div className="alt-popup-field">
-                                            <label>Country:</label>
-                                            <input type="text" name="country" value={formData1?.country} onChange={handleChange1} className="alt-popup-input" />
-                                        </div>
-                                        <div className="alt-popup-field">
                                             <label>Email:</label>
                                             <input type="email" name="email" value={formData1?.email} onChange={handleChange1} className="alt-popup-input" />
+                                            {errors.email && <p style={{ color: "red" }} className="error-text">{errors.email}</p>}
                                         </div>
                                         <div className="alt-popup-field">
                                             <label>Website:</label>
                                             <input type="text" name="website" value={formData1?.website} onChange={handleChange1} className="alt-popup-input" />
+                                            {errors.website && <p style={{ color: "red" }} className="error-text">{errors.website}</p>}
                                         </div>
                                     </div>
                                     <div className="alt-popup-buttons">
@@ -443,14 +1244,13 @@ export default function myprofile(pageProp) {
                                         alt_contact_infos[0]?.seasonal}</div>
                                     <div><strong className="lable1">Address :</strong> {memberships[0]?.user.
                                         alt_contact_infos[0]?.address} <span onClick={handleEditClick} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div>
-                                    <div>
-                                        <div><strong className="lable1">From:</strong>{memberships[0]?.user.
-                                            alt_contact_infos[0]?.from_day_month} {memberships[0]?.user.
-                                                alt_contact_infos[0]?.from_year} </div>
-                                        <div><strong className="lable1">To:</strong> {memberships[0]?.user.
-                                            alt_contact_infos[0]?.to_day_month} {memberships[0]?.user.
-                                                alt_contact_infos[0]?.to_year}</div>
-                                    </div>
+
+                                    <div><strong className="lable1">From:</strong> {memberships[0]?.user.
+                                        alt_contact_infos[0]?.from_year} {memberships[0]?.user.
+                                            alt_contact_infos[0]?.from_day_month} </div>
+                                    <div><strong className="lable1">To:</strong>  {memberships[0]?.user.
+                                        alt_contact_infos[0]?.to_year} {memberships[0]?.user.
+                                            alt_contact_infos[0]?.to_day_month}</div>
 
                                     <div><strong className="lable1">Phone:</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.phone}</div>
@@ -464,10 +1264,11 @@ export default function myprofile(pageProp) {
                                     <div><strong className="lable1">Preferred #:</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.preferred}</div>
                                     <div><strong className="lable1">State / Province:</strong>{memberships[0]?.user.
-                                        alt_contact_infos[0]?.city}</div>
+                                        alt_contact_infos[0]?.state}</div>
                                     <div><strong className="lable1">Postal Code:</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.postal_code}</div>
-                                    <div><strong className="lable1">Country:</strong> No</div>
+                                    <div><strong className="lable1">Country:</strong>{memberships[0]?.user.
+                                        alt_contact_infos[0]?.country}</div>
                                     <div><strong className="lable1">Email:</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.email}</div>
                                 </div>
@@ -492,29 +1293,59 @@ export default function myprofile(pageProp) {
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>From Year:</label>
-                                            <input
+                                            <label>From Month:</label>
+                                            {/* <input
                                                 type="text"
                                                 name="from_year"
                                                 value={formData.from_year}
                                                 onChange={handleChange}
                                                 className="alt-popup-input"
-                                            />
+                                            /> */}
+                                            <select name="from_year" onChange={handleChange} value={formData?.from_year} className="alt-popup-input">
+                                                <option></option>
+                                                <option>January</option>
+                                                <option>February</option>
+                                                <option>March</option>
+                                                <option>April</option>
+                                                <option>May</option>
+                                                <option>June</option>
+                                                <option>July</option>
+                                                <option>August</option>
+                                                <option>September</option>
+                                                <option>October</option>
+                                                <option>November</option>
+                                                <option>December</option>
+                                            </select>
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>To Year:</label>
-                                            <input
+                                            <label>To Month:</label>
+                                            {/* <input
                                                 type="text"
                                                 name="to_year"
                                                 value={formData.to_year}
                                                 onChange={handleChange}
                                                 className="alt-popup-input"
-                                            />
+                                            /> */}
+                                            <select className="alt-popup-input" name="to_year" value={formData?.to_year} onChange={handleChange}>
+                                                <option></option>
+                                                <option>January</option>
+                                                <option>February</option>
+                                                <option>March</option>
+                                                <option>April</option>
+                                                <option>May</option>
+                                                <option>June</option>
+                                                <option>July</option>
+                                                <option>August</option>
+                                                <option>September</option>
+                                                <option>October</option>
+                                                <option>November</option>
+                                                <option>December</option>
+                                            </select>
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>From Day/Month:</label>
+                                            <label>From Day:</label>
                                             <input
                                                 type="text"
                                                 name="from_day_month"
@@ -522,10 +1353,11 @@ export default function myprofile(pageProp) {
                                                 onChange={handleChange}
                                                 className="alt-popup-input"
                                             />
+                                            {errors1.from_day_month && <p style={{ color: "red" }} className="error-text">{errors1.from_day_month}</p>}
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>To Day/Month:</label>
+                                            <label>To Day:</label>
                                             <input
                                                 type="text"
                                                 name="to_day_month"
@@ -533,39 +1365,71 @@ export default function myprofile(pageProp) {
                                                 onChange={handleChange}
                                                 className="alt-popup-input"
                                             />
+                                            {errors1.to_day_month && <p style={{ color: "red" }} className="error-text">{errors1.to_day_month}</p>}
                                         </div>
 
                                         <div className="alt-popup-field">
                                             <label>Phone:</label>
-                                            <input
+                                            {/* <input
                                                 type="text"
                                                 name="phone"
                                                 value={formData.phone}
                                                 onChange={handleChange}
                                                 className="alt-popup-input"
+                                            /> */}
+                                            <PhoneInput
+                                                className="test_inpuy"
+                                                country={'us'}
+                                                value={formData.phone}
+                                                onChange={handlePhoneChange3}
+                                                //  className="nameform-input"
+                                                inputProps={{
+                                                    name: 'phone',
+                                                    required: true,
+                                                    autoFocus: false,
+                                                }}
+                                                countryCodeEditable={false}
                                             />
                                         </div>
 
                                         <div className="alt-popup-field">
                                             <label>Int'l Phone:</label>
-                                            <input
+                                            {/* <input
                                                 type="text"
                                                 name="intl_phone"
                                                 value={formData.intl_phone}
                                                 onChange={handleChange}
                                                 className="alt-popup-input"
+                                            /> */}
+                                            <PhoneInput
+                                                className="test_inpuy"
+                                                country={'us'}
+                                                value={formData.intl_phone}
+                                                onChange={handlePhoneChange4}
+                                                //  className="nameform-input"
+                                                inputProps={{
+                                                    name: 'intl_phone',
+                                                    required: true,
+                                                    autoFocus: false,
+                                                }}
+                                                countryCodeEditable={false}
                                             />
                                         </div>
 
                                         <div className="alt-popup-field">
                                             <label>Preferred #:</label>
-                                            <input
+                                            {/* <input
                                                 type="text"
                                                 name="preferred"
                                                 value={formData.preferred}
                                                 onChange={handleChange}
                                                 className="alt-popup-input"
-                                            />
+                                            /> */}
+                                            <select name="preferred" value={formData?.preferred} onChange={handleChange} className="alt-popup-input">
+                                                <option>Select Preferred</option>
+                                                <option>Phone</option>
+                                                <option>Int'l Phone</option>
+                                            </select>
                                         </div>
 
                                         <div className="alt-popup-field">
@@ -591,26 +1455,87 @@ export default function myprofile(pageProp) {
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>City:</label>
-                                            <input
+                                            <label>Country:</label>
+                                            {/* <input
                                                 type="text"
-                                                name="city"
-                                                value={formData.city}
+                                                name="country"
+                                                value={formData.country}
                                                 onChange={handleChange}
                                                 className="alt-popup-input"
+                                            /> */}
+                                            <CreatableSelect
+                                                placeholder="Select or type country"
+                                                options={toOptions1(countries1)}
+                                                value={
+                                                    formData.country
+                                                        ? { label: formData.country, value: formData.country }
+                                                        : null
+                                                }
+                                                onChange={(selected) =>
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        country: selected?.value || '',
+                                                        state: '',
+                                                        city: '',
+                                                    }))
+                                                }
                                             />
                                         </div>
 
                                         <div className="alt-popup-field">
                                             <label>State / Province:</label>
-                                            <input
+                                            {/* <input
                                                 type="text"
                                                 name="state"
                                                 value={formData.state}
                                                 onChange={handleChange}
                                                 className="alt-popup-input"
+                                            /> */}
+                                            <CreatableSelect
+                                                placeholder="Select or type state"
+                                                options={toOptions1(states1)}
+                                                value={
+                                                    formData.state
+                                                        ? { label: formData.state, value: formData.state }
+                                                        : null
+                                                }
+                                                onChange={(selected) =>
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        state: selected?.value || '',
+                                                        city: '',
+                                                    }))
+                                                }
                                             />
                                         </div>
+
+                                        <div className="alt-popup-field">
+                                            <label>City:</label>
+                                            {/* <input
+                                                type="text"
+                                                name="city"
+                                                value={formData.city}
+                                                onChange={handleChange}
+                                                className="alt-popup-input"
+                                            /> */}
+                                            <CreatableSelect
+                                                placeholder="Select or type city"
+                                                options={toOptions1(cities1)}
+                                                value={
+                                                    formData.city
+                                                        ? { label: formData.city, value: formData.city }
+                                                        : null
+                                                }
+                                                onChange={(selected) =>
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        city: selected?.value || '',
+                                                    }))
+                                                }
+                                            />
+                                        </div>
+
+
 
                                         <div className="alt-popup-field">
                                             <label>Postal Code:</label>
@@ -632,6 +1557,7 @@ export default function myprofile(pageProp) {
                                                 onChange={handleChange}
                                                 className="alt-popup-input"
                                             />
+                                            {errors1.email && <p style={{ color: "red" }} className="error-text">{errors1.email}</p>}
                                         </div>
                                     </div>
 
@@ -649,6 +1575,139 @@ export default function myprofile(pageProp) {
                                 <div className="grid-2col">
                                     <div><strong className="lable1">Company Name:</strong></div>
                                 </div>
+                            </div>
+                        }
+                        {
+                            activeTab === "Surnames" &&
+                            <div className="st-table-wrapper">
+                                <div className="st-add-button-container">
+                                    <button style={{ color: "white" }} className="st-add-button" onClick={handleAddClick}>Add</button>
+                                </div>
+
+                                {showModal && (
+                                    <div className="st-modal-overlay">
+                                        <div className="st-modal">
+                                            <h3 className="st-modal-title">{isEditMode ? "Update New Surname" : "Add New Surname"}</h3>
+                                            <div className="st-form-modal">
+                                                <div style={{ width: "100%" }}>
+                                                    <input name="surname" placeholder="Surname" value={form.surname} onChange={handleChangeform} />
+                                                    {errors2.surname && <p style={{ color: "red" }} className="error-text">{errors2.surname}</p>}
+                                                </div>
+                                                <input name="county" placeholder="County" value={form.county} onChange={handleChangeform} />
+
+                                                {/* <input name="country" placeholder="Country" value={form.country} onChange={handleChangeform} /> */}
+                                                <CreatableSelect
+                                                    placeholder="Select or type country"
+                                                    options={toOptions2(countries2)}
+                                                    value={
+                                                        form.country
+                                                            ? { label: form.country, value: form.country }
+                                                            : null
+                                                    }
+                                                    onChange={(selected) =>
+                                                        setForm((prev) => ({
+                                                            ...prev,
+                                                            country: selected?.value || '',
+                                                            state: '',
+                                                            city: '',
+                                                        }))
+                                                    }
+                                                />
+                                                {/* <input name="state" placeholder="State" value={form.state} onChange={handleChangeform} /> */}
+                                                <CreatableSelect
+                                                    placeholder="Select or type state"
+                                                    options={toOptions2(states2)}
+                                                    value={
+                                                        form.state
+                                                            ? { label: form.state, value: form.state }
+                                                            : null
+                                                    }
+                                                    onChange={(selected) =>
+                                                        setForm((prev) => ({
+                                                            ...prev,
+                                                            state: selected?.value || '',
+                                                            city: '',
+                                                        }))
+                                                    }
+                                                />
+                                                {/* <input name="city" placeholder="City" value={form.city} onChange={handleChangeform} /> */}
+                                                <CreatableSelect
+                                                    placeholder="Select or type city"
+                                                    options={toOptions2(cities2)}
+                                                    value={
+                                                        form.city
+                                                            ? { label: form.city, value: form.city }
+                                                            : null
+                                                    }
+                                                    onChange={(selected) =>
+                                                        setForm((prev) => ({
+                                                            ...prev,
+                                                            city: selected?.value || '',
+                                                        }))
+                                                    }
+                                                />
+                                                <div style={{ width: "100%" }}>
+                                                    <input name="start_year" placeholder="Start Year" value={form.start_year} onChange={handleChangeform} />
+                                                    {errors2.start_year && <p style={{ color: "red" }} className="error-text">{errors2.start_year}</p>}
+                                                </div>
+                                                <div style={{ width: "100%" }}>
+                                                    <input name="end_year" placeholder="End Year" value={form.end_year} onChange={handleChangeform} />
+                                                    {errors2.end_year && <p style={{ color: "red" }} className="error-text">{errors2.end_year}</p>}
+                                                </div>
+                                                <input name="alt_spelling" placeholder="Alt Spelling" value={form.alt_spelling} onChange={handleChangeform} />
+                                                {/* <input name="commant" placeholder="Comment" value={form.commant} onChange={handleChangeform} /> */}
+                                                <div>
+                                                    <textarea style={{ height: "80px" }} value={form?.commant} name="commant" onChange={handleChangeform}></textarea>
+                                                </div>
+                                                <div className="st-modal-buttons">
+                                                    <button onClick={handleAdd} className="st-save-btn">{isEditMode ? "Update" : "Save"}</button>
+                                                    <button onClick={() => setShowModal(false)} className="st-cancel-btn">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <table className="st-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Actions</th>
+                                            <th>Surname</th>
+                                            <th>City</th>
+                                            <th>County</th>
+                                            <th>State</th>
+                                            <th>Country</th>
+                                            <th>Start Year</th>
+                                            <th>End Year</th>
+                                            <th>Alt Spelling</th>
+                                            <th>Comment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {memberships[0]?.user?.surnames.map((entry, index) => (
+                                            <tr key={index}>
+                                                <td className="st-actions-cell">
+                                                    <button onClick={() => {
+                                                        setForm(entry); // Prefill the form with current row data
+                                                        setEditId(entry.id); // Set ID for PUT
+                                                        setIsEditMode(true); // Mark as edit mode
+                                                        setShowModal(true); // Open modal
+                                                    }} className="st-edit-btn">✏️</button>
+                                                    <button onClick={() => handleDelete(entry.id)} className="st-delete-btn">🗑️</button>
+                                                </td>
+                                                <td>{entry.surname}</td>
+                                                <td>{entry.city}</td>
+                                                <td>{entry.county}</td>
+                                                <td>{entry.state}</td>
+                                                <td>{entry.country}</td>
+                                                <td>{entry.start_year}</td>
+                                                <td>{entry.end_year}</td>
+                                                <td>{entry.alt_spelling}</td>
+                                                <td>{entry.commant}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         }
                         {
@@ -674,28 +1733,148 @@ export default function myprofile(pageProp) {
                                     <div className="card-row">
                                         <div className="card">
                                             <div className="grid-2col">
-                                                <div><strong className="lable1">Show Name :</strong> Yes</div>
-                                                <div><strong className="lable1">Address :</strong> Yes <span className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div>
-                                                <div><strong className="lable1">Telephone :</strong> Yes</div>
-                                                <div><strong className="lable1">Email Address :</strong> Yes</div>
-                                                <div><strong className="lable1">Website :</strong> Yes</div>
-                                                <div><strong className="lable1">Photo :</strong> No</div>
+                                                <div><strong className="lable1">Show Name :</strong>{data1?.show_name === true ? "yes" : "No"}</div>
+                                                <div><strong className="lable1">Address :</strong>{data1?.address === true ? "Yes" : "No"}<span onClick={openMembershipEditPopup} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div>
+                                                <div><strong className="lable1">Telephone :</strong>{data1?.
+                                                    telephone === true ? "Yes" : "No"
+                                                }</div>
+                                                <div><strong className="lable1">Email Address :</strong>{data1?.
+                                                    email_address === true ? "Yes" : "No"
+                                                }</div>
+                                                <div><strong className="lable1">Website :</strong>{data1?.
+                                                    website === true ? "Yes" : "No"
+                                                }</div>
+                                                <div><strong className="lable1">Photo :</strong>{data1?.photo === true ? "Yes" : "No"}</div>
                                             </div>
                                         </div>
 
                                         <div className="card card11">
                                             <h2 className="section-title">Receive Email Now :</h2>
                                             <div className="grid-2col grid-2col11">
-                                                <div><strong className="lable1">General Notices :</strong> Yes <span className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" alt="" /></span></div>
-                                                <div><strong className="lable1">Event Reminders :</strong> Yes</div>
-                                                <div><strong className="lable1">News Letters :</strong> Yes</div>
-                                                <div><strong className="lable1">Surname Inquiries :</strong> Yes</div>
+                                                <div><strong className="lable1">General Notices :</strong>{data1?.
+                                                    general_notices === true ? "yes" : "No"} <span onClick={openMembershipEditPopup1} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" alt="" /></span></div>
+                                                <div><strong className="lable1">Event Reminders :</strong> {data1?.
+                                                    general_notices === true ? "yes" : "No"}</div>
+                                                <div><strong className="lable1">News Letters :</strong>{data1?.
+                                                    newsletters === true ? "yes" : "No"
+                                                }</div>
+                                                <div><strong className="lable1">Surname Inquiries :</strong> {data1?.surname_inquiries === true ? "Yes" : "No"
+                                                }</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         }
+                        {/* {showMembershipPopup && (
+                            <div className="popup">
+                                <h3>Membership List</h3>
+                                <label><input type="checkbox" name="show_name" checked={formData.show_name} onChange={handleCheckboxChange} /> Show Name</label>
+                                <label><input type="checkbox" name="address" checked={formData.address} onChange={handleCheckboxChange} /> Address</label>
+                                <label><input type="checkbox" name="telephone" checked={formData.telephone} onChange={handleCheckboxChange} /> Telephone</label>
+                                <label><input type="checkbox" name="email_address" checked={formData.email_address} onChange={handleCheckboxChange} /> Email Address</label>
+                                <label><input type="checkbox" name="website" checked={formData.website} onChange={handleCheckboxChange} /> Website</label>
+                                <label><input type="checkbox" name="photo" checked={formData.photo} onChange={handleCheckboxChange} /> Photo</label>
+                                <button onClick={handleSubmit}>Save</button>
+                            </div>
+                        )}
+
+                        {showEmailPopup && (
+                            <div className="popup">
+                                <h3>Receive Email Now</h3>
+                                <label><input type="checkbox" name="general_notices" checked={formData.general_notices} onChange={handleCheckboxChange} /> General Notices</label>
+                                <label><input type="checkbox" name="event_reminders" checked={formData.event_reminders} onChange={handleCheckboxChange} /> Event Reminders</label>
+                                <label><input type="checkbox" name="newsletters" checked={formData.newsletters} onChange={handleCheckboxChange} /> News Letters</label>
+                                <label><input type="checkbox" name="surname_inquiries" checked={formData.surname_inquiries} onChange={handleCheckboxChange} /> Surname Inquiries</label>
+                                <button onClick={handleSubmit}>Save</button>
+                            </div>
+                        )} */}
+                        {showMembershipPopup && (
+                            <div className="popup-overlay" onClick={() => setShowMembershipPopup(false)}>
+                                <div
+                                    className="popup-content"
+                                    onClick={(e) => e.stopPropagation()} // click overlay pe close, content pe nahi
+                                >
+                                    <h3>Edit Membership Settings</h3>
+
+                                    <form>
+                                        {Object.keys(defaultSettings)
+                                            .filter((key) => !excludeKeys.includes(key))
+                                            .map((key) => (
+                                                <label key={key} className="checkbox-label">
+                                                    <input
+                                                        type="checkbox"
+                                                        name={key}
+                                                        checked={formData3[key]}
+                                                        onChange={handleCheckboxChange}
+                                                        className="checkbox-input"
+                                                    />
+                                                    {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                                                </label>
+                                            ))}
+
+                                        <div className="popup-buttons">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowMembershipPopup(false)}
+                                                className="btn btn-cancel"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={handleSubmit}
+                                                className="btn btn-save"
+                                            >
+                                                Save
+                                            </button>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        )}
+
+                        {showSpecialPopup && (
+                            <div className="popup-overlay" onClick={() => setShowSpecialPopup(false)}>
+                                <div
+                                    className="popup-content"
+                                    onClick={(e) => e.stopPropagation()} // overlay click pe close, content pe nahi
+                                >
+                                    <h3>Recieve Email Now</h3>
+                                    <form>
+                                        {specialKeys.map((key) => (
+                                            <label key={key} className="checkbox-label">
+                                                <input
+                                                    type="checkbox"
+                                                    name={key}
+                                                    checked={formData3[key]}
+                                                    onChange={handleCheckboxChange}
+                                                    className="checkbox-input"
+                                                />
+                                                {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                                            </label>
+                                        ))}
+
+                                        <div className="popup-buttons">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowSpecialPopup(false)}
+                                                className="btn btn-cancel"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button type="button" onClick={handleSubmit} className="btn btn-save">
+                                                Save
+                                            </button>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
+
                     </div>
                 </div>
             </div>
