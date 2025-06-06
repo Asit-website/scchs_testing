@@ -932,8 +932,118 @@ export default function myprofile(pageProp) {
     //   setShowMembershipPopup(true);
     // };
 
+    // const [showPopup, setShowPopup] = useState(false);
 
+    // const [loginName, setLoginName] = useState(memberships[0]?.user?.username || "");
+    // const [newLoginName, setNewLoginName] = useState("");
 
+    // const handleEditClick11 = () => {
+    //     setNewLoginName(loginName);
+    //     setShowPopup(true);
+    // };
+
+    // const handleSubmit11 = async () => {
+    //     try {
+    //         const res = await fetch("https://admin.scchs.co.in/api/login-name-update", {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 'Authorization': `Bearer ${JSON.parse(localStorage.getItem("scchs_Access"))}`
+    //             },
+    //             body: JSON.stringify({
+    //                 username: newLoginName,
+    //                 id: memberships[0]?.user?.id, // API ke hisaab se ID bhej rahe
+    //             }),
+    //         });
+
+    //         if (!res.ok) throw new Error("Network response was not ok");
+
+    //         const result = await res.json();
+    //         toast.success(result?.message);
+    //         setLoginName(newLoginName);
+    //         setShowPopup(false);
+    //     } catch (err) {
+    //         console.error("Error:", err);
+    //         alert("Failed to update login name.");
+    //     }
+    // };
+
+    const [showPopup, setShowPopup] = useState(false);
+    const [newLoginName, setNewLoginName] = useState("");
+
+    const currentLoginName = memberships[0]?.user?.username || "";
+
+    const handleEditClick11 = () => {
+        setNewLoginName(currentLoginName);
+        setShowPopup(true);
+    };
+
+    const handleSubmit11 = async () => {
+        try {
+            const res = await fetch("https://admin.scchs.co.in/api/login-name-update", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${JSON.parse(localStorage.getItem("scchs_Access"))}`
+                },
+                body: JSON.stringify({
+                    username: newLoginName,
+                    id: memberships[0]?.user?.id,
+                }),
+            });
+
+            if (!res.ok) throw new Error("Network error");
+
+            Swal.fire('Success', 'Settings updated successfully', 'success');
+            window.location.href = "/member/myprofile";
+
+            // await refreshMemberships(); // refresh memberships from backend
+            setShowPopup(false);
+        } catch (err) {
+            console.error("Error:", err);
+            alert("Failed to update login name.");
+        }
+    };
+
+    // ===================password reset============
+    const [showPopup1, setShowPopup1] = useState(false);
+    const [password, setPassword] = useState("");
+
+    const handleEditClick22 = () => {
+        setPassword(""); // input box empty rahe
+        setShowPopup1(true);
+    };
+
+    const handleSubmit22 = async () => {
+        const passwordRegex = /^(?=[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+        if (!passwordRegex.test(password)) {
+            // alert("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
+            Swal.fire('Error', 'Password must start with a capital letter, include a special character, and be at least 8 characters long.', 'error');
+            return;
+        }
+
+        try {
+            const res = await fetch("https://admin.scchs.co.in/api/login-password-update", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${JSON.parse(localStorage.getItem("scchs_Access"))}`
+                },
+                body: JSON.stringify({
+                    new_password: password, // ✅ correct payload key
+                    id: userId,
+                }),
+            });
+
+            if (!res.ok) throw new Error("Network error");
+
+            setShowPopup1(false);
+            Swal.fire('Success', 'Settings updated successfully', 'success');
+        } catch (err) {
+            console.error("Error:", err);
+            alert("Failed to update password.");
+        }
+    };
 
     return (
         <div className="page_shopping_list sop">
@@ -1717,48 +1827,87 @@ export default function myprofile(pageProp) {
                                     <div className="site-access-grid">
                                         <div className="access-box">
                                             <span className="label">Login Name :</span>
-                                            <span className="value">GWalker  <span className="edit-icon"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" alt="" /></span></span>
+                                            <span className="value">{currentLoginName}<span onClick={handleEditClick11} className="edit-icon"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" alt="" /></span></span>
 
                                         </div>
                                         <div className="access-box">
                                             <span className="label">Password :</span>
-                                            <span className="value">Null  <span className="edit-icon"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" alt="" /></span></span>
+                                            <span className="value">Null  <span onClick={handleEditClick22} className="edit-icon"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" alt="" /></span></span>
 
                                         </div>
                                     </div>
                                 </div>
+
+                                {showPopup && (
+                                    <div className="site-access-popup-overlay-unique">
+                                        <div className="site-access-popup-box-unique">
+                                            <h3>Edit Login Name</h3>
+                                            <input
+                                                type="text"
+                                                value={newLoginName}
+                                                onChange={(e) => setNewLoginName(e.target.value)}
+                                            />
+                                            <div className="site-access-popup-actions-unique">
+                                                <button onClick={handleSubmit11}>Save</button>
+                                                <button onClick={() => setShowPopup(false)}>Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* ===========reset password======== */}
+
+                                {showPopup1 && (
+                                    <div className="password-popup-overlay-unique">
+                                        <div className="password-popup-box-unique">
+                                            <h3>Set New Password</h3>
+                                            <input
+                                                type="password"
+                                                placeholder="Enter new password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                            />
+                                            <div className="password-popup-actions-unique">
+                                                <button onClick={handleSubmit22}>Save</button>
+                                                <button onClick={() => setShowPopup1(false)}>Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="card-section">
                                     <h2 className="section-title">Membership List :</h2>
                                     <div className="card-row">
                                         <div className="card">
                                             <div className="grid-2col">
-                                                <div><strong className="lable1">Show Name :</strong>{data1?.show_name === true ? "yes" : "No"}</div>
-                                                <div><strong className="lable1">Address :</strong>{data1?.address === true ? "Yes" : "No"}<span onClick={openMembershipEditPopup} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div>
-                                                <div><strong className="lable1">Telephone :</strong>{data1?.
-                                                    telephone === true ? "Yes" : "No"
+                                                <div><strong className="lable1">Show Name :</strong>{memberships[0]?.user.
+                                                    member_settings[0].show_name === 1 ? "Yes" : "No"}</div>
+                                                <div><strong className="lable1">Address :</strong>{memberships[0]?.user?.member_settings[0]?.address === 1 ? "Yes" : "No"}<span onClick={openMembershipEditPopup} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div>
+                                                <div><strong className="lable1">Telephone :</strong>{memberships[0]?.user?.member_settings[0]?.
+                                                    telephone === 1 ? "Yes" : "No"
                                                 }</div>
-                                                <div><strong className="lable1">Email Address :</strong>{data1?.
-                                                    email_address === true ? "Yes" : "No"
+                                                <div><strong className="lable1">Email Address :</strong>{memberships[0]?.user?.member_settings[0]?.
+                                                    email_address === 1 ? "Yes" : "No"
                                                 }</div>
-                                                <div><strong className="lable1">Website :</strong>{data1?.
-                                                    website === true ? "Yes" : "No"
+                                                <div><strong className="lable1">Website :</strong>{memberships[0]?.user?.member_settings[0].
+                                                    website === 1 ? "Yes" : "No"
                                                 }</div>
-                                                <div><strong className="lable1">Photo :</strong>{data1?.photo === true ? "Yes" : "No"}</div>
+                                                <div><strong className="lable1">Photo :</strong>{memberships[0]?.user?.member_settings[0]?.photo === 1 ? "Yes" : "No"}</div>
                                             </div>
                                         </div>
 
                                         <div className="card card11">
                                             <h2 className="section-title">Receive Email Now :</h2>
                                             <div className="grid-2col grid-2col11">
-                                                <div><strong className="lable1">General Notices :</strong>{data1?.
-                                                    general_notices === true ? "yes" : "No"} <span onClick={openMembershipEditPopup1} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" alt="" /></span></div>
-                                                <div><strong className="lable1">Event Reminders :</strong> {data1?.
-                                                    event_reminders === true ? "yes" : "No"}</div>
-                                                <div><strong className="lable1">News Letters :</strong>{data1?.
-                                                    newsletters === true ? "yes" : "No"
+                                                <div><strong className="lable1">General Notices :</strong>{memberships[0]?.user?.member_settings[0]?.
+                                                    general_notices === 1 ? "Yes" : "No"} <span onClick={openMembershipEditPopup1} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" alt="" /></span></div>
+                                                <div><strong className="lable1">Event Reminders :</strong> {memberships[0]?.user?.member_settings[0]?.
+                                                    event_reminders === 1 ? "Yes" : "No"}</div>
+                                                <div><strong className="lable1">News Letters :</strong>{memberships[0]?.user?.member_settings[0]?.
+                                                    newsletters === 1 ? "Yes" : "No"
                                                 }</div>
-                                                <div><strong className="lable1">Surname Inquiries :</strong> {data1?.surname_inquiries === true ? "Yes" : "No"
+                                                <div><strong className="lable1">Surname Inquiries :</strong> {data1?.surname_inquiries
+                                                    === true ? "Yes" : "No"
                                                 }</div>
                                             </div>
                                         </div>
