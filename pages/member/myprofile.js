@@ -1754,7 +1754,7 @@ export default function myprofile(pageProp) {
                                                 <div><strong className="lable1">General Notices :</strong>{data1?.
                                                     general_notices === true ? "yes" : "No"} <span onClick={openMembershipEditPopup1} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" alt="" /></span></div>
                                                 <div><strong className="lable1">Event Reminders :</strong> {data1?.
-                                                    general_notices === true ? "yes" : "No"}</div>
+                                                    event_reminders === true ? "yes" : "No"}</div>
                                                 <div><strong className="lable1">News Letters :</strong>{data1?.
                                                     newsletters === true ? "yes" : "No"
                                                 }</div>
