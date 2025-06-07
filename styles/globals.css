@@ -11792,7 +11792,12 @@ label {
   }
 }
 /* =======================our business friend css end=========== */
-
+.pagination-settings{
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin: 20px 0px;
+}
 /* ≤ 1224px: just constrain max-width and padding */
 @media (max-width: 1224px) {
 

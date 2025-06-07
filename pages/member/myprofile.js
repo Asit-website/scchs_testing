@@ -1847,7 +1847,7 @@ export default function myprofile(pageProp) {
                                                 value={newLoginName}
                                                 onChange={(e) => setNewLoginName(e.target.value)}
                                             />
-                                            <div className="site-access-popup-actions-unique">
+                                            <div className="password-popup-actions-unique">
                                                 <button onClick={handleSubmit11}>Save</button>
                                                 <button onClick={() => setShowPopup(false)}>Cancel</button>
                                             </div>

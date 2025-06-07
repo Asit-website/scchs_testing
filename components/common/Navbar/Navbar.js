@@ -630,6 +630,16 @@ export default function Navbar(props) {
     }
 
 
+    const [query, setQuery] = useState("");
+    const router = useRouter();
+
+
+    const handleSearch = async (e) => {
+      e.preventDefault();
+      if (!query.trim()) return;
+      router.push(`/search?query=${encodeURIComponent(query.trim())}`);
+    };
+
 
 
     return (
@@ -773,9 +783,10 @@ export default function Navbar(props) {
                 <Link href="/contact-us">Contact us</Link>
               </li>
               <div className="scchs_searchbar">
-                <form>
-                  <input placeholder="Search" name="search" />
-                  <button><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <form onSubmit={handleSearch}>
+                  <input value={query}
+                    onChange={(e) => setQuery(e.target.value)} placeholder="Search" />
+                  <button type="submit" ><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M14.7547 13.7078V13.9149L14.9012 14.0614L19.4113 18.5713L18.5724 19.4111L14.0604 14.9006L13.7497 14.59L13.4017 14.8581C11.7892 16.1004 9.76435 16.6824 7.73832 16.4858C5.71229 16.2893 3.83703 15.329 2.49341 13.7999C1.14979 12.2709 0.438561 10.2878 0.504167 8.25341C0.569772 6.21901 1.40729 4.28585 2.84664 2.84656C4.28598 1.40727 6.21921 0.56977 8.2537 0.504166C10.2882 0.438563 12.2714 1.14977 13.8005 2.49335C15.3295 3.83692 16.2899 5.7121 16.4864 7.73805C16.683 9.764 16.101 11.7888 14.8587 13.4012L14.7547 13.5361V13.7064V13.7078ZM18.724 19.5626L18.7236 19.5622C18.7238 19.5625 18.724 19.5627 18.7242 19.5629L18.724 19.5626ZM8.50489 15.9684C9.48508 15.9684 10.4557 15.7753 11.3612 15.4002C12.2668 15.0251 13.0897 14.4754 13.7828 13.7823C14.4759 13.0892 15.0257 12.2664 15.4008 11.3609C15.7759 10.4553 15.9689 9.48475 15.9689 8.50459C15.9689 7.52443 15.7759 6.55386 15.4008 5.64831C15.0257 4.74276 14.4759 3.91996 13.7828 3.22688C13.0897 2.53381 12.2668 1.98403 11.3612 1.60894C10.4557 1.23385 9.48508 1.04079 8.50489 1.04079C6.52531 1.04079 4.6268 1.82715 3.22702 3.22688C1.82724 4.62661 1.04085 6.52506 1.04085 8.50459C1.04085 10.4841 1.82724 12.3826 3.22702 13.7823C4.6268 15.182 6.52531 15.9684 8.50489 15.9684Z" fill="#FD605D" stroke="white" />
                   </svg>
                   </button>
@@ -847,13 +858,13 @@ export default function Navbar(props) {
                 }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
               </li>
               <li>
-               <Link href={"/storeorder"}><div className="cart-container">
+                <Link href={"/storeorder"}><div className="cart-container">
                   {/* <svg className="cart-icon" viewBox="0 0 24 24" fill="none">
                     <path d="M6 6h15l-1.5 9h-13z" stroke="black" strokeWidth="2" />
                     <circle cx="9" cy="21" r="1" fill="black" />
                     <circle cx="18" cy="21" r="1" fill="black" />
                   </svg> */}
-                  <ShoppingCart/>
+                  <ShoppingCart />
                   {countCart > 0 && <span className="cart-count">{countCart}</span>}
 
                 </div></Link>
@@ -1081,19 +1092,19 @@ export default function Navbar(props) {
                 )}
               </li>
             ))}
-          
-               <Link style={{marginLeft:"auto"}} href={"/storeorder"}><div className="cart-container">
-                  {/* <svg className="cart-icon" viewBox="0 0 24 24" fill="none">
+
+            <Link style={{ marginLeft: "auto" }} href={"/storeorder"}><div className="cart-container">
+              {/* <svg className="cart-icon" viewBox="0 0 24 24" fill="none">
                     <path d="M6 6h15l-1.5 9h-13z" stroke="black" strokeWidth="2" />
                     <circle cx="9" cy="21" r="1" fill="black" />
                     <circle cx="18" cy="21" r="1" fill="black" />
                   </svg> */}
-                  <ShoppingCart/>
-                  
-                  {countCart > 0 && <span className="cart-count">{countCart}</span>}
+              <ShoppingCart />
 
-                </div></Link>
-                <style jsx>{`
+              {countCart > 0 && <span className="cart-count">{countCart}</span>}
+
+            </div></Link>
+            <style jsx>{`
   .cart-container {
     position: relative;
     top:11px !important;
@@ -1122,13 +1133,13 @@ export default function Navbar(props) {
     font-weight: bold;
   }
                     `}</style>
-           
+
             <li className="nav-signin">
               <Link href="/user/userlogin">
                 <button className="signin-btn">SIGN IN</button>
               </Link>
             </li>
-            
+
 
           </ul>
         </div>

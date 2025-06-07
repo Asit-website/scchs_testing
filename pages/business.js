@@ -22,7 +22,10 @@ export default function business(pageProp) {
     const [businesses, setBusinesses] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [timeframe, setTimeframe] = useState("all");
+
+
+
 
     useEffect(() => {
         const fetchBusinesses = async () => {
@@ -53,9 +56,41 @@ export default function business(pageProp) {
         fetchCategories();
     }, []);
 
-    const filtered = selectedCategory
-        ? businesses.filter((biz) => biz.category_id == selectedCategory)
-        : businesses;
+    const isWithinMonths = (dateString, months) => {
+        const created = new Date(dateString);
+        const now = new Date();
+        const pastDate = new Date();
+        pastDate.setMonth(now.getMonth() - months);
+        return created >= pastDate;
+    };
+
+    // const filtered = selectedCategory
+    //     ? businesses.filter((biz) => biz.category_id == selectedCategory)
+    //     : businesses;
+
+    const filtered = businesses.filter((biz) => {
+        const categoryMatch = selectedCategory ? biz.category_id == selectedCategory : true;
+
+        let timeframeMatch = true;
+        if (timeframe === "1") timeframeMatch = isWithinMonths(biz.created_at, 1);
+        else if (timeframe === "3") timeframeMatch = isWithinMonths(biz.created_at, 3);
+        else if (timeframe === "6") timeframeMatch = isWithinMonths(biz.created_at, 6);
+        else if (timeframe === "12") timeframeMatch = isWithinMonths(biz.created_at, 12);
+
+        return categoryMatch && timeframeMatch;
+    });
+
+    const [perPage, setPerPage] = useState(10); // default 10
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // Calculate page-wise data
+    const startIndex = (currentPage - 1) * perPage;
+    const endIndex = startIndex + perPage;
+    const paginatedBusinesses = filtered.slice(startIndex, endIndex);
+
+    // Total listings count
+    const totalListings = filtered.length;
+    const totalPages = Math.ceil(totalListings / perPage);
 
 
 
@@ -69,14 +104,30 @@ export default function business(pageProp) {
 
             <div className="event_system_main">
                 <div className="event_main">
+
+                    <div className="pagination-settings">
+                        <label>Listings Per Page:&nbsp;</label>
+                        <select value={perPage} onChange={(e) => {
+                            setPerPage(Number(e.target.value));
+                            setCurrentPage(1); // reset to page 1 on perPage change
+                        }}>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+
+
                     <div className="filters-left">
                         <div className="custom_drop">
+                            {/* <span>Filter by category</span> */}
                             <select
                                 className="dropdown"
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                             >
-                                <option value="">All</option>
+                                <option value="">Filter by category</option>
                                 {categories.map((cat) => (
                                     <option key={cat.id} value={cat.id}>
                                         {cat.name}
@@ -86,12 +137,17 @@ export default function business(pageProp) {
                             </select>
                         </div>
                         <div className="custom_drop">
-                            <select className="dropdown">
-                                <option>Timeframe</option>
-                                {/* <option value="all">All</option> */}
-                                <option value="today">Today</option>
-                                <option value="thisWeek">This Week</option>
-                                <option value="thisMonth">This Month</option>
+                            {/* <p>Filter by Timeframe</p> */}
+                            <select
+                                className="dropdown"
+                                value={timeframe}
+                                onChange={(e) => setTimeframe(e.target.value)}
+                            >
+                                <option value="all">Timeframe</option>
+                                <option value="1">Within 1 Month</option>
+                                <option value="3">Within 3 Months</option>
+                                <option value="6">Within 6 Months</option>
+                                <option value="12">Within 12 Months</option>
                             </select>
                         </div>
                     </div>
