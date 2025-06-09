@@ -116,7 +116,11 @@ export default function business(pageProp) {
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
+
                     </div>
+                    <p style={{textAlign:"right"}}>
+                        Listings: {startIndex + 1} to {Math.min(endIndex, totalListings)} of {totalListings}
+                    </p>
 
 
                     <div className="filters-left">
@@ -154,7 +158,7 @@ export default function business(pageProp) {
 
                     <div className="flying1-container">
                         {
-                            filtered?.map((item, index) => {
+                            paginatedBusinesses?.map((item, index) => {
                                 return <div key={index} className="flying1-box">
                                     {/* <div className="flying1-img">
                                     <img

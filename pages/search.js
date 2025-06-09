@@ -21,14 +21,14 @@ var settingsMorePhotos = {
 
 export default function business(pageProp) {
 
-      const { toggleBoolValue } = pageProp;
+    const { toggleBoolValue } = pageProp;
 
     const searchParams = useSearchParams();
     const query = searchParams.get("query");
     const [results, setResults] = useState({ products: [], businesses: [], events: [] });
     const [loading, setLoading] = useState(true);
 
-       const router = useRouter();
+    const router = useRouter();
 
     const formatTime = (timeStr) => {
         const [hour, minute] = timeStr.split(':');
@@ -60,29 +60,29 @@ export default function business(pageProp) {
     }, [query]);
 
     const addToCartApi = async (id) => {
-    
-            const resp = await fetch('https://admin.scchs.co.in/api/cart/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-                },
-                body: JSON.stringify({
-                    product_id: id,
-                    quantity: 1,
-                }),
+
+        const resp = await fetch('https://admin.scchs.co.in/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+            },
+            body: JSON.stringify({
+                product_id: id,
+                quantity: 1,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                toast.success(data?.message);
+                router.push("/storeorder");
+                toggleBoolValue();
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                    toast.success(data?.message);
-                    router.push("/storeorder");
-                    toggleBoolValue();
-                })
-                .catch(error => console.error('Error:', error));
-    
-            // alert(resp)
-        }
+            .catch(error => console.error('Error:', error));
+
+        // alert(resp)
+    }
 
     if (loading) return <p>Loading...</p>;
 
@@ -117,17 +117,18 @@ export default function business(pageProp) {
                                             <Link href={`/storedetail?id=${product?.slug}`}><img
                                                 className="custom-card-image"
                                                 // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
-                                                src={`https://admin.scchs.co.in//ecommerce/products/${product.image}`}
+                                                src={`https://admin.scchs.co.in//ecommerce/products/${product?.images[0]}`}
                                                 alt="Product"
                                             /></Link>
                                             <div className="custom-card-content">
                                                 <Link style={{ textDecoration: "none" }} href={`/storedetail?id=${product?.slug}`}>
-                                                    <h3 className="custom-card-title">{product.name}</h3></Link>
-                                                <p className="custom-card-subtitle">{product.short_description}</p>
+                                                    <h3 className="custom-card-title">{product.product_name}</h3></Link>
+                                                <p className="custom-card-subtitle">{product.product_specification}</p>
                                                 {/* <p className="custom-card-location">{product.location}</p> */}
                                                 {/* <p className="custom-card-location">MO 1918</p> */}
                                                 <p className="custom-card-updated">
-                                                    <span>Last Updated:</span> {product.updated_at}
+                                                    <span>Last Updated:</span> {new Date(product.updated_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }).replace(',', '').replace(' ', '-')}
+
                                                     {/* {product.updated} */}
 
                                                 </p>
@@ -179,6 +180,13 @@ export default function business(pageProp) {
                                     <div key={biz.id} className="p-4 border rounded mb-2">
                                         <h4 className="font-medium">{biz.title}</h4>
                                         <p dangerouslySetInnerHTML={{ __html: biz.description }} />
+                                        {
+                                        biz?.link && <div className="flying1-btn">
+                                            <a href={`${biz?.link ? biz.link : "#"}`} target="_blank" rel="noopener noreferrer">
+                                                View Website
+                                            </a>
+                                        </div>
+                                    }
                                     </div>
                                 ))}
                             </div>
