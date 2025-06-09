@@ -441,7 +441,7 @@ export default function Navbar(props) {
           },
           {
             title: "History of Our Building",
-            link: "/history-of-our-building"
+            link: "/history-of-0ur-building"
           },
           {
             title: "History of Our County",
