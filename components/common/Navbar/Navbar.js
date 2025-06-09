@@ -22,6 +22,14 @@ import { signOut } from "next-auth/react";
 import { toast } from "react-toastify";
 import { ShoppingCart } from 'lucide-react';
 
+const staticItems = [
+  { id: "Archives", title: "ARCHIVES", link: "/archieve" },
+  { id: "Photos", title: "PHOTOS", link: "/photos/mainhome" },
+  { id: "surname", title: "SURNAME LOOKUP", link: "/surenamelook" },
+  { id: "business", title: "OUR BUSINESS FRIENDS", link: "/business" },
+   { id: "contact", title: "CONTACT US", link: "/contact-us" },
+];
+
 
 export default function Navbar(props) {
 
@@ -40,7 +48,8 @@ export default function Navbar(props) {
 
   const [membershipStatus, setMembershipStatus] = useState("loading");
 
-
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [expanded, setExpanded] = useState(null);
 
 
 
@@ -641,6 +650,25 @@ export default function Navbar(props) {
     };
 
 
+    // ===============member dropdown mobile==========
+    const dropdownRef = useRef();
+    const [isOpen1, setIsOpen1] = useState(false);
+
+    const [mainOpen, setMainOpen] = useState(false);
+    const [subOpen, setSubOpen] = useState(false);
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setMainOpen(false);
+          setSubOpen(false);
+        }
+      }
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+    const toggleDropdown112 = () => setIsOpen1(!isOpen1);
+
 
     return (
       <>
@@ -974,7 +1002,7 @@ export default function Navbar(props) {
         </div>
 
         {/* ==========mobile========== */}
-        <div className="navbar-wrapper" ref={navRef}>
+        {/* <div className="navbar-wrapper" ref={navRef}>
           <div className="logo-and-toggle">
             <a href="/"><img
               className="logo"
@@ -987,64 +1015,7 @@ export default function Navbar(props) {
           </div>
 
           <ul className={`nav-list ${mobileOpen ? "open" : ""}`}>
-            {/* <div style={{ width: "100%" }} className="schss_parent">
-              <li className="dev_svg nav-item" onClick={handleToggle} ref={buttonRef}>
-                <a>Members only</a>
-                {isOpen && (
-                  <svg
-                    width="10"
-                    height="6"
-                    viewBox="0 0 13 8"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5.66016 7.19531L0.328125 1.89062C0.0820312 1.61719 0.0820312 1.20703 0.328125 0.960938L0.957031 0.332031C1.20312 0.0859375 1.61328 0.0859375 1.88672 0.332031L6.125 4.54297L10.3359 0.332031C10.6094 0.0859375 11.0195 0.0859375 11.2656 0.332031L11.8945 0.960938C12.1406 1.20703 12.1406 1.61719 11.8945 1.89062L6.5625 7.19531C6.31641 7.44141 5.90625 7.44141 5.66016 7.19531Z"
-                      fill="white"
-                    />
-                  </svg>
-                )}
-              </li>
-
-              {isOpen && (
-                <div ref={dropdownRef11} className="test_drop1">
-                  <div><p>Membership List</p></div>
-                  <div onClick={handleDropdownToggle7} ref={dropdownRef7} className="tyino">
-                    <p>SCCHS Publications Archives</p>
-                    {isDropdownOpen7 &&
-                      <svg
-                        width="10"
-                        height="6"
-                        viewBox="0 0 13 8"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M5.66016 7.19531L0.328125 1.89062C0.0820312 1.61719 0.0820312 1.20703 0.328125 0.960938L0.957031 0.332031C1.20312 0.0859375 1.61328 0.0859375 1.88672 0.332031L6.125 4.54297L10.3359 0.332031C10.6094 0.0859375 11.0195 0.0859375 11.2656 0.332031L11.8945 0.960938C12.1406 1.20703 12.1406 1.61719 11.8945 1.89062L6.5625 7.19531C6.31641 7.44141 5.90625 7.44141 5.66016 7.19531Z"
-                          fill="white"
-                        />
-                      </svg>
-                    }
-                    {
-                      isDropdownOpen7 &&
-
-                      <span className="newsLetter_why">
-                        <ol>
-                          <li>Membership Newsletters</li>
-                          <li>SCCHS Genealogy Newsletters</li>
-                        </ol>
-                      </span>
-                    }
-                  </div>
-                  <div><p>My Profile</p></div>
-                  <div className="logout"><p>Logout</p></div>
-                  <span>
-                    <div><p>Research</p></div>
-                    <div><p>Cemetery Records</p></div>
-                  </span>
-                </div>
-              )}
-            </div> */}
+          
             <li className="nav-item">
               <a href="/archieve">Archives</a>
             </li>
@@ -1070,7 +1041,7 @@ export default function Navbar(props) {
               </form>
             </div>
 
-            {/* ===========lower nav======= */}
+         
             {navItemss.map((item, index) => (
               <li
                 key={index}
@@ -1094,11 +1065,7 @@ export default function Navbar(props) {
             ))}
 
             <Link style={{ marginLeft: "auto" }} href={"/storeorder"}><div className="cart-container">
-              {/* <svg className="cart-icon" viewBox="0 0 24 24" fill="none">
-                    <path d="M6 6h15l-1.5 9h-13z" stroke="black" strokeWidth="2" />
-                    <circle cx="9" cy="21" r="1" fill="black" />
-                    <circle cx="18" cy="21" r="1" fill="black" />
-                  </svg> */}
+             
               <ShoppingCart />
 
               {countCart > 0 && <span className="cart-count">{countCart}</span>}
@@ -1142,7 +1109,168 @@ export default function Navbar(props) {
 
 
           </ul>
+        </div> */}
+        <div className="mobile-navbar-wrapper">
+          <div className="mobile-navbar-header">
+            <a href="/"><img
+              className="logo"
+              src="https://res.cloudinary.com/dgif730br/image/upload/v1743768420/SCCHS_Logo_vFINAL_1_1_whtysx.svg"
+              alt="Logo"
+            /></a>
+            <button
+              className="mobile-navbar-toggle"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              {menuOpen ? "✖" : "☰"}
+            </button>
+          </div>
+
+
+          <div className={`mobile-navbar-menu ${menuOpen ? "open" : ""}`}>
+            {membershipStatus === "active" && <div className="member-dropdown-container" ref={dropdownRef}>
+              <div
+                className="member-dropdown-button"
+                onClick={() => setMainOpen(!mainOpen)}
+              >
+                MEMBERS ONLY ▾
+              </div>
+
+              {mainOpen && (
+                <div className="member-dropdown-menu">
+                  <div
+                    className="member-dropdown-item"
+                    onClick={() => setSubOpen(!subOpen)}
+                  >
+                    SCCHS Publications Archives ▸
+                  </div>
+
+                  {subOpen && (
+                    <div className="member-sub-dropdown">
+                      <div className="member-sub-item">Membership Newsletters</div>
+                      <div className="member-sub-item">SCCHS Genealogy Newsletters</div>
+                    </div>
+                  )}
+
+                 <a style={{textDecoration:"none",color:"white"}} href="/member/myprofile"><div className="member-dropdown-item">My Profile</div></a> 
+                  <div className="member-dropdown-item">Research</div>
+                  <div className="member-dropdown-item">Cementry Records</div>
+                  {/* <div className="member-dropdown-item">Membership List</div> */}
+                </div>
+              )}
+            </div>}
+
+            {/* Static Items */}
+            {staticItems.map((item) => (
+              <div key={item.id} className="mobile-navbar-item">
+                <div className="mobile-navbar-parent">
+                  <a href={item.link}>{item.title}</a>
+                </div>
+              </div>
+            ))}
+
+            {/* Dynamic Items */}
+            {navbarItems.map((item) => (
+              <div key={item.parentId} className="mobile-navbar-item">
+                <div
+                  className="mobile-navbar-parent"
+                  onClick={() =>
+                    setExpanded((prev) =>
+                      prev === item.parentId ? null : item.parentId
+                    )
+                  }
+                >
+                  <a href={item.parentItems.link}>{item.parentItems.title}</a>
+                  {item.subItems.length > 0 && (
+                    <span>{expanded === item.parentId ? "▲" : "▼"}</span>
+                  )}
+                </div>
+                <div
+                  className={`mobile-navbar-submenu ${expanded === item.parentId ? "expanded" : ""
+                    }`}
+                >
+                  {item.subItems.map((sub) => (
+                    <a key={sub.id} href={sub.link}>
+                      {sub.title}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <Link style={{ marginLeft: "auto" }} href={"/storeorder"}><div className="cart-container">
+
+              <ShoppingCart />
+
+              {countCart > 0 && <span className="cart-count">{countCart}</span>}
+
+            </div></Link>
+            <style jsx>{`
+  .cart-container {
+    position: relative;
+    top:11px !important;
+    width: 40px;
+    height: 40px;
+  }
+
+  .cart-icon {
+    width: 100%;
+    height: 100%;
+  }
+
+  .cart-count {
+    position: absolute;
+    top: -6px;
+    right: 7px;
+    background-color: rgba(0, 49, 92, 1);
+    color: white;
+    font-size: 12px;
+    width:20px;
+    height:20px;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+  }
+                    `}</style>
+
+            <li style={{ listStyle: "none", marginTop: "15px" }} className="test_sign">
+              {instaUser ? <button onClick={() => {
+                localStorage.removeItem("scchs_Access");
+                localStorage.removeItem("scchs_User");
+                setAccessToken(null)
+                setInstaUser(null)
+                toast.success("Logout successfully");
+                window.location.href = "/"
+              }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
+            </li>
+
+            {instaUser && <div className="user-dropdown-wrapper">
+              <div className="user-avatar" onClick={toggleDropdown112}>
+                <img src="https://res.cloudinary.com/dgif730br/image/upload/v1748089475/user_xegqs3.png" alt="User" />
+              </div>
+
+              {isOpen1 && (
+                <ul className="user-dropdown-menu">
+                  {/* <li><a href="/cart">Add to Cart</a></li>
+                  <li><a href="/order-history">Order History</a></li>
+                  <li><a href="/logout">Logout</a></li> */}
+                  <li><a href="/orderhistory">Order History</a></li>
+                  {/* <a href="/eventhistory">🎫 Event Orders</a> */}
+                  <li> <a href="/eventhistory">Event Order History</a></li>
+                  <li><a href="/donationhistory">Donation History</a></li>
+                  <li><a href="/storeorder">View Cart</a></li>
+                  <li><a href="/join/memberplan">{membershipStatus === "active" ? "Purchase another plan" : "Purchase Plan"}</a></li>
+                  {membershipStatus === "active" && <li><a style={{ cursor: "pointer" }} onClick={handleRenewClick}>Renew Online</a></li>}
+                </ul>
+              )}
+            </div>}
+
+
+
+          </div>
         </div>
+
         {/* end======================= */}
 
         {/* ipad mobile  */}
