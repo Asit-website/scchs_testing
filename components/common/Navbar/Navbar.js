@@ -805,7 +805,7 @@ export default function Navbar(props) {
                 <Link href="/surenamelook">surname lookup</Link>
               </li>
               <li>
-                <Link href="/our-business-freind">our business friends</Link>
+                <Link href="/business">our business friends</Link>
               </li>
               <li>
                 <Link href="/contact-us">Contact us</Link>

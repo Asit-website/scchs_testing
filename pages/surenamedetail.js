@@ -44,7 +44,7 @@ export default function surenamelook(pageProp) {
                 <div className="event_main">
                     <div className="surname-btn-group">
                         <button className="btn-primary">Print</button>
-                       <Link href={"/surenamelook"}><button className="btn-outline">Back</button></Link>
+                        <Link href={"/surenamelook"}><button className="btn-outline">Back</button></Link>
                     </div>
                     <div className="surname-details-wrapper">
                         <div className="surname-details-grid">
