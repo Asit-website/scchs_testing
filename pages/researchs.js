@@ -101,33 +101,33 @@ export default function researchs(pageProp) {
                                 <div className="custom-box">
                                     <p>Only <span>SCCHS Members</span> have access to the following online indexes:</p>
                                     <ul>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Archived Copies of SCCHS Heritage Journals</a></li>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Archived Copies of SCCHS Newsletters</a></li>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Baue Funeral Home Records Index (in progress)</a></li>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Burial or Removal Permits</a></li>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Burials by Church</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/research4" : "/member/memberlogin"}>Archived Copies of SCCHS Heritage Journals</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/heritage" : "/member/memberlogin"}>Archived Copies of SCCHS Newsletters</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/cementry-records" : "/member/memberlogin"}>Baue Funeral Home Records Index (in progress)</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/Br-permit" : "/member/memberlogin"}>Burial or Removal Permits</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/Burials-By-Church" : "/member/memberlogin"}>Burials by Church</a></li>
                                         {/* https://admin.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf */}
-                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf" : "/member/memberlogin" }>Business &amp; Industry Files Index</a></li>
+                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf" : "/member/memberlogin"}>Business &amp; Industry Files Index</a></li>
                                         <li>
-                                            <a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Cemetery Records</a>
+                                            <a href={membershipStatus === "active" ? "/cemetery-records" : "/member/memberlogin"}>Cemetery Records</a>
                                             <p className="cementry-text">There are currently almost 50,000 individual records available from over 350 cemeteries in Saint Charles</p>
                                         </li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>County. For more information CLICK HERE</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Census, St. Charles County, 1876 Family Files</a></li>
+                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>County. For more information CLICK HERE</a></li>
+                                        <li><a href={membershipStatus === "active" ? "	/census" : "/member/memberlogin"}>Census, St. Charles County, 1876 Family Files</a></li>
                                         {/*  */}
                                         <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Family%20Files/Family%20Files.pdf" : "/member/memberlogin"}>Family Files</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Guardian Books</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Land and Property Record by Last Name</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Land and Property Records by Year</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Marriages by Church</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Marriage Index 1836 - 1858</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>McElhiney Olson Historical Newspaper Articles Index</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Naturalization Records</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Obituaries</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Obituaries from the Demokrat w/English translations (1852-1894)</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Probate Records</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Selected Church Baptisms</a></li>
-                                        <li><a href={ membershipStatus === "active" ? "#" : "/member/memberlogin"}>Sibley Diary 1844 - 1855</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/guardian-book-search" : "/member/memberlogin"}>Guardian Books</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/land-and-property" : "/member/memberlogin"}>Land and Property Record by Last Name</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/land-and-property 1" : "/member/memberlogin"}>Land and Property Records by Year</a></li>
+                                        <li><a href={membershipStatus === "active" ? "	/marriages-by-church" : "/member/memberlogin"}>Marriages by Church</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/marriage1" : "/member/memberlogin"}>Marriage Index 1836 - 1858</a></li>
+                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>McElhiney Olson Historical Newspaper Articles Index</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/naturalization-records" : "/member/memberlogin"}>Naturalization Records</a></li>
+                                        <li><a href={membershipStatus === "active" ? "	/obituaries" : "/member/memberlogin"}>Obituaries</a></li>
+                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Obituaries from the Demokrat w/English translations (1852-1894)</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/Probate Records" : "/member/memberlogin"}>Probate Records</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/Church-Baptisms	" : "/member/memberlogin"}>Selected Church Baptisms</a></li>
+                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Sibley Diary 1844 - 1855</a></li>
                                         {/* https://admin.scchs.co.in/backend/admin/media/Stillbirths.pdf */}
                                         <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Stillbirths.pdf" : "/member/memberlogin"}>Stillbirths</a></li>
                                         <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Subject/Topic Files</a></li>

@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../components/common/Head/head1";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 
 
@@ -19,19 +20,32 @@ var settingsMorePhotos = {
 
 
 
-const data = {
-    surname: "Alferman",
-    city: "St. Charles",
-    county: "St. Charles",
-    state: "Missouri",
-    country: "USA",
-    beginYear: "1801",
-    endYear: "1960",
-    alternateSpellings: "Alfermann",
-};
+// const data = {
+//     surname: "Alferman",
+//     city: "St. Charles",
+//     county: "St. Charles",
+//     state: "Missouri",
+//     country: "USA",
+//     beginYear: "1801",
+//     endYear: "1960",
+//     alternateSpellings: "Alfermann",
+// };
 
 export default function surenamelook(pageProp) {
 
+    const { query } = useRouter();
+
+    const data = {
+        surname: query.surname || "",
+        city: query.city || "",
+        county: query.county || "",
+        state: query.state || "",
+        country: query.country || "",
+        beginYear: query.begin || "",
+        endYear: query.end || "",
+        alternateSpellings: query.alt || "",
+        notes: query?.notes
+    };
 
 
     return (
@@ -48,29 +62,66 @@ export default function surenamelook(pageProp) {
                     </div>
                     <div className="surname-details-wrapper">
                         <div className="surname-details-grid">
-                            <div>Surname</div>
-                            <div>: <strong><a href="#">{data.surname}</a></strong></div>
+                            {data?.surname && <><div>Surname</div>
+                                <div>: <strong><a href="#">{data.surname}</a></strong></div></>}
 
-                            <div>City</div>
-                            <div>: <strong><a href="#">{data.city}</a></strong></div>
+                            {
+                                data?.city && <>
+                                    <div>City</div>
+                                    <div>: <strong><a href="#">{data.city}</a></strong></div>
+                                </>
+                            }
 
-                            <div>County</div>
-                            <div>: <strong><a href="#">{data.county}</a></strong></div>
+                            {
+                                data?.county && <>
+                                    <div>County</div>
+                                    <div>: <strong><a href="#">{data.county}</a></strong></div>
+                                </>
+                            }
 
-                            <div>State/Prov./Rgn</div>
-                            <div>: <strong><a href="#">{data.state}</a></strong></div>
+                            {
+                                data?.state && <>
+                                    <div>State/Prov./Rgn</div>
+                                    <div>: <strong><a href="#">{data.state}</a></strong></div>
+                                </>
+                            }
 
-                            <div>Country</div>
-                            <div>: <strong><a href="#">{data.country}</a></strong></div>
+                            {
+                                data?.country &&
+                                <>
+                                    <div>Country</div>
+                                    <div>: <strong><a href="#">{data.country}</a></strong></div>
+                                </>
+                            }
 
-                            <div>Being Year</div>
-                            <div>: <strong><a href="#">{data.beginYear}</a></strong></div>
+                            {
+                                data?.beginYear && <>
+                                    <div>Being Year</div>
+                                    <div>: <strong><a href="#">{data.beginYear}</a></strong></div>
+                                </>
+                            }
+                            {
+                                data?.endYear && <>
+                                    <div>End Year</div>
+                                    <div>: <strong><a href="#">{data.endYear}</a></strong></div>
+                                </>
+                            }
 
-                            <div>End Year</div>
-                            <div>: <strong><a href="#">{data.endYear}</a></strong></div>
 
-                            <div>Alternate Spellings</div>
-                            <div>: <strong><a href="#">{data.alternateSpellings}</a></strong></div>
+                            {
+                                data?.alternateSpellings && <>
+                                    <div>Alternate Spellings</div>
+                                    <div>: <strong><a href="#">{data.alternateSpellings}</a></strong></div>
+                                </>
+                            }
+
+                            {
+                                data?.notes && <>
+                                    <div>Notes / Comments</div>
+                                    <div>: <strong><a href="#">{data.notes}</a></strong></div>
+                                </>
+                            }
+
                         </div>
 
 
