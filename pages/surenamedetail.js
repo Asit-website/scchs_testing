@@ -41,11 +41,13 @@ export default function surenamelook(pageProp) {
         county: query.county || "",
         state: query.state || "",
         country: query.country || "",
-        beginYear: query.begin || "",
-        endYear: query.end || "",
+        beginYear: query.start_year || "",
+        endYear: query.end_year || "",
         alternateSpellings: query.alt || "",
-        notes: query?.notes
+        notes: query?.commant
     };
+
+    console.log(data)
 
 
     return (

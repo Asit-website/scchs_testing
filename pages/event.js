@@ -99,11 +99,12 @@ const ITEMS_PER_PAGE = 3;
 
 export default function events(pageProp) {
 
-    const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+    const [visibleCount, setVisibleCount] = useState(6);
 
     const handleLoadMore = () => {
-        setVisibleCount(prev => prev + ITEMS_PER_PAGE);
-    }
+    setVisibleCount((prev) => prev + 6);
+  };
+
 
     const product = pageProp.page_content.product;
     const customFields = product?.customFields;
@@ -196,6 +197,8 @@ export default function events(pageProp) {
     const [searchField, setSearchField] = useState('title');
     const [searchInput, setSearchInput] = useState('');
     const [searchText, setSearchText] = useState(''); // this is what gets used in filter
+
+    
 
 
     const fetchCategory = async () => {
@@ -425,7 +428,7 @@ export default function events(pageProp) {
 
 
                                 return true; // 'all'
-                            }).map((card, index) => (
+                            }).slice(0,visibleCount).map((card, index) => (
                                 <div className="event-card" key={index}>
                                     <div className="card-header">
                                         <span>
@@ -455,18 +458,19 @@ export default function events(pageProp) {
                             ))
                         )}
                     </div>
-                    {/* {
-                        visibleCount < cards.length && (
-                            <div className="load-more-wrapper">
-                                <button onClick={handleLoadMore} className="load-more-btn">
-                                    Load More
-                                    <span className="arrow-wrap">
-                                        <img width="12" src="https://res.cloudinary.com/dgif730br/image/upload/v1744279126/Group_1171280891_zvryne.png" />
-                                    </span>
-                                </button>
-                            </div>
-                        )
-                    } */}
+                    {visibleCount < cards.length && (
+        <div className="load-more-wrapper">
+          <button onClick={handleLoadMore} className="load-more-btn">
+            Load More
+            <span className="arrow-wrap">
+              <img
+                width="12"
+                src="https://res.cloudinary.com/dgif730br/image/upload/v1744279126/Group_1171280891_zvryne.png"
+              />
+            </span>
+          </button>
+        </div>
+      )}
 
                 </div>
 
