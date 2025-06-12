@@ -123,16 +123,16 @@ export default function researchs(pageProp) {
                                         <li><a href={membershipStatus === "active" ? "/land-and-property 1" : "/member/memberlogin"}>Land and Property Records by Year</a></li>
                                         <li><a href={membershipStatus === "active" ? "	/marriages-by-church" : "/member/memberlogin"}>Marriages by Church</a></li>
                                         <li><a href={membershipStatus === "active" ? "/marriage1" : "/member/memberlogin"}>Marriage Index 1836 - 1858</a></li>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>McElhiney Olson Historical Newspaper Articles Index</a></li>
+                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20McElhiney%20Olson%20Index.pdf " : "/member/memberlogin"}>McElhiney Olson Historical Newspaper Articles Index</a></li>
                                         <li><a href={membershipStatus === "active" ? "/naturalization-records" : "/member/memberlogin"}>Naturalization Records</a></li>
                                         <li><a href={membershipStatus === "active" ? "	/obituaries" : "/member/memberlogin"}>Obituaries</a></li>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Obituaries from the Demokrat w/English translations (1852-1894)</a></li>
+                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20Demokrat%20obits%201852-1894.pdf " : "/member/memberlogin"}>Obituaries from the Demokrat w/English translations (1852-1894)</a></li>
                                         <li><a href={membershipStatus === "active" ? "/Probate Records" : "/member/memberlogin"}>Probate Records</a></li>
                                         <li><a href={membershipStatus === "active" ? "/Church-Baptisms	" : "/member/memberlogin"}>Selected Church Baptisms</a></li>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Sibley Diary 1844 - 1855</a></li>
+                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/hisrical_record/St.%20Charles%20County%20Historical%20Society%20-%20Sibley%20Diary%201844-1855.pdf " : "/member/memberlogin"}>Sibley Diary 1844 - 1855</a></li>
                                         {/* https://admin.scchs.co.in/backend/admin/media/Stillbirths.pdf */}
                                         <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Stillbirths.pdf" : "/member/memberlogin"}>Stillbirths</a></li>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Subject/Topic Files</a></li>
+                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/St.%20Charles%20County%20Historical%20Society%20-%20Subject_Topic%20Files.pdf " : "/member/memberlogin"}>Subject/Topic Files</a></li>
                                         <li><a href={membershipStatus === "active" ? "/world-war" : "/member/memberlogin"}>World War II Marriages</a></li>
                                     </ul>
                                 </div>
