@@ -84,12 +84,12 @@ export default function cementrydetail(pageProp) {
 
                             <div className="cemetery-list">
                                 <div className="cemetery-item">
-                                    <h3>{cemetery?.name}</h3>
+                                    <h3 style={{marginBottom: '1rem'}}>{cemetery?.name}</h3>
                                     <div className="cemetery-links">
-                                        <Link href={`/cementrytable?id=${id}`}>View Cemetery Records</Link> |
-                                        <Link href="/cementryrecord"> Return to Cemetery Listings</Link>
+                                        <Link  style={{ border: '1px solid #9d0030', padding: '7px 15px', color: '#9d0030', fontSize: '13px', textDecoration: 'none', borderRadius: '3px'  }} href={`/cementrytable?id=${id}`}>View Cemetery Records</Link> {""} 
+                                        <Link style={{ border: '1px solid #00305b',padding: '7px 15px', color: '#00305b', fontSize: '13px', textDecoration: 'none', borderRadius: '3px'  }} href="/cementryrecord"> Return to Cemetery Listings</Link>
                                     </div>
-                                    <p dangerouslySetInnerHTML={{ __html: cemetery?.short_description }} />
+                                    <p style={{padding: '10px 0px'}}  dangerouslySetInnerHTML={{ __html: cemetery?.short_description }} />
                                     <p dangerouslySetInnerHTML={{ __html: cemetery?.description }} />
                                 </div>
 
@@ -110,7 +110,9 @@ export default function cementrydetail(pageProp) {
           flex-wrap: wrap;
           gap: 20px;
         }
-
+        .cemetery-item h1{
+          margin-bottom: 1rem !important;
+        }
         .filter-group label {
           display: block;
           margin-top: 10px;
@@ -126,6 +128,15 @@ export default function cementrydetail(pageProp) {
           margin-right: 5px;
         }
 
+     .cemetery-item p {
+    text-align: left;
+    font-size: 17px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+
         .search-button {
           padding: 4px 8px;
         }
@@ -138,38 +149,76 @@ export default function cementrydetail(pageProp) {
           margin-top: 10px;
           font-weight: bold;
         }
+.cemetery-list {
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+  }
 
-        .cemetery-list {
-          border-top: 1px solid #ccc;
-          padding-top: 20px;
-        }
+  .cemetery-item {
+    margin-bottom: 20px;
+  }
 
-        .cemetery-item {
-          margin-bottom: 20px;
-        }
+  .cemetery-item h3 {
+    color: #6d2c2c;
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
 
-        .cemetery-item h3 {
-          color: #6d2c2c;
-        }
+  .cemetery-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0 16px 0;
+  }
 
-        .cemetery-links a {
-          color: green;
-          text-decoration: none;
-          margin-right: 5px;
-        }
+  .cemetery-links a {
+    padding: 10px 14px;
+    border: 1px solid #b3003c;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    color: #b3003c;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
 
-        .pagination button {
-          margin: 0 5px;
-          padding: 4px 8px;
-          background: #eee;
-          border: 1px solid #ccc;
-          cursor: pointer;
-        }
+  .cemetery-links a:first-child {
+    background-color: #b3003c;
+    color: #fff;
+  }
 
-        .pagination button.active {
-          font-weight: bold;
-          background: #ddd;
-        }
+  .cemetery-links a:hover {
+    opacity: 0.9;
+  }
+
+  @media (max-width: 600px) {
+    .cemetery-filters {
+      flex-direction: column;
+    }
+
+    .surname-search {
+      flex-direction: row;
+    }
+
+    .search-button {
+      width: 50px;
+      padding: 0;
+    }
+
+    .cemetery-links {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cemetery-links a {
+      width: 100%;
+      text-align: center;
+    }
+
+    .cemetery-item h3 {
+      font-size: 20px;
+    }
+  }
       `}</style>
                         </div>
                     </div>
@@ -204,3 +253,4 @@ export async function getServerSideProps(context) {
 
     }
 }
+
