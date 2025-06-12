@@ -117,16 +117,36 @@ export default function store(pageProp) {
     //     }
     // };
 
-    const fetchProductByCat = () => {
-        if (!selectedSlug) return;
+    // const fetchProductByCat = () => {
+    //     if (!selectedSlug) return;
 
-        fetch(`https://admin.scchs.co.in/api/products/category/${selectedSlug}?limit=${limit}&offset=0`)
-            .then((res) => res.json())
-            .then((data) => {
-                setAllProduct(data?.products || []);
-                setHasSearched(true); // Mark that user searched
-            });
-    };
+    //     fetch(`https://admin.scchs.co.in/api/products/category/${selectedSlug}?limit=${limit}&offset=0`)
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             setAllProduct(data?.products || []);
+    //             setHasSearched(true); // Mark that user searched
+    //         });
+    // };
+
+    const fetchProductByCat = () => {
+    let url = "";
+
+    if (!selectedSlug) {
+        // fetch all products
+        url = `https://admin.scchs.co.in/api/products?limit=${limit}&offset=0&all=1`;
+    } else {
+        // fetch by category slug
+        url = `https://admin.scchs.co.in/api/products/category/${selectedSlug}?limit=${limit}&offset=0`;
+    }
+
+    fetch(url)
+        .then((res) => res.json())
+        .then((data) => {
+            setAllProduct(data?.products || []);
+            setHasSearched(true);
+        });
+};
+
 
 
     const addToCartApi = async (id) => {
@@ -173,7 +193,7 @@ export default function store(pageProp) {
                             <div className="event-title-filter ev_tight_fill">
                                 <div className="custom_drop">
                                     <select value={selectedSlug} onChange={(e) => setSelectedSlug(e.target.value)} className="dropdown small" id="dropdownnn">
-                                        <option>Filter by category</option>
+                                        <option value="">Filter by category</option>
                                         {
                                             allCategory?.map((item, index) => {
                                                 return <option key={item.id} value={item?.slug}>{item?.name}</option>
