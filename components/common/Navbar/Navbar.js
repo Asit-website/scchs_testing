@@ -788,7 +788,7 @@ export default function Navbar(props) {
                     }} className="logout"><p>Logout</p></div>
 
                     <a href="/research"><div><p>Research</p></div></a>
-                    <a style={{ paddingRight: "0px" }} href="/cementry"><div><p>Cemetery Records</p></div></a>
+                    <a style={{ paddingRight: "0px" }} href="/cementryrecord"><div><p>Cemetery Records</p></div></a>
 
                   </div>
                 )}

@@ -50,31 +50,50 @@ export default function store(pageProp) {
     const [selectedSlug, setSelectedSlug] = useState('');
     const [hasSearched, setHasSearched] = useState(false);
     const [limit, setLimit] = useState(10);
+    const [totalProducts, setTotalProducts] = useState(0);
     const [offset, setOffset] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
     const router = useRouter();
-    const fetchProduct = async () => {
-        try {
-            const resp = await fetch(`https://admin.scchs.co.in/api/products?limit=${limit}&offset=0&all=1`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
+    // const fetchProduct = async () => {
+    //     try {
+    //         const resp = await fetch(`https://admin.scchs.co.in/api/products?limit=${limit}&offset=0&all=1`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             }
+    //         });
 
 
-            if (resp.status === 200) {
-                const formateddata = await resp.json();
-                console.log(formateddata);
-                setAllProduct(formateddata?.products);
-            }
+    //         if (resp.status === 200) {
+    //             const formateddata = await resp.json();
+    //             console.log(formateddata);
+    //             setAllProduct(formateddata?.products);
+    //         }
 
 
-        } catch (error) {
+    //     } catch (error) {
 
-            console.error("There was an error fetching the categories:", error);
-        }
-    };
+    //         console.error("There was an error fetching the categories:", error);
+    //     }
+    // };
+    const fetchProduct = async (customLimit = limit) => {
+  try {
+    const resp = await fetch(`https://admin.scchs.co.in/api/products?limit=${customLimit}&offset=0&all=1`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (resp.status === 200) {
+      const data = await resp.json();
+      setAllProduct(data?.products || []);
+      setTotalProducts(data?.total || data?.products?.length || 0); // depends on your backend response
+      setOffset(0); // reset offset on new fetch
+    }
+  } catch (error) {
+    console.error("Error fetching all products:", error);
+  }
+};
+
 
     const fetchCategory = async () => {
         try {
@@ -128,7 +147,7 @@ export default function store(pageProp) {
     //         });
     // };
 
-    const fetchProductByCat = () => {
+   const fetchProductByCat = () => {
     let url = "";
 
     if (!selectedSlug) {
@@ -144,8 +163,14 @@ export default function store(pageProp) {
         .then((data) => {
             setAllProduct(data?.products || []);
             setHasSearched(true);
+            setOffset(0); // reset offset on every fetch
+            setTotalProducts(data?.total || data?.products?.length || 0); // total from API or fallback
+        })
+        .catch((error) => {
+            console.error("Error fetching products:", error);
         });
 };
+
 
 
 
@@ -213,7 +238,7 @@ export default function store(pageProp) {
                             <div className="listing">
                                 <label>Listing Per Page</label>
                                 <div className="custom_drop custom_drop1">
-                                    <select
+                                    {/* <select
                                         value={limit}
                                         onChange={(e) => {
                                             const newLimit = Number(e.target.value);
@@ -232,19 +257,57 @@ export default function store(pageProp) {
                                         <option value={2}>2</option>
                                         <option value={4}>4</option>
                                         <option value={6}>6</option>
+                                    </select> */}
+
+                                    <select
+                                        value={limit}
+                                        onChange={async (e) => {
+                                            const newLimit = Number(e.target.value);
+                                            setLimit(newLimit);
+
+                                            if (selectedSlug) {
+                                                // If a category is selected, fetch filtered products
+                                                try {
+                                                    const resp = await fetch(`https://admin.scchs.co.in/api/products/category/${selectedSlug}?limit=${newLimit}&offset=0`, {
+                                                        method: 'GET',
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                        }
+                                                    });
+
+                                                    if (resp.status === 200) {
+                                                        const data = await resp.json();
+                                                        setAllProduct(data?.products || []);
+                                                    }
+                                                } catch (error) {
+                                                    console.error("Error fetching category-based products:", error);
+                                                }
+                                            } else {
+                                                // No category selected: fetch all products with updated limit
+                                                fetchProduct(newLimit);
+                                            }
+                                        }}
+                                    >
+                                        {/* <option value="">List</option> */}
+                                        <option value={6}>6</option>
+                                        <option value={4}>4</option>
+                                        <option value={2}>2</option>
                                     </select>
+
+
 
                                 </div>
                             </div>
                             <div className="record-info">
-                                Records : <span>1 to 4 of </span> 4
+                                {/* Records : <span>1 to 4 of </span> 4 */}
+                                Records : <span>{offset + 1} to {Math.min(offset + limit, totalProducts)} of </span> {totalProducts}
                             </div>
                         </div>
                     </div>
 
                     <div className="custom-grid-container">
                         {hasSearched && allProduct.length === 0 && <p>No Products Found</p>}
-                        {allProduct.map((product, index) => (
+                        {allProduct?.map((product, index) => (
                             <div className="custom-card" key={index}>
                                 <Link href={`/storedetail?id=${product?.slug}`}><img
                                     className="custom-card-image"

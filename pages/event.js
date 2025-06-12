@@ -274,18 +274,35 @@ export default function events(pageProp) {
 
 
 
-    const formatTime = (timeStr) => {
-        const [hour, minute] = timeStr.split(':');
-        const date = new Date();
-        date.setHours(hour);
-        date.setMinutes(minute);
+    // const formatTime = (timeStr) => {
+    //     const [hour, minute] = timeStr.split(':');
+    //     const date = new Date();
+    //     date.setHours(hour);
+    //     date.setMinutes(minute);
 
-        return new Intl.DateTimeFormat('en-US', {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-        }).format(date);
-    };
+    //     return new Intl.DateTimeFormat('en-US', {
+    //         hour: 'numeric',
+    //         minute: '2-digit',
+    //         hour12: true,
+    //     }).format(date);
+    // };
+
+    const formatTime = (timeStr) => {
+    if (!timeStr || typeof timeStr !== 'string' || !timeStr.includes(':')) {
+        return ''; // or return 'Invalid time' or fallback value
+    }
+
+    const [hour, minute] = timeStr.split(':');
+    const date = new Date();
+    date.setHours(hour);
+    date.setMinutes(minute);
+
+    return new Intl.DateTimeFormat('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+    }).format(date);
+};
 
 
     return (

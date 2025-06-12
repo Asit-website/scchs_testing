@@ -10096,6 +10096,126 @@ label {
   background-color: #0066cc;
 }
 
+/* ================cementry table css start================ */
+.cemetery-records-wrapper {
+  background-color: #fff;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.cemetery-records-filters {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.cemetery-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cemetery-search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cemetery-filter-select,
+.cemetery-search-input {
+  padding: 5px;
+  font-size: 14px;
+}
+
+.cemetery-search-btn,
+.cemetery-clear-btn {
+  padding: 6px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cemetery-results-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cemetery-record-count {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.cemetery-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cemetery-table th,
+.cemetery-table td {
+  border: 1px solid #999;
+  padding: 8px;
+  text-align: left;
+}
+
+.cemetery-table th {
+  background-color: #ffffff;
+  color: #333;
+}
+
+.cemetery-detail-container {
+  background-color: #fff;
+  padding: 30px;
+  min-height: 100vh;
+}
+
+.cemetery-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cemetery-detail-title {
+  font-size: 28px;
+  background-color: #ffffff;
+  padding: 5px 15px;
+  border: 1px solid #ccc;
+}
+
+.cemetery-detail-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.cemetery-btn-print,
+.cemetery-btn-close {
+  background-color: rgba(0, 49, 92, 1);
+  color: white;
+  padding: 6px 14px;
+  border: 1px solid #666;
+  cursor: pointer;
+}
+
+.cemetery-box {
+  border: 1px solid #aaa;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #fff;
+}
+
+.cemetery-box-title {
+  color: #335533;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+
+/* ========================cementry table css end============== */
+
 @keyframes fadeSlideDown {
   from {
     opacity: 0;
