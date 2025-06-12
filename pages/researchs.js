@@ -112,7 +112,9 @@ export default function researchs(pageProp) {
                                             <a href={membershipStatus === "active" ? "/cemetery-records" : "/member/memberlogin"}>Cemetery Records</a>
                                             <p className="cementry-text">There are currently almost 50,000 individual records available from over 350 cemeteries in Saint Charles</p>
                                         </li>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>County. For more information CLICK HERE</a></li>
+
+                                       {/* <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>County. For more information CLICK HERE</a></li> */}
+
                                         <li><a href={membershipStatus === "active" ? "	/census" : "/member/memberlogin"}>Census, St. Charles County, 1876 Family Files</a></li>
                                         {/*  */}
                                         <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Family%20Files/Family%20Files.pdf" : "/member/memberlogin"}>Family Files</a></li>
@@ -131,7 +133,7 @@ export default function researchs(pageProp) {
                                         {/* https://admin.scchs.co.in/backend/admin/media/Stillbirths.pdf */}
                                         <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Stillbirths.pdf" : "/member/memberlogin"}>Stillbirths</a></li>
                                         <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>Subject/Topic Files</a></li>
-                                        <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>World War II Marriages</a></li>
+                                        <li><a href={membershipStatus === "active" ? "/world-war" : "/member/memberlogin"}>World War II Marriages</a></li>
                                     </ul>
                                 </div>
                             </section>
