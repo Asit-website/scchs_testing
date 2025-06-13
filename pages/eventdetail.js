@@ -269,7 +269,7 @@ export default function eventdetail(pageProp) {
             <HeadSEO1 />
 
             <div className="event_system_main">
-                <div className="event_main">
+                <div className="event_main" id="event_maintain">
 
                     {/* {showModal1 && (
                         <div className="modal-overlay" onClick={closeModal}>
@@ -294,7 +294,7 @@ export default function eventdetail(pageProp) {
 
                     <PayPalScriptProvider options={{ clientId: 'AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy', currency: 'USD' }}>
                         <div>
-                            <button onClick={() => setShowModal1(true)} className="ticket-btn">Purchase Tickets</button>
+                            <button onClick={() => setShowModal1(true)} className="ticket-btn" id="ticket-btnns">Purchase Tickets</button>
 
                             {showModal1 && (
                                 <div className="modal-overlay" onClick={closeModal}>
@@ -366,7 +366,7 @@ export default function eventdetail(pageProp) {
 
                     <div className="event_details_main">
                         <Link style={{ textDecoration: "none" }} href={"/event"}><button className="event_det_back">Back</button></Link>
-                        <div className="event-page">
+                        <div className="event-page" id="event_maintain" >
                             <div className="event-header">
                                 <div className="event-info">
                                     <h1>{aboutnew?.title}</h1>

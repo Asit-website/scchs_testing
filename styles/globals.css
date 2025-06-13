@@ -10479,6 +10479,7 @@ label {
   .event-info {
     min-width: 100%;
     width: 100%;
+    padding: 20px;
   }
 
   .payment_advance_flex {
@@ -10695,10 +10696,13 @@ label {
 
   .presented-by {
     line-height: 32px;
+    padding-left: 20px;
   }
+
 
   .event_payment h3 {
     font-size: 20px;
+    padding: 20px;
   }
 
   .payment_left h3 {
@@ -13519,3 +13523,14 @@ textarea::placeholder,
     margin-left: 0;
   }
 }
+#event_maintain{
+  margin-top: 10px;
+}
+@media(max-width: 375px){
+  #ticket-btnns{
+    margin-bottom: 10px;
+  }
+}
+
+/* ================ */
+

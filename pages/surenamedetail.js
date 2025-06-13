@@ -32,7 +32,10 @@ var settingsMorePhotos = {
 // };
 
 export default function surenamelook(pageProp) {
-
+    
+     const handlePrint = () => {
+          window.print();
+        };
     const { query } = useRouter();
 
     const data = {
@@ -59,7 +62,8 @@ export default function surenamelook(pageProp) {
             <div className="event_system_main event_system_main1">
                 <div className="event_main">
                     <div className="surname-btn-group">
-                        <button className="btn-primary">Print</button>
+                        {/* <button className="btn-primary">Print</button> */}
+                        <button className="btn-primary" onClick={handlePrint}>Print</button>
                         <Link href={"/surenamelook"}><button className="btn-outline">Back</button></Link>
                     </div>
                     <div className="surname-details-wrapper">
@@ -129,6 +133,7 @@ export default function surenamelook(pageProp) {
 
                     </div>
                 </div>
+
             </div>
 
 
