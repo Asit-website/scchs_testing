@@ -9869,7 +9869,7 @@ label {
 }
 
 .photo-record-table a:hover {
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 .archieve_suing {
@@ -13511,7 +13511,7 @@ textarea::placeholder,
 @media (max-width: 600px) {
   .listingTop {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.5rem;
   }
 
