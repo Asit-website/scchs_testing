@@ -2998,6 +2998,8 @@ button {
 .footer-top {
   height: 100%;
   max-height: 100%;
+  max-width: 1400px !important;
+  margin: auto !important;
 }
 
 .footer_para p {
@@ -5240,7 +5242,6 @@ justify-content: center !important;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  flex-wrap: wrap;
   padding: 20px;
   background-color: #f9f9f9;
   gap: 10px;
@@ -10603,10 +10604,16 @@ label {
   }
 }
 
-
+@media only screen and (max-width:480px) {
+  .filters-container {
+    /* padding: 20px 0px; */
+    justify-content: center !important;
+  }
+}
 @media only screen and (max-width:450px) {
   .filters-container {
-    padding: 20px 0px;
+    /* padding: 20px 0px; */
+    /* justify-content: center; */
   }
 
   /* ----- */
@@ -13370,7 +13377,7 @@ textarea::placeholder,
 .ress1Title {
   font-size: 2rem;
   background-color: white;
-  padding: 1.5rem 2rem;
+  padding: 1rem 2rem;
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: 5px;

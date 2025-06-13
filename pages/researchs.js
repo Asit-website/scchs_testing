@@ -109,7 +109,7 @@ export default function researchs(pageProp) {
                                         {/* https://admin.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf */}
                                         <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf" : "/member/memberlogin"}>Business &amp; Industry Files Index</a></li>
                                         <li>
-                                            <a href={membershipStatus === "active" ? "/cemetery-records" : "/member/memberlogin"}>Cemetery Records</a>
+                                            <a href={membershipStatus === "active" ? "/cementryrecord" : "/member/memberlogin"}>Cemetery Records</a>
                                             <p className="cementry-text">There are currently almost 50,000 individual records available from over 350 cemeteries in Saint Charles</p>
                                         </li>
 
