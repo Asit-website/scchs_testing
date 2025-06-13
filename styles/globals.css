@@ -5226,7 +5226,8 @@ justify-content: center !important;
 
 /* ==================events css start============= */
 .event_system_main {
-  background-color: rgba(249, 249, 249, 1);
+  background-color: rgb(241, 239, 239);
+  
 }
 
 .event_main {
@@ -12077,8 +12078,8 @@ label {
 
 /* ================research page css start=================== */
 .main-section {
-  background-color: #EAEAEA;
-  padding: 0px 60px;
+
+  /* padding: 0px 60px; */
 }
 
 .container {
@@ -12204,6 +12205,7 @@ label {
 .info-box p {
   font-weight: 400;
   font-size: 25px;
+  line-height: 27px;
   margin-bottom: 20px;
 }
 
@@ -12224,6 +12226,7 @@ label {
 
 .info-box li {
   margin-top: 35px;
+  line-height: 30px;
 }
 
 .info-box strong {
