@@ -795,6 +795,8 @@ export default function donation(pageProp) {
                                 value={formdata?.postal_code}
                                 onChange={handleChange}
                             />
+                             <p style={{ marginTop: "6px" }}>Please mention applicable postal code, zip code, pin code, postcode</p>
+                            
                             {errors.postal_code && <p className="text_red">{errors.postal_code}</p>}
 
                             {/* </form> */}

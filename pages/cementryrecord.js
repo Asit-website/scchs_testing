@@ -88,6 +88,45 @@ export default function cementryrecord(pageProp) {
   const start = (currentPage - 1) * resultsPerPage + 1;
   const end = Math.min(start + resultsPerPage - 1, totalRecords);
 
+
+  // ===============alphabatic cementry record===========
+  // const groupedCemeteries = {};
+
+  // filteredRecords
+  //   .sort((a, b) => a.name.localeCompare(b.name))
+  //   .forEach((cemetery) => {
+  //     const trimmedName = cemetery.name.trim();
+  //     const firstChar = trimmedName.charAt(0).toUpperCase();
+
+  //     const isAlpha = /^[A-Z]$/.test(firstChar); // Check A-Z
+  //     const key = isAlpha ? firstChar : '#';     // Group invalid under '#'
+
+  //     if (!groupedCemeteries[key]) {
+  //       groupedCemeteries[key] = [];
+  //     }
+
+  //     groupedCemeteries[key].push(cemetery);
+  //   });
+
+  const groupedCemeteries = {};
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  for (const letter of alphabet) {
+    groupedCemeteries[letter] = [];
+  }
+
+  filteredRecords
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .forEach((cemetery) => {
+      const trimmed = cemetery.name.trim();
+      const first = trimmed.charAt(0).toUpperCase();
+      const isAlpha = /^[A-Z]$/.test(first);
+      const key = isAlpha ? first : "#";
+      if (!groupedCemeteries[key]) groupedCemeteries[key] = [];
+      groupedCemeteries[key].push(cemetery);
+    });
+
+
   return (
     <div className="page_shopping_list sop">
       <HeadSEO title={"memberlogin"} description={"this member is login"} image={null} />
@@ -104,7 +143,7 @@ export default function cementryrecord(pageProp) {
                     value={selectedCounty}
                     onChange={(e) => setSelectedCounty(e.target.value)}
                   >
-                    <option>Filter List by County / Region</option>
+                    <option value="All">Filter List by County / Region</option>
                     {counties.map((county) => (
                       <option key={county.id} value={county.name}>
                         {county.name}
@@ -116,7 +155,7 @@ export default function cementryrecord(pageProp) {
                     value={selectedCemetery}
                     onChange={(e) => setSelectedCemetery(e.target.value)}
                   >
-                    <option>Select Cemetery</option>
+                    <option value="All">Select Cemetery</option>
                     {filteredCemeteries.map((cemetery) => (
                       <option key={cemetery.id} value={cemetery.name}>
                         {cemetery.name}
@@ -135,7 +174,7 @@ export default function cementryrecord(pageProp) {
                   </div>
                 </div>
 
-                {/* <div className="filters-right">
+                <div className="filters-right">
                   <div className="dropdown-group">
                     <label>Results Per Page</label>
                     <select value={resultsPerPage} onChange={handlePerPageChange}>
@@ -158,11 +197,11 @@ export default function cementryrecord(pageProp) {
                   <div className="listing-info">
                     Listing : <strong>{start} to {end}</strong> of {totalRecords}
                   </div>
-                </div> */}
+                </div>
               </div>
 
               <div className="cemetery-list">
-                {filteredRecords.map((cemetery) => (
+                {/* {filteredRecords.map((cemetery) => (
                   <div className="cemetery-item" key={cemetery.id}>
                     <h3>{cemetery.name}</h3>
                     <div className="cemetery-links">
@@ -173,7 +212,58 @@ export default function cementryrecord(pageProp) {
                       <p dangerouslySetInnerHTML={{ __html: cemetery?.short_description }} />
                     )}
                   </div>
-                ))}
+                ))} */}
+                {Object.keys(groupedCemeteries)
+                  .sort()
+                  .map((letter) => (
+                    <div key={letter}>
+                      {/* <h2 style={{ marginTop: '30px', color: '#00305b' }}>{letter}</h2> */}
+
+                      {groupedCemeteries[letter].map((cemetery) => (
+                        <div className="cemetery-item" key={cemetery.id}>
+                          <h3>{cemetery.name}</h3>
+                          <div className="cemetery-links">
+                            <Link
+                              style={{
+                                border: '1px solid #9d0030',
+                                padding: '5px 10px',
+                                color: '#9d0030',
+                                fontSize: '13px',
+                                textDecoration: 'none',
+                                borderRadius: '3px',
+                              }}
+                              className="opens"
+                              href={`/cementrydetail?id=${cemetery.id}`}
+                            >
+                              View Cemetery Details
+                            </Link>{" "}
+                            <Link
+                              style={{
+                                border: '1px solid #00305b',
+                                padding: '5px 10px',
+                                color: '#00305b',
+                                fontSize: '13px',
+                                textDecoration: 'none',
+                                borderRadius: '3px',
+                              }}
+                              className="opens"
+                              href={`/cementrytable?id=${cemetery.id}`}
+                            >
+                              View Cemetery Records
+                            </Link>
+                          </div>
+                          {cemetery.short_description && (
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: cemetery?.short_description,
+                              }}
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+
               </div>
             </div>
 
