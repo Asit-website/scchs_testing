@@ -771,8 +771,9 @@ export default function Navbar(props) {
 
                         <span className="newsLetter_why">
                           <ol>
-                            <li>Membership Newsletters</li>
-                            <li>SCCHS Genealogy Newsletters</li>
+                           <a href="/research4"> <li>SCCHS Heritage Journal</li></a>
+                           <a href="/heritage"> <li>SCCHS Newsletters</li></a>
+                            <a href="/message-1"> <li>SCCHS President Messages</li></a>
                           </ol>
                         </span>
                       }

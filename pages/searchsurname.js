@@ -54,34 +54,37 @@ export default function searchsurname(pageProp) {
                 <div className="event_main">
                     <div className="cemetery-records-wrapper">
                         <h2>Search Results for: <strong>{surname}</strong></h2>
-                        <table className="cemetery-table">
-                            <thead>
-                                <tr>
-                                    <th>Actions</th>
-                                    <th>Surname</th>
-                                    <th>Given Name</th>
-                                    <th>Age</th>
-                                    <th>Birth Year</th>
-                                    <th>Death Year</th>
-                                    <th>Burial Year</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {searchResults.map((person) => (
-                                    <tr key={person.id}>
-                                        <td>
-                                            <Link href={`/cementrytabledetail?id=${person.cemetery_id}&personId=${person.index}`}>👁</Link>
-                                        </td>
-                                        <td>{person.surname}</td>
-                                        <td>{person.name}</td>
-                                        <td>{person.age}</td>
-                                        <td>{person.birth_year}</td>
-                                        <td>{person.death_year}</td>
-                                        <td>{person.burial_year}</td>
+                        {
+                            !searchResults?.length > 0 ? <h2>No record found</h2> : <table className="cemetery-table">
+                                <thead>
+                                    <tr>
+                                        <th>Actions</th>
+                                        <th>Surname</th>
+                                        <th>Given Name</th>
+                                        <th>Age</th>
+                                        <th>Birth Year</th>
+                                        <th>Death Year</th>
+                                        <th>Burial Year</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {searchResults.map((person) => (
+                                        <tr key={person.id}>
+                                            <td>
+                                                <Link href={`/cementrytabledetail?id=${person.cemetery_id}&personId=${person.index}`}>👁</Link>
+                                            </td>
+                                            <td>{person.surname}</td>
+                                            <td>{person.name}</td>
+                                            <td>{person.age}</td>
+                                            <td>{person.birth_year}</td>
+                                            <td>{person.death_year}</td>
+                                            <td>{person.burial_year}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        }
+
                     </div>
                 </div>
             </div>

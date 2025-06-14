@@ -77,12 +77,13 @@ export default function cementrytable(pageProp) {
                                 </div>
                             </div>
                         </div>
-
-                        <table className="cemetery-table">
+                       {
+                        !filteredPeople.length > 0 ? <h2>No record found</h2> :  <table className="cemetery-table">
                             <thead>
                                 <tr>
                                     <th>Actions</th>
-                                    <th>Surname ⬆</th>
+                                    {/* ⬆ */}
+                                    <th>Surname </th>
                                     <th>Given Name</th>
                                     <th>Age</th>
                                     <th>Birth Year</th>
@@ -99,11 +100,13 @@ export default function cementrytable(pageProp) {
                                         <td>{person.age}</td>
                                         <td>{person.birth_year}</td>
                                         <td>{person.death_year}</td>
-                                        <td>{person.burial_year}</td>
+                                        <td style={{width:"20%"}}>{person.burial_year}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
+                       }
+                       
 
 
                     </div>

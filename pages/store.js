@@ -39,7 +39,7 @@ const products = new Array(8).fill({
 products[1].inStock = true; // Example of "Out Of Stock"
 
 
-const ITEMS_PER_PAGE = 3;
+// const ITEMS_PER_PAGE = 3;
 
 export default function store(pageProp) {
 
@@ -49,7 +49,7 @@ export default function store(pageProp) {
     const [allCategory, setAllCategory] = useState([]);
     const [selectedSlug, setSelectedSlug] = useState('');
     const [hasSearched, setHasSearched] = useState(false);
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(1000);
     const [totalProducts, setTotalProducts] = useState(0);
     const [offset, setOffset] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
@@ -77,22 +77,23 @@ export default function store(pageProp) {
     //     }
     // };
     const fetchProduct = async (customLimit = limit) => {
-  try {
-    const resp = await fetch(`https://admin.scchs.co.in/api/products?limit=${customLimit}&offset=0&all=1`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
+        try {
+            const resp = await fetch(`https://admin.scchs.co.in/api/products?limit=${customLimit}&offset=0&all=1`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
 
-    if (resp.status === 200) {
-      const data = await resp.json();
-      setAllProduct(data?.products || []);
-      setTotalProducts(data?.total || data?.products?.length || 0); // depends on your backend response
-      setOffset(0); // reset offset on new fetch
-    }
-  } catch (error) {
-    console.error("Error fetching all products:", error);
-  }
-};
+            if (resp.status === 200) {
+                const data = await resp.json();
+                console.log(data)
+                setAllProduct(data?.products || []);
+                setTotalProducts(data?.total || data?.products?.length || 0); // depends on your backend response
+                setOffset(0); // reset offset on new fetch
+            }
+        } catch (error) {
+            console.error("Error fetching all products:", error);
+        }
+    };
 
 
     const fetchCategory = async () => {
@@ -119,8 +120,8 @@ export default function store(pageProp) {
     };
 
     useEffect(() => {
-        fetchCategory();
         fetchProduct();
+        fetchCategory();
     }, [])
 
     // const fetchProductByCat = async () => {
@@ -147,29 +148,29 @@ export default function store(pageProp) {
     //         });
     // };
 
-   const fetchProductByCat = () => {
-    let url = "";
+    const fetchProductByCat = () => {
+        let url = "";
 
-    if (!selectedSlug) {
-        // fetch all products
-        url = `https://admin.scchs.co.in/api/products?limit=${limit}&offset=0&all=1`;
-    } else {
-        // fetch by category slug
-        url = `https://admin.scchs.co.in/api/products/category/${selectedSlug}?limit=${limit}&offset=0`;
-    }
+        if (!selectedSlug) {
+            // fetch all products
+            url = `https://admin.scchs.co.in/api/products?limit=${limit}&offset=0&all=1`;
+        } else {
+            // fetch by category slug
+            url = `https://admin.scchs.co.in/api/products/category/${selectedSlug}?limit=${limit}&offset=0`;
+        }
 
-    fetch(url)
-        .then((res) => res.json())
-        .then((data) => {
-            setAllProduct(data?.products || []);
-            setHasSearched(true);
-            setOffset(0); // reset offset on every fetch
-            setTotalProducts(data?.total || data?.products?.length || 0); // total from API or fallback
-        })
-        .catch((error) => {
-            console.error("Error fetching products:", error);
-        });
-};
+        fetch(url)
+            .then((res) => res.json())
+            .then((data) => {
+                setAllProduct(data?.products || []);
+                setHasSearched(true);
+                setOffset(0); // reset offset on every fetch
+                setTotalProducts(data?.total || data?.products?.length || 0); // total from API or fallback
+            })
+            .catch((error) => {
+                console.error("Error fetching products:", error);
+            });
+    };
 
 
 

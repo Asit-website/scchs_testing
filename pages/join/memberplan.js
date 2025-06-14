@@ -456,7 +456,7 @@ export default function memberplan(pageProp) {
             </div> :
               <div>
                 <h1 style={{ textAlign: "center" }}>Need to login for purchase membership plan</h1>
-                <Link style={{ textDecoration: "none" }} href={"/member/memberlogin"}> <button className="scchs_hj_btn">Sign In</button></Link>
+                <Link style={{ textDecoration: "none" }} href={"/user/userlogin"}> <button className="scchs_hj_btn">Sign In</button></Link>
               </div>
           }
 
