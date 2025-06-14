@@ -20,6 +20,7 @@ var settingsMorePhotos = {
 
 
 export default function cementrytable(pageProp) {
+    const printRef = useRef();
     const router = useRouter();
     const { id, personId } = router.query;
     const [personData, setPersonData] = useState(null);
@@ -31,6 +32,53 @@ export default function cementrytable(pageProp) {
                 .then((data) => setPersonData(data));
         }
     }, [id, personId]);
+
+    const handlePrint = () => {
+        const printContents = printRef.current.cloneNode(true);
+        const printWindow = window.open("", "", "width=800,height=600");
+
+        printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Surname Details</title>
+          <style>
+           @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+          *{
+             font-family: "Inter", sans-serif;
+          }
+          body{
+              font-family: "Inter", sans-serif;
+          }
+           .cemetery-box {
+  border: 1px solid #aaa;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #fff;
+}
+
+.cemetery-box-title {
+  color: #335533;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+          </style>
+        </head>
+        <body>
+         
+        </body>
+      </html>
+    `);
+
+        printWindow.document.body.appendChild(printContents);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+        }, 500);
+    };
 
     if (!personData) return <p>Loading...</p>;
     return (
@@ -47,36 +95,37 @@ export default function cementrytable(pageProp) {
                         <div className="cemetery-detail-header">
                             <h1 className="cemetery-detail-title">Cemetery Record</h1>
                             <div className="cemetery-detail-buttons">
-                                <button className="cemetery-btn-print" onClick={() => window.print()}>Print</button>
+                                <button className="cemetery-btn-print" onClick={handlePrint}>Print</button>
                                 <button className="cemetery-btn-close" onClick={() => router.back()}>Close</button>
                             </div>
                         </div>
+                        <div ref={printRef}>
+                            <div className="cemetery-box" >
+                                <h3 className="cemetery-box-title">Personal Data:</h3>
+                                <p>Surname: <strong>{personData.surname}</strong></p>
+                                <p>Given Name: <strong>{personData.given_name}</strong></p>
+                                <p>Age: <strong>{personData.age}</strong></p>
+                            </div>
 
-                        <div className="cemetery-box">
-                            <h3 className="cemetery-box-title">Personal Data:</h3>
-                            <p>Surname: <strong>{personData.surname}</strong></p>
-                            <p>Given Name: <strong>{personData.given_name}</strong></p>
-                            <p>Age: <strong>{personData.age}</strong></p>
-                        </div>
+                            <div className="cemetery-box">
+                                <h3 className="cemetery-box-title">Birth Information:</h3>
+                                <p>  Mo. / Day / Year : <strong>{personData.birth_month} {personData?.birth_day} {personData?.birth_year}</strong></p>
+                            </div>
 
-                        <div className="cemetery-box">
-                            <h3 className="cemetery-box-title">Birth Information:</h3>
-                            <p>Year / Mo. / Day: <strong>{personData.birth_info}</strong></p>
-                        </div>
+                            <div className="cemetery-box">
+                                <h3 className="cemetery-box-title">Death Information:</h3>
+                                <p> / Mo. / Day / Year : <strong>{personData.death_month} {personData?.death_day} {personData?.death_year}</strong></p>
+                            </div>
 
-                        <div className="cemetery-box">
-                            <h3 className="cemetery-box-title">Death Information:</h3>
-                            <p>Year / Mo. / Day: <strong>{personData.death_info}</strong></p>
-                        </div>
+                            <div className="cemetery-box">
+                                <h3 className="cemetery-box-title">Interment Information:</h3>
+                                <p>Cemetery: <strong>{personData.cemetery}</strong></p>
+                            </div>
 
-                        <div className="cemetery-box">
-                            <h3 className="cemetery-box-title">Interment Information:</h3>
-                            <p>Cemetery: <strong>{personData.cemetery}</strong></p>
-                        </div>
-
-                        <div className="cemetery-box">
-                            <h3 className="cemetery-box-title">Notes / Comments:</h3>
-                            <p><strong>{personData.remarks}</strong></p>
+                            <div className="cemetery-box">
+                                <h3 className="cemetery-box-title">Notes / Comments:</h3>
+                                <p><strong>{personData.notes}</strong></p>
+                            </div>
                         </div>
                     </div>
                 </div>

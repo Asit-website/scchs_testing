@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../components/common/Head/head1";
 import Link from "next/link";
 import { useRouter } from "next/router";
+// import ReactToPrint from "react-to-print";
 
 
 
@@ -33,6 +34,8 @@ var settingsMorePhotos = {
 
 export default function surenamelook(pageProp) {
 
+    const printRef = useRef();
+
     const { query } = useRouter();
 
     const data = {
@@ -47,7 +50,103 @@ export default function surenamelook(pageProp) {
         notes: query?.commant
     };
 
+
+
     console.log(data)
+
+    const handlePrint = () => {
+        const printContents = printRef.current.cloneNode(true);
+        const printWindow = window.open("", "", "width=800,height=600");
+
+        printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Surname Details</title>
+          <style>
+           @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+          *{
+             font-family: "Inter", sans-serif;
+          }
+          body{
+              font-family: "Inter", sans-serif;
+          }
+             .surname-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 24px;
+  column-gap: 60px;
+  align-items: center;
+}
+
+.surname-details-grid div {
+  color: rgba(8, 13, 23, 1);
+  font-size: 18px;
+  font-family: "Euclid-Regular";
+}
+
+.surname-details-grid strong {
+  color: rgba(0, 49, 92, 1) !important;
+  font-size: 18px !important;
+  font-family: "Euclid-Medium" !important;
+  font-weight: 400 !important;
+}
+
+.surname-details-grid div:nth-child(3n+2) {
+  color: #000;
+}
+
+.surname-details-grid a {
+  color: #003865;
+  /* Same as the Figma color for links */
+  text-decoration: none;
+}
+
+.surname-btn-group {
+  margin-top: 40px;
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  background-color: #002f5f;
+  color: white;
+  padding: 10px 40px;
+  border-radius: 30px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 1);
+  font-size: 18px;
+  font-family: "Euclid-Regular";
+}
+
+.btn-outline {
+  border: 1px solid #97002b;
+  background: none;
+  color: #97002b;
+  padding: 10px 28px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+          </style>
+        </head>
+        <body>
+         
+        </body>
+      </html>
+    `);
+
+        printWindow.document.body.appendChild(printContents);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+        }, 500);
+    };
 
 
     return (
@@ -59,11 +158,11 @@ export default function surenamelook(pageProp) {
             <div className="event_system_main event_system_main1">
                 <div className="event_main">
                     <div className="surname-btn-group">
-                        <button className="btn-primary">Print</button>
+                        <button onClick={handlePrint} className="btn-primary">Print</button>
                         <Link href={"/surenamelook"}><button className="btn-outline">Back</button></Link>
                     </div>
                     <div className="surname-details-wrapper">
-                        <div className="surname-details-grid">
+                        <div className="surname-details-grid" ref={printRef}>
                             {data?.surname && <><div>Surname</div>
                                 <div>: <strong><a href="#">{data.surname}</a></strong></div></>}
 
