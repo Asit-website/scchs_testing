@@ -52,6 +52,7 @@ export default function cementrytable(pageProp) {
 
             <div className="event_system_main event_system_main1">
                 <div className="event_main">
+                    
                     <div className="cemetery-records-wrapper">
                         <div className="cemetery-records-filters">
                             <div className="cemetery-filter-group">
@@ -77,8 +78,8 @@ export default function cementrytable(pageProp) {
                                 </div>
                             </div>
                         </div>
-                       {
-                        !filteredPeople.length > 0 ? <h2>No record found</h2> :  <table className="cemetery-table">
+
+                        <table className="cemetery-table" >
                             <thead>
                                 <tr>
                                     <th>Actions</th>
@@ -105,11 +106,12 @@ export default function cementrytable(pageProp) {
                                 ))}
                             </tbody>
                         </table>
-                       }
+                       
                        
 
 
                     </div>
+                    
                 </div>
             </div>
         </div>

@@ -1767,7 +1767,7 @@ export default function myprofile(pageProp) {
                                                 <input name="alt_spelling" placeholder="Alt Spelling" value={form.alt_spelling} onChange={handleChangeform} />
                                                 {/* <input name="commant" placeholder="Comment" value={form.commant} onChange={handleChangeform} /> */}
                                                 <div>
-                                                    <textarea style={{ height: "80px" }} value={form?.commant} name="commant" onChange={handleChangeform}></textarea>
+                                                    <textarea style={{ height: "80px", padding: "8px", fontSize: "16px" }} value={form?.commant} name="commant" onChange={handleChangeform} placeholder="Comment"></textarea>
                                                 </div>
                                                 <div className="st-modal-buttons">
                                                     <button onClick={handleAdd} className="st-save-btn">{isEditMode ? "Update" : "Save"}</button>

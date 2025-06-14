@@ -103,7 +103,7 @@ export default function business(pageProp) {
 
 
             <div className="event_system_main">
-                <div className="event_main">
+                <div className="event_main" id="eventsynopsis">
 
                     <div className="pagination-settings">
                         <label>Listings Per Page:&nbsp;</label>
