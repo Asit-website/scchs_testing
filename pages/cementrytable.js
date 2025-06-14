@@ -52,6 +52,7 @@ export default function cementrytable(pageProp) {
 
             <div className="event_system_main event_system_main1">
                 <div className="event_main">
+                    
                     <div className="cemetery-records-wrapper">
                         <div className="cemetery-records-filters">
                             <div className="cemetery-filter-group">
@@ -78,7 +79,7 @@ export default function cementrytable(pageProp) {
                             </div>
                         </div>
 
-                        <table className="cemetery-table">
+                        <table className="cemetery-table" >
                             <thead>
                                 <tr>
                                     <th>Actions</th>
@@ -107,6 +108,7 @@ export default function cementrytable(pageProp) {
 
 
                     </div>
+                    
                 </div>
             </div>
         </div>

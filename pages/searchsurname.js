@@ -54,7 +54,8 @@ export default function searchsurname(pageProp) {
                 <div className="event_main">
                     <div className="cemetery-records-wrapper">
                         <h2>Search Results for: <strong>{surname}</strong></h2>
-                        <table className="cemetery-table">
+                        <div style={{ overflowX: "auto" }}>
+                        <table className="cemetery-table" style={{ minWidth: "700px", width: "100%", overflowX: "auto"}}>
                             <thead>
                                 <tr>
                                     <th>Actions</th>
@@ -82,6 +83,7 @@ export default function searchsurname(pageProp) {
                                 ))}
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

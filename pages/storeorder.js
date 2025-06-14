@@ -597,6 +597,8 @@ export default function storeorder(pageProp) {
 
     // }
 
+    const payPalBtn = useRef();
+
     const paymentHandler = async () => {
         try {
             const response = await fetch("https://admin.scchs.co.in/api/order/create", {
@@ -618,6 +620,7 @@ export default function storeorder(pageProp) {
             console.log("Order created:", formattedResponse);
             setPayment(formattedResponse);
             setPayNow(true);
+            payPalBtn.current.scrollIntoView({ behavior: 'smooth' });
         } catch (error) {
             console.error("Order creation failed", error);
         }
@@ -970,6 +973,7 @@ export default function storeorder(pageProp) {
                                         }]
                                     });
                                 }}
+                                ref={payPalBtn}
                                 onApprove={async (data, actions) => {
                                     const details = await actions.order.capture();
                                     console.log("Payment successful!", details);

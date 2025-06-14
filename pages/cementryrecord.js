@@ -60,8 +60,8 @@ export default function cementryrecord(pageProp) {
     let records = selectedCemetery === "All"
       ? filteredCemeteries
       : filteredCemeteries.filter(
-          (c) => c.name.toLowerCase().trim() === selectedCemetery.toLowerCase().trim()
-        );
+        (c) => c.name.toLowerCase().trim() === selectedCemetery.toLowerCase().trim()
+      );
 
     setTotalRecords(records.length);
     const start = (currentPage - 1) * resultsPerPage;
@@ -166,8 +166,8 @@ export default function cementryrecord(pageProp) {
                   <div className="cemetery-item" key={cemetery.id}>
                     <h3>{cemetery.name}</h3>
                     <div className="cemetery-links">
-                      <Link   style={{ border: '1px solid #9d0030', padding: '5px 10px', color: '#9d0030', fontSize: '13px', textDecoration: 'none', borderRadius: '3px'  }} className="opens" href={`/cementrydetail?id=${cemetery.id}`}>View Cemetery Details</Link> {" "}
-                      <Link   style={{ border: '1px solid #00305b',padding: '5px 10px', color: '#00305b', fontSize: '13px', textDecoration: 'none', borderRadius: '3px'  }} className="opens" href={`/cementrytable?id=${cemetery.id}`}>View Cemetery Records</Link>
+                      <Link style={{ border: '1px solid #9d0030', padding: '5px 10px', color: '#9d0030', fontSize: '13px', textDecoration: 'none', borderRadius: '3px' }} className="opens" href={`/cementrydetail?id=${cemetery.id}`}>View Cemetery Details</Link> {" "}
+                      <Link style={{ border: '1px solid #00305b', padding: '5px 10px', color: '#00305b', fontSize: '13px', textDecoration: 'none', borderRadius: '3px' }} className="openss" href={`/cementrytable?id=${cemetery.id}`}>View Cemetery Records</Link>
                     </div>
                     {cemetery.short_description && (
                       <p dangerouslySetInnerHTML={{ __html: cemetery?.short_description }} />
