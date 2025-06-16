@@ -773,7 +773,8 @@ export default function Navbar(props) {
                           <ol>
                            <a href="/research4"> <li>SCCHS Heritage Journal</li></a>
                            <a href="/heritage"> <li>SCCHS Newsletters</li></a>
-                            <a href="/message-1"> <li>SCCHS President Messages</li></a>
+                             <a href="/heritage"> <li>Genealogy Newsletter</li></a>
+                            <a href="/genealogy-newsletter"> <li>SCCHS President Messages</li></a>
                           </ol>
                         </span>
                       }
