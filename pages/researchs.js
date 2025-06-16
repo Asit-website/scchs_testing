@@ -152,7 +152,7 @@ export default function researchs(pageProp) {
                                     </p>
                                     <p>
                                         If you are a member, you may view the above indexes by clicking on them or going to the&nbsp;
-                                        <a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>RESEARCH</a>&nbsp;section of the MEMBERS ONLY&nbsp;page.&nbsp;
+                                        <a href={membershipStatus === "active" ? "/research" : "/member/memberlogin"}>RESEARCH</a>&nbsp;section of the MEMBERS ONLY&nbsp;page.&nbsp;
                                     </p>
                                     <p>
                                         If you are&nbsp;not&nbsp;a member and would like&nbsp;information about becoming&nbsp;one&nbsp;
@@ -165,7 +165,7 @@ export default function researchs(pageProp) {
                                         Everyone using our website has access to our online Catalog and to the St. Charles County Circuit<br />
                                         Court online index.
                                     </p>
-                                    <p><a href="#">The online Catalog contains our collection of:</a></p>
+                                    <p><a href="/checkout">The online Catalog contains our collection of:</a></p>
                                     <ul>
                                         <li>
                                             <strong>Photographs</strong> - The SCCHS collection contains over 14,000 images of buildings,
@@ -183,7 +183,7 @@ export default function researchs(pageProp) {
                                 </div>
 
                                 <div className="info-below">
-                                    <p><a href="https://scchs.co.in/photos/mainhome">CLICK HERE</a>&nbsp;to view our&nbsp;Online Catalog.</p>
+                                    <p><a href="/checkout">CLICK HERE</a>&nbsp;to view our&nbsp;Online Catalog.</p>
                                     <p>
                                         2. The&nbsp;St. Charles County Circuit Court online index&nbsp;is the result of a-partnership between the Local
                                         Records Division of the Missouri State Archives, the St. Charles County' circuit clerk and the
@@ -194,7 +194,7 @@ export default function researchs(pageProp) {
                                     <ul>
                                         <li>1. includes sessions held&nbsp;from 1805 through 1893 (includes the period St. Charles served as Missouri's state capital),</li>
                                         <li>2. is&nbsp;to&nbsp;original records&nbsp;that are stored at the SCCHS Archives, and</li>
-                                        <li>3. may&nbsp;be&nbsp;searched&nbsp;free at&nbsp;<a href="">MO Judicial Archives</a>&nbsp;as part of the Missouri Judicial Records Collection (select Saint&nbsp;Charles in the County box).&nbsp;</li>
+                                        <li>3. may&nbsp;be&nbsp;searched&nbsp;free at&nbsp;<a href="https://s1.sos.mo.gov/records/archives/archivesdb/JudicialRecords">MO Judicial Archives</a>&nbsp;as part of the Missouri Judicial Records Collection (select Saint&nbsp;Charles in the County box).&nbsp;</li>
                                         <li>4. The original documents are at the St. Charles County Historical Society Archives.</li>
                                     </ul>
 

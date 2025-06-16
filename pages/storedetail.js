@@ -198,7 +198,12 @@ export default function storedetail(pageProp) {
                                     </Swiper>
                                     : <img
                                         className="product-detail-image"
-                                        src={productdetail?.images}
+                                        src={productdetail?.images || "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png"}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png";
+                                        }}
+                                        // src={productdetail?.images ? productdetail?.images : "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png"}
                                         alt="Print"
                                     />
 

@@ -18,6 +18,7 @@ import Head from "next/head";
 import HeadSEO1 from "../components/common/Head/head1";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+// import { useRouter } from "next/router";
 
 
 var settingsMorePhotos = {
@@ -35,6 +36,7 @@ const ITEMS_PER_PAGE = 3;
 export default function eventdetail(pageProp) {
 
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+    
 
     const handleLoadMore = () => {
         setVisibleCount(prev => prev + ITEMS_PER_PAGE);
@@ -116,7 +118,7 @@ export default function eventdetail(pageProp) {
             setShowPayPal(true); // now show PayPal button
         } catch (err) {
             console.error(err);
-            alert('Failed to place order');
+            toast.error('Failed to place order');
         }
 
     };
@@ -294,7 +296,10 @@ export default function eventdetail(pageProp) {
 
                     <PayPalScriptProvider options={{ clientId: 'AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy', currency: 'USD' }}>
                         <div>
-                            <button onClick={() => setShowModal1(true)} className="ticket-btn">Purchase Tickets</button>
+                            <button onClick={() =>{
+                                instaUser ? setShowModal1(true) : router.push("/user/userlogin")
+                                
+                            }} className="ticket-btn">Purchase Tickets</button>
 
                             {showModal1 && (
                                 <div className="modal-overlay" onClick={closeModal}>

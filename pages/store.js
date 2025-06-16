@@ -162,6 +162,7 @@ export default function store(pageProp) {
         fetch(url)
             .then((res) => res.json())
             .then((data) => {
+                console.log(data);
                 setAllProduct(data?.products || []);
                 setHasSearched(true);
                 setOffset(0); // reset offset on every fetch
@@ -290,9 +291,12 @@ export default function store(pageProp) {
                                         }}
                                     >
                                         {/* <option value="">List</option> */}
-                                        <option value={6}>6</option>
-                                        <option value={4}>4</option>
-                                        <option value={2}>2</option>
+                                        <option value={150}>150</option>
+                                        <option value={100}>100</option>
+                                        <option value={50}>50</option>
+                                        <option value={25}>25</option>
+                                        <option value={10}>10</option>
+
                                     </select>
 
 
@@ -313,7 +317,12 @@ export default function store(pageProp) {
                                 <Link href={`/storedetail?id=${product?.slug}`}><img
                                     className="custom-card-image"
                                     // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
-                                    src={product?.image}
+                                    // src={product?.image}
+                                    src={product?.image?.trim() || "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png"}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png";
+                                    }}
                                     alt="Product"
                                 /></Link>
                                 <div className="custom-card-content">
@@ -328,8 +337,9 @@ export default function store(pageProp) {
 
                                     </p>
                                     <button
+                                        disabled={product.status === "inactive"}
                                         //  out-stock
-                                        className="custom-card-button"
+                                        className={`${product?.status === "inactive" ? "ina_bt" : "custom-card-button"}`}
                                         onClick={async () => {
                                             const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
                                             const productId = product?.id;
@@ -358,7 +368,7 @@ export default function store(pageProp) {
 
                                         }}
                                     >
-                                        {product.inStock ? "Out of Stock" : "Add to Cart"}
+                                        {product?.status === "active" ? "Add to Cart" : "Out of Stock"}
                                     </button>
                                 </div>
                             </div>

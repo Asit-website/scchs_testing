@@ -17,48 +17,86 @@ var settingsMorePhotos = {
 };
 
 
-const records = [
-    { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
-    { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
-    { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
-    { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
-    { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
-    { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
-    { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
-    { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
-    { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
-    { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
-    { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
-    { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
-    { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
-    { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
-    { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
-    { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
-    { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
-    { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
-    { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
-    { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
-    { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
-    { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
-    { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
-    { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
-    // Add more for testing pagination
-];
+// const records = [
+//     { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
+//     { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
+//     { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
+//     { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
+//     { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
+//     { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
+//     { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
+//     { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
+//     { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
+//     { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
+//     { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
+//     { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
+//     { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
+//     { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
+//     { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
+//     { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
+//     { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
+//     { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
+//     { name: 'Almeling, Dan and Christy', email: 'd56da@aol.com' },
+//     { name: 'Anderson, Evan', email: 'eja2100@aol.com' },
+//     { name: 'Angell, Natalie', address: '202 Sandfort Ln. St. Charles, MO 63301-4411', phone: '(636) 947-6970', email: 'natalie.angell20@gmail.com' },
+//     { name: 'Archer, Hillary', email: 'hillaryarcher47@gmail.com' },
+//     { name: 'Arens, Dan [Dan] Robert', email: 'drarens@yahoo.com' },
+//     { name: 'Armantrout, F. John', email: 'kayak910@outlook.com' },
+//     // Add more for testing pagination
+// ];
 
 const itemsPerPage = 10;
 export default function memberlist(pageProp) {
 
+    const [records, setRecords] = useState([]);
+    const [filteredRecords, setFilteredRecords] = useState([]);
+    const [searchField, setSearchField] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(50);
+    const [searchValue, setSearchValue] = useState("");
 
-    const totalPages = Math.ceil(records.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = records.slice(startIndex, startIndex + itemsPerPage);
 
-    const handleClick = (page) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
+    useEffect(() => {
+        const fetchCustomers = async () => {
+            try {
+                const response = await fetch('https://admin.scchs.co.in/api/all/customers');
+                const data = await response.json();
+                setRecords(data || []);
+                setFilteredRecords(data || []);
+            } catch (error) {
+                console.error('Error fetching customers:', error);
+            }
+        };
+        fetchCustomers();
+    }, []);
+
+    // Filter function
+    useEffect(() => {
+        if (!searchValue || !searchField) {
+            setFilteredRecords(records);
+            return;
         }
-    };
+
+        const result = records.filter((item) => {
+            const name = item.user?.[searchField]?.toLowerCase() || "";
+            return name.includes(searchValue.toLowerCase());
+        });
+
+        setFilteredRecords(result);
+        setCurrentPage(1); // Reset to first page after search
+    }, [searchValue, searchField, records]);
+
+    // Pagination setup
+    const totalPages = Math.ceil(filteredRecords.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentItems = filteredRecords.slice(startIndex, startIndex + itemsPerPage);
+
+    // const handleClick = (page) => {
+    //     if (page >= 1 && page <= totalPages) {
+    //         setCurrentPage(page);
+    //     }
+    // };
 
     return (
         <div className="page_shopping_list sop">
@@ -71,14 +109,22 @@ export default function memberlist(pageProp) {
                     <div className="memberList_filter" >
                         <div className="event-title-filter memberlist-title-filter">
                             <div className="custom_drop">
-                                <select className="dropdown small">
-                                    <option>Last / Org. Name</option>
+                                <select value={searchField}
+                                    onChange={(e) => setSearchField(e.target.value)} className="dropdown small">
+                                    <option value="">Select</option>
+                                    <option value="first_name">First Name</option>
+                                    <option value="last_name">Last Name</option>
                                 </select>
                             </div>
                             <span className="for-label">FOR:</span>
-                            <input type="text" className="search-input" />
-                            <button className="search-button">
-                                <img width="28" src="https://res.cloudinary.com/dgif730br/image/upload/v1744279927/Mask_group_zicocm.png" alt="this is search image" />
+                            <input value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)} type="text" className="search-input" />
+                            <button onClick={() => {
+                                setSearchField("");
+                                setSearchValue("");
+                            }} className="search-button">
+                                Clear
+                                {/* <img width="28" src="https://res.cloudinary.com/dgif730br/image/upload/v1744279927/Mask_group_zicocm.png" alt="this is search image" /> */}
                             </button>
                         </div>
 
@@ -86,8 +132,16 @@ export default function memberlist(pageProp) {
                             <div className="listing">
                                 <label>Listing Per Page</label>
                                 <div className="custom_drop custom_drop1">
-                                    <select className="dropdown small">
-                                        <option>50</option>
+                                    <select value={itemsPerPage}
+                                        onChange={(e) => {
+                                            setItemsPerPage(Number(e.target.value));
+                                            setCurrentPage(1);
+                                        }} className="dropdown small">
+                                        {[10, 25, 50, 100].map((count) => (
+                                            <option key={count} value={count}>
+                                                {count}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
@@ -96,8 +150,13 @@ export default function memberlist(pageProp) {
                             <div className="listing" id="listingg">
                                 <label>Jump to Page</label>
                                 <div className="custom_drop custom_drop1">
-                                    <select className="dropdown small">
-                                        <option>50</option>
+                                    <select value={currentPage}
+                                        onChange={(e) => setCurrentPage(Number(e.target.value))} className="dropdown small">
+                                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
+                                            <option key={pg} value={pg}>
+                                                {pg}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
@@ -106,7 +165,8 @@ export default function memberlist(pageProp) {
 
                     </div>
                     <div className="record-info mem-record-info">
-                        Records : <span>1 to 200 of </span> 976
+                        Records: {filteredRecords.length === 0 ? 0 : startIndex + 1} to{" "}
+                        {Math.min(startIndex + itemsPerPage, filteredRecords.length)} of {filteredRecords.length}
                     </div>
 
                     <div className="scch-table-container">
@@ -126,88 +186,18 @@ export default function memberlist(pageProp) {
                             <tbody>
                                 {currentItems.map((item, idx) => (
                                     <tr key={idx}>
-                                        <td>{item.name}</td>
-                                        <td>{item.address || ''}</td>
+                                        <td>{item?.user?.first_name} {item?.user?.last_name}</td>
+                                        <td>{item?.user?.address || ''}</td>
                                         <td>
-                                            {item.phone && <div>{item.phone}</div>}
-                                            {item.email}
+                                            {item?.user?.mobile_number && <div>{item?.user.mobile_number}</div>}
+                                            {item?.user?.email}
+                                            {item?.user?.website}
                                         </td>
                                     </tr>
                                 ))}
-                                {/* <tr>
-                                    <td>1st Mo St Capitol, State Historic Site</td>
-                                    <td />
-                                    <td>sue.love@dnr.mo.gov</td>
-                                </tr> */}
-                                {/* <tr>
-                                    <td>Achelpohl, John</td>
-                                    <td>1118 Perry St. Saint. Charles, MO 63301-2904</td>
-                                    <td />
-                                </tr>
-                                <tr>
-                                    <td>Ackmann, Mark</td>
-                                    <td />
-                                    <td />
-                                </tr>
-                                <tr>
-                                    <td>Adams, Amanda</td>
-                                    <td />
-                                    <td>adamsamanda1@hotmail.com</td>
-                                </tr>
-                                <tr>
-                                    <td>Adams, Kathy</td>
-                                    <td>1330 Jonathans Trl Vero Beach, FL 32963-2367</td>
-                                    <td>adamsiumd@bellsouth.net</td>
-                                </tr>
-                                <tr>
-                                    <td>Adams, Rick</td>
-                                    <td />
-                                    <td>rrrussell@centurytel.net</td>
-                                </tr>
-                                <tr>
-                                    <td>Adams, William T.</td>
-                                    <td />
-                                    <td>adams_terry@att.net</td>
-                                </tr>
-                                <tr>
-                                    <td>Adamson, Steve &amp; Carolyn</td>
-                                    <td>1253 Warren St. Placentia, CA 92870-3640</td>
-                                    <td>
-                                        (714) 996-9511
-                                        <br />
-                                        cjwadamson@gmail.com
-                                    </td>
-                                </tr> */}
                             </tbody>
                         </table>
-
                     </div>
-
-
-                    <div className="custom-pagination">
-                        {[...Array(totalPages)].map((_, i) => (
-                            <button
-                                key={i}
-                                className={`page-btn ${currentPage === i + 1 ? 'active' : ''}`}
-                                onClick={() => handleClick(i + 1)}
-                            >
-                                {i + 1}
-                            </button>
-                        ))}
-
-                        <button
-                            className="page-btn next-btn1"
-                            onClick={() => handleClick(currentPage + 1)}
-                            disabled={currentPage === totalPages}
-                        >
-                           <span>Next</span> 
-                            <svg width="6" height="12" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M2.13115 0.5L0.368652 2.2625L6.09365 8L0.368652 13.7375L2.13115 15.5L9.63115 8L2.13115 0.5Z" fill="#666D76" />
-                            </svg>
-
-                        </button>
-                    </div>
-
                 </div>
             </div>
 

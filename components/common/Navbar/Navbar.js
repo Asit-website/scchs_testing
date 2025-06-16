@@ -800,7 +800,7 @@ export default function Navbar(props) {
                 <Link href={"/archieve"}>Archives</Link>
               </li>
               <li>
-                <Link href={"/photos/mainhome"}>photos</Link>
+                <Link href={"/checkout"}>photos</Link>
               </li>
               <li>
                 <Link href="/surenamelook">surname lookup</Link>

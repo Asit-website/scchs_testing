@@ -823,8 +823,13 @@ export default function storeorder(pageProp) {
                                         cartData?.cart?.map((val, index) => {
                                             return <div key={index} className="order-info-row">
                                                 <div className="item-col">
+                                                    {/* src={val?.image || val?.images[0]} */}
                                                     {/* https://res.cloudinary.com/dgif730br/image/upload/v1745412566/image_3_qhe6b5.png */}
-                                                    <img src={val?.image || val?.images[0]} alt="print" className="order-info-image" />
+                                                    <img src={(val?.image?.trim() || val?.images?.[0]?.trim()) || "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png"}
+                                                        onError={(e) => {
+                                                            e.target.onerror = null;
+                                                            e.target.src = "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png";
+                                                        }} alt="print" className="order-info-image" />
                                                     <div className="order-info-details">
                                                         {/* <div className="item-title">Print "The Meeting Place"</div> */}
                                                         <div className="item-title">{val?.name || val?.product_name}</div>

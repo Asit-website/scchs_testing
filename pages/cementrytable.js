@@ -79,7 +79,7 @@ export default function cementrytable(pageProp) {
                             </div>
                         </div>
 
-                        <table className="cemetery-table" style={{overflow}}>
+                        <table className="cemetery-table">
                             <thead>
                                 <tr>
                                     <th>Actions</th>

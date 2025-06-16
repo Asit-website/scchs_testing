@@ -1045,6 +1045,11 @@ export default function myprofile(pageProp) {
         }
     };
 
+    const totalAmount = donations.reduce(
+        (acc, item) => acc + parseFloat(item.donation_amount || 0),
+        0
+    );
+
     return (
         <div className="page_shopping_list sop">
             <HeadSEO title={"memberprofile"} description={"this is member profile"} image={null} />
@@ -1106,9 +1111,16 @@ export default function myprofile(pageProp) {
                                 </div> */}
                                 <div className="info-card">
                                     <div className="grid-2col">
-                                        <div><strong className="lable1">Expiration Date  :</strong>{memberships[0]?.end_date}</div>
+                                        <div><strong className="lable1">Expiration Date  :</strong>{memberships[0]?.end_date &&
+                                            (() => {
+                                                const date = new Date(memberships[0].end_date);
+                                                const mm = String(date.getMonth() + 1).padStart(2, '0');
+                                                const dd = String(date.getDate()).padStart(2, '0');
+                                                const yy = String(date.getFullYear()).slice(-2);
+                                                return `${mm}-${dd}-${yy}`;
+                                            })()}</div>
                                         <div><strong className="lable1">Amount Paid       :</strong>{memberships[0]?.plan?.monthly_price}$</div>
-                                        <div><strong className="lable1">Donation             :</strong>{donations[0]?.donation_amount}</div>
+                                        <div><strong className="lable1">Donation             :</strong>{totalAmount}</div>
                                         <div><strong className="lable1">Date                      :</strong>{new Date(donations[0]?.created_at).toLocaleString("en-US", {
                                             year: "numeric",
                                             month: "long",
@@ -1146,7 +1158,14 @@ export default function myprofile(pageProp) {
                                 <div className="grid-2col">
                                     <div><strong className="lable1">Member Active:</strong>{memberships[0]?.status === "active" ? "Yes" : "No"}</div>
                                     {/* <div><strong className="lable1">Address :</strong> Yes <span className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div> */}
-                                    <div><strong className="lable1">Join Date:</strong>{memberships[0]?.start_date}</div>
+                                    <div><strong className="lable1">Join Date:</strong>{memberships[0]?.end_date &&
+                                        (() => {
+                                            const date = new Date(memberships[0].start_date);
+                                            const mm = String(date.getMonth() + 1).padStart(2, '0');
+                                            const dd = String(date.getDate()).padStart(2, '0');
+                                            const yy = String(date.getFullYear()).slice(-2);
+                                            return `${mm}-${dd}-${yy}`;
+                                        })()}</div>
                                     <div><strong className="lable1">Prefix:</strong>{memberships[0]?.prefix}</div>
                                     <div><strong className="lable1">First Name:</strong>{memberships[0]?.user.first_name}</div>
                                     <div><strong className="lable1">Last Name:</strong>{memberships[0]?.user.last_name}</div>
