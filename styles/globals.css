@@ -9366,6 +9366,24 @@ label {
   transition: box-shadow 0.2s ease;
 }
 
+@media(max-width:644px){
+  .product-item{
+    
+    flex-direction: column;
+  }
+}
+@media(max-width:420px){
+  .order-card-header{
+    flex-direction: column;
+  }
+}
+@media(max-width:355px){
+  .product-item{
+    width: 80% !important;
+    flex-direction: column;
+  }
+}
+
 .product-item:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -13208,7 +13226,7 @@ textarea::placeholder,
 }
 
 .product-description p span {
-  background-color: none !important;
+  background-color: wheat !important;
 }
 
 
@@ -13638,7 +13656,7 @@ textarea::placeholder,
 
 /* subjectfile */
 body {
-  background-color: #fefee5;
+
   font-family: Arial, sans-serif;
   color: #2d2d2d;
 }
@@ -13725,4 +13743,16 @@ body {
   .subjectfiles1-header {
     display: none; /* Hide header for stacked view */
   }
+}
+
+
+
+.cemetery-table-wrapper {
+  overflow-x: auto !important;
+  width: 100% !important;
+}
+.cemetery-table {
+  min-width: 600px !important; /* or whatever minimum width makes sense */
+  width: 100% !important;
+  border-collapse: collapse !important;
 }
