@@ -564,7 +564,7 @@ export default function donation(pageProp) {
                             <input value={formdata?.address2} onChange={handleChange} name="address2" className="donation-input" type="text" placeholder="Address 2" />
                             {/* <input name="country" onChange={handleChange} value={formdata?.country} className="donation-input" type="text" placeholder="Country" /> */}
                             <div style={{ marginBottom: '20px', }}>
-                                <CreatableSelect
+                                {/* <CreatableSelect
                                     placeholder="Select or type country"
                                     options={toOptions(countries)}
                                     value={formdata.country ? { label: formdata.country, value: formdata.country } : null}
@@ -593,7 +593,53 @@ export default function donation(pageProp) {
 
                                         }),
                                     }}
-                                />
+                                /> */}
+                                <CreatableSelect
+  placeholder="Select or type country"
+  options={toOptions(countries)}
+  value={
+    formdata.country
+      ? { label: formdata.country, value: formdata.country }
+      : null
+  }
+  onChange={(selected) =>
+    setFormData((prev) => ({
+      ...prev,
+      country: selected?.value || '',
+      state: '',
+      city: '',
+    }))
+  }
+  styles={{
+    input: (provided) => ({
+      ...provided,
+      minHeight: '48px',
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      minHeight: '48px',
+      fontSize: '18px',
+      border: '2px solid rgb(114 114 115)',
+      boxShadow: state.isFocused ? 'rgb(114 114 115)' : 'none',
+      '&:hover': {
+        borderColor: 'rgb(114 114 115)',
+      },
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+    }),
+    menu: (provided) => ({
+      ...provided,
+      outline: 'none',
+      boxShadow: 'none',
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      outline: 'none',
+    }),
+  }}
+/>
+
                             </div>
                             {/* <input
                                 className="donation-input"
@@ -618,23 +664,52 @@ export default function donation(pageProp) {
                                             city: '',
                                         }))
                                     }
+                                    // styles={{
+                                    //     input: (provided) => ({
+                                    //         ...provided,
+                                    //         minHeight: '48px', // make sure input height is normal
+                                    //     }),
+                                    //     control: (provided) => ({
+                                    //         ...provided,
+                                    //         minHeight: '48px', // default or adjust as needed
+                                    //         fontSize: '18px',
+                                    //         border: '2px solid #888'
+                                    //     }),
+                                    //     placeholder: (provided) => ({
+                                    //         ...provided,
+
+                                    //     }),
+                                    // }}
                                     styles={{
                                         input: (provided) => ({
-                                            ...provided,
-                                            minHeight: '48px', // make sure input height is normal
+                                          ...provided,
+                                          minHeight: '48px',
                                         }),
-                                        control: (provided) => ({
-                                            ...provided,
-                                            minHeight: '48px', // default or adjust as needed
-                                            fontSize: '18px',
-                                            border: '2px solid #888'
+                                        control: (provided, state) => ({
+                                          ...provided,
+                                          minHeight: '48px',
+                                          fontSize: '18px',
+                                          border: '2px solid rgb(114 114 115)',
+                                          boxShadow: state.isFocused ? 'rgb(114 114 115)' : 'none',
+                                          '&:hover': {
+                                            borderColor: 'rgb(114 114 115)',
+                                          },
                                         }),
                                         placeholder: (provided) => ({
-                                            ...provided,
-
+                                          ...provided,
                                         }),
-                                    }}
+                                        menu: (provided) => ({
+                                          ...provided,
+                                          outline: 'none',
+                                          boxShadow: 'none',
+                                        }),
+                                        menuList: (provided) => ({
+                                          ...provided,
+                                          outline: 'none',
+                                        }),
+                                      }}
                                 />
+
                             </div>
                             {errors.state && <p className="text_red">{errors.state}</p>}
                             {/* <input
@@ -659,25 +734,53 @@ export default function donation(pageProp) {
                                             city: selected?.value || '',
                                         }))
                                     }
+                                    // styles={{
+                                    //     input: (provided) => ({
+                                    //         ...provided,
+
+                                    //         minHeight: '48px',
+                                    //     }),
+                                    //     control: (provided) => ({
+                                    //         ...provided,
+                                    //         minHeight: '48px',
+                                    //         fontSize: '18px',
+                                    //         border: '2px solid #888'
+
+                                    //     }),
+                                    //     placeholder: (provided) => ({
+                                    //         ...provided,
+
+
+                                    //     }),
+                                    // }}
                                     styles={{
                                         input: (provided) => ({
-                                            ...provided,
-
-                                            minHeight: '48px',
+                                          ...provided,
+                                          minHeight: '48px',
                                         }),
-                                        control: (provided) => ({
-                                            ...provided,
-                                            minHeight: '48px',
-                                            fontSize: '18px',
-                                            border: '2px solid #888'
-
+                                        control: (provided, state) => ({
+                                          ...provided,
+                                          minHeight: '48px',
+                                          fontSize: '18px',
+                                          border: '2px solid rgb(114 114 115)',
+                                          boxShadow: state.isFocused ? 'rgb(114 114 115)' : 'none',
+                                          '&:hover': {
+                                            borderColor: 'rgb(114 114 115)',
+                                          },
                                         }),
                                         placeholder: (provided) => ({
-                                            ...provided,
-
-
+                                          ...provided,
                                         }),
-                                    }}
+                                        menu: (provided) => ({
+                                          ...provided,
+                                          outline: 'none',
+                                          boxShadow: 'none',
+                                        }),
+                                        menuList: (provided) => ({
+                                          ...provided,
+                                          outline: 'none',
+                                        }),
+                                      }}
                                 />
                             </div>
 

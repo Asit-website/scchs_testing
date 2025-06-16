@@ -86,8 +86,8 @@ export default function cementrydetail(pageProp) {
                                 <div className="cemetery-item">
                                     <h3 style={{marginBottom: '1rem'}}>{cemetery?.name}</h3>
                                     <div className="cemetery-links">
-                                        <Link  style={{ border: '1px solid #9d0030', padding: '7px 15px', color: '#9d0030', fontSize: '13px', textDecoration: 'none', borderRadius: '3px'  }} href={`/cementrytable?id=${id}`}>View Cemetery Records</Link> {""} 
-                                        <Link style={{ border: '1px solid #00305b',padding: '7px 15px', color: '#00305b', fontSize: '13px', textDecoration: 'none', borderRadius: '3px'  }} href="/cementryrecord"> Return to Cemetery Listings</Link>
+                                        <Link  style={{ border: '1px solid #9d0030', padding: '7px 15px', color: '#9d0030', fontSize: '13px', textDecoration: 'none', borderRadius: '3px'  }} className="opens" href={`/cementrytable?id=${id}`}>View Cemetery Records</Link> {""} 
+                                        <Link style={{ border: '1px solid #00305b',padding: '7px 15px', color: '#00305b', fontSize: '13px', textDecoration: 'none', borderRadius: '3px'  }} className="openss" href="/cementryrecord"> Return to Cemetery Listings</Link>
                                     </div>
                                     <p style={{padding: '10px 0px'}}  dangerouslySetInnerHTML={{ __html: cemetery?.short_description }} />
                                     <p dangerouslySetInnerHTML={{ __html: cemetery?.description }} />
@@ -192,10 +192,7 @@ export default function cementrydetail(pageProp) {
   }
 
   @media (max-width: 600px) {
-    .cemetery-filters {
-      flex-direction: column;
-    }
-
+   
     .surname-search {
       flex-direction: row;
     }
@@ -206,7 +203,7 @@ export default function cementrydetail(pageProp) {
     }
 
     .cemetery-links {
-      flex-direction: column;
+      width:100%
       gap: 10px;
     }
 

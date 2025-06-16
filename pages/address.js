@@ -529,7 +529,7 @@ export default function Cart(props) {
             <div className="container">
 
                 <div className="form_address">
-                    <h2 style={{ textAlign: "center" }}>Order Information</h2>
+                    <h2 style={{ textAlign: "center" }}>Address Information</h2>
                     <form className="form_add nameform-container" onSubmit={isEditing ? updateAddressHandler : createAddressHandler}>
 
                         <div className="address_flex">
