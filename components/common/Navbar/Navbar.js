@@ -27,7 +27,7 @@ const staticItems = [
   { id: "Photos", title: "PHOTOS", link: "/photos/mainhome" },
   { id: "surname", title: "SURNAME LOOKUP", link: "/surenamelook" },
   { id: "business", title: "OUR BUSINESS FRIENDS", link: "/business" },
-   { id: "contact", title: "CONTACT US", link: "/contact-us" },
+  { id: "contact", title: "CONTACT US", link: "/contact-us" },
 ];
 
 
@@ -771,9 +771,9 @@ export default function Navbar(props) {
 
                         <span className="newsLetter_why">
                           <ol>
-                           <a href="/research4"> <li>SCCHS Heritage Journal</li></a>
-                           <a href="/heritage"> <li>SCCHS Newsletters</li></a>
-                             <a href="/genealogy-newsletter"> <li>Genealogy Newsletter</li></a>
+                            <a href="/research4"> <li>SCCHS Heritage Journal</li></a>
+                            <a href="/heritage"> <li>SCCHS Newsletters</li></a>
+                            <a href="/genealogy-newsletter"> <li>Genealogy Newsletter</li></a>
                             <a href="/message-1"> <li>SCCHS President Messages</li></a>
                           </ol>
                         </span>
@@ -1148,17 +1148,17 @@ export default function Navbar(props) {
 
                   {subOpen && (
                     <div className="member-sub-dropdown">
-                       <a href={"/research4"}><div className="member-sub-item">SCCHS Heritage Journal</div></a>
-                     <a href={"/heritage"}><div className="member-sub-item">Scchs Newsletters</div></a>
-                     <a href="/genealogy-newsletter"><div className="member-sub-item">SCCHS Genealogy Newsletters</div></a>
+                      <a href={"/research4"}><div className="member-sub-item">SCCHS Heritage Journal</div></a>
+                      <a href={"/heritage"}><div className="member-sub-item">Scchs Newsletters</div></a>
+                      <a href="/genealogy-newsletter"><div className="member-sub-item">SCCHS Genealogy Newsletters</div></a>
                       <a href="/message-1"><div className="member-sub-item">SCCHS President Message</div></a>
                     </div>
                   )}
 
-                 <a style={{textDecoration:"none",color:"white"}} href="/member/myprofile"><div className="member-dropdown-item">My Profile</div></a> 
-                 <a style={{textDecoration:"none",color:"white"}} href="/research"><div className="member-dropdown-item">Research</div></a>
-                 <a style={{textDecoration:"none",color:"white"}} href="/cementryrecord"><div className="member-dropdown-item">Cementry Records</div></a>
-                 <a style={{textDecoration:"none",color:"white"}} href="/member/memberlist"><div className="member-dropdown-item">Membership List</div></a>
+                  <a style={{ textDecoration: "none", color: "white" }} href="/member/myprofile"><div className="member-dropdown-item">My Profile</div></a>
+                  <a style={{ textDecoration: "none", color: "white" }} href="/research"><div className="member-dropdown-item">Research</div></a>
+                  <a style={{ textDecoration: "none", color: "white" }} href="/cementryrecord"><div className="member-dropdown-item">Cementry Records</div></a>
+                  <a style={{ textDecoration: "none", color: "white" }} href="/member/memberlist"><div className="member-dropdown-item">Membership List</div></a>
                 </div>
               )}
             </div>}
