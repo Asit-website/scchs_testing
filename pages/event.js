@@ -102,8 +102,8 @@ export default function events(pageProp) {
     const [visibleCount, setVisibleCount] = useState(6);
 
     const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 6);
-  };
+        setVisibleCount((prev) => prev + 6);
+    };
 
 
     const product = pageProp.page_content.product;
@@ -198,7 +198,7 @@ export default function events(pageProp) {
     const [searchInput, setSearchInput] = useState('');
     const [searchText, setSearchText] = useState(''); // this is what gets used in filter
 
-    
+
 
 
     const fetchCategory = async () => {
@@ -291,21 +291,21 @@ export default function events(pageProp) {
     // };
 
     const formatTime = (timeStr) => {
-    if (!timeStr || typeof timeStr !== 'string' || !timeStr.includes(':')) {
-        return ''; // or return 'Invalid time' or fallback value
-    }
+        if (!timeStr || typeof timeStr !== 'string' || !timeStr.includes(':')) {
+            return ''; // or return 'Invalid time' or fallback value
+        }
 
-    const [hour, minute] = timeStr.split(':');
-    const date = new Date();
-    date.setHours(hour);
-    date.setMinutes(minute);
+        const [hour, minute] = timeStr.split(':');
+        const date = new Date();
+        date.setHours(hour);
+        date.setMinutes(minute);
 
-    return new Intl.DateTimeFormat('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-    }).format(date);
-};
+        return new Intl.DateTimeFormat('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+        }).format(date);
+    };
 
 
     return (
@@ -428,16 +428,19 @@ export default function events(pageProp) {
 
 
                                 return true; // 'all'
-                            }).slice(0,visibleCount).map((card, index) => (
+                            }).slice(0, visibleCount).map((card, index) => (
                                 <div className="event-card" key={index}>
                                     <div className="card-header">
                                         <span>
-                                            {new Intl.DateTimeFormat('en-GB', {
-                                                day: 'numeric',
+                                            {new Intl.DateTimeFormat('en-US', {
                                                 month: 'long',
+                                                day: 'numeric',
                                                 year: 'numeric',
-                                            }).format(new Date(card.date))}
+                                            })
+                                                .format(new Date(card.date))
+                                                .replace(',', '')}
                                         </span>
+
                                         <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
                                     </div>
                                     <img
@@ -459,18 +462,18 @@ export default function events(pageProp) {
                         )}
                     </div>
                     {visibleCount < cards.length && (
-        <div className="load-more-wrapper">
-          <button onClick={handleLoadMore} className="load-more-btn">
-            Load More
-            <span className="arrow-wrap">
-              <img
-                width="12"
-                src="https://res.cloudinary.com/dgif730br/image/upload/v1744279126/Group_1171280891_zvryne.png"
-              />
-            </span>
-          </button>
-        </div>
-      )}
+                        <div className="load-more-wrapper">
+                            <button onClick={handleLoadMore} className="load-more-btn">
+                                Load More
+                                <span className="arrow-wrap">
+                                    <img
+                                        width="12"
+                                        src="https://res.cloudinary.com/dgif730br/image/upload/v1744279126/Group_1171280891_zvryne.png"
+                                    />
+                                </span>
+                            </button>
+                        </div>
+                    )}
 
                 </div>
 
