@@ -428,7 +428,12 @@ export default function surenamelook(pageProp) {
                     <div className="memberList_filter" >
                         <div className="event-title-filter memberlist-title-filter tyile_filter">
                             <input value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)} type="text" className="search-input serach_inpp" placeholder="Search Surname" />
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        setSearchTrigger(searchTerm);
+                                    }
+                                }} type="text" className="search-input serach_inpp" placeholder="Search Surname" />
                             <button onClick={() => setSearchTrigger(searchTerm)} className="search-button">
                                 <img width="28" src="https://res.cloudinary.com/dgif730br/image/upload/v1744279927/Mask_group_zicocm.png" alt="this is search image" />
                             </button>
