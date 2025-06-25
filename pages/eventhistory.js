@@ -124,7 +124,16 @@ export default function eventhistory(pageProp) {
                                 <h2 className="oderset1-event-title">{order.event.title}</h2>
                                 <p className="oderset1-event-desc">{order.event.short_description}</p>
                                 <p className="oderset1-date">
-                                    Purchased on: {new Date(order.purchased_at).toLocaleString()}
+                                    {/* Purchased on: {new Date(order.purchased_at).toLocaleString()} */}
+                                    Purchased on: {new Date(order.purchased_at).toLocaleString("en-US", {
+                                        month: "long",
+                                        day: "numeric",
+                                        year: "numeric",
+                                        // hour: "numeric",
+                                        // minute: "2-digit",
+                                        // hour12: true,
+                                        // timeZone: "UTC",
+                                    })}
                                 </p>
                             </div>
 

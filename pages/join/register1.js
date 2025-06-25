@@ -68,16 +68,57 @@ export default function register1(pageProp) {
 
 
 
+    // const handleChange = (e) => {
+    //     setFormData((prev) => ({
+    //         ...prev,
+    //         [e.target.name]: e.target.value,
+    //     }));
+    //     setErrors((prev) => ({
+    //         ...prev,
+    //         [e.target.name]: '',
+    //     }));
+    // };
+
+
     const handleChange = (e) => {
-        setFormData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
-        setErrors((prev) => ({
-            ...prev,
-            [e.target.name]: '',
-        }));
-    };
+        const { name, value } = e.target;
+        let newValue = value;
+      
+        if (name === "dobMonth") {
+  
+          if (/^\d{0,2}$/.test(value)) {
+            if (Number(value) <= 12 || value === "") {
+              setFormData((prev) => ({ ...prev, [name]: newValue }));
+              setErrors((prev) => ({ ...prev, dobMonth: "" }));
+            } else {
+              setErrors((prev) => ({ ...prev, dobMonth: "Month cannot exceed 12" }));
+            }
+          }
+        } else if (name === "dob") {
+       
+          if (/^\d{0,2}$/.test(value)) {
+            if (Number(value) <= 31 || value === "") {
+              setFormData((prev) => ({ ...prev, [name]: newValue }));
+              setErrors((prev) => ({ ...prev, dob: "" }));
+            } else {
+              setErrors((prev) => ({ ...prev, dob: "Day cannot exceed 31" }));
+            }
+          }
+        } else if (name === "dobYear") {
+        
+          if (/^\d{0,4}$/.test(value)) {
+            setFormData((prev) => ({ ...prev, [name]: newValue }));
+            if (value.length > 4) {
+              setErrors((prev) => ({ ...prev, dobYear: "Year must be 4 digits" }));
+            } else {
+              setErrors((prev) => ({ ...prev, dobYear: "" }));
+            }
+          }
+        } else {
+          setFormData((prev) => ({ ...prev, [name]: newValue }));
+        }
+      };
+      
 
 
     // ===========for phone number============
