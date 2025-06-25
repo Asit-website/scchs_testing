@@ -13774,3 +13774,173 @@ body {
   width: 100% !important;
   border-collapse: collapse !important;
 }
+
+/* ======================= View Profile css start*/
+
+
+.viewprofile1-container {
+  max-width: 1000px;
+  margin: 30px auto;
+ background-color: #f8fafd;
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.viewprofile1-title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  color: #1f2937;
+  margin-bottom: 25px;
+}
+
+.viewprofile1-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  padding: 30px;
+  transition: 0.3s ease;
+}
+
+.viewprofile1-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.viewprofile1-field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.viewprofile1-label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.viewprofile1-input {
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.viewprofile1-input:focus {
+  border-color: #2563eb;
+}
+
+.viewprofile1-text {
+  font-size: 14px;
+  color: #111827;
+  background: #f9fafb;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.viewprofile1-button-wrapper {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.viewprofile1-button {
+  background-color: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.viewprofile1-button:hover {
+  background-color: #1d4ed8;
+}
+
+@media (max-width: 600px) {
+  .viewprofile1-title {
+    font-size: 22px;
+  }
+
+  .viewprofile1-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .viewprofile1-card {
+    padding: 20px;
+  }
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .viewprofile1-container {
+    padding: 20px 15px;
+  }
+
+  .viewprofile1-title {
+    font-size: 22px;
+  }
+
+  .viewprofile1-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .viewprofile1-container {
+    padding: 25px 15px;
+  }
+
+  .viewprofile1-title {
+    font-size: 22px;
+  }
+
+  .viewprofile1-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .viewprofile1-input {
+    font-size: 13px;
+    padding: 9px 10px;
+  }
+
+  .viewprofile1-button {
+    padding: 10px 22px;
+    font-size: 14px;
+  }
+}
+
+
+@media screen and (max-width: 480px) {
+  .viewprofile1-title {
+    font-size: 20px;
+  }
+
+  .viewprofile1-label {
+    font-size: 13px;
+  }
+
+  .viewprofile1-input {
+    font-size: 12.5px;
+    padding: 8px 10px;
+  }
+
+  .viewprofile1-button {
+    padding: 10px 20px;
+    font-size: 13px;
+   
+  }
+
+  .viewprofile1-button-wrapper {
+    margin-top: 25px;
+  }
+}
+

@@ -80,13 +80,40 @@ export default function donation(pageProp) {
     //         phone: value,
     //     }));
     // };
+
+
+    // =============================================================================================
+    // const handlePhoneChange = (value) => {
+    //     setFormData((prev) => ({
+    //         ...prev,
+    //         phone: '+' + value,
+    //     }));
+    // };
+
+
     const handlePhoneChange = (value) => {
+        const numericValue = value.replace(/\D/g, ''); // Remove non-digits
+
         setFormData((prev) => ({
             ...prev,
-            phone: '+' + value,
+            phone: value,
         }));
+
+        if (numericValue.length < 10) {
+            setErrors((prev) => ({
+                ...prev,
+                phone: 'Phone number must be at least 10 digits',
+            }));
+        } else {
+            setErrors((prev) => ({
+                ...prev,
+                phone: '',
+            }));
+        }
     };
 
+
+    // ==============================================================================================
     // ============for country state city=======
 
     const [countries, setCountries] = useState([]);
@@ -470,7 +497,7 @@ export default function donation(pageProp) {
                                     required: true,
                                     autoFocus: false,
                                 }}
-                                 countryCodeEditable={false}
+                                countryCodeEditable={false}
                             />
                             {errors.phone && <p className="text_red">{errors.phone}</p>}
                             {/* <div className="warning">Required, formatted as (000) 000-0000</div> */}
@@ -595,50 +622,50 @@ export default function donation(pageProp) {
                                     }}
                                 /> */}
                                 <CreatableSelect
-  placeholder="Select or type country"
-  options={toOptions(countries)}
-  value={
-    formdata.country
-      ? { label: formdata.country, value: formdata.country }
-      : null
-  }
-  onChange={(selected) =>
-    setFormData((prev) => ({
-      ...prev,
-      country: selected?.value || '',
-      state: '',
-      city: '',
-    }))
-  }
-  styles={{
-    input: (provided) => ({
-      ...provided,
-      minHeight: '48px',
-    }),
-    control: (provided, state) => ({
-      ...provided,
-      minHeight: '48px',
-      fontSize: '18px',
-      border: '2px solid rgb(114 114 115)',
-      boxShadow: state.isFocused ? 'rgb(114 114 115)' : 'none',
-      '&:hover': {
-        borderColor: 'rgb(114 114 115)',
-      },
-    }),
-    placeholder: (provided) => ({
-      ...provided,
-    }),
-    menu: (provided) => ({
-      ...provided,
-      outline: 'none',
-      boxShadow: 'none',
-    }),
-    menuList: (provided) => ({
-      ...provided,
-      outline: 'none',
-    }),
-  }}
-/>
+                                    placeholder="Select or type country"
+                                    options={toOptions(countries)}
+                                    value={
+                                        formdata.country
+                                            ? { label: formdata.country, value: formdata.country }
+                                            : null
+                                    }
+                                    onChange={(selected) =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            country: selected?.value || '',
+                                            state: '',
+                                            city: '',
+                                        }))
+                                    }
+                                    styles={{
+                                        input: (provided) => ({
+                                            ...provided,
+                                            minHeight: '48px',
+                                        }),
+                                        control: (provided, state) => ({
+                                            ...provided,
+                                            minHeight: '48px',
+                                            fontSize: '18px',
+                                            border: '2px solid rgb(114 114 115)',
+                                            boxShadow: state.isFocused ? 'rgb(114 114 115)' : 'none',
+                                            '&:hover': {
+                                                borderColor: 'rgb(114 114 115)',
+                                            },
+                                        }),
+                                        placeholder: (provided) => ({
+                                            ...provided,
+                                        }),
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            outline: 'none',
+                                            boxShadow: 'none',
+                                        }),
+                                        menuList: (provided) => ({
+                                            ...provided,
+                                            outline: 'none',
+                                        }),
+                                    }}
+                                />
 
                             </div>
                             {/* <input
@@ -682,32 +709,32 @@ export default function donation(pageProp) {
                                     // }}
                                     styles={{
                                         input: (provided) => ({
-                                          ...provided,
-                                          minHeight: '48px',
+                                            ...provided,
+                                            minHeight: '48px',
                                         }),
                                         control: (provided, state) => ({
-                                          ...provided,
-                                          minHeight: '48px',
-                                          fontSize: '18px',
-                                          border: '2px solid rgb(114 114 115)',
-                                          boxShadow: state.isFocused ? 'rgb(114 114 115)' : 'none',
-                                          '&:hover': {
-                                            borderColor: 'rgb(114 114 115)',
-                                          },
+                                            ...provided,
+                                            minHeight: '48px',
+                                            fontSize: '18px',
+                                            border: '2px solid rgb(114 114 115)',
+                                            boxShadow: state.isFocused ? 'rgb(114 114 115)' : 'none',
+                                            '&:hover': {
+                                                borderColor: 'rgb(114 114 115)',
+                                            },
                                         }),
                                         placeholder: (provided) => ({
-                                          ...provided,
+                                            ...provided,
                                         }),
                                         menu: (provided) => ({
-                                          ...provided,
-                                          outline: 'none',
-                                          boxShadow: 'none',
+                                            ...provided,
+                                            outline: 'none',
+                                            boxShadow: 'none',
                                         }),
                                         menuList: (provided) => ({
-                                          ...provided,
-                                          outline: 'none',
+                                            ...provided,
+                                            outline: 'none',
                                         }),
-                                      }}
+                                    }}
                                 />
 
                             </div>
@@ -755,32 +782,32 @@ export default function donation(pageProp) {
                                     // }}
                                     styles={{
                                         input: (provided) => ({
-                                          ...provided,
-                                          minHeight: '48px',
+                                            ...provided,
+                                            minHeight: '48px',
                                         }),
                                         control: (provided, state) => ({
-                                          ...provided,
-                                          minHeight: '48px',
-                                          fontSize: '18px',
-                                          border: '2px solid rgb(114 114 115)',
-                                          boxShadow: state.isFocused ? 'rgb(114 114 115)' : 'none',
-                                          '&:hover': {
-                                            borderColor: 'rgb(114 114 115)',
-                                          },
+                                            ...provided,
+                                            minHeight: '48px',
+                                            fontSize: '18px',
+                                            border: '2px solid rgb(114 114 115)',
+                                            boxShadow: state.isFocused ? 'rgb(114 114 115)' : 'none',
+                                            '&:hover': {
+                                                borderColor: 'rgb(114 114 115)',
+                                            },
                                         }),
                                         placeholder: (provided) => ({
-                                          ...provided,
+                                            ...provided,
                                         }),
                                         menu: (provided) => ({
-                                          ...provided,
-                                          outline: 'none',
-                                          boxShadow: 'none',
+                                            ...provided,
+                                            outline: 'none',
+                                            boxShadow: 'none',
                                         }),
                                         menuList: (provided) => ({
-                                          ...provided,
-                                          outline: 'none',
+                                            ...provided,
+                                            outline: 'none',
                                         }),
-                                      }}
+                                    }}
                                 />
                             </div>
 
@@ -795,14 +822,26 @@ export default function donation(pageProp) {
                                 value={formdata?.postal_code}
                                 onChange={handleChange}
                             />
-                             <p style={{ marginTop: "6px" }}>Please mention applicable postal code, zip code, pin code, postcode</p>
-                            
+                            <p style={{ marginTop: "6px" }}>Please mention applicable postal code, zip code, pin code, postcode</p>
+
                             {errors.postal_code && <p className="text_red">{errors.postal_code}</p>}
 
                             {/* </form> */}
                         </div>
                         <div className="submit_donation">
-                            <button type="submit">{isEditMode ? 'Edit' : 'Submit'}</button>
+                            {/* <button type="submit"
+                             disabled={!!errors.phone}
+                             className={`btn ${errors.phone ? 'opacity-50 cursor-not-allowed' : ''}`} >
+                            {isEditMode ? 'Edit' : 'Submit'}</button> */}
+                            <button
+                                type="submit"
+                                disabled={!!errors.phone}
+                                className={`bg-[#002f5f] text-white px-6 py-2 rounded-full font-semibold 
+              ${errors.phone ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#002f5f]'}`}>
+                                Submit
+                            </button>
+
+
                         </div>
                     </form>
                 </section>

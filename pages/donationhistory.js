@@ -65,19 +65,40 @@ export default function eventhistory(pageProp) {
                                 <div>City: {donation.city}, {donation.state}</div>
                                 <div>Status: <span className={donation.payment_status === "completed" ? "status-success" : "status-failed"}>{donation.payment_status}</span></div>
                                 <div className="donation-payment-history-date">
+                                    {/* Date: {new Date(donation.created_at).toLocaleString("en-US", {
+                                        // year: "numeric",
+                                        // month: "long",
+                                        // day: "numeric",
+                                        // hour: "numeric",
+                                        // minute: "2-digit",
+                                        // hour12: true,
+                                    })} */}
+
                                     Date: {new Date(donation.created_at).toLocaleString("en-US", {
-                                        year: "numeric",
                                         month: "long",
                                         day: "numeric",
+                                        year: "numeric",
+                                        // hour: "numeric",
+                                        // minute: "2-digit",
+                                        // hour12: true,
+                                        // timeZone: "America/New_York",
+                                    })}
+
+                                    {/* Date: {new Date(donation.created_at).toLocaleString("en-US", {
+                                        month: "long",
+                                        day: "numeric",
+                                        year: "numeric",
                                         hour: "numeric",
                                         minute: "2-digit",
                                         hour12: true,
-                                    })}
+                                        timeZone: "America/Chicago"
+                                    })} CST */}
+
                                 </div>
 
                             </div>
                         </div>
-                        
+
                     ))}
                 </div>
             </div>
