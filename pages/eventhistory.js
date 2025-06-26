@@ -110,7 +110,7 @@ export default function eventhistory(pageProp) {
 
                     // </div>
 
-                   
+
 
                     <div key={order.id} className="oderset1">
                         <div className="oderset1-header">
@@ -132,8 +132,9 @@ export default function eventhistory(pageProp) {
                                         // hour: "numeric",
                                         // minute: "2-digit",
                                         // hour12: true,
-                                        // timeZone: "UTC",
+                                        // timeZone: "Europe/London"
                                     })}
+
                                 </p>
                             </div>
 

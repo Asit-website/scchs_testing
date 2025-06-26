@@ -70,44 +70,44 @@ export default function register1(pageProp) {
     const handleChange = (e) => {
         const { name, value } = e.target;
         let newValue = value;
-      
-        if (name === "dobMonth") {
-        
-          if (/^\d{0,2}$/.test(value)) {
-            if (Number(value) <= 12 || value === "") {
-              setFormData((prev) => ({ ...prev, [name]: newValue }));
-              setErrors((prev) => ({ ...prev, dobMonth: "" }));
-            } else {
-              setErrors((prev) => ({ ...prev, dobMonth: "Month cannot exceed 12" }));
-            }
-          }
-        } else if (name === "dob") {
-      
-          if (/^\d{0,2}$/.test(value)) {
-            if (Number(value) <= 31 || value === "") {
-              setFormData((prev) => ({ ...prev, [name]: newValue }));
-              setErrors((prev) => ({ ...prev, dob: "" }));
-            } else {
-              setErrors((prev) => ({ ...prev, dob: "Day cannot exceed 31" }));
-            }
-          }
-        } else if (name === "dobYear") {
-       
-          if (/^\d{0,4}$/.test(value)) {
-            setFormData((prev) => ({ ...prev, [name]: newValue }));
-            if (value.length > 4) {
-              setErrors((prev) => ({ ...prev, dobYear: "Year must be 4 digits" }));
-            } else {
-              setErrors((prev) => ({ ...prev, dobYear: "" }));
-            }
-          }
-        } else {
-          setFormData((prev) => ({ ...prev, [name]: newValue }));
-        }
-      };
-      
 
-      
+        if (name === "dobMonth") {
+
+            if (/^\d{0,2}$/.test(value)) {
+                if (Number(value) <= 12 || value === "") {
+                    setFormData((prev) => ({ ...prev, [name]: newValue }));
+                    setErrors((prev) => ({ ...prev, dobMonth: "" }));
+                } else {
+                    setErrors((prev) => ({ ...prev, dobMonth: "Month cannot exceed 12" }));
+                }
+            }
+        } else if (name === "dob") {
+
+            if (/^\d{0,2}$/.test(value)) {
+                if (Number(value) <= 31 || value === "") {
+                    setFormData((prev) => ({ ...prev, [name]: newValue }));
+                    setErrors((prev) => ({ ...prev, dob: "" }));
+                } else {
+                    setErrors((prev) => ({ ...prev, dob: "Day cannot exceed 31" }));
+                }
+            }
+        } else if (name === "dobYear") {
+
+            if (/^\d{0,4}$/.test(value)) {
+                setFormData((prev) => ({ ...prev, [name]: newValue }));
+                if (value.length > 4) {
+                    setErrors((prev) => ({ ...prev, dobYear: "Year must be 4 digits" }));
+                } else {
+                    setErrors((prev) => ({ ...prev, dobYear: "" }));
+                }
+            }
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: newValue }));
+        }
+    };
+
+
+
     // const handleChange = (e) => {
     //     setFormData((prev) => ({
     //         ...prev,
@@ -136,14 +136,30 @@ export default function register1(pageProp) {
         //     value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
         // }
 
+        const numericValue = value.replace(/\D/g, ''); // Remove non-digits
+
         setFormData((prev) => ({
             ...prev,
             mobile_number: value,
         }));
-        setErrors((prev) => ({
-            ...prev,
-            mobile_number: '',
-        }));
+
+        if (numericValue.length < 10) {
+            setErrors((prev) => ({
+                ...prev,
+                mobile_number: 'Phone number must be at least 10 digits',
+            }));
+        }
+
+        else {
+            setErrors((prev) => ({
+                ...prev,
+                mobile_number: '',
+            }));
+        }
+        // setErrors((prev) => ({
+        //     ...prev,
+        //     mobile_number: '',
+        // }));
     };
 
     const handleCellPhoneChange = (value) => {
@@ -288,6 +304,15 @@ export default function register1(pageProp) {
             if (!formData.mobile_number.trim()) {
                 newErrors.mobile_number = 'Phone number is required';
             }
+
+            if (formData.cell_phone.trim()) {
+                const digitsOnly = formData.cell_phone.replace(/\D/g, '');
+
+                if (digitsOnly.length < 10) {
+                    newErrors.cell_phone = 'Cell phone must be at least 10 digits';
+                }
+            }
+
 
             // else {
             //     const cleanPhone = formData.mobile_number.replace(/\D/g, '');
@@ -449,11 +474,64 @@ export default function register1(pageProp) {
         setStep((prev) => prev - 1)
     }
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+
+    //     // const newerrors1 = {}
+
+
+    //     const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+    //     if (formData.password !== formData.password_confirmation) {
+    //         toast.error("Password and confirm password must be the same.");
+    //         return;
+    //     }
+
+    //     if (!passwordRegex.test(formData.password)) {
+    //         toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
+    //         return;
+    //     }
+
+
+    //     try {
+    //         const response = await fetch('https://admin.scchs.co.in/api/registration', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(formData),
+    //         });
+
+    //         const result = await response.json();
+
+    //         console.log(result);
+
+    //         // if (result.status === false) {
+    //         //     toast.error(result?.message?.email[0]);
+    //         //     return;
+    //         // }
+
+    //         //   alert('Registration successful!');
+    //         toast.success("Registered successfully!");
+    //         setFormData({
+    //             prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
+    //             dob: '', dobMonth: '', dobYear: '',
+    //             address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
+    //             preferred: '', email: '', website: '',
+    //             username: '', password: '', password_confirmation: ''
+    //         });
+
+    //         router.push("/user/userlogin");
+
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         //   alert(error.message || 'Something went wrong!');
+    //         toast.error("username already purchased");
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // const newerrors1 = {}
-
 
         const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
@@ -467,7 +545,6 @@ export default function register1(pageProp) {
             return;
         }
 
-
         try {
             const response = await fetch('https://admin.scchs.co.in/api/registration', {
                 method: 'POST',
@@ -478,16 +555,21 @@ export default function register1(pageProp) {
             });
 
             const result = await response.json();
-
             console.log(result);
 
             if (result.status === false) {
-                toast.error(result?.message?.email[0]);
+                if (result.message?.email?.length > 0) {
+                    toast.error(result.message.email[0]);
+                } else if (result.message?.username?.length > 0) {
+                    toast.error(result.message.username[0]);
+                } else {
+                    toast.error("Registration failed. Please check your input.");
+                }
                 return;
             }
 
-            //   alert('Registration successful!');
             toast.success("Registered successfully!");
+
             setFormData({
                 prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
                 dob: '', dobMonth: '', dobYear: '',
@@ -500,11 +582,9 @@ export default function register1(pageProp) {
 
         } catch (error) {
             console.error('Error:', error);
-            //   alert(error.message || 'Something went wrong!');
-            toast.error("username already purchased");
+            toast.error("Something went wrong. Please try again later.");
         }
     };
-
 
 
     return (
@@ -667,11 +747,11 @@ export default function register1(pageProp) {
                                                 {errors.dobMonth && <p className="text_red">{errors.dobMonth}</p>}
                                             </div>
                                             <div className="dibm">
-                                                <input  onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
+                                                <input onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
                                                 {errors.dob && <p className="text_red">{errors.dob}</p>}
                                             </div>
                                             <div className="dibm">
-                                                <input  onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
+                                                <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
                                                 {errors.dobYear && <p className="text_red">{errors.dobYear}</p>}
                                             </div>
                                         </div>
@@ -927,7 +1007,8 @@ export default function register1(pageProp) {
                                                 <PhoneInput
 
                                                     country={'us'}
-                                                    value={formData.mobile_number}
+                                                    // value={formData.mobile_number}
+                                                    value={formData.mobile_number.replace('+', ' ')}
                                                     onChange={handlePhoneChange}
                                                     //  className="nameform-input"
                                                     inputProps={{
@@ -961,7 +1042,7 @@ export default function register1(pageProp) {
                                                         required: true,
                                                         autoFocus: false,
                                                     }}
-                                                     countryCodeEditable={false}
+                                                    countryCodeEditable={false}
                                                 />
                                             </div>
                                             {errors.cell_phone && <p className="text_red">{errors.cell_phone}</p>}
@@ -1014,7 +1095,7 @@ export default function register1(pageProp) {
                                             </select>
                                         </div> */}
                                         {
-                                            step < 3 && <button type="button" onClick={() => {
+                                            step < 3 && <button disabled={!!errors.mobile_number} type="button" onClick={() => {
                                                 console.log("step", step);
                                                 handleNext()
                                             }} className="scchs_hj_btn testing_btn111">Next</button>
