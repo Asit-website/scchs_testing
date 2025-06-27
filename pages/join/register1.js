@@ -42,7 +42,7 @@ export default function register1(pageProp) {
 
     const [step, setStep] = useState(1);
 
-
+    const [loading, setLoading] = useState(false);
 
     const router = useRouter();
 
@@ -83,46 +83,46 @@ export default function register1(pageProp) {
     const handleChange = (e) => {
         const { name, value } = e.target;
         let newValue = value;
-      
+
         if (name === "dobMonth") {
-  
-          if (/^\d{0,2}$/.test(value)) {
-            if (Number(value) <= 12 || value === "") {
-              setFormData((prev) => ({ ...prev, [name]: newValue }));
-              setErrors((prev) => ({ ...prev, dobMonth: "" }));
-            } else {
-              setErrors((prev) => ({ ...prev, dobMonth: "Month cannot exceed 12" }));
+
+            if (/^\d{0,2}$/.test(value)) {
+                if (Number(value) <= 12 || value === "") {
+                    setFormData((prev) => ({ ...prev, [name]: newValue }));
+                    setErrors((prev) => ({ ...prev, dobMonth: "" }));
+                } else {
+                    setErrors((prev) => ({ ...prev, dobMonth: "Month cannot exceed 12" }));
+                }
             }
-          }
         } else if (name === "dob") {
-       
-          if (/^\d{0,2}$/.test(value)) {
-            if (Number(value) <= 31 || value === "") {
-              setFormData((prev) => ({ ...prev, [name]: newValue }));
-              setErrors((prev) => ({ ...prev, dob: "" }));
-            } else {
-              setErrors((prev) => ({ ...prev, dob: "Day cannot exceed 31" }));
+
+            if (/^\d{0,2}$/.test(value)) {
+                if (Number(value) <= 31 || value === "") {
+                    setFormData((prev) => ({ ...prev, [name]: newValue }));
+                    setErrors((prev) => ({ ...prev, dob: "" }));
+                } else {
+                    setErrors((prev) => ({ ...prev, dob: "Day cannot exceed 31" }));
+                }
             }
-          }
         } else if (name === "dobYear") {
-        
-          if (/^\d{0,4}$/.test(value)) {
-            setFormData((prev) => ({ ...prev, [name]: newValue }));
-            if (value.length > 4) {
-              setErrors((prev) => ({ ...prev, dobYear: "Year must be 4 digits" }));
-            } else {
-              setErrors((prev) => ({ ...prev, dobYear: "" }));
+
+            if (/^\d{0,4}$/.test(value)) {
+                setFormData((prev) => ({ ...prev, [name]: newValue }));
+                if (value.length > 4) {
+                    setErrors((prev) => ({ ...prev, dobYear: "Year must be 4 digits" }));
+                } else {
+                    setErrors((prev) => ({ ...prev, dobYear: "" }));
+                }
             }
-          }
         } else {
-          setFormData((prev) => ({ ...prev, [name]: newValue }));
+            setFormData((prev) => ({ ...prev, [name]: newValue }));
         }
-      };
-      
+    };
+
 
 
     // ===========for phone number============
-       const handlePhoneChange = (value) => {
+    const handlePhoneChange = (value) => {
         // let value = e.target.value;
 
         // value = value.replace(/\D/g, '');
@@ -306,7 +306,7 @@ export default function register1(pageProp) {
                 newErrors.mobile_number = 'Phone number is required';
             }
 
-           if (formData.cell_phone.trim()) {
+            if (formData.cell_phone.trim()) {
                 // Remove all non-digit characters
                 const digitsOnly = formData.cell_phone.replace(/\D/g, '');
 
@@ -478,62 +478,124 @@ export default function register1(pageProp) {
         setStep((prev) => prev - 1)
     }
 
-   const handleSubmit = async (e) => {
-         e.preventDefault();
- 
-         const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
- 
-         if (formData.password !== formData.password_confirmation) {
-             toast.error("Password and confirm password must be the same.");
-             return;
-         }
- 
-         if (!passwordRegex.test(formData.password)) {
-             toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
-             return;
-         }
- 
-         try {
-             const response = await fetch('https://admin.scchs.co.in/api/registration', {
-                 method: 'POST',
-                 headers: {
-                     'Content-Type': 'application/json',
-                 },
-                 body: JSON.stringify(formData),
-             });
- 
-             const result = await response.json();
-             console.log(result);
- 
-             if (result.status === false) {
-                 if (result.message?.email?.length > 0) {
-                     toast.error(result.message.email[0]);
-                 } else if (result.message?.username?.length > 0) {
-                     toast.error(result.message.username[0]);
-                 } else {
-                     toast.error("Registration failed. Please check your input.");
-                 }
-                 return;
-             }
- 
-             toast.success("Registered successfully!");
- 
-             setFormData({
-                 prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
-                 dob: '', dobMonth: '', dobYear: '',
-                 address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
-                 preferred: '', email: '', website: '',
-                 username: '', password: '', password_confirmation: ''
-             });
- 
-             router.push("/user/userlogin");
- 
-         } catch (error) {
-             console.error('Error:', error);
-             toast.error("Something went wrong. Please try again later.");
-         }
-     };
+    //    const handleSubmit = async (e) => {
+    //          e.preventDefault();
 
+    //          const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+    //          if (formData.password !== formData.password_confirmation) {
+    //              toast.error("Password and confirm password must be the same.");
+    //              return;
+    //          }
+
+    //          if (!passwordRegex.test(formData.password)) {
+    //              toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
+    //              return;
+    //          }
+
+    //          try {
+    //              const response = await fetch('https://admin.scchs.co.in/api/registration', {
+    //                  method: 'POST',
+    //                  headers: {
+    //                      'Content-Type': 'application/json',
+    //                  },
+    //                  body: JSON.stringify(formData),
+    //              });
+
+    //              const result = await response.json();
+    //              console.log(result);
+
+    //              if (result.status === false) {
+    //                  if (result.message?.email?.length > 0) {
+    //                      toast.error(result.message.email[0]);
+    //                  } else if (result.message?.username?.length > 0) {
+    //                      toast.error(result.message.username[0]);
+    //                  } else {
+    //                      toast.error("Registration failed. Please check your input.");
+    //                  }
+    //                  return;
+    //              }
+
+    //              toast.success("Registered successfully!");
+
+    //              setFormData({
+    //                  prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
+    //                  dob: '', dobMonth: '', dobYear: '',
+    //                  address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
+    //                  preferred: '', email: '', website: '',
+    //                  username: '', password: '', password_confirmation: ''
+    //              });
+
+    //              router.push("/user/userlogin");
+
+    //          } catch (error) {
+    //              console.error('Error:', error);
+    //              toast.error("Something went wrong. Please try again later.");
+    //          }
+    //      };
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true); // show loader
+
+        const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+        if (formData.password !== formData.password_confirmation) {
+            toast.error("Password and confirm password must be the same.");
+            setLoading(false);
+            return;
+        }
+
+        if (!passwordRegex.test(formData.password)) {
+            toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await fetch('https://admin.scchs.co.in/api/registration', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+            console.log(result);
+
+            if (result.status === false) {
+                if (result.message?.email?.length > 0) {
+                    toast.error(result.message.email[0]);
+                } else if (result.message?.username?.length > 0) {
+                    toast.error(result.message.username[0]);
+                } else {
+                    toast.error("Registration failed. Please check your input.");
+                }
+                setLoading(false);
+                return;
+            }
+
+            toast.success("Registered successfully!");
+
+            setFormData({
+                prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
+                dob: '', dobMonth: '', dobYear: '',
+                address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
+                preferred: '', email: '', website: '',
+                username: '', password: '', password_confirmation: ''
+            });
+
+            router.push("/user/userlogin");
+
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error("Something went wrong. Please try again later.");
+        } finally {
+            setLoading(false); // hide loader
+        }
+    };
 
 
     return (
@@ -1028,7 +1090,7 @@ export default function register1(pageProp) {
 
                                                     country={'us'}
                                                     // value={formData.mobile_number}
-                                                      value={formData.mobile_number.replace('+', ' ')}
+                                                    value={formData.mobile_number.replace('+', ' ')}
                                                     onChange={handlePhoneChange}
                                                     //  className="nameform-input"
                                                     inputProps={{
@@ -1196,7 +1258,15 @@ export default function register1(pageProp) {
 
 
                         {
-                            step === 3 && <button type="submit" className="scchs_hj_btn">Submit</button>
+                            step === 3 && <button type="submit" disabled={loading} className="scchs_hj_btn">
+                                {loading ? (
+                                    <span className="btn-loader-wrapper">
+                                        <span className="loader"></span> Submitting...
+                                    </span>
+                                ) : (
+                                    "Submit"
+                                )}
+                            </button>
                         }
 
 

@@ -42,6 +42,8 @@ export default function register1(pageProp) {
 
     const [step, setStep] = useState(1);
 
+    const [loading, setLoading] = useState(false);
+
 
 
     const router = useRouter();
@@ -537,16 +539,19 @@ export default function register1(pageProp) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // show loader
 
         const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
         if (formData.password !== formData.password_confirmation) {
             toast.error("Password and confirm password must be the same.");
+            setLoading(false);
             return;
         }
 
         if (!passwordRegex.test(formData.password)) {
             toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
+            setLoading(false);
             return;
         }
 
@@ -570,6 +575,7 @@ export default function register1(pageProp) {
                 } else {
                     toast.error("Registration failed. Please check your input.");
                 }
+                setLoading(false);
                 return;
             }
 
@@ -588,8 +594,11 @@ export default function register1(pageProp) {
         } catch (error) {
             console.error('Error:', error);
             toast.error("Something went wrong. Please try again later.");
+        } finally {
+            setLoading(false); // hide loader
         }
     };
+
 
 
     return (
@@ -1181,7 +1190,15 @@ export default function register1(pageProp) {
 
 
                         {
-                            step === 3 && <button type="submit" className="scchs_hj_btn">Submit</button>
+                            step === 3 && <button type="submit" disabled={loading} className="scchs_hj_btn">
+                                {loading ? (
+                                    <span className="btn-loader-wrapper">
+                                        <span className="loader"></span> Submitting...
+                                    </span>
+                                ) : (
+                                    "Submit"
+                                )}
+                            </button>
                         }
 
 
