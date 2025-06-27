@@ -143,7 +143,7 @@ export default function register1(pageProp) {
             mobile_number: value,
         }));
 
-        if (numericValue.length < 10) {
+        if (numericValue.length < 11) {
             setErrors((prev) => ({
                 ...prev,
                 mobile_number: 'Phone number must be at least 10 digits',
@@ -306,12 +306,17 @@ export default function register1(pageProp) {
             }
 
             if (formData.cell_phone.trim()) {
+                // Remove all non-digit characters
                 const digitsOnly = formData.cell_phone.replace(/\D/g, '');
 
-                if (digitsOnly.length < 10) {
+                // Remove leading country code (like '1' for US)
+                const numberWithoutCountryCode = digitsOnly.startsWith('1') ? digitsOnly.slice(1) : digitsOnly;
+
+                if (numberWithoutCountryCode.length < 10) {
                     newErrors.cell_phone = 'Cell phone must be at least 10 digits';
                 }
             }
+
 
 
             // else {

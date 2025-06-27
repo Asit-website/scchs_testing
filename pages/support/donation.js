@@ -99,7 +99,7 @@ export default function donation(pageProp) {
             phone: value,
         }));
 
-        if (numericValue.length < 10) {
+        if (numericValue.length < 11) {
             setErrors((prev) => ({
                 ...prev,
                 phone: 'Phone number must be at least 10 digits',
