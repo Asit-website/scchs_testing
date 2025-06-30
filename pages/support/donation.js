@@ -104,8 +104,8 @@ export default function donation(pageProp) {
                 ...prev,
                 phone: 'Phone number must be at least 10 digits',
             }));
-        } 
-        
+        }
+
         else {
             setErrors((prev) => ({
                 ...prev,

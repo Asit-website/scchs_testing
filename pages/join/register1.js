@@ -42,6 +42,14 @@ export default function register1(pageProp) {
 
     const [step, setStep] = useState(1);
 
+    const [instaUser, setInstaUser] = useState(null);
+    useEffect(() => {
+        const storedUser = localStorage.getItem("scchs_User");
+        if (storedUser) {
+            setInstaUser(JSON.parse(storedUser));
+        }
+    }, []);
+
     const [loading, setLoading] = useState(false);
 
     const router = useRouter();
@@ -535,9 +543,71 @@ export default function register1(pageProp) {
     //      };
 
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true); // show loader
+
+    //     const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+    //     if (formData.password !== formData.password_confirmation) {
+    //         toast.error("Password and confirm password must be the same.");
+    //         setLoading(false);
+    //         return;
+    //     }
+
+    //     if (!passwordRegex.test(formData.password)) {
+    //         toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
+    //         setLoading(false);
+    //         return;
+    //     }
+
+    //     try {
+    //         const response = await fetch('https://admin.scchs.co.in/api/registration', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(formData),
+    //         });
+
+    //         const result = await response.json();
+    //         console.log(result);
+
+    //         if (result.status === false) {
+    //             if (result.message?.email?.length > 0) {
+    //                 toast.error(result.message.email[0]);
+    //             } else if (result.message?.username?.length > 0) {
+    //                 toast.error(result.message.username[0]);
+    //             } else {
+    //                 toast.error("Registration failed. Please check your input.");
+    //             }
+    //             setLoading(false);
+    //             return;
+    //         }
+
+    //         toast.success("Registered successfully!");
+
+    //         setFormData({
+    //             prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
+    //             dob: '', dobMonth: '', dobYear: '',
+    //             address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
+    //             preferred: '', email: '', website: '',
+    //             username: '', password: '', password_confirmation: ''
+    //         });
+
+    //         router.push("/user/userlogin");
+
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         toast.error("Something went wrong. Please try again later.");
+    //     } finally {
+    //         setLoading(false); // hide loader
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true); // show loader
+        setLoading(true);
 
         const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
@@ -554,48 +624,108 @@ export default function register1(pageProp) {
         }
 
         try {
-            const response = await fetch('https://admin.scchs.co.in/api/registration', {
+            const isMemberCreation = instaUser?.id ? true : false;
+
+
+            const url = isMemberCreation
+                ? "https://admin.scchs.co.in/api/members/create"
+                : "https://admin.scchs.co.in/api/registration";
+
+            if (isMemberCreation) {
+                // Get active membership plan for user
+                const userMembershipRes = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const membershipData = await userMembershipRes.json();
+
+                const today = new Date();
+                const activePlan = membershipData?.data?.find(plan => {
+                    const isActive = plan.status === "active";
+                    const endDate = new Date(plan.end_date);
+                    return isActive && endDate >= today;
+                });
+
+                const allowMember = parseInt(activePlan?.plan?.allow_member || "0", 10);
+
+                // No count check here – assuming backend validates limit
+                console.log("Skipping client-side count check – backend handles it.");
+            }
+
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    ...(isMemberCreation && JSON?.parse(localStorage.getItem("scchs_Access")) ? { Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` } : {}),
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(
+                    isMemberCreation
+                        ? { ...formData, parent_user_id: instaUser.id }
+                        : formData
+                ),
             });
 
             const result = await response.json();
             console.log(result);
 
+            // if (result.status === false) {
+            //     if (result.message?.email?.length > 0) {
+            //         toast.error(result.message.email[0]);
+            //     } else if (result.message?.username?.length > 0) {
+            //         toast.error(result.message.username[0]);
+            //     } else {
+            //         toast.error("Submission failed. Please check your input.");
+            //     }
+            //     setLoading(false);
+            //     return;
+            // }
+
             if (result.status === false) {
+            if (result.message?.email?.length > 0) {
+                toast.error(result.message.email[0]);
+            } else if (result.message?.username?.length > 0) {
+                toast.error(result.message.username[0]);
+            } else if (typeof result.message === 'string') {
+                toast.error(result.message);
+            } else if (typeof result.errors === 'object') {
+                const firstKey = Object.keys(result.errors)[0];
+                const firstErrorMsg = result.errors[firstKey]?.[0] || "Something went wrong.";
+                toast.error(firstErrorMsg);
+            } else {
+                toast.error("Submission failed. Please check your input.");
+            }
+            setLoading(false);
+            return;
+        }
+
+
+            console.log(isMemberCreation);
+            if (isMemberCreation) {
+                toast.success(result?.message || "Member created successfully!");
+                window.location.href = "/"
+            }
+            else {
                 if (result.message?.email?.length > 0) {
                     toast.error(result.message.email[0]);
                 } else if (result.message?.username?.length > 0) {
                     toast.error(result.message.username[0]);
                 } else {
-                    toast.error("Registration failed. Please check your input.");
+                    toast.success("Registered successfully!");
                 }
-                setLoading(false);
-                return;
             }
 
-            toast.success("Registered successfully!");
+            setFormData({});
 
-            setFormData({
-                prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
-                dob: '', dobMonth: '', dobYear: '',
-                address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
-                preferred: '', email: '', website: '',
-                username: '', password: '', password_confirmation: ''
-            });
-
-            router.push("/user/userlogin");
+            if (!isMemberCreation) {
+                router.push("/user/userlogin");
+            }
 
         } catch (error) {
             console.error('Error:', error);
             toast.error("Something went wrong. Please try again later.");
         } finally {
-            setLoading(false); // hide loader
+            setLoading(false);
         }
     };
+
+
 
 
     return (
