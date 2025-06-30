@@ -443,13 +443,13 @@ export default function events(pageProp) {
 
                                         <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
                                     </div>
-                                    <img
+                                  <Link href={`/eventdetail?id=${card?.slug}`}>  <img
                                         src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
                                         alt="Event"
                                         className="card-image"
-                                    />
+                                    /></Link>
                                     <div className="card-content">
-                                        <h3>{card.title}</h3>
+                                      <Link style={{textDecoration:"none",color:"#000"}} href={`/eventdetail?id=${card?.slug}`}><h3>{card.title}</h3></Link>
                                         <p>{card.short_description}</p>
                                         <Link href={`/eventdetail?id=${card?.slug}`}>
                                             <button className="info-btn">
