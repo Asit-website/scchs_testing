@@ -147,7 +147,8 @@ export default function userlogin(pageProp) {
                         {/* if you are a new user you can  <Link href="/join/register"> <span className="scchs-click-here"> Sign up free  </span> </Link>
                         If you are member then login in */}
 
-                        <Link href="/join/register"> <span className="scchs-click-here"> Sign up for free. </span> </Link>  Already a member? Log in here.
+                        {/* <Link href="/join/register"> <span className="scchs-click-here"> Sign up for free. </span> </Link>  Already a member? Log in here. */}
+                        <Link href="/join/register"> <span className="scchs-click-here">   Already a member? </span> </Link> Sign up for free or Log in here.
 
                     </p>
                     <h2 className="scchs-login-title">Sign in</h2>
