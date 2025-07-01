@@ -643,6 +643,13 @@ export default function register1(pageProp) {
                     return isActive && endDate >= today;
                 });
 
+                // Block if plan is "Reference"
+                if (activePlan?.type?.toLowerCase() === "reference") {
+                    toast.error("You cannot create members under a reference membership.");
+                    setLoading(false);
+                    return;
+                }
+
                 const allowMember = parseInt(activePlan?.plan?.allow_member || "0", 10);
 
                 // No count check here – assuming backend validates limit
@@ -665,35 +672,35 @@ export default function register1(pageProp) {
             const result = await response.json();
             console.log(result);
 
+            if (result.status === false) {
+                if (result.message?.email?.length > 0) {
+                    toast.error(result.message.email[0]);
+                } else if (result.message?.username?.length > 0) {
+                    toast.error(result.message.username[0]);
+                } else {
+                    toast.error("Submission failed. Please check either username aur email is alreday taken");
+                }
+                setLoading(false);
+                return;
+            }
+
             // if (result.status === false) {
             //     if (result.message?.email?.length > 0) {
             //         toast.error(result.message.email[0]);
             //     } else if (result.message?.username?.length > 0) {
             //         toast.error(result.message.username[0]);
+            //     } else if (typeof result.message === 'string') {
+            //         toast.error(result.message);
+            //     } else if (typeof result.errors === 'object') {
+            //         const firstKey = Object.keys(result.errors)[0];
+            //         const firstErrorMsg = result.errors[firstKey]?.[0] || "Something went wrong.";
+            //         toast.error(firstErrorMsg);
             //     } else {
             //         toast.error("Submission failed. Please check your input.");
             //     }
             //     setLoading(false);
             //     return;
             // }
-
-            if (result.status === false) {
-            if (result.message?.email?.length > 0) {
-                toast.error(result.message.email[0]);
-            } else if (result.message?.username?.length > 0) {
-                toast.error(result.message.username[0]);
-            } else if (typeof result.message === 'string') {
-                toast.error(result.message);
-            } else if (typeof result.errors === 'object') {
-                const firstKey = Object.keys(result.errors)[0];
-                const firstErrorMsg = result.errors[firstKey]?.[0] || "Something went wrong.";
-                toast.error(firstErrorMsg);
-            } else {
-                toast.error("Submission failed. Please check your input.");
-            }
-            setLoading(false);
-            return;
-        }
 
 
             console.log(isMemberCreation);

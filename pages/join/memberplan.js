@@ -243,15 +243,17 @@ export default function memberplan(pageProp) {
                       </tr>
                     </thead>
                     <tbody>
-                      {planss.map((item, idx) => (
+                      {plans.map((item, idx) => (
                         <tr key={idx}>
                           <td>{item.name}</td>
                           {/* <td>{item.for}</td> */}
                           <td>
-                            {item?.members}
+                            {/* {item?.members} */}
+                            {item?.allow_member}
                           </td>
                           <td>
-                            {item?.fee}
+                            {/* {item?.fee} */}
+                            {item?.price}$
                           </td>
                           {/* <td>
                             {item?.description}
