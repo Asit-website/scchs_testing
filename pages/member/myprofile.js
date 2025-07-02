@@ -1900,7 +1900,7 @@ export default function myprofile(pageProp) {
                                         <div className="card">
                                             <div className="grid-2col">
                                                 <div><strong className="lable1">Show Name :</strong>{memberships[0]?.user.
-                                                    member_settings[0].show_name === 1 ? "Yes" : "No"}</div>
+                                                    member_settings[0]?.show_name === 1 ? "Yes" : "No"}</div>
                                                 <div><strong className="lable1">Address :</strong>{memberships[0]?.user?.member_settings[0]?.address === 1 ? "Yes" : "No"}<span onClick={openMembershipEditPopup} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div>
                                                 <div><strong className="lable1">Telephone :</strong>{memberships[0]?.user?.member_settings[0]?.
                                                     telephone === 1 ? "Yes" : "No"
@@ -1908,7 +1908,7 @@ export default function myprofile(pageProp) {
                                                 <div><strong className="lable1">Email Address :</strong>{memberships[0]?.user?.member_settings[0]?.
                                                     email_address === 1 ? "Yes" : "No"
                                                 }</div>
-                                                <div><strong className="lable1">Website :</strong>{memberships[0]?.user?.member_settings[0].
+                                                <div><strong className="lable1">Website :</strong>{memberships[0]?.user?.member_settings[0]?.
                                                     website === 1 ? "Yes" : "No"
                                                 }</div>
                                                 <div><strong className="lable1">Photo :</strong>{memberships[0]?.user?.member_settings[0]?.photo === 1 ? "Yes" : "No"}</div>
