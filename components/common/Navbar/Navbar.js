@@ -934,7 +934,7 @@ export default function Navbar(props) {
 
                   {open && (
                     <div ref={dropdownRef12} className="dropdown-menusss">
-                      <a>Hello, </a>
+                      {/* <a>Hello, </a> */}
                       <a href="/ViewProfile">View Profile</a>
                       <a href="/orderhistory">Order History</a>
                       {/* <a href="/eventhistory">🎫 Event Orders</a> */}
