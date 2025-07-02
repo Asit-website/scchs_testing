@@ -1062,47 +1062,95 @@ export default function myprofile(pageProp) {
     const [selectedPlanId, setSelectedPlanId] = useState("");
     const [onlySingleMemberPlans, setOnlySingleMemberPlans] = useState(false);
 
-    useEffect(() => {
-        const fetchPlans = async () => {
-            try {
-                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser?.id}`);
-                const data = await res.json();
+    // useEffect(() => {
+    //     const fetchPlans = async () => {
+    //         try {
+    //             const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser?.id}`);
+    //             const data = await res.json();
 
-                const today = new Date();
+    //             const today = new Date();
 
-                const purchasedPlans = data?.data?.filter(plan => {
-                    const isPurchased = plan?.type?.toLowerCase() === "purchased";
-                    const isActive = plan?.status?.toLowerCase() === "active";
-                    const endDate = new Date(plan?.end_date);
-                    return isPurchased && isActive && endDate >= today;
-                });
+    //             const purchasedPlans = data?.data?.filter(plan => {
+    //                 const isPurchased = plan?.type?.toLowerCase() === "purchased";
+    //                 const isActive = plan?.status?.toLowerCase() === "active";
+    //                 const endDate = new Date(plan?.end_date);
+    //                 return isPurchased && isActive && endDate >= today;
+    //             });
 
-                console.log("All Purchased Plans:", purchasedPlans);
+    //             console.log("All Purchased Plans:", purchasedPlans);
 
-                // Check if all plans have allow_member === "1"
-                const allSingleMember = purchasedPlans.every(plan => plan?.plan?.allow_member === "1");
-                setOnlySingleMemberPlans(allSingleMember); // 👈 create this state
+    //             // Check if all plans have allow_member === "1"
+    //             const allSingleMember = purchasedPlans.every(plan => plan?.plan?.allow_member === "1");
+    //             setOnlySingleMemberPlans(allSingleMember); // 👈 create this state
 
-                // Filter out single-member plans for dropdown
-                const filteredPlans = purchasedPlans.filter(plan => plan?.plan?.allow_member !== "1");
+    //             // Filter out single-member plans for dropdown
+    //             const filteredPlans = purchasedPlans.filter(plan => plan?.plan?.allow_member !== "1");
 
-                const mappedPlans = filteredPlans.map(plan => ({
-                    membership_plan_id: plan.membership_plan_id,
-                    name: plan.plan?.name || `Plan ${plan.membership_plan_id}`
-                }));
+    //             const mappedPlans = filteredPlans.map(plan => ({
+    //                 membership_plan_id: plan.membership_plan_id,
+    //                 name: plan.plan?.name || `Plan ${plan.membership_plan_id}`
+    //             }));
 
+    //             setValidPlans(mappedPlans);
+
+    //             if (mappedPlans.length > 0) {
+    //                 setSelectedPlanId(mappedPlans[0].membership_plan_id);
+    //             }
+    //         } catch (err) {
+    //             console.error("Error loading plans:", err);
+    //         }
+    //     };
+
+    //     if (instaUser?.id) fetchPlans();
+    // }, [instaUser?.id]);
+
+     useEffect(() => {
+    const fetchPlans = async () => {
+        try {
+            const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser?.id}`);
+            const data = await res.json();
+
+            const today = new Date();
+
+            const purchasedPlans = data?.data?.filter(plan => {
+                const isPurchased = plan?.type?.toLowerCase() === "purchased";
+                const isActive = plan?.status?.toLowerCase() === "active";
+                const endDate = new Date(plan?.end_date);
+                return isPurchased && isActive && endDate >= today;
+            });
+
+            console.log("All Purchased Plans:", purchasedPlans);
+
+            // Check if all plans allow only 1 member
+            const allSingleMember = purchasedPlans.every(plan => plan?.plan?.allow_member === "1");
+            setOnlySingleMemberPlans(allSingleMember);
+
+            // Filter plans where used_slots < allow_member
+            const filteredPlans = purchasedPlans.filter(plan => {
+                const allowed = parseInt(plan?.plan?.allow_member || "0", 10);
+                const used = parseInt(plan?.used_slots || "0", 10);
+                return allowed > 1 && used < allowed;
+            });
+
+            const mappedPlans = filteredPlans.map(plan => ({
+                membership_plan_id: plan.membership_plan_id,
+                name: plan.plan?.name || `Plan ${plan.membership_plan_id}`
+            }));
+
+            if (mappedPlans.length > 0) {
                 setValidPlans(mappedPlans);
-
-                if (mappedPlans.length > 0) {
-                    setSelectedPlanId(mappedPlans[0].membership_plan_id);
-                }
-            } catch (err) {
-                console.error("Error loading plans:", err);
+                setSelectedPlanId(mappedPlans[0].membership_plan_id);
+            } else {
+                setValidPlans([]);
+                setSelectedPlanId(null);
             }
-        };
+        } catch (err) {
+            console.error("Error loading plans:", err);
+        }
+    };
 
-        if (instaUser?.id) fetchPlans();
-    }, [instaUser?.id]);
+    if (instaUser?.id) fetchPlans();
+}, [instaUser?.id]);
 
 
     const handleRedirect = () => {
@@ -1111,7 +1159,7 @@ export default function myprofile(pageProp) {
         router.push("/join/register1");
     };
 
-    if (validPlans.length === 0) return null;
+    // if (validPlans.length === 0) return ;
     //    ========================fetch active member plan finished======
 
     return (
