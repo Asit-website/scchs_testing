@@ -1093,7 +1093,7 @@ export default function myprofile(pageProp) {
                             <div className="info-section info-section2">
                                 <div className="info-header">Mailing Information :</div>
                                 <div className="info-card">
-                                    <p><strong>Send Mail To :</strong></p>
+                                    <p><strong>Send Mail To :</strong>{memberships[0]?.user?.address}</p>
                                     <p><strong>Always Mail Pubs :</strong> No</p>
                                     {/* <div className="grid-2col">
                                         <div><strong className="lable1">Send Mail To:</strong></div>

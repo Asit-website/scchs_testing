@@ -253,7 +253,7 @@ export default function memberplan(pageProp) {
                           </td>
                           <td>
                             {/* {item?.fee} */}
-                            {item?.price}$
+                            ${item?.price}
                           </td>
                           {/* <td>
                             {item?.description}
