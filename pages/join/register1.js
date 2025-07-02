@@ -28,6 +28,8 @@ var settingsMorePhotos = {
 // const itemsPerPage = 10;
 export default function register1(pageProp) {
 
+
+
     // const [currentPage, setCurrentPage] = useState(1);
 
     // const totalPages = Math.ceil(records.length / itemsPerPage);
@@ -49,6 +51,37 @@ export default function register1(pageProp) {
             setInstaUser(JSON.parse(storedUser));
         }
     }, []);
+
+    // =============fetch member============
+
+    const [validPlans, setValidPlans] = useState([]);
+
+    useEffect(() => {
+        const fetchMembershipPlans = async () => {
+            if (!instaUser?.id) return;
+
+            try {
+                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const data = await res.json();
+
+                const today = new Date();
+                const purchasedPlans = data?.data?.filter(plan => {
+                    const isActive = plan.status === "active";
+                    const endDate = new Date(plan.end_date);
+                    return isActive && plan.type === "Purchased" && endDate >= today;
+                });
+                console.log(purchasedPlans)
+                setValidPlans(purchasedPlans);
+                console.log(validPlans);
+            } catch (err) {
+                console.error("Error fetching membership plans:", err);
+            }
+        };
+
+        fetchMembershipPlans();
+    }, [instaUser]);
+
+    // ===================fetch member end===============
 
     const [loading, setLoading] = useState(false);
 
@@ -605,132 +638,390 @@ export default function register1(pageProp) {
     //     }
     // };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+
+    //     const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+    //     if (formData.password !== formData.password_confirmation) {
+    //         toast.error("Password and confirm password must be the same.");
+    //         setLoading(false);
+    //         return;
+    //     }
+
+    //     if (!passwordRegex.test(formData.password)) {
+    //         toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
+    //         setLoading(false);
+    //         return;
+    //     }
+
+    //     try {
+    //         const isMemberCreation = instaUser?.id ? true : false;
+
+
+    //         const url = isMemberCreation
+    //             ? "https://admin.scchs.co.in/api/members/create"
+    //             : "https://admin.scchs.co.in/api/registration";
+
+    //         if (isMemberCreation) {
+    //             // Get active membership plan for user
+    //             const userMembershipRes = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+    //             const membershipData = await userMembershipRes.json();
+
+    //             const today = new Date();
+    //             const activePlan = membershipData?.data?.find(plan => {
+    //                 const isActive = plan.status === "active";
+    //                 const endDate = new Date(plan.end_date);
+    //                 return isActive && endDate >= today;
+    //             });
+
+    //             // Block if plan is "Reference"
+    //             if (activePlan?.type?.toLowerCase() === "reference") {
+    //                 toast.error("You cannot create members under a reference membership.");
+    //                 setLoading(false);
+    //                 return;
+    //             }
+
+    //             const allowMember = parseInt(activePlan?.plan?.allow_member || "0", 10);
+
+    //             // No count check here – assuming backend validates limit
+    //             console.log("Skipping client-side count check – backend handles it.");
+    //         }
+
+    //         const response = await fetch(url, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 ...(isMemberCreation && JSON?.parse(localStorage.getItem("scchs_Access")) ? { Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` } : {}),
+    //             },
+    //             body: JSON.stringify(
+    //                 isMemberCreation
+    //                     ? { ...formData, parent_user_id: instaUser.id }
+    //                     : formData
+    //             ),
+    //         });
+
+    //         const result = await response.json();
+    //         console.log(result);
+
+    //         if (result.status === false) {
+    //             if (result.message?.email?.length > 0) {
+    //                 toast.error(result.message.email[0]);
+    //             } else if (result.message?.username?.length > 0) {
+    //                 toast.error(result.message.username[0]);
+    //             } else {
+    //                 toast.error("Submission failed. Please check either username aur email is alreday taken");
+    //             }
+    //             setLoading(false);
+    //             return;
+    //         }
+
+    //         // if (result.status === false) {
+    //         //     if (result.message?.email?.length > 0) {
+    //         //         toast.error(result.message.email[0]);
+    //         //     } else if (result.message?.username?.length > 0) {
+    //         //         toast.error(result.message.username[0]);
+    //         //     } else if (typeof result.message === 'string') {
+    //         //         toast.error(result.message);
+    //         //     } else if (typeof result.errors === 'object') {
+    //         //         const firstKey = Object.keys(result.errors)[0];
+    //         //         const firstErrorMsg = result.errors[firstKey]?.[0] || "Something went wrong.";
+    //         //         toast.error(firstErrorMsg);
+    //         //     } else {
+    //         //         toast.error("Submission failed. Please check your input.");
+    //         //     }
+    //         //     setLoading(false);
+    //         //     return;
+    //         // }
+
+
+    //         console.log(isMemberCreation);
+    //         if (isMemberCreation) {
+    //             toast.success(result?.message || "Member created successfully!");
+    //             // window.location.href = "/"
+    //         }
+    //         else {
+    //             if (result.message?.email?.length > 0) {
+    //                 toast.error(result.message.email[0]);
+    //             } else if (result.message?.username?.length > 0) {
+    //                 toast.error(result.message.username[0]);
+    //             } else {
+    //                 toast.success("Registered successfully!");
+    //             }
+    //         }
+
+    //         setFormData({});
+
+    //         if (!isMemberCreation) {
+    //             router.push("/user/userlogin");
+    //         }
+
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         toast.error("Something went wrong. Please try again later.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+
+
+
+
+
+
+
+    // ==================ye memebership fetched ke accorroding hain======
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+
+    //     const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+    //     if (formData.password !== formData.password_confirmation) {
+    //         toast.error("Password and confirm password must be the same.");
+    //         setLoading(false);
+    //         return;
+    //     }
+
+    //     if (!passwordRegex.test(formData.password)) {
+    //         toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
+    //         setLoading(false);
+    //         return;
+    //     }
+
+    //     try {
+    //         const isMemberCreation = instaUser?.id ? true : false;
+
+    //         const url = isMemberCreation
+    //             ? "https://admin.scchs.co.in/api/members/create"
+    //             : "https://admin.scchs.co.in/api/registration";
+
+    //         let memberPayload = { ...formData };
+
+    //         if (isMemberCreation) {
+    //             const userMembershipRes = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+    //             const membershipData = await userMembershipRes.json();
+
+    //             const today = new Date();
+    //             const validPlans = membershipData?.data?.filter(plan => {
+    //                 const isActive = plan.status === "active";
+    //                 const endDate = new Date(plan.end_date);
+    //                 const isPurchased = plan.type === "Purchased";
+    //                 const allowed = parseInt(plan.plan?.allow_member || "0", 10);
+    //                 return isActive && isPurchased && endDate >= today && allowed > 0;
+    //             });
+
+    //             let selectedPlan = null;
+
+    //             for (const plan of validPlans) {
+    //                 // We'll try member creation — backend will validate
+    //                 selectedPlan = plan;
+    //                 break;
+    //             }
+
+    //             console.log(selectedPlan);
+
+    //             if (!selectedPlan) {
+    //                 toast.error("You have already created maximum members for all active membership plans.");
+    //                 setLoading(false);
+    //                 return;
+    //             }
+
+    //             memberPayload = {
+    //                 ...formData,
+    //                 parent_user_id: instaUser.id,
+    //                 membership_plan_id: selectedPlan.membership_plan_id
+    //             };
+    //         }
+
+    //         const response = await fetch(url, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 ...(isMemberCreation && JSON?.parse(localStorage.getItem("scchs_Access")) ? {
+    //                     Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+    //                 } : {}),
+    //             },
+    //             body: JSON.stringify(memberPayload),
+    //         });
+
+    //         const result = await response.json();
+    //         console.log(result);
+
+    //         if (result.status === false) {
+    //             if (result.message?.email?.length > 0) {
+    //                 toast.error(result.message.email[0]);
+    //             } else if (result.message?.username?.length > 0) {
+    //                 toast.error(result.message.username[0]);
+    //             } else if (typeof result.message === 'string') {
+    //                 toast.error(result.message);
+    //             } else if (typeof result.errors === 'object') {
+    //                 const firstKey = Object.keys(result.errors)[0];
+    //                 const firstErrorMsg = result.errors[firstKey]?.[0] || "Something went wrong.";
+    //                 toast.error(firstErrorMsg);
+    //             } else {
+    //                 toast.error("Submission failed. Please check your input.");
+    //             }
+    //             setLoading(false);
+    //             return;
+    //         }
+
+    //         if (isMemberCreation) {
+    //             toast.success(result?.message || "Member created successfully!");
+    //         } else {
+    //             if (result.message?.email?.length > 0) {
+    //                 toast.error(result.message.email[0]);
+    //             } else if (result.message?.username?.length > 0) {
+    //                 toast.error(result.message.username[0]);
+    //             } else {
+    //                 toast.success("Registered successfully!");
+    //             }
+    //         }
+
+    //         setFormData({});
+
+    //         if (!isMemberCreation) {
+    //             router.push("/user/userlogin");
+    //         }
+
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         toast.error("Something went wrong. Please try again later.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-        const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+    const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
-        if (formData.password !== formData.password_confirmation) {
-            toast.error("Password and confirm password must be the same.");
-            setLoading(false);
-            return;
-        }
+    if (formData.password !== formData.password_confirmation) {
+        toast.error("Password and confirm password must be the same.");
+        setLoading(false);
+        return;
+    }
 
-        if (!passwordRegex.test(formData.password)) {
-            toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
-            setLoading(false);
-            return;
-        }
+    if (!passwordRegex.test(formData.password)) {
+        toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
+        setLoading(false);
+        return;
+    }
 
-        try {
-            const isMemberCreation = instaUser?.id ? true : false;
+    try {
+        const isMemberCreation = instaUser?.id ? true : false;
 
+        const url = isMemberCreation
+            ? "https://admin.scchs.co.in/api/members/create"
+            : "https://admin.scchs.co.in/api/registration";
 
-            const url = isMemberCreation
-                ? "https://admin.scchs.co.in/api/members/create"
-                : "https://admin.scchs.co.in/api/registration";
+        let memberPayload = { ...formData };
 
-            if (isMemberCreation) {
-                // Get active membership plan for user
-                const userMembershipRes = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
-                const membershipData = await userMembershipRes.json();
+        // if (isMemberCreation) {
+        //     const userMembershipRes = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+        //     const membershipData = await userMembershipRes.json();
 
-                const today = new Date();
-                const activePlan = membershipData?.data?.find(plan => {
-                    const isActive = plan.status === "active";
-                    const endDate = new Date(plan.end_date);
-                    return isActive && endDate >= today;
-                });
+        //     const selectedPlan = membershipData?.data?.find(plan => plan.membership_plan_id === parseInt(formData.membership_plan_id));
 
-                // Block if plan is "Reference"
-                if (activePlan?.type?.toLowerCase() === "reference") {
-                    toast.error("You cannot create members under a reference membership.");
-                    setLoading(false);
-                    return;
-                }
+        //     if (!selectedPlan) {
+        //         toast.error("Selected membership plan not found or invalid.");
+        //         setLoading(false);
+        //         return;
+        //     }
 
-                const allowMember = parseInt(activePlan?.plan?.allow_member || "0", 10);
+        //     if (selectedPlan.type?.toLowerCase() === "reference") {
+        //         toast.error("You cannot create members under a reference membership.");
+        //         setLoading(false);
+        //         return;
+        //     }
 
-                // No count check here – assuming backend validates limit
-                console.log("Skipping client-side count check – backend handles it.");
-            }
+        //     memberPayload = {
+        //         ...formData,
+        //         parent_user_id: instaUser.id,
+        //         membership_plan_id: selectedPlan.membership_plan_id
+        //     };
+        // }
 
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(isMemberCreation && JSON?.parse(localStorage.getItem("scchs_Access")) ? { Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` } : {}),
-                },
-                body: JSON.stringify(
-                    isMemberCreation
-                        ? { ...formData, parent_user_id: instaUser.id }
-                        : formData
-                ),
-            });
+         if (isMemberCreation) {
+            const selectedPlanId = localStorage.getItem("selected_member_plan_id");
 
-            const result = await response.json();
-            console.log(result);
-
-            if (result.status === false) {
-                if (result.message?.email?.length > 0) {
-                    toast.error(result.message.email[0]);
-                } else if (result.message?.username?.length > 0) {
-                    toast.error(result.message.username[0]);
-                } else {
-                    toast.error("Submission failed. Please check either username aur email is alreday taken");
-                }
+            if (!selectedPlanId) {
+                toast.error("No membership plan selected for member creation.");
                 setLoading(false);
                 return;
             }
 
-            // if (result.status === false) {
-            //     if (result.message?.email?.length > 0) {
-            //         toast.error(result.message.email[0]);
-            //     } else if (result.message?.username?.length > 0) {
-            //         toast.error(result.message.username[0]);
-            //     } else if (typeof result.message === 'string') {
-            //         toast.error(result.message);
-            //     } else if (typeof result.errors === 'object') {
-            //         const firstKey = Object.keys(result.errors)[0];
-            //         const firstErrorMsg = result.errors[firstKey]?.[0] || "Something went wrong.";
-            //         toast.error(firstErrorMsg);
-            //     } else {
-            //         toast.error("Submission failed. Please check your input.");
-            //     }
-            //     setLoading(false);
-            //     return;
-            // }
-
-
-            console.log(isMemberCreation);
-            if (isMemberCreation) {
-                toast.success(result?.message || "Member created successfully!");
-                window.location.href = "/"
-            }
-            else {
-                if (result.message?.email?.length > 0) {
-                    toast.error(result.message.email[0]);
-                } else if (result.message?.username?.length > 0) {
-                    toast.error(result.message.username[0]);
-                } else {
-                    toast.success("Registered successfully!");
-                }
-            }
-
-            setFormData({});
-
-            if (!isMemberCreation) {
-                router.push("/user/userlogin");
-            }
-
-        } catch (error) {
-            console.error('Error:', error);
-            toast.error("Something went wrong. Please try again later.");
-        } finally {
-            setLoading(false);
+            memberPayload = {
+                ...formData,
+                parent_user_id: instaUser.id,
+                membership_plan_id: selectedPlanId
+            };
         }
-    };
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(isMemberCreation && JSON?.parse(localStorage.getItem("scchs_Access")) ? {
+                    Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                } : {}),
+            },
+            body: JSON.stringify(memberPayload),
+        });
+
+        const result = await response.json();
+        console.log(result);
+
+        if (result.status === false) {
+            if (result.message?.email?.length > 0) {
+                toast.error(result.message.email[0]);
+            } else if (result.message?.username?.length > 0) {
+                toast.error(result.message.username[0]);
+            } else if (typeof result.message === 'string') {
+                toast.error(result.message);
+            } else if (typeof result.errors === 'object') {
+                const firstKey = Object.keys(result.errors)[0];
+                const firstErrorMsg = result.errors[firstKey]?.[0] || "Something went wrong.";
+                toast.error(firstErrorMsg);
+            } else {
+                toast.error("Submission failed. Please check your input.");
+            }
+            setLoading(false);
+            return;
+        }
+
+        if (isMemberCreation) {
+            toast.success(result?.message || "Member created successfully!");
+        } else {
+            if (result.message?.email?.length > 0) {
+                toast.error(result.message.email[0]);
+            } else if (result.message?.username?.length > 0) {
+                toast.error(result.message.username[0]);
+            } else {
+                toast.success("Registered successfully!");
+            }
+        }
+
+        setFormData({});
+
+        if (!isMemberCreation) {
+            router.push("/user/userlogin");
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        toast.error("Something went wrong. Please try again later.");
+    } finally {
+        setLoading(false);
+    }
+};
+
+
 
 
 
@@ -824,6 +1115,25 @@ export default function register1(pageProp) {
                                     </div>
                                     <div className="nameform-container">
                                         <h2>Primary Member Information</h2>
+                                        <div className="nameform-group nams_group">
+
+                                            {/* <input onChange={handleChange} name="prefix" value={formData.prefix} className="nameform-input" type="text" placeholder="Prefix" /> */}
+                                            {/* <select value={formData.membership_plan_id || ""}
+                                                onChange={(e) =>
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        membership_plan_id: parseInt(e.target.value),
+                                                    }))
+                                                } className="nameform-input" type="text" placeholder="Prefix">
+                                                <option value={""}>Select Membership Plan</option>
+                                                {validPlans.map((plan) => (
+                                                    <option key={plan.id} value={plan.membership_plan_id}>
+                                                        {plan.plan?.name} 
+                                                        
+                                                    </option>
+                                                ))}
+                                            </select> */}
+                                        </div>
                                         <div className="nameform-group nams_group">
 
                                             {/* <input onChange={handleChange} name="prefix" value={formData.prefix} className="nameform-input" type="text" placeholder="Prefix" /> */}

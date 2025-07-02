@@ -12,6 +12,7 @@ import { Country, State, City } from 'country-state-city';
 import CreatableSelect from 'react-select/creatable';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import { useRouter } from "next/router";
 
 var settingsMorePhotos = {
     arrows: true,
@@ -49,6 +50,8 @@ export default function myprofile(pageProp) {
     const [errors, setErrors] = useState({})
     const [errors1, setErrors1] = useState({})
     const [errors2, setErrors2] = useState({})
+
+    const router = useRouter();
 
 
     useEffect(() => {
@@ -102,6 +105,10 @@ export default function myprofile(pageProp) {
     }, [instaUser]);
 
     const [donations, setDonations] = useState([]);
+
+
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -1050,6 +1057,63 @@ export default function myprofile(pageProp) {
         0
     );
 
+    // ================fetch active member plan==========
+    const [validPlans, setValidPlans] = useState([]);
+    const [selectedPlanId, setSelectedPlanId] = useState("");
+    const [onlySingleMemberPlans, setOnlySingleMemberPlans] = useState(false);
+
+    useEffect(() => {
+        const fetchPlans = async () => {
+            try {
+                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser?.id}`);
+                const data = await res.json();
+
+                const today = new Date();
+
+                const purchasedPlans = data?.data?.filter(plan => {
+                    const isPurchased = plan?.type?.toLowerCase() === "purchased";
+                    const isActive = plan?.status?.toLowerCase() === "active";
+                    const endDate = new Date(plan?.end_date);
+                    return isPurchased && isActive && endDate >= today;
+                });
+
+                console.log("All Purchased Plans:", purchasedPlans);
+
+                // Check if all plans have allow_member === "1"
+                const allSingleMember = purchasedPlans.every(plan => plan?.plan?.allow_member === "1");
+                setOnlySingleMemberPlans(allSingleMember); // 👈 create this state
+
+                // Filter out single-member plans for dropdown
+                const filteredPlans = purchasedPlans.filter(plan => plan?.plan?.allow_member !== "1");
+
+                const mappedPlans = filteredPlans.map(plan => ({
+                    membership_plan_id: plan.membership_plan_id,
+                    name: plan.plan?.name || `Plan ${plan.membership_plan_id}`
+                }));
+
+                setValidPlans(mappedPlans);
+
+                if (mappedPlans.length > 0) {
+                    setSelectedPlanId(mappedPlans[0].membership_plan_id);
+                }
+            } catch (err) {
+                console.error("Error loading plans:", err);
+            }
+        };
+
+        if (instaUser?.id) fetchPlans();
+    }, [instaUser?.id]);
+
+
+    const handleRedirect = () => {
+        if (!selectedPlanId) return;
+        localStorage.setItem("selected_member_plan_id", selectedPlanId);
+        router.push("/join/register1");
+    };
+
+    if (validPlans.length === 0) return null;
+    //    ========================fetch active member plan finished======
+
     return (
         <div className="page_shopping_list sop">
             <HeadSEO title={"memberprofile"} description={"this is member profile"} image={null} />
@@ -1058,6 +1122,29 @@ export default function myprofile(pageProp) {
 
             <div className="event_system_main event_system_main2">
                 <div className="event_main">
+                    {!onlySingleMemberPlans && (
+                        <select
+                            value={selectedPlanId}
+                            onChange={(e) => setSelectedPlanId(e.target.value)}
+                            className="your-select-class"
+                        >
+                            {validPlans.map(plan => (
+                                <option key={plan.membership_plan_id} value={plan.membership_plan_id}>
+                                    {plan.name}
+                                </option>
+                            ))}
+                        </select>
+                    )}
+
+                    <button
+                        onClick={handleRedirect}
+                        className="your-button-class"
+                        disabled={onlySingleMemberPlans}
+                    >
+                        Add Member
+                    </button>
+
+
                     <div className="membership_info">
                         <div className="membership_info_left">
                             <svg width="34" height="34" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1119,7 +1206,7 @@ export default function myprofile(pageProp) {
                                                 const yy = String(date.getFullYear()).slice(-2);
                                                 return `${mm}-${dd}-${yy}`;
                                             })()}</div>
-                                        <div><strong className="lable1">Amount Paid       :</strong>{memberships[0]?.plan?.monthly_price}$</div>
+                                        <div><strong className="lable1">Amount Paid       :</strong>${memberships[0]?.plan?.monthly_price}</div>
                                         <div><strong className="lable1">Donation             :</strong>{totalAmount}</div>
                                         <div><strong className="lable1">Date                      :</strong>{new Date(donations[0]?.created_at).toLocaleString("en-US", {
                                             year: "numeric",
@@ -1175,7 +1262,7 @@ export default function myprofile(pageProp) {
                                     {/* maiden_name */}
                                     <div><strong className="lable1">Use Maiden Name:</strong>{memberships[0]?.user.maiden_name}</div>
                                     <div><strong className="lable1">Suffix:</strong>{memberships[0]?.user.suffix}</div>
-                                    <div><strong className="lable1">Photo:</strong> No</div>
+                                    {/* <div><strong className="lable1">Photo:</strong> No</div> */}
                                     <div><strong className="lable1">Date of birth:</strong>{memberships[0]?.user.dobMonth} {memberships[0]?.user.dob}{memberships[0]?.user.dobYear}</div>
                                 </div>
                             </div>
