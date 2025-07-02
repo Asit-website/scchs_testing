@@ -1122,27 +1122,54 @@ export default function myprofile(pageProp) {
 
             <div className="event_system_main event_system_main2">
                 <div className="event_main">
-                    {!onlySingleMemberPlans && (
-                        <select
-                            value={selectedPlanId}
-                            onChange={(e) => setSelectedPlanId(e.target.value)}
-                            className="your-select-class"
-                        >
-                            {validPlans.map(plan => (
-                                <option key={plan.membership_plan_id} value={plan.membership_plan_id}>
-                                    {plan.name}
-                                </option>
-                            ))}
-                        </select>
-                    )}
 
-                    <button
-                        onClick={handleRedirect}
-                        className="your-button-class"
-                        disabled={onlySingleMemberPlans}
-                    >
-                        Add Member
-                    </button>
+                    {/* {!onlySingleMemberPlans && (
+                            <select
+                                value={selectedPlanId}
+                                onChange={(e) => setSelectedPlanId(e.target.value)}
+                                className="your-select-class"
+                            >
+                                {validPlans.map(plan => (
+                                    <option key={plan.membership_plan_id} value={plan.membership_plan_id}>
+                                        {plan.name}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+
+                        <button
+                            onClick={handleRedirect}
+                            className="your-button-class"
+                            disabled={onlySingleMemberPlans}
+                        >
+                            Add Member
+                        </button> */}
+                    <div className="newsection1-wrapper">
+                        <div className="newsection1-inner">
+                            {!onlySingleMemberPlans && (
+                                <select
+                                    value={selectedPlanId}
+                                    onChange={(e) => setSelectedPlanId(e.target.value)}
+                                    className="newsection1-select"
+                                >
+                                    {validPlans.map(plan => (
+                                        <option key={plan.membership_plan_id} value={plan.membership_plan_id}>
+                                            {plan.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+
+                            <button
+                                onClick={handleRedirect}
+                                className="newsection1-button"
+                                disabled={onlySingleMemberPlans}
+                            >
+                                Add Member
+                            </button>
+                        </div>
+                    </div>
+
 
 
                     <div className="membership_info">

@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import { toast } from "react-toastify";
 import { ShoppingCart } from 'lucide-react';
+import { userInfo } from "os";
 
 const staticItems = [
   { id: "Archives", title: "ARCHIVES", link: "/archieve" },
@@ -669,6 +670,7 @@ export default function Navbar(props) {
     }, []);
     const toggleDropdown112 = () => setIsOpen1(!isOpen1);
 
+    
 
     return (
       <>
@@ -932,6 +934,7 @@ export default function Navbar(props) {
 
                   {open && (
                     <div ref={dropdownRef12} className="dropdown-menusss">
+                      <a>Hello, </a>
                       <a href="/ViewProfile">View Profile</a>
                       <a href="/orderhistory">Order History</a>
                       {/* <a href="/eventhistory">🎫 Event Orders</a> */}
