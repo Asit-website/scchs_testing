@@ -1003,7 +1003,7 @@ export default function Navbar(props) {
                 </li>
 
               }
-              {instaUser && <li className="test_sign"><a>Hi <span style={{ fontWeight: "bold" }}>{instaUser?.first_name}</span></a></li>}
+              {instaUser && <li className="test_sign"><a>Hi, <span style={{ fontWeight: "bold" }}>{instaUser?.first_name}</span></a></li>}
             </ul>
           </div>
         </div>
