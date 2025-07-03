@@ -148,7 +148,7 @@ export default function userlogin(pageProp) {
                         If you are member then login in */}
 
                         {/* <Link href="/join/register"> <span className="scchs-click-here"> Sign up for free. </span> </Link>  Already a member? Log in here. */}
-                        <Link href="/join/register"> <span className="scchs-click-here">   Already a member? </span> </Link> Login here . <br/> <span>Or sign up for free</span>
+                        <Link href="/join/register"> <span className="scchs-click-here">   Already a member? </span> </Link> Login here  <br/> <span style={{fontWeight:"bold"}}> Or sign up for free</span>
 
                     </p>
                     <h2 className="scchs-login-title">Sign in</h2>
