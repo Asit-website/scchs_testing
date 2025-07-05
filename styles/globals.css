@@ -7823,6 +7823,11 @@ th {
 .clear-button:hover {
   background-color: #c62828;
 }
+/* ============sustom========= */
+.sustom_drop::after{
+  top: 65% !important;
+}
+/* ============sustom============= */
 @keyframes spin {
   0% {
     transform: rotate(0deg);

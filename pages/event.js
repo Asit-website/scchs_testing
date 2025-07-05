@@ -192,7 +192,7 @@ export default function events(pageProp) {
     const [selectedCategory, setSelectedCategory] = useState('');
 
     // ======for timeframe===========
-    const [timeframe, setTimeframe] = useState('all');
+    const [timeframe, setTimeframe] = useState('upcoming');
 
     const [searchField, setSearchField] = useState('title');
     const [searchInput, setSearchInput] = useState('');
@@ -321,17 +321,18 @@ export default function events(pageProp) {
                     <div className="filters-container">
                         <div>
                             <div className="filters-left">
-                                <div className="custom_drop">
+                                <div className="custom_drop sustom_drop">
+                                    <label style={{ marginBottom: "10px", fontWeight: "bold" }}>Filter By Category</label>
                                     <select onChange={handleCategoryChange}
                                         value={selectedCategory} className="dropdown">
-                                        <option value="">Filter by Category</option>
+                                        <option value="">All</option>
                                         {categories.map(cat => (
                                             <option key={cat.id} value={cat.id}>{cat.name}</option>
                                         ))}
                                     </select>
                                 </div>
 
-                                <div className="custom_drop">
+                                <div className="custom_drop sustom_drop">
                                     {/* <select value={timeframe} onChange={(e) => setTimeframe(e.target.value)} className="dropdown">
                                         <option>Timeframe</option>
                                        
@@ -339,13 +340,14 @@ export default function events(pageProp) {
                                         <option value="thisWeek">This Week</option>
                                         <option value="thisMonth">This Month</option>
                                     </select> */}
+                                    <label style={{ marginBottom: "10px", fontWeight: "bold" }}>Timeframe</label>
                                     <select value={timeframe} onChange={(e) => setTimeframe(e.target.value)} className="dropdown">
-                                        <option value="">Timeframe</option>
+                                        {/* <option value="upcoming">All</option> */}
+                                        <option value="upcoming">All Upcoming</option>
                                         <option value="within1Month">Within 1 month</option>
                                         <option value="within3Months">Within 3 months</option>
                                         <option value="within6Months">Within 6 months</option>
                                         <option value="within12Months">Within 12 months</option>
-                                        <option value="upcoming">All Upcoming</option>
                                         <option value="past">History of past event</option>
                                     </select>
                                 </div>
@@ -401,132 +403,220 @@ export default function events(pageProp) {
                     </div>
 
                     {/* slice(0, visibleCount) */}
-                    <div className="card-grid">
+                    {/* <div className="card-grid">
                         {cards.length === 0 ? (
                             <p>No events found.</p>
                         ) : (
-                            cards.filter(card => {
-                                const eventDate = new Date(card.date);
-
-                                // if (timeframe === 'today') {
-                                //     const today = new Date();
-                                //     return eventDate.toDateString() === today.toDateString();
-                                // }
-
-                                // if (timeframe === 'thisWeek') {
-                                //     const now = new Date();
-                                //     const startOfWeek = new Date(now);
-                                //     startOfWeek.setDate(now.getDate() - now.getDay() + 1); // Monday
-
-                                //     const endOfWeek = new Date(startOfWeek);
-                                //     endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
-
-                                //     return eventDate >= startOfWeek && eventDate <= endOfWeek;
-                                // }
-
-                                // if (timeframe === 'thisMonth') {
-                                //     const now = new Date();
-                                //     return (
-                                //         eventDate.getMonth() === now.getMonth() &&
-                                //         eventDate.getFullYear() === now.getFullYear()
-                                //     );
-                                // }
-
-                                if (timeframe === 'within1Month') {
+                            cards
+                                .filter(card => {
+                                    const eventDate = new Date(card.date);
                                     const now = new Date();
-                                    const oneMonthLater = new Date(now);
-                                    oneMonthLater.setMonth(now.getMonth() + 1);
-                                    return eventDate >= now && eventDate <= oneMonthLater;
-                                }
+                                    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                                    const eventOnlyDate = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
 
-                                if (timeframe === 'within3Months') {
-                                    const now = new Date();
-                                    const threeMonthsLater = new Date(now);
-                                    threeMonthsLater.setMonth(now.getMonth() + 3);
-                                    return eventDate >= now && eventDate <= threeMonthsLater;
-                                }
+                                    // ======= TIMEFRAME FILTER =======
+                                    if (timeframe === 'past' && eventOnlyDate >= today) return false;
+                                    if (timeframe === 'upcoming' && eventOnlyDate < today) return false;
 
-                                if (timeframe === 'within6Months') {
-                                    const now = new Date();
-                                    const sixMonthsLater = new Date(now);
-                                    sixMonthsLater.setMonth(now.getMonth() + 6);
-                                    return eventDate >= now && eventDate <= sixMonthsLater;
-                                }
+                                    if (timeframe === 'within1Month') {
+                                        const oneMonthLater = new Date(today);
+                                        oneMonthLater.setMonth(today.getMonth() + 1);
+                                        if (eventOnlyDate < today || eventOnlyDate > oneMonthLater) return false;
+                                    }
 
-                                if (timeframe === 'within12Months') {
-                                    const now = new Date();
-                                    const twelveMonthsLater = new Date(now);
-                                    twelveMonthsLater.setMonth(now.getMonth() + 12);
-                                    return eventDate >= now && eventDate <= twelveMonthsLater;
-                                }
+                                    if (timeframe === 'within3Months') {
+                                        const threeMonthsLater = new Date(today);
+                                        threeMonthsLater.setMonth(today.getMonth() + 3);
+                                        if (eventOnlyDate < today || eventOnlyDate > threeMonthsLater) return false;
+                                    }
 
-                                if (timeframe === 'upcoming') {
-                                    const now = new Date();
-                                    return eventDate >= now;
-                                }
+                                    if (timeframe === 'within6Months') {
+                                        const sixMonthsLater = new Date(today);
+                                        sixMonthsLater.setMonth(today.getMonth() + 6);
+                                        if (eventOnlyDate < today || eventOnlyDate > sixMonthsLater) return false;
+                                    }
 
-                                if (timeframe === 'past') {
-                                    const now = new Date();
-                                    return eventDate < now;
-                                }
+                                    if (timeframe === 'within12Months') {
+                                        const twelveMonthsLater = new Date(today);
+                                        twelveMonthsLater.setMonth(today.getMonth() + 12);
+                                        if (eventOnlyDate < today || eventOnlyDate > twelveMonthsLater) return false;
+                                    }
 
+                                    // ======= CATEGORY FILTER (if selected) =======
+                                    // if (selectedCategory && selectedCategory !== 'all') {
+                                    //     if (card.category_name?.toLowerCase() !== selectedCategory.toLowerCase()) return false;
+                                    // }
 
-                                // =======for search==========
+                                    if (typeof selectedCategory === 'string' && selectedCategory !== 'all') {
+                                        if ((card.category_name || '').toLowerCase() !== selectedCategory.toLowerCase()) return false;
+                                    }
 
-                                const search = searchText.toLowerCase();
+                                    // ======= SEARCH FILTER =======
+                                    const search = searchText.toLowerCase();
+                                    if (search) {
+                                        const title = card.title?.toLowerCase() || '';
+                                        const desc = card.short_description?.toLowerCase() || '';
 
-                                if (!search) return true;
+                                        if (searchField === 'title' && !title.includes(search)) return false;
+                                        if (searchField === 'title_description' && !(title.includes(search) || desc.includes(search))) return false;
+                                    }
 
-                                const title = card.title?.toLowerCase() || '';
-                                const desc = card.short_description?.toLowerCase() || '';
+                                    return true;
+                                })
+                                .slice(0, visibleCount).map((card, index) => (
+                                    <div className="event-card" key={index}>
+                                        <div className="card-header">
+                                            <span>
+                                                {new Intl.DateTimeFormat('en-US', {
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                    year: 'numeric',
+                                                })
+                                                    .format(new Date(card.date))
+                                                    .replace(',', '')}
+                                            </span>
 
-                                if (searchField === 'title') {
-                                    return title.includes(search);
-                                }
-
-                                if (searchField === 'title_description') {
-                                    return title.includes(search) || desc.includes(search);
-                                }
-
-                                console.log(desc)
-
-
-
-                                return true; // 'all'
-                            }).slice(0, visibleCount).map((card, index) => (
-                                <div className="event-card" key={index}>
-                                    <div className="card-header">
-                                        <span>
-                                            {new Intl.DateTimeFormat('en-US', {
-                                                month: 'long',
-                                                day: 'numeric',
-                                                year: 'numeric',
-                                            })
-                                                .format(new Date(card.date))
-                                                .replace(',', '')}
-                                        </span>
-
-                                        <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
+                                            <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
+                                        </div>
+                                        <Link href={`/eventdetail?id=${card?.slug}`}>  <img
+                                            src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
+                                            alt="Event"
+                                            className="card-image"
+                                        /></Link>
+                                        <div className="card-content">
+                                            <Link style={{ textDecoration: "none", color: "#000" }} href={`/eventdetail?id=${card?.slug}`}><h3>{card.title}</h3></Link>
+                                            <p>{card.short_description}</p>
+                                            <Link href={`/eventdetail?id=${card?.slug}`}>
+                                                <button className="info-btn">
+                                                    More Info <span className="arrow-icon"></span>
+                                                </button>
+                                            </Link>
+                                        </div>
                                     </div>
-                                    <Link href={`/eventdetail?id=${card?.slug}`}>  <img
-                                        src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
-                                        alt="Event"
-                                        className="card-image"
-                                    /></Link>
-                                    <div className="card-content">
-                                        <Link style={{ textDecoration: "none", color: "#000" }} href={`/eventdetail?id=${card?.slug}`}><h3>{card.title}</h3></Link>
-                                        <p>{card.short_description}</p>
-                                        <Link href={`/eventdetail?id=${card?.slug}`}>
-                                            <button className="info-btn">
-                                                More Info <span className="arrow-icon"></span>
-                                            </button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            ))
+                                ))
                         )}
-                    </div>
-                    {visibleCount < cards.length && (
+                    </div> */}
+                    {cards.length === 0 ? (
+  <p>No events found.</p>
+) : (
+  (() => {
+    const filtered = cards.filter(card => {
+      const eventDate = new Date(card.date);
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const eventOnlyDate = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+
+      // ======= TIMEFRAME FILTER =======
+      if (timeframe === 'past' && eventOnlyDate >= today) return false;
+      if (timeframe === 'upcoming' && eventOnlyDate < today) return false;
+
+      if (timeframe === 'within1Month') {
+        const oneMonthLater = new Date(today);
+        oneMonthLater.setMonth(today.getMonth() + 1);
+        if (eventOnlyDate < today || eventOnlyDate > oneMonthLater) return false;
+      }
+
+      if (timeframe === 'within3Months') {
+        const threeMonthsLater = new Date(today);
+        threeMonthsLater.setMonth(today.getMonth() + 3);
+        if (eventOnlyDate < today || eventOnlyDate > threeMonthsLater) return false;
+      }
+
+      if (timeframe === 'within6Months') {
+        const sixMonthsLater = new Date(today);
+        sixMonthsLater.setMonth(today.getMonth() + 6);
+        if (eventOnlyDate < today || eventOnlyDate > sixMonthsLater) return false;
+      }
+
+      if (timeframe === 'within12Months') {
+        const twelveMonthsLater = new Date(today);
+        twelveMonthsLater.setMonth(today.getMonth() + 12);
+        if (eventOnlyDate < today || eventOnlyDate > twelveMonthsLater) return false;
+      }
+
+      // ======= CATEGORY FILTER =======
+      if (typeof selectedCategory === 'string' && selectedCategory !== 'all') {
+        if ((card.category_name || '').toLowerCase() !== selectedCategory.toLowerCase()) return false;
+      }
+
+      // ======= SEARCH FILTER =======
+      const search = searchText.toLowerCase();
+      if (search) {
+        const title = card.title?.toLowerCase() || '';
+        const desc = card.short_description?.toLowerCase() || '';
+
+        if (searchField === 'title' && !title.includes(search)) return false;
+        if (searchField === 'title_description' && !(title.includes(search) || desc.includes(search))) return false;
+      }
+
+      return true;
+    });
+
+    return (
+      <>
+        <div className="card-grid">
+          {filtered.length === 0 ? (
+            <p>No events found.</p>
+          ) : (
+            filtered.slice(0, visibleCount).map((card, index) => (
+              <div className="event-card" key={index}>
+                <div className="card-header">
+                  <span>
+                    {new Intl.DateTimeFormat('en-US', {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })
+                      .format(new Date(card.date))
+                      .replace(',', '')}
+                  </span>
+
+                  <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
+                </div>
+                <Link href={`/eventdetail?id=${card?.slug}`}>
+                  <img
+                    src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
+                    alt="Event"
+                    className="card-image"
+                  />
+                </Link>
+                <div className="card-content">
+                  <Link style={{ textDecoration: "none", color: "#000" }} href={`/eventdetail?id=${card?.slug}`}>
+                    <h3>{card.title}</h3>
+                  </Link>
+                  <p>{card.short_description}</p>
+                  <Link href={`/eventdetail?id=${card?.slug}`}>
+                    <button className="info-btn">
+                      More Info <span className="arrow-icon"></span>
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Load More Button Centered */}
+        {filtered.length > 6 && visibleCount < filtered.length && (
+          <div className="load-more-wrapper" style={{ textAlign: "center", marginTop: "20px" }}>
+            <button onClick={handleLoadMore} className="load-more-btn">
+              Load More
+              <span className="arrow-wrap">
+                <img
+                  width="12"
+                  src="https://res.cloudinary.com/dgif730br/image/upload/v1744279126/Group_1171280891_zvryne.png"
+                />
+              </span>
+            </button>
+          </div>
+        )}
+      </>
+    );
+  })()
+)}
+
+
+                    {/* {visibleCount < cards.length && (
                         <div className="load-more-wrapper">
                             <button onClick={handleLoadMore} className="load-more-btn">
                                 Load More
@@ -538,7 +628,22 @@ export default function events(pageProp) {
                                 </span>
                             </button>
                         </div>
-                    )}
+                    )} */}
+
+                    {/* {cards.length > 6 && visibleCount < cards.length && (
+                        <div className="load-more-wrapper">
+                            <button onClick={handleLoadMore} className="load-more-btn">
+                                Load More
+                                <span className="arrow-wrap">
+                                    <img
+                                        width="12"
+                                        src="https://res.cloudinary.com/dgif730br/image/upload/v1744279126/Group_1171280891_zvryne.png"
+                                    />
+                                </span>
+                            </button>
+                        </div>
+                    )} */}
+
 
                 </div>
 
