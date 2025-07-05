@@ -6,6 +6,7 @@ const UserProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [form, setForm] = useState({});
   const [loading, setLoading] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
 //   const user = localStorage?.getItem("scchs_User");
 //   console.log(user)
 
@@ -30,6 +31,11 @@ const UserProfile = () => {
   };
 
   const toggleEdit = () => {
+    if (isEdit) {
+      localStorage.setItem("scchs_User", JSON.stringify(form));
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 3000); // Auto hide after 3s
+    }
     setIsEdit(!isEdit);
   };
 
@@ -40,6 +46,9 @@ const UserProfile = () => {
 
       <h2 className="viewprofile1-title">User Profile</h2>
 
+      {showPopup && (
+        <div className="popup-toast">✅ Your profile is updated</div>
+      )}
       <div className="viewprofile1-grid">
         {[
           ["Prefix", "prefix"],
@@ -77,7 +86,7 @@ const UserProfile = () => {
                 className="viewprofile1-input"
               />
             ) : (
-              <p className="viewprofile1-text">{form?.[key] || "-"} </p>
+              <p className="viewprofile1-text">{form?.[key] || "-"}</p>
             )}
           </div>
         ))}
