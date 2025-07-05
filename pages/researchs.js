@@ -138,7 +138,7 @@ export default function researchs(pageProp) {
                                         <li><a href={membershipStatus === "active" ? "/Church-Baptisms	" : "/member/memberlogin"}>Selected Church Baptisms</a></li>
                                         <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/hisrical_record/St.%20Charles%20County%20Historical%20Society%20-%20Sibley%20Diary%201844-1855.pdf " : "/join/memberplan"}target="_blank">Sibley Diary 1844 - 1855</a></li>
                                         {/* https://admin.scchs.co.in/backend/admin/media/Stillbirths.pdf */}
-                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Stillbirths.pdf" : "/join/memberplan"}>Stillbirths</a></li>
+                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Stillbirths.pdf" : "/join/memberplan"}target="_blank">Stillbirths</a></li>
                                         <li>
                                             <a
                                                 href={
