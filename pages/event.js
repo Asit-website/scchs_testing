@@ -497,123 +497,123 @@ export default function events(pageProp) {
                         )}
                     </div> */}
                     {cards.length === 0 ? (
-  <p>No events found.</p>
-) : (
-  (() => {
-    const filtered = cards.filter(card => {
-      const eventDate = new Date(card.date);
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const eventOnlyDate = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+                        <p>No events found.</p>
+                    ) : (
+                        (() => {
+                            const filtered = cards.filter(card => {
+                                const eventDate = new Date(card.date);
+                                const now = new Date();
+                                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                                const eventOnlyDate = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
 
-      // ======= TIMEFRAME FILTER =======
-      if (timeframe === 'past' && eventOnlyDate >= today) return false;
-      if (timeframe === 'upcoming' && eventOnlyDate < today) return false;
+                                // ======= TIMEFRAME FILTER =======
+                                if (timeframe === 'past' && eventOnlyDate >= today) return false;
+                                if (timeframe === 'upcoming' && eventOnlyDate < today) return false;
 
-      if (timeframe === 'within1Month') {
-        const oneMonthLater = new Date(today);
-        oneMonthLater.setMonth(today.getMonth() + 1);
-        if (eventOnlyDate < today || eventOnlyDate > oneMonthLater) return false;
-      }
+                                if (timeframe === 'within1Month') {
+                                    const oneMonthLater = new Date(today);
+                                    oneMonthLater.setMonth(today.getMonth() + 1);
+                                    if (eventOnlyDate < today || eventOnlyDate > oneMonthLater) return false;
+                                }
 
-      if (timeframe === 'within3Months') {
-        const threeMonthsLater = new Date(today);
-        threeMonthsLater.setMonth(today.getMonth() + 3);
-        if (eventOnlyDate < today || eventOnlyDate > threeMonthsLater) return false;
-      }
+                                if (timeframe === 'within3Months') {
+                                    const threeMonthsLater = new Date(today);
+                                    threeMonthsLater.setMonth(today.getMonth() + 3);
+                                    if (eventOnlyDate < today || eventOnlyDate > threeMonthsLater) return false;
+                                }
 
-      if (timeframe === 'within6Months') {
-        const sixMonthsLater = new Date(today);
-        sixMonthsLater.setMonth(today.getMonth() + 6);
-        if (eventOnlyDate < today || eventOnlyDate > sixMonthsLater) return false;
-      }
+                                if (timeframe === 'within6Months') {
+                                    const sixMonthsLater = new Date(today);
+                                    sixMonthsLater.setMonth(today.getMonth() + 6);
+                                    if (eventOnlyDate < today || eventOnlyDate > sixMonthsLater) return false;
+                                }
 
-      if (timeframe === 'within12Months') {
-        const twelveMonthsLater = new Date(today);
-        twelveMonthsLater.setMonth(today.getMonth() + 12);
-        if (eventOnlyDate < today || eventOnlyDate > twelveMonthsLater) return false;
-      }
+                                if (timeframe === 'within12Months') {
+                                    const twelveMonthsLater = new Date(today);
+                                    twelveMonthsLater.setMonth(today.getMonth() + 12);
+                                    if (eventOnlyDate < today || eventOnlyDate > twelveMonthsLater) return false;
+                                }
 
-      // ======= CATEGORY FILTER =======
-      if (typeof selectedCategory === 'string' && selectedCategory !== 'all') {
-        if ((card.category_name || '').toLowerCase() !== selectedCategory.toLowerCase()) return false;
-      }
+                                // ======= CATEGORY FILTER =======
+                                if (typeof selectedCategory === 'string' && selectedCategory !== 'all') {
+                                    if ((card.category_name || '').toLowerCase() !== selectedCategory.toLowerCase()) return false;
+                                }
 
-      // ======= SEARCH FILTER =======
-      const search = searchText.toLowerCase();
-      if (search) {
-        const title = card.title?.toLowerCase() || '';
-        const desc = card.short_description?.toLowerCase() || '';
+                                // ======= SEARCH FILTER =======
+                                const search = searchText.toLowerCase();
+                                if (search) {
+                                    const title = card.title?.toLowerCase() || '';
+                                    const desc = card.short_description?.toLowerCase() || '';
 
-        if (searchField === 'title' && !title.includes(search)) return false;
-        if (searchField === 'title_description' && !(title.includes(search) || desc.includes(search))) return false;
-      }
+                                    if (searchField === 'title' && !title.includes(search)) return false;
+                                    if (searchField === 'title_description' && !(title.includes(search) || desc.includes(search))) return false;
+                                }
 
-      return true;
-    });
+                                return true;
+                            });
 
-    return (
-      <>
-        <div className="card-grid">
-          {filtered.length === 0 ? (
-            <p>No events found.</p>
-          ) : (
-            filtered.slice(0, visibleCount).map((card, index) => (
-              <div className="event-card" key={index}>
-                <div className="card-header">
-                  <span>
-                    {new Intl.DateTimeFormat('en-US', {
-                      month: 'long',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })
-                      .format(new Date(card.date))
-                      .replace(',', '')}
-                  </span>
+                            return (
+                                <>
+                                    <div className="card-grid">
+                                        {filtered.length === 0 ? (
+                                            <p>No events found.</p>
+                                        ) : (
+                                            filtered.slice(0, visibleCount).map((card, index) => (
+                                                <div className="event-card" key={index}>
+                                                    <div className="card-header">
+                                                        <span>
+                                                            {new Intl.DateTimeFormat('en-US', {
+                                                                month: 'long',
+                                                                day: 'numeric',
+                                                                year: 'numeric',
+                                                            })
+                                                                .format(new Date(card.date))
+                                                                .replace(',', '')}
+                                                        </span>
 
-                  <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
-                </div>
-                <Link href={`/eventdetail?id=${card?.slug}`}>
-                  <img
-                    src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
-                    alt="Event"
-                    className="card-image"
-                  />
-                </Link>
-                <div className="card-content">
-                  <Link style={{ textDecoration: "none", color: "#000" }} href={`/eventdetail?id=${card?.slug}`}>
-                    <h3>{card.title}</h3>
-                  </Link>
-                  <p>{card.short_description}</p>
-                  <Link href={`/eventdetail?id=${card?.slug}`}>
-                    <button className="info-btn">
-                      More Info <span className="arrow-icon"></span>
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+                                                        <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
+                                                    </div>
+                                                    <Link href={`/eventdetail?id=${card?.slug}`}>
+                                                        <img
+                                                            src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
+                                                            alt="Event"
+                                                            className="card-image"
+                                                        />
+                                                    </Link>
+                                                    <div className="card-content">
+                                                        <Link style={{ textDecoration: "none", color: "#000" }} href={`/eventdetail?id=${card?.slug}`}>
+                                                            <h3>{card.title}</h3>
+                                                        </Link>
+                                                        <p>{card.short_description}</p>
+                                                        <Link href={`/eventdetail?id=${card?.slug}`}>
+                                                            <button className="info-btn">
+                                                                More Info <span className="arrow-icon"></span>
+                                                            </button>
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
 
-        {/* Load More Button Centered */}
-        {filtered.length > 6 && visibleCount < filtered.length && (
-          <div className="load-more-wrapper" style={{ textAlign: "center", marginTop: "20px" }}>
-            <button onClick={handleLoadMore} className="load-more-btn">
-              Load More
-              <span className="arrow-wrap">
-                <img
-                  width="12"
-                  src="https://res.cloudinary.com/dgif730br/image/upload/v1744279126/Group_1171280891_zvryne.png"
-                />
-              </span>
-            </button>
-          </div>
-        )}
-      </>
-    );
-  })()
-)}
+                                    {/* Load More Button Centered */}
+                                    {filtered.length > 6 && visibleCount < filtered.length && (
+                                        <div className="load-more-wrapper" style={{ textAlign: "center", marginTop: "20px" }}>
+                                            <button onClick={handleLoadMore} className="load-more-btn">
+                                                Load More
+                                                <span className="arrow-wrap">
+                                                    <img
+                                                        width="12"
+                                                        src="https://res.cloudinary.com/dgif730br/image/upload/v1744279126/Group_1171280891_zvryne.png"
+                                                    />
+                                                </span>
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
+                            );
+                        })()
+                    )}
 
 
                     {/* {visibleCount < cards.length && (
