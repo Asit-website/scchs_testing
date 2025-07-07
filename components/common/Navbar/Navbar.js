@@ -941,7 +941,7 @@ export default function Navbar(props) {
                       <a href="/eventhistory">Event Order History</a>
                       <a href="/donationhistory">Donation History</a>
                       <a href="/storeorder">View Cart</a>
-                      onClick={handleRenewClick}
+                      {/* onClick={handleRenewClick} */}
                       <a href="/join/memberplan">{membershipStatus === "active" ? "Purchase another plan" : "Purchase Plan"}</a>
                       {membershipStatus === "active" && <Link href={"/renew"}><p style={{ cursor: "pointer" }} >RENEW ONLINE</p></Link>}
                     </div>
