@@ -91,6 +91,7 @@ export default function renew(pageProp) {
             const result = await response.json();
             if (result.status !== false) {
                 toast.success("Membership renewed successfully!");
+                window.location.href = "/"
             } else {
                 toast.error("Failed to renew membership.");
             }
