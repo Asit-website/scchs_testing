@@ -7,8 +7,8 @@ const UserProfile = () => {
   const [form, setForm] = useState({});
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-//   const user = localStorage?.getItem("scchs_User");
-//   console.log(user)
+  //   const user = localStorage?.getItem("scchs_User");
+  //   console.log(user)
 
   useEffect(() => {
     const user = localStorage.getItem("scchs_User");
@@ -84,6 +84,7 @@ const UserProfile = () => {
                 value={form?.[key] || ""}
                 onChange={handleChange}
                 className="viewprofile1-input"
+                maxLength={key === "mobile_number" ? 11 : undefined}
               />
             ) : (
               <p className="viewprofile1-text">{form?.[key] || "-"}</p>

@@ -291,21 +291,52 @@ export default function events(pageProp) {
     // };
 
     const formatTime = (timeStr) => {
-        if (!timeStr || typeof timeStr !== 'string' || !timeStr.includes(':')) {
-            return ''; // or return 'Invalid time' or fallback value
+        if (!timeStr || typeof timeStr !== 'string') return '';
+
+        // Case 1: Already in 12-hour format like "4:00 PM" or "12:00 AM"
+        const ampmMatch = timeStr.match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i);
+        if (ampmMatch) {
+            const date = new Date();
+            const [, hourStr, minuteStr, meridian] = ampmMatch;
+            let hour = Number(hourStr);
+            const minute = Number(minuteStr);
+
+            if (meridian.toUpperCase() === 'PM' && hour !== 12) hour += 12;
+            if (meridian.toUpperCase() === 'AM' && hour === 12) hour = 0;
+
+            date.setHours(hour, minute, 0, 0);
+            return date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
         }
 
-        const [hour, minute] = timeStr.split(':');
-        const date = new Date();
-        date.setHours(hour);
-        date.setMinutes(minute);
+        // Case 2: 24-hour string like "14:30"
+        const parts = timeStr.split(':');
+        if (parts.length !== 2) return '';
 
-        return new Intl.DateTimeFormat('en-US', {
+        const hour = Number(parts[0]);
+        const minute = Number(parts[1]);
+
+        if (
+            isNaN(hour) || isNaN(minute) ||
+            hour < 0 || hour > 23 ||
+            minute < 0 || minute > 59
+        ) return '';
+
+        const date = new Date();
+        date.setHours(hour, minute, 0, 0);
+        return date.toLocaleTimeString('en-US', {
             hour: 'numeric',
             minute: '2-digit',
-            hour12: true,
-        }).format(date);
+            hour12: true
+        });
     };
+
+
+
+
 
 
     return (
@@ -353,6 +384,7 @@ export default function events(pageProp) {
                                 </div>
 
                             </div>
+
                             <div className="event-title-filter">
                                 <div className="custom_drop">
                                     <select value={searchField} onChange={(e) => setSearchField(e.target.value)} className="dropdown small">
@@ -385,6 +417,7 @@ export default function events(pageProp) {
                                     </button>
                                 )}
                             </div>
+                            
                         </div>
 
                         {/* <div className="filters-right">
@@ -552,13 +585,16 @@ export default function events(pageProp) {
                                 return true;
                             });
 
+                            // Sort filtered data by date ascending (soonest event first)
+                            const sorted = filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+
                             return (
                                 <>
                                     <div className="card-grid">
-                                        {filtered.length === 0 ? (
+                                        {sorted.length === 0 ? (
                                             <p>No events found.</p>
                                         ) : (
-                                            filtered.slice(0, visibleCount).map((card, index) => (
+                                            sorted.slice(0, visibleCount).map((card, index) => (
                                                 <div className="event-card" key={index}>
                                                     <div className="card-header">
                                                         <span>
@@ -573,7 +609,7 @@ export default function events(pageProp) {
 
                                                         <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
                                                     </div>
-                                                    <Link href={`/eventdetail?id=${card?.slug}`}>
+                                                    <Link href={`/eventdetail/${card?.id}/${card?.slug}`}>
                                                         <img
                                                             src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
                                                             alt="Event"
@@ -585,7 +621,7 @@ export default function events(pageProp) {
                                                             <h3>{card.title}</h3>
                                                         </Link>
                                                         <p>{card.short_description}</p>
-                                                        <Link href={`/eventdetail?id=${card?.slug}`}>
+                                                        <Link href={`/eventdetail/${card?.id}/${card?.slug}`}>
                                                             <button className="info-btn">
                                                                 More Info <span className="arrow-icon"></span>
                                                             </button>
@@ -597,7 +633,7 @@ export default function events(pageProp) {
                                     </div>
 
                                     {/* Load More Button Centered */}
-                                    {filtered.length > 6 && visibleCount < filtered.length && (
+                                    {sorted.length > 6 && visibleCount < sorted.length && (
                                         <div className="load-more-wrapper" style={{ textAlign: "center", marginTop: "20px" }}>
                                             <button onClick={handleLoadMore} className="load-more-btn">
                                                 Load More
@@ -614,6 +650,7 @@ export default function events(pageProp) {
                             );
                         })()
                     )}
+
 
 
                     {/* {visibleCount < cards.length && (

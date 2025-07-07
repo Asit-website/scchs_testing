@@ -79,6 +79,98 @@ body {
   padding: 0;
 }
 
+/* ==============renew css======= */
+.membership-renew-main{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px;
+}
+  .membership-renew-container {
+  padding: 20px;
+  /* max-width: 800px;
+  margin: 0 auto; */
+}
+.membership-renew-heading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.membership-renew-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.membership-renew-name {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+.membership-renew-dates {
+  font-size: 14px;
+  color: #555;
+}
+.membership-renew-btn {
+  background-color: rgba(0, 49, 92, 1);
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  /* margin-top: 10px; */
+  opacity: 1;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+/* Disabled State Styling */
+.membership-renew-btn:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.membership-renew-paypal-box {
+  margin-top: 30px;
+}
+.membership-renew-paypal-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.status-badge {
+  display: inline-block;
+  /* padding: 4px 10px;
+  border-radius: 12px; */
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+    padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  opacity: 1;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.status-badge.active {
+  background-color: #28a745; /* Green */
+}
+
+.status-badge.grace {
+  background-color: #ff9800; /* Orange */
+}
+
+.status-badge.expired {
+  background-color: #f44336; /* Red */
+}
+.ren_dis{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+/* ============renew css end=============== */
+
 *,
 *::before,
 *::after {
@@ -3375,13 +3467,24 @@ button {
   top: -119px;
 }
 
+@media only screen and (max-width:1361px){
+  .membership-renew-main{
+    grid-template-columns: repeat(3,1fr);
+  }
+}
+
+
 @media only screen and (max-width:1200px) {
   .header_header__UxNqT .header_navItemsLeave1__Z0_2Y {
     border-left: 10px solid #065175 !important;
   }
 
 }
-
+@media only screen and (max-width:1056px){
+   .membership-renew-main{
+    grid-template-columns: repeat(2,1fr);
+  }
+}
 @media only screen and (max-width:776px) {
   .rwing {
     flex-direction: column;
@@ -3420,6 +3523,12 @@ button {
 @media only screen and (max-width:450px) {
   .site-footer br {
     display: none !important;
+  }
+  .membership-renew-container{
+    padding: 0px;
+  }
+  .membership-renew-main{
+    grid-template-columns: repeat(1,1fr);
   }
 }
 
@@ -5288,8 +5397,14 @@ justify-content: center !important;
   position: relative;
   display: inline-block;
   width: 100%;
-  min-width: 216px;
+  /* min-width: 216px; */
   /* adjust as needed */
+}
+.donation-history-empty-message {
+  text-align: center;
+  color: #777;
+  font-size: 16px;
+  margin-top: 20px;
 }
 
 .dropdown small {
@@ -5333,8 +5448,9 @@ justify-content: center !important;
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding-left: 15px;
+  padding-left: 8px;
   padding-top: 8px;
+  padding-right: 8px;
   padding-bottom: 8px;
   margin-top: 20px;
   background-color: rgba(255, 255, 255, 1);
@@ -5383,7 +5499,7 @@ justify-content: center !important;
 }
 
 .search-button {
-  padding: 10px 15px;
+  padding: 8px 16px;
   background-color: rgba(171, 5, 53, 1);
   color: white;
   border: none;
@@ -5911,7 +6027,10 @@ justify-content: center !important;
   font-family: "Euclid-Medium";
   border-radius: 6px;
 }
-
+.payment_right button:hover{
+  background-color: rgba(171, 5, 53, 1);
+  color: white;
+}
 /* ==============event detail page end========================= */
 
 
@@ -7807,27 +7926,7 @@ th {
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
-.clear-button {
-  margin-left: 8px;
-  padding: 8px 16px;
-  background-color: rgba(171, 5, 53, 1);
-  color: white;
-  font-size: 14px;
-  border: none;
-  border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
 
-.clear-button:hover {
-  background-color: #c62828;
-}
-/* ============sustom========= */
-.sustom_drop::after{
-  top: 65% !important;
-}
-/* ============sustom============= */
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -8746,6 +8845,22 @@ label {
   font-weight: 600;
   text-transform: capitalize;
 }
+.clear-button {
+  /* margin-left: 8px; */
+  padding: 11px 16px;
+  background-color: rgb(171 5 53) !important;
+  color: white;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.clear-button:hover {
+  background: #002c5f !important;
+}
 
 
 /* Responsive Styles */
@@ -9494,7 +9609,8 @@ label {
 }
 
 .ticket-btn:hover {
-  background-color: #f0f0f0;
+  background-color: rgba(0, 49, 92, 1);
+  color: white;
 }
 
 .modal-overlay {
@@ -14081,4 +14197,44 @@ body {
     width: 100%;
     font-size: 13px;
   }
+}
+
+.popup-toast {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #2ecc71;
+  color: white;
+  padding: 16px 28px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  font-size: 18px;
+  z-index: 9999;
+  animation: fadeInOut 3s ease-in-out;
+  text-align: center;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+}
+
+.sustom_drop::after{
+  top: 65% !important;
 }
