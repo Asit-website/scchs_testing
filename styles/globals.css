@@ -7413,6 +7413,9 @@ th {
   font-family: "Euclid-Regular";
   opacity: .8;
 }
+.ks-search-button:hover{
+  background-color:rgba(171, 5, 53, 1) ;
+}
 
 .ks-checkbox {
   width: 28px;
@@ -9671,12 +9674,17 @@ label {
   border: none;
   color: #555;
   margin-top: 12px;
+  padding: 10px;
+  border-radius: 5px;
   cursor: pointer;
   text-align: center;
   display: block;
   width: 100%;
 }
-
+.modal-close:hover{
+  background-color: #ab0535;
+  color: white;
+}
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -14237,4 +14245,15 @@ body {
 
 .sustom_drop::after{
   top: 65% !important;
+}
+
+.hover-link {
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+.hover-link:hover {
+  color: #00315c;
+}
+.hov-link:hover{
+  background-color: rgba(171, 5, 53, 1);
 }
