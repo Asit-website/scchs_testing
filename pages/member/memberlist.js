@@ -189,9 +189,12 @@ export default function memberlist(pageProp) {
                                         <td>{item?.user?.first_name} {item?.user?.last_name}</td>
                                         <td>{item?.user?.address || ''}</td>
                                         <td>
-                                            {item?.user?.mobile_number && <div>{item?.user.mobile_number}</div>}
+                                            {/* {item?.user?.mobile_number && <div>{item?.user.mobile_number}</div>}
                                             {item?.user?.email}
-                                            {item?.user?.website}
+                                            {item?.user?.website} */}
+                                            {[item?.user?.mobile_number, item?.user?.email, item?.user?.website]
+                                                .filter(Boolean)
+                                                .join(" / ")}
                                         </td>
                                     </tr>
                                 ))}
