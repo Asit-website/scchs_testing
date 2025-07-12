@@ -367,7 +367,8 @@ export default function memberplan(pageProp) {
                          console.log("Purchase API response:", result);
 
                          toast.success("membership plan purchased successfully")
-                         window.location.href = "/member/welcomemember";
+                        //  window.location.href = "/member/welcomemember";
+                         window.location.href = "/join/register1";
                          
 
                          // Optional: show success message or redirect
