@@ -650,7 +650,9 @@ export default function Navbar(props) {
           // Filter all active (not expired) plans
           const activePlans = (data?.data || []).filter(plan => {
             const isActive = plan.status === "active";
-            const endDate = new Date(plan.end_date);
+            const endDate = new Date(plan.
+              grace_end_date
+            );
             return isActive && endDate >= today;
           });
 
