@@ -59,9 +59,9 @@ export default function memberplan(pageProp) {
   console.log(accessToken);
   console.log(instaUser?.id);
 
-  
 
-  
+
+
 
   const fetchPlan = async () => {
     try {
@@ -149,29 +149,29 @@ export default function memberplan(pageProp) {
       try {
         const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser?.id}`);
         const data = await res.json();
-  
+
         const today = new Date();
-  
+
         const alreadyPurchased = data?.data?.some(plan => {
           const isSamePlan = plan.membership_plan_id === selectedPlan.id;
           const isActive = plan.status === "active";
           const endDate = new Date(plan.end_date); // assuming `end_date` is in ISO format
           const stillValid = endDate >= today;
-  
+
           return isSamePlan && isActive && stillValid;
         });
-  
+
         setHasSameActivePlan(alreadyPurchased);
       } catch (err) {
         console.error("Error checking membership:", err);
       }
     };
-  
+
     if (instaUser?.id && selectedPlan?.id) {
       checkMembership();
     }
   }, [instaUser?.id, selectedPlan?.id]);
-  
+
 
 
   return (
@@ -184,7 +184,7 @@ export default function memberplan(pageProp) {
       <div className="event_system_main event_system_main1">
         <div className="event_main">
 
-          
+
 
           {
             accessToken ? <div className="scchs-wrapper">
@@ -300,88 +300,94 @@ export default function memberplan(pageProp) {
                 {showPaypal && selectedPlan && (
                   <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency: "USD" }}>
                     {
-                      hasSameActivePlan ?   <div className="text-red-600 font-semibold">
-                      You have already purchased this membership.
-                    </div> :  
-                     <PayPalButtons
-                    //  onClick={(data, actions) => {
-                    //   if (hasSameActivePlan) {
-                    //     alert("You already purchased this plan and it's still active.");
-                    //     return actions.reject();
-                    //   }
-                    //   return actions.resolve();
-                    // }}
-                     style={{ layout: "vertical" }}
-
-                     
-                     
-                     createOrder={async (data, actions) => {
-                      
-                       const amount = Number(selectedPlan?.price || 0).toFixed(2);
-                       console.log("Creating PayPal order for amount:", amount);
-                       return actions.order.create({
-                         purchase_units: [
-                           {
-                             amount: {
-                               value: amount // like "45.00"
-                             },
-                           },
-                         ],
-                       });
+                      hasSameActivePlan ? <div className="text-red-600 font-semibold">
+                        You have already purchased this membership.
+                      </div> :
+                        <PayPalButtons
+                          //  onClick={(data, actions) => {
+                          //   if (hasSameActivePlan) {
+                          //     alert("You already purchased this plan and it's still active.");
+                          //     return actions.reject();
+                          //   }
+                          //   return actions.resolve();
+                          // }}
+                          style={{ layout: "vertical" }}
 
 
-                     }}
+
+                          createOrder={async (data, actions) => {
+
+                            const amount = Number(selectedPlan?.price || 0).toFixed(2);
+                            console.log("Creating PayPal order for amount:", amount);
+                            return actions.order.create({
+                              purchase_units: [
+                                {
+                                  amount: {
+                                    value: amount // like "45.00"
+                                  },
+                                },
+                              ],
+                            });
 
 
-                     onApprove={async (data, actions) => {
+                          }}
 
-                      
-                       try {
-                        
-                         const details = await actions.order.capture();
-                         console.log(details?.id);
-                         console.log("Payment Successful:", details);
-                         //  console.log(details?.pri)
-                         const payload = {
-                           user_id: parseInt(instaUser.id),
-                           membership_plan_id: parseInt(selectedPlan.id),
-                           amount: selectedPlan.price.toFixed(2),
-                           transaction_id: details.id,
-                           // status: "success", 
-                           status: details?.status,
-                           currency: "USD",
-                           payment_gateway: "paypal"
-                         };
 
-                         console.log(payload);
+                          onApprove={async (data, actions) => {
 
-                         const response = await fetch("https://admin.scchs.co.in/api/membership/purchase", {
-                           method: "POST",
-                           headers: {
-                             "Content-Type": "application/json",
-                           },
-                           body: JSON.stringify(payload),
-                         });
 
-                         const result = await response.json();
-                         console.log("Purchase API response:", result);
+                            try {
 
-                         toast.success("membership plan purchased successfully")
-                        //  window.location.href = "/member/welcomemember";
-                         window.location.href = "/join/register1";
-                         
+                              const details = await actions.order.capture();
+                              console.log(details?.id);
+                              console.log("Payment Successful:", details);
+                              //  console.log(details?.pri)
+                              const payload = {
+                                user_id: parseInt(instaUser.id),
+                                membership_plan_id: parseInt(selectedPlan.id),
+                                amount: selectedPlan.price.toFixed(2),
+                                transaction_id: details.id,
+                                // status: "success", 
+                                status: details?.status,
+                                currency: "USD",
+                                payment_gateway: "paypal"
+                              };
 
-                         // Optional: show success message or redirect
-                       } catch (error) {
-                         console.error("Error during payment or API call:", error);
-                       }
-                     }}
-                     onError={(err) => {
-                       alert(`payment succesfull of ${selectedPlan.price}`);
-                     }}
-                   />
+                              console.log(payload);
+
+                              const response = await fetch("https://admin.scchs.co.in/api/membership/purchase", {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(payload),
+                              });
+
+                              const result = await response.json();
+                              console.log("Purchase API response:", result);
+
+                              // ...existing code...
+                              toast.success("membership plan purchased successfully")
+                              //  window.location.href = "/member/welcomemember";
+                              if (selectedPlan?.name === "Individual") {
+                                window.location.href = "/";
+                              } else {
+                                window.location.href = "/join/register1";
+                              }
+                              // ...existing code...
+
+
+                              // Optional: show success message or redirect
+                            } catch (error) {
+                              console.error("Error during payment or API call:", error);
+                            }
+                          }}
+                          onError={(err) => {
+                            alert(`payment succesfull of ${selectedPlan.price}`);
+                          }}
+                        />
                     }
-                   
+
                   </PayPalScriptProvider>
                 )}
 

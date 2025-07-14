@@ -602,6 +602,41 @@ export default function Navbar(props) {
     }, []);
 
 
+    // useEffect(() => {
+    //   const fetchMembership = async () => {
+    //     if (!instaUser?.id) return;
+
+    //     try {
+    //       const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+    //       const data = await res.json();
+
+    //       console.log(data);
+
+    //       const today = new Date();
+
+    //       const activePlan = data?.data?.find(plan => {
+    //         const isActive = plan.status === "active";
+    //         const endDate = new Date(plan.end_date);
+    //         return isActive && endDate >= today;
+    //       });
+
+    //       setMembershipStatus(activePlan ? "active" : "none");
+    //     } catch (err) {
+    //       console.error("Error fetching membership:", err);
+    //       setMembershipStatus("none");
+    //     }
+    //   };
+
+    //   fetchMembership();
+    // }, [instaUser]);
+
+
+    // ===============for renew=========
+
+    const [usedSlot, setUsedSlot] = useState(0);
+    const [allowedSlot, setAllowedSlot] = useState(0);
+
+    // Replace your fetchMembership useEffect with this:
     useEffect(() => {
       const fetchMembership = async () => {
         if (!instaUser?.id) return;
@@ -610,29 +645,39 @@ export default function Navbar(props) {
           const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
           const data = await res.json();
 
-          console.log(data);
-
           const today = new Date();
 
-          const activePlan = data?.data?.find(plan => {
+          // Filter all active (not expired) plans
+          const activePlans = (data?.data || []).filter(plan => {
             const isActive = plan.status === "active";
             const endDate = new Date(plan.end_date);
             return isActive && endDate >= today;
           });
 
-          setMembershipStatus(activePlan ? "active" : "none");
+          console.log(activePlans);
+
+          setMembershipStatus(activePlans.length > 0 ? "active" : "none");
+
+          // Sum all allow_member and used_slots from all active plans
+          let totalAllowed = 0;
+          let totalUsed = 0;
+          activePlans.forEach(plan => {
+            totalAllowed += Number(plan.plan?.allow_member || 0);
+            totalUsed += Number(plan.used_slots || 0);
+          });
+
+          setUsedSlot(totalUsed);
+          setAllowedSlot(totalAllowed);
+
         } catch (err) {
-          console.error("Error fetching membership:", err);
           setMembershipStatus("none");
+          setUsedSlot(0);
+          setAllowedSlot(0);
         }
       };
 
       fetchMembership();
     }, [instaUser]);
-
-
-    // ===============for renew=========
-
 
 
     const handleMember = () => {
@@ -983,6 +1028,10 @@ export default function Navbar(props) {
                       {/* onClick={handleRenewClick} */}
                       <a href="/join/memberplan">{membershipStatus === "active" ? "Purchase another plan" : "Purchase Plan"}</a>
                       {membershipStatus === "active" && <Link href={"/renew"}><p style={{ cursor: "pointer" }} >RENEW ONLINE</p></Link>}
+
+                      {membershipStatus === "active" && usedSlot < allowedSlot && (
+                        <a href="/join/register1">Create Member</a>
+                      )}
                     </div>
 
                   )}
@@ -1313,6 +1362,9 @@ export default function Navbar(props) {
                   <li><a href="/storeorder">View Cart</a></li>
                   <li><a href="/join/memberplan">{membershipStatus === "active" ? "Purchase another plan" : "Purchase Plan"}</a></li>
                   {membershipStatus === "active" && <li><a href="/renew" style={{ cursor: "pointer" }}>Renew Online</a></li>}
+                  {membershipStatus === "active" && usedSlot < allowedSlot && (
+                    <a href="/join/register1">Create Member</a>
+                  )}
                 </ul>
               )}
             </div>}
