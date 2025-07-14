@@ -220,7 +220,7 @@ export default function store(pageProp) {
                             <div className="event-title-filter ev_tight_fill">
                                 <div className="custom_drop">
                                     <select value={selectedSlug} onChange={(e) => setSelectedSlug(e.target.value)} className="dropdown small" id="dropdownnn">
-                                        <option value="">Filter by category</option>
+                                        <option value="">All</option>
                                         {
                                             allCategory?.map((item, index) => {
                                                 return <option key={item.id} value={item?.slug}>{item?.name}</option>
