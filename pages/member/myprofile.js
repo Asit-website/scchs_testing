@@ -1240,9 +1240,14 @@ export default function myprofile(pageProp) {
                             <p><span>Password Note :</span>Only letters and numbers, please. Special characters like punctuation will not be saved, and you will not be able to</p>
                             <p>log in with a password like that.</p>
                         </div>
+
                     </div>
+                   
                     <div className="membership-container">
                         <div className="section-header">Membership Info</div>
+                         <div>
+                        <span style={{marginLeft:"15px"}}>Membership Id: {memberships[0]?.membership_number}</span>
+                    </div>
 
                         <div className="card-wrapper">
                             <div className="info-section info-section1">
