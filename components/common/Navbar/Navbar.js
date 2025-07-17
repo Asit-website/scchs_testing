@@ -798,7 +798,7 @@ export default function Navbar(props) {
                 {isOpen && (
                   membershipStatus === "active" &&
                   <div ref={dropdownRef11} className="test_drop1">
-                    <a href="/member/memberlist"><div><p>Membership List</p></div></a>
+                    {/* <a href="/member/memberlist"><div><p>Membership List</p></div></a> */}
                     <div onClick={handleDropdownToggle7} ref={dropdownRef7} className="tyino">
                       <p>SCCHS Publications Archives</p>
                       {/* {isDropdownOpen7 && */}
@@ -1254,7 +1254,7 @@ export default function Navbar(props) {
                   <a style={{ textDecoration: "none", color: "white" }} href="/member/myprofile"><div className="member-dropdown-item">My Profile</div></a>
                   <a style={{ textDecoration: "none", color: "white" }} href="/research"><div className="member-dropdown-item">Research</div></a>
                   <a style={{ textDecoration: "none", color: "white" }} href="/cementryrecord"><div className="member-dropdown-item">Cementry Records</div></a>
-                  <a style={{ textDecoration: "none", color: "white" }} href="/member/memberlist"><div className="member-dropdown-item">Membership List</div></a>
+                  {/* <a style={{ textDecoration: "none", color: "white" }} href="/member/memberlist"><div className="member-dropdown-item">Membership List</div></a> */}
                 </div>
               )}
             </div>}
