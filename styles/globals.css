@@ -7918,7 +7918,8 @@ th {
 .custom-card-image {
   width: 100%;
   /* height: 180px; */
-  object-fit: cover;
+  /* object-fit: cover; */
+  object-fit: contain;
   max-height: 200px;
 }
 
@@ -14338,4 +14339,37 @@ body {
 }
 .hov-link:hover{
   background-color: rgba(171, 5, 53, 1);
+}
+
+.deeping-btn{
+  display: flex;
+  justify-content: end;
+  padding-top: 20px;
+  padding-right: 50px;
+}
+.deep-btn {
+  background-color: rgba(0, 49, 92, 1);
+  border: rgba(0, 49, 92, 1);
+  display: flex;
+  justify-content: end;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.deep-btn:hover {
+  background-color: rgba(171, 5, 53, 1) !important;
+  border: rgba(171, 5, 53, 1) !important   ;
+  
+}
+
+@media (max-width: 640px) {
+  .deep-btn {
+   
+    text-align: center;
+    display: block;
+  }
 }
