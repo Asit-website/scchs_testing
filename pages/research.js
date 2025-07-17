@@ -45,7 +45,8 @@ const records = [
     description: "Business & Industry Files Index contains historical records and documents related to local businesses and industries in the region. This index serves as a reference tool for researchers interested in the commercial history and development of the area.",
     updated: "26 March 2021",
     category: "City/State/Federal Records",
-    link: "https://admin.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf"
+    link: "https://admin.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf",
+    
   },
   {
     title: "Cemeteries in St. Charles County",
@@ -73,7 +74,8 @@ const records = [
     description: "An index of Circuit Court records from 1805 through 1893, including legal filings, decisions, and other documentation.",
     updated: "08 November 2023",
     category: "City/State/Federal Records",
-    link: "https://s1.sos.mo.gov/records/archives/archivesdb/JudicialRecords/"
+    link: "https://s1.sos.mo.gov/records/archives/archivesdb/JudicialRecords/",
+   
   },
   {
     title: "Deed Records Related To Smith Chapel Cemetery",
@@ -87,7 +89,8 @@ const records = [
     description: "The Family Files are compiled genealogies and research notes organized by family surname. These records are useful for tracing lineage, local family histories, and relationships between community members.",
     updated: "20 March 2024",
     category: "Family History",
-    link: "https://admin.scchs.co.in/backend/admin/media/Family%20Files/Family%20Files.pdf"
+    link: "https://admin.scchs.co.in/backend/admin/media/Family%20Files/Family%20Files.pdf",
+   
   },
   {
     title: "Family Search",
@@ -143,7 +146,8 @@ const records = [
     description: "This index catalogues historical newspaper articles collected by McElhiney Olson, covering events, people, and places of interest in the local area.",
     updated: "7 May 2021",
     category: "Newspapers",
-    link: "https://admin.scchs.co.in/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20McElhiney%20Olson%20Index.pdf"
+    link: "https://admin.scchs.co.in/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20McElhiney%20Olson%20Index.pdf",
+   
   },
   {
     title: "Missouri Death Certificates",
@@ -199,7 +203,8 @@ const records = [
     description: "The Sibley Diary offers a glimpse into life in mid-19th century Missouri, detailing events, personal reflections, and historical context.",
     updated: "15 July 2016",
     category: "Cemeteries",
-    link: "https://admin.scchs.co.in/backend/admin/media/hisrical_record/St.%20Charles%20County%20Historical%20Society%20-%20Sibley%20Diary%201844-1855.pdf"
+    link: "https://admin.scchs.co.in/backend/admin/media/hisrical_record/St.%20Charles%20County%20Historical%20Society%20-%20Sibley%20Diary%201844-1855.pdf",
+  
   },
   {
     title: "Stillbirths",
@@ -213,7 +218,7 @@ const records = [
     description: "These files contain newspaper clippings, research notes, and references organized by topic such as schools, military, or local events.",
     updated: "26 March 2021",
     category: "City/State/Federal Records",
-    link: "https://admin.scchs.co.in/backend/admin/media/St.%20Charles%20County%20Historical%20Society%20-%20Subject_Topic%20Files.pdf"
+    link: "https://admin.scchs.co.in/backend/admin/media/St.%20Charles%20County%20Historical%20Society%20-%20Subject_Topic%20Files.pdf",
   },
   {
     title: "World War II Marriages",

@@ -31,6 +31,11 @@ export default function deeprecord(pageProp) {
 
 
             <div className='deeptop'>
+            <div className="deeping-btn">
+                        <a href="javascript:history.back()" className="deep-btn">
+                            ← Back
+                        </a>
+                    </div>
 
             <div className="deeprecords1-container">
                 <h2 className="deeprecords1-title">DEED RECORDS RELATED TO SMITH CHAPEL</h2>
