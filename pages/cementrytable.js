@@ -64,12 +64,12 @@ export default function cementrytable(pageProp) {
                                         value={surname}
                                         onChange={(e) => setSurname(e.target.value)}
                                     />
-                                    <button
+                                    {/* <button
                                         className="cemetery-clear-btn"
                                         onClick={() => setSurname("")}
                                     >
                                         🧹
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
                             <div className="cemetery-results-info">
