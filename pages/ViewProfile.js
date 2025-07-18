@@ -47,10 +47,10 @@ const UserProfile = () => {
 
   // POST API
   const updateProfileApi = async () => {
-    if (form.mobile_number && !/^\d{10}$/.test(form.mobile_number)) {
-      alert("Mobile Number must be exactly 10 digits.");
-      return false;
-    }
+    // if (form.mobile_number && !/^\d{10}$/.test(form.mobile_number)) {
+    //   alert("Mobile Number must be exactly 10 digits.");
+    //   return false;
+    // }
     // Email validation
     if (form.email && !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(form.email)) {
       alert("Please enter a valid email address.");

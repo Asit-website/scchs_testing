@@ -21,22 +21,27 @@ var settingsMorePhotos = {
 export default function searchsurname(pageProp) {
 
     const router = useRouter();
-    const { surname } = router.query;
+    const { surname, cemetery_id } = router.query;
 
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (surname) {
-            fetch(`https://admin.scchs.co.in/api/people/search?surname=${surname}`)
+            let apiUrl = "";
+            if (cemetery_id) {
+                apiUrl = `https://admin.scchs.co.in/api/cemetert/surname/search?cemetery_id=${cemetery_id}&surname=${encodeURIComponent(surname)}`;
+            } else {
+                apiUrl = `https://admin.scchs.co.in/api/people/search?surname=${encodeURIComponent(surname)}`;
+            }
+            fetch(apiUrl)
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log(data)
                     setSearchResults(data);
                     setLoading(false);
                 });
         }
-    }, [surname]);
+    }, [surname, cemetery_id]);
 
     console.log(searchResults[0])
 
