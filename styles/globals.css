@@ -161,7 +161,39 @@ body {
 .button-row button:hover {
   background-color: #0056b3;
 }
+.cemetery-clear-btn{
+  background-color: rgba(171, 5, 53, 1);
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.back-button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 35px;
+  padding: 20px 20px 0 20px;
+}
 
+.back-btn {
+  background-color: #00305C;
+  color: white;
+
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  background-color: #AB0635;
+  color: white;
+}
 .membership-renew-main{
   display: grid;
   grid-template-columns: repeat(4,1fr);

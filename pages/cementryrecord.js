@@ -132,14 +132,14 @@ export default function cementryrecord(pageProp) {
     <div className="page_shopping_list sop">
       <HeadSEO title={"memberlogin"} description={"this member is login"} image={null} />
       <HeadSEO1 />
-       
+
 
       <div className="event_system_main event_system_main1">
-      <div className="deeping-btn">
-                        <a href="javascript:history.back()" className="deep-btn">
-                            ← Back
-                        </a>
-                    </div>
+        <div className="deeping-btn">
+          <a href="javascript:history.back()" className="deep-btn">
+            ← Back
+          </a>
+        </div>
         <div className="event_main">
           <div className="cemetery-record">
             <div className="cemetery-wrapper">
@@ -181,6 +181,13 @@ export default function cementryrecord(pageProp) {
                       }}
                     />
                     <button onClick={handleSearch}>🔍</button>
+                    <button
+                      style={{marginLeft: "10px"}}
+                      className="cemetery-clear-btn"
+                      onClick={() => setSurname("")}
+                    >
+                      Clear
+                    </button>
                   </div>
                 </div>
 
