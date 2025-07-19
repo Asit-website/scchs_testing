@@ -81,7 +81,10 @@ export default function researchs(pageProp) {
                                 <div className="research-request">
                                     <h2>You may submit a research request by:</h2>
                                     <div>
-                                        <p>1. Using our convenient <a href="/contact-us">RESEARCH&nbsp;CONTACT FORM</a></p>
+                                        <p>1. Using our convenient <a href="/contact-us">
+                                        {/* RESEARCH&nbsp;CONTACT FORM */}
+                                        By&nbsp;Email
+                                        </a></p>
                                         <p>2. Calling us at&nbsp;<span>(636) 946-9828</span>&nbsp;</p>
                                         <p>3. Visiting the Archives at&nbsp;<span>101 South Main Street,&nbsp;St. Charles, MO. 63301-2802</span></p>
                                     </div>
