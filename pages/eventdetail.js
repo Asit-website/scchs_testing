@@ -36,7 +36,7 @@ const ITEMS_PER_PAGE = 3;
 export default function eventdetail(pageProp) {
 
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
-    
+
 
     const handleLoadMore = () => {
         setVisibleCount(prev => prev + ITEMS_PER_PAGE);
@@ -68,6 +68,8 @@ export default function eventdetail(pageProp) {
         }
     }, []);
 
+    console.log("instaUser", instaUser);
+
 
 
 
@@ -96,6 +98,11 @@ export default function eventdetail(pageProp) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // if (!instaUser) {
+        //     router.push("/user/userlogin");
+        //     return;
+        // }
         try {
             const res = await fetch(`https://admin.scchs.co.in/api/events/${aboutnew.id}/orders`, {
                 method: 'POST',
@@ -296,10 +303,19 @@ export default function eventdetail(pageProp) {
 
                     <PayPalScriptProvider options={{ clientId: 'AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy', currency: 'USD' }}>
                         <div>
-                            <button onClick={() =>{
-                                instaUser ? setShowModal1(true) : router.push("/user/userlogin")
-                                
-                            }} className="ticket-btn">Purchase Tickets</button>
+                            <button
+                                onClick={() => {
+                                    const user = typeof window !== "undefined" ? localStorage.getItem("scchs_User") : null;
+                                    if (user) {
+                                        setShowModal1(true);
+                                    } else {
+                                        router.push("/user/userlogin");
+                                    }
+                                }}
+                                className="ticket-btn"
+                            >
+                                Purchase Tickets
+                            </button>
 
                             {showModal1 && (
                                 <div className="modal-overlay" onClick={closeModal}>
@@ -351,7 +367,7 @@ export default function eventdetail(pageProp) {
                                                         });
                                                         toast.success("Payment completed successfully!")
                                                         closeModal();
-                                                         router.push(`/eventpayment?orderId=${orderId}`);
+                                                        router.push(`/eventpayment?orderId=${orderId}`);
                                                     }}
                                                     onError={(err) => {
                                                         console.error('PayPal error:', err);
@@ -494,8 +510,25 @@ export default function eventdetail(pageProp) {
                             <h3>Payment in advance is greatly appreciated, table hosts are responsible <br /> for ensuring full payment at or prior to event</h3>
                         </div>
                         <div className="payment_right">
-                            <button onClick={() => setShowModal1(true)}>Purchase Tickets</button>
+                            <button
+                                onClick={() => {
+                                     
+                                    // console.log(user);
+                                    if (!instaUser) {
+                                        window.location.href="/user/userlogin"
+                                        console.log("clicked1")
+                                      
+                                    } else {
+                                         setShowModal1(true);
+                                        console.log("clicked")
+                                    }
+                                }}
+                                className="ticket-btn"
+                            >
+                                Purchase Tickets
+                            </button>
                         </div>
+
                         {/* <div className="payment_right">
                             <button>Download</button>
                         </div>

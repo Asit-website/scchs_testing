@@ -537,7 +537,10 @@ export default function eventdetail(pageProp) {
                             <h3>Payment in advance is greatly appreciated, table hosts are responsible <br /> for ensuring full payment at or prior to event</h3>
                         </div>
                         <div className="payment_right">
-                            <button onClick={() => setShowModal1(true)}>Purchase Tickets</button>
+                            <button onClick={() =>{
+                                instaUser ? setShowModal1(true) : router.push("/user/userlogin")
+                                
+                            }}>Purchase Tickets</button>
                         </div>
                         {/* <div className="payment_right">
                             <button>Download</button>
