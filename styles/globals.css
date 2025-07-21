@@ -6397,6 +6397,7 @@ justify-content: center !important;
 
 .scch-member-table {
   width: 100%;
+  min-width: 800px;
   border-collapse: collapse;
   table-layout: fixed;
   border-left: none;
@@ -6405,6 +6406,22 @@ justify-content: center !important;
 
 .scch-member-table thead tr {
   height: 70px;
+}
+.scch-member-table th,
+.scch-member-table td {
+  padding: 8px 12px;
+  text-align: left;
+  white-space: nowrap; /* Taaki columns wrap na ho */
+}
+
+@media (max-width: 768px) {
+  .scch-table-container {
+    /* Mobile par bhi scroll enable rahe */
+    overflow-x: auto;
+  }
+  .scch-member-table {
+    min-width: 1100px;
+  }
 }
 
 .scch-member-table thead tr th {
