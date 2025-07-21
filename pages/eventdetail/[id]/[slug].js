@@ -36,7 +36,7 @@ const ITEMS_PER_PAGE = 3;
 export default function eventdetail(pageProp) {
 
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
-    
+
 
     const handleLoadMore = () => {
         setVisibleCount(prev => prev + ITEMS_PER_PAGE);
@@ -263,7 +263,7 @@ export default function eventdetail(pageProp) {
     //   return () => clearInterval(interval); // clear on close or unmount
     // }, [showModal, aboutnew?.image?.length]);
 
-     const formatTime = (timeStr) => {
+    const formatTime = (timeStr) => {
         if (!timeStr || typeof timeStr !== 'string') return '';
 
         // Case 1: Already in 12-hour format like "4:00 PM" or "12:00 AM"
@@ -339,11 +339,15 @@ export default function eventdetail(pageProp) {
 
                     <PayPalScriptProvider options={{ clientId: 'AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy', currency: 'USD' }}>
                         <div>
-                            <button onClick={() =>{
-                                instaUser ? setShowModal1(true) : router.push("/user/userlogin")
-                                
-                            }} className="ticket-btn">Purchase Tickets</button>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "20px", marginBottom: "30px" }}>
+                                <button onClick={() => {
+                                    instaUser ? setShowModal1(true) : router.push("/user/userlogin")
 
+                                }} className="ticket-btn">Purchase Tickets</button>
+                                <Link href="/event" style={{ textDecoration: "none" }}>
+                                    <button className="event_det_back">Back</button>
+                                </Link>
+                            </div>
                             {showModal1 && (
                                 <div className="modal-overlay" onClick={closeModal}>
                                     <div className="modal-box" onClick={(e) => e.stopPropagation()}>
@@ -394,7 +398,7 @@ export default function eventdetail(pageProp) {
                                                         });
                                                         toast.success("Payment completed successfully!")
                                                         closeModal();
-                                                         router.push(`/eventpayment?orderId=${orderId}`);
+                                                        router.push(`/eventpayment?orderId=${orderId}`);
                                                     }}
                                                     onError={(err) => {
                                                         console.error('PayPal error:', err);
@@ -413,7 +417,7 @@ export default function eventdetail(pageProp) {
 
 
                     <div className="event_details_main">
-                        <Link style={{ textDecoration: "none" }} href={"/event"}><button className="event_det_back">Back</button></Link>
+                        {/* <Link style={{ textDecoration: "none" }} href={"/event"}><button className="event_det_back">Back</button></Link> */}
                         <div className="event-page">
                             <div className="event-header">
                                 <div className="event-info">
@@ -537,9 +541,9 @@ export default function eventdetail(pageProp) {
                             <h3>Payment in advance is greatly appreciated, table hosts are responsible <br /> for ensuring full payment at or prior to event</h3>
                         </div>
                         <div className="payment_right">
-                            <button onClick={() =>{
+                            <button onClick={() => {
                                 instaUser ? setShowModal1(true) : router.push("/user/userlogin")
-                                
+
                             }}>Purchase Tickets</button>
                         </div>
                         {/* <div className="payment_right">
