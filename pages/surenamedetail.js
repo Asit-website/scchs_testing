@@ -162,68 +162,63 @@ export default function surenamelook(pageProp) {
                         <Link href={"/surenamelook"}><button className="btn-outline">Back</button></Link>
                     </div>
                     <div className="surname-details-wrapper">
-                        <div className="surname-details-grid" ref={printRef}>
-                            {data?.surname && <><div>Surname</div>
-                                <div>: <strong><a href="#">{data.surname}</a></strong></div></>}
-
-                            {
-                                data?.city && <>
+                        <div className="surname-details-grid px-4 md:px-12" ref={printRef}>
+                            {data?.surname && (
+                                <>
+                                    <div>Surname</div>
+                                    <div>: <strong><a href="#">{data.surname}</a></strong></div>
+                                </>
+                            )}
+                            {data?.city && (
+                                <>
                                     <div>City</div>
                                     <div>: <strong><a href="#">{data.city}</a></strong></div>
                                 </>
-                            }
-
-                            {
-                                data?.county && <>
+                            )}
+                            {data?.county && (
+                                <>
                                     <div>County</div>
                                     <div>: <strong><a href="#">{data.county}</a></strong></div>
                                 </>
-                            }
-
-                            {
-                                data?.state && <>
+                            )}
+                            {data?.state && (
+                                <>
                                     <div>State/Prov./Rgn</div>
                                     <div>: <strong><a href="#">{data.state}</a></strong></div>
                                 </>
-                            }
-
-                            {
-                                data?.country &&
+                            )}
+                            {data?.country && (
                                 <>
                                     <div>Country</div>
                                     <div>: <strong><a href="#">{data.country}</a></strong></div>
                                 </>
-                            }
-
-                            {
-                                data?.beginYear && <>
-                                    <div>Being Year</div>
+                            )}
+                            {data?.beginYear && (
+                                <>
+                                    <div>Begin Year</div>
                                     <div>: <strong><a href="#">{data.beginYear}</a></strong></div>
                                 </>
-                            }
-                            {
-                                data?.endYear && <>
+                            )}
+                            {data?.endYear && (
+                                <>
                                     <div>End Year</div>
                                     <div>: <strong><a href="#">{data.endYear}</a></strong></div>
                                 </>
-                            }
-
-
-                            {
-                                data?.alternateSpellings && <>
+                            )}
+                            {data?.alternateSpellings && (
+                                <>
                                     <div>Alternate Spellings</div>
                                     <div>: <strong><a href="#">{data.alternateSpellings}</a></strong></div>
                                 </>
-                            }
-
-                            {
-                                data?.notes && <>
+                            )}
+                            {data?.notes && (
+                                <>
                                     <div>Notes / Comments</div>
                                     <div>: <strong><a href="#">{data.notes}</a></strong></div>
                                 </>
-                            }
-
+                            )}
                         </div>
+
 
 
                     </div>

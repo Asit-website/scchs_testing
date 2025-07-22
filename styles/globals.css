@@ -7884,7 +7884,7 @@ th {
   display: grid;
   grid-template-columns: 1fr 1fr;
   row-gap: 24px;
-  column-gap: 60px;
+  column-gap: 40px;
   align-items: center;
 }
 

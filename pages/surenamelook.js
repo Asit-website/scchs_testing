@@ -501,8 +501,8 @@ export default function surenamelook(pageProp) {
                             <thead>
                                 <tr>
                                     <th className="nh1">Surname</th>
-                                    <th className="nh1">Country</th>
-                                    <th>Stage/Prov./Rgn</th>
+                                    <th className="nh1">County</th>
+                                    <th>State</th>
                                     <th>Country</th>
                                     <th>Begin Year</th>
                                     <th>End Year</th>
