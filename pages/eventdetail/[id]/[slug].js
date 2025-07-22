@@ -49,6 +49,8 @@ export default function eventdetail(pageProp) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState('');
 
+    const [membershipStatus, setMembershipStatus] = useState("loading");
+
     // ================paypal==============
 
 
@@ -67,6 +69,32 @@ export default function eventdetail(pageProp) {
             setInstaUser(JSON.parse(storedUser));
         }
     }, []);
+
+    useEffect(() => {
+        const fetchMembership = async () => {
+            if (!instaUser?.id) return;
+
+            try {
+                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const data = await res.json();
+
+                const today = new Date();
+
+                const activePlan = data?.data?.find(plan => {
+                    const isActive = plan.status === "active";
+                    const endDate = new Date(plan.grace_end_date);
+                    return isActive && endDate >= today;
+                });
+
+                setMembershipStatus(activePlan ? "active" : "none");
+            } catch (err) {
+                console.error("Error fetching membership:", err);
+                setMembershipStatus("none");
+            }
+        };
+
+        fetchMembership();
+    }, [instaUser]);
 
 
 
@@ -466,25 +494,37 @@ export default function eventdetail(pageProp) {
                                                 <p>{aboutnew?.location}</p>
                                             </div>
                                         </div>
+                                        {
+                                            membershipStatus === "active" ? <>
+                                                <div className="detail-row">
 
-                                        <div className="detail-row">
-                                           
-                                            <div className="text">
-                                                <span>Ticket Price</span><br />
-                                                {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
-                                                <p>{aboutnew?.user_price}</p>
+                                                    <div className="text">
+                                                        <span>Ticket Price</span><br />
+                                                        {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
+                                                        <p>{aboutnew?.user_price}</p>
+                                                    </div>
+
+                                                </div>
+                                                <div className="detail-row">
+
+                                                    <div className="text">
+                                                        <span>Membership Ticket Price</span><br />
+                                                        {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
+                                                        <p>{aboutnew?.member_price}</p>
+                                                    </div>
+
+                                                </div>
+                                            </> : <div className="detail-row">
+
+                                                <div className="text">
+                                                    <span>Ticket Price</span><br />
+                                                    {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
+                                                    <p>{aboutnew?.user_price}</p>
+                                                </div>
+
                                             </div>
-                                            
-                                        </div>
-                                         <div className="detail-row">
-                                           
-                                            <div className="text">
-                                                <span>Membership Ticket Price</span><br />
-                                                {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
-                                                <p>{aboutnew?.member_price}</p>
-                                            </div>
-                                            
-                                        </div>
+                                        }
+
                                     </div>
                                 </div>
                                 <div className="event-gallery-main">
