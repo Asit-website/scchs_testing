@@ -49,6 +49,8 @@ export default function eventdetail(pageProp) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState('');
 
+    const [membershipStatus, setMembershipStatus] = useState("loading");
+
     // ================paypal==============
 
 
