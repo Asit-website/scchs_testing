@@ -68,7 +68,7 @@ export default function storedetail(pageProp) {
 
                 const activePlan = data?.data?.find(plan => {
                     const isActive = plan.status === "active";
-                    const endDate = new Date(plan.end_date);
+                    const endDate = new Date(plan.grace_end_date);
                     return isActive && endDate >= today;
                 });
 
