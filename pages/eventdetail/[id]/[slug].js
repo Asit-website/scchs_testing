@@ -525,6 +525,11 @@ export default function eventdetail(pageProp) {
                                             </div>
                                         }
 
+                                        <div
+                                            className="aspect-video"
+                                            dangerouslySetInnerHTML={{ __html: aboutnew?.location_iframe }}
+                                        />
+
                                     </div>
                                 </div>
                                 <div className="event-gallery-main">
