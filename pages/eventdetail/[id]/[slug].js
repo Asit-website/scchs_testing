@@ -466,6 +466,25 @@ export default function eventdetail(pageProp) {
                                                 <p>{aboutnew?.location}</p>
                                             </div>
                                         </div>
+
+                                        <div className="detail-row">
+                                           
+                                            <div className="text">
+                                                <span>Ticket Price</span><br />
+                                                {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
+                                                <p>{aboutnew?.user_price}</p>
+                                            </div>
+                                            
+                                        </div>
+                                         <div className="detail-row">
+                                           
+                                            <div className="text">
+                                                <span>Membership Ticket Price</span><br />
+                                                {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
+                                                <p>{aboutnew?.member_price}</p>
+                                            </div>
+                                            
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="event-gallery-main">
