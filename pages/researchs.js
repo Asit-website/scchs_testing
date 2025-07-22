@@ -120,7 +120,7 @@ export default function researchs(pageProp) {
                                         <li><a href={membershipStatus === "active" ? "https://admin.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf" : "/join/memberplan"}target="_blank">Business &amp; Industry Files Index</a></li>
                                         <li>
                                             <a href={membershipStatus === "active" ? "/cementryrecord" : "/join/memberplan"}>Cemetery Records</a>
-                                            <p className="cementry-text">There are currently almost 50,000 individual records available from over 350 cemeteries in Saint Charles</p>
+                                            <p className="cementry-text">There are currently almost 50,000 individual records available from over 350 cemeteries in Saint Charles For more information <a>CLICK HERE</a> </p>
                                         </li>
 
                                         {/* <li><a href={membershipStatus === "active" ? "#" : "/member/memberlogin"}>County. For more information CLICK HERE</a></li> */}
