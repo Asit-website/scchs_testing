@@ -884,7 +884,8 @@ export default function Navbar(props) {
             <ul className="scchs_nav_ul">
               <div className="scchs_logo">
                 <a href="/"><img
-                  src="https://res.cloudinary.com/dgif730br/image/upload/v1745856268/High_Res_SCCHS_Logo_vFINAL_2_1_zlnojv.svg"
+                  // src="https://res.cloudinary.com/dgif730br/image/upload/v1745856268/High_Res_SCCHS_Logo_vFINAL_2_1_zlnojv.svg"
+                  src="https://res.cloudinary.com/dbcmdtr3r/image/upload/v1753223453/High_Res_SCCHS_Logo_vFINAl_LOgo_gpm1z8.png"
                   alt="SCCHS Logo"
                 /></a>
               </div>
