@@ -51,7 +51,7 @@ export default function register1(pageProp) {
     const [formData, setFormData] = useState({
         prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
         dob: '', dobMonth: '', dobYear: '',
-        address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
+        address: '', address2: '',  city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
         preferred: '', email: '', website: '',
         username: '', password: '', password_confirmation: ''
     });
@@ -354,7 +354,9 @@ export default function register1(pageProp) {
 
             if (!formData.address) newErrors.address = "Address is required";
             if (!formData.city) newErrors.city = "City is required";
+            if(!formData.country) newErrors.country ="country is required"
             if (!formData.state) newErrors.state = "State is required";
+
             if (!formData.postal_code) {
                 newErrors.postal_code = "Postal code is required";
             }
@@ -613,9 +615,9 @@ export default function register1(pageProp) {
 
             <div className="event_system_main event_system_main1">
                 <div className="event_main">
-                <Link href="/user/userlogin" style={{ textDecoration: "none", }}>
-                                    <button className="store_det_back">Back</button>
-                                </Link>
+                    <Link href="/user/userlogin" style={{ textDecoration: "none", }}>
+                        <button className="store_det_back">Back</button>
+                    </Link>
                     <form onSubmit={handleSubmit}>
                         {
                             // step === 1 && <div className="scchs-wrapper">
@@ -1139,16 +1141,17 @@ export default function register1(pageProp) {
                                             <input required onChange={handleChange} name="username" value={formData?.username} className="nameform-input" type="text" placeholder="UserName" />
                                             {errors?.username && <p className="text_red">{errors.username}</p>}
                                         </div>
-                                        <div className="nameform-group" style={{ position: 'relative' }}>
+
+                                        {/* <div className="nameform-group" style={{ position: 'relative' }}>
                                             <input required onChange={(e) => {
                                                 const value = e.target.value;
                                                 setFormData({ ...formData, password: value });
 
-                                                const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+                                   const passwordRegex = /^(?=[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[a-zA-Z]).{8,}$/;
 
                                                 if (value && !passwordRegex.test(value)) {
                                                     setPasswordError(
-                                                        "Password must start with a capital letter, include a special character, and be at least 8 characters long."
+                                                        "Password must start with a capital letter, include a special character, a number, and be at least 8 characters long.."
                                                     );
                                                 } else {
                                                     setPasswordError("");
@@ -1159,26 +1162,73 @@ export default function register1(pageProp) {
                                                 onClick={() => setPasswordVisible((v) => !v)}
                                             >
                                                 {passwordVisible ? (
-                                                    // Eye open SVG
+                                                  
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
                                                         <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2"/>
                                                     </svg>
                                                 ) : (
-                                                    // Eye closed SVG
+                                                 
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
                                                         <path d="M4 4L16 16" stroke="#888" strokeWidth="2"/>
                                                     </svg>
                                                 )}
                                             </span>
-                                            {/* {errors?.password && <p className="text_red">{errors.password}</p>} */}
+                                         
                                             {passwordError && (
                                                 <p className="text_red">
                                                     {passwordError}
                                                 </p>
                                             )}
+                                        </div> */}
+
+                                        <div className="nameform-group" style={{ position: 'relative' }}>
+                                            <input
+                                                required
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    setFormData({ ...formData, password: value });
+
+                                                    const passwordRegex = /^(?=[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
+
+                                                    if (value && !passwordRegex.test(value)) {
+                                                        setPasswordError(
+                                                            "Password must start with a capital letter, include at least one number, one special character, and be at least 8 characters long."
+                                                        );
+                                                    } else {
+                                                        setPasswordError("");
+                                                    }
+                                                }}
+                                                name="password"
+                                                value={formData?.password}
+                                                className="nameform-input"
+                                                type={passwordVisible ? "text" : "password"}
+                                                placeholder="Password"
+                                            />
+
+                                            <span
+                                                style={{ position: "absolute", right: 20, top: 15, cursor: "pointer" }}
+                                                onClick={() => setPasswordVisible((v) => !v)}
+                                            >
+                                                {passwordVisible ? (
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
+                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2" />
+                                                    </svg>
+                                                ) : (
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
+                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2" />
+                                                    </svg>
+                                                )}
+                                            </span>
+
+                                            {passwordError && (
+                                                <p className="text_red">{passwordError}</p>
+                                            )}
                                         </div>
+
 
                                         <div className="nameform-group" style={{ position: 'relative' }}>
                                             <input required name="password_confirmation" onChange={(e) => {
@@ -1199,14 +1249,14 @@ export default function register1(pageProp) {
                                                 {confirmPasswordVisible ? (
                                                     // Eye open SVG
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
-                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2"/>
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
+                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2" />
                                                     </svg>
                                                 ) : (
                                                     // Eye closed SVG
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
-                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2"/>
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
+                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2" />
                                                     </svg>
                                                 )}
                                             </span>

@@ -428,6 +428,7 @@ export default function register1(pageProp) {
             if (!formData.address) newErrors.address = "Address is required";
             if (!formData.city) newErrors.city = "City is required";
             if (!formData.state) newErrors.state = "State is required";
+            if(!formData.mobile_number) newErrors.state = "mobile number is required"
             if (!formData.postal_code) {
                 newErrors.postal_code = "Postal code is required";
             }
@@ -1074,6 +1075,9 @@ export default function register1(pageProp) {
 
             <div className="event_system_main event_system_main1">
                 <div className="event_main">
+                <Link href="/user/userlogin" style={{ textDecoration: "none", }}>
+                        <button className="store_det_back">Back</button>
+                    </Link>
                     <form onSubmit={handleSubmit}>
                         {
                             // step === 1 && <div className="scchs-wrapper">
