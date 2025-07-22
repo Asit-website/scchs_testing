@@ -8090,6 +8090,7 @@ th {
 
 .product-detail-wrapper {
   background-color: #f8f8f8;
+  margin-top: 20px;
   padding: 40px 24px;
   display: flex;
   justify-content: center;
@@ -14422,4 +14423,22 @@ body {
     text-align: center;
     display: block;
   }
+}
+
+.store_det_back{
+  border: 1px solid rgba(171, 6, 53, 1);
+  padding: 10px 30px;
+  border-radius: 6px;
+  color: rgba(8, 13, 23, 1);
+  font-size: 18px;
+  font-family: "Euclid-Regular";
+  display: block;
+  margin-left: auto;
+  text-decoration: none;
+
+}
+
+.store_det_back:hover {
+  background-color: #AB0535;
+  color: white;
 }
