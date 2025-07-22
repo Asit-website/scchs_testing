@@ -173,7 +173,7 @@ export default function storedetail(pageProp) {
 
             <div className="event_system_main">
                 <div className="event_main">
-                <Link href="/event" style={{ textDecoration: "none", }}>
+                <Link href="/store" style={{ textDecoration: "none", }}>
                                     <button className="store_det_back">Back</button>
                                 </Link>
                     <div className="product-detail-wrapper">
