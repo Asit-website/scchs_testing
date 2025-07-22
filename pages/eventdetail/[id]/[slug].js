@@ -253,14 +253,25 @@ export default function eventdetail(pageProp) {
 
     // =================slider end===============
 
+    // function formatDateToLongLabel(dateString) {
+    //     const date = new Date(dateString);
+    //     return date.toLocaleDateString('en-US', {
+    //         weekday: 'long',   // Saturday
+    //         month: 'long',     // March
+    //         day: 'numeric'     // 29
+    //     });
+    // }
+
     function formatDateToLongLabel(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
-            weekday: 'long',   // Saturday
-            month: 'long',     // March
-            day: 'numeric'     // 29
+            timeZone: 'America/Chicago', // Central Time
+            weekday: 'long',              // e.g., Saturday
+            month: 'long',                // e.g., March
+            day: 'numeric'                // e.g., 29
         });
     }
+
 
     // const formatTime = (timeStr) => {
     //     if (!timeStr || !timeStr.includes(':')) return '';
