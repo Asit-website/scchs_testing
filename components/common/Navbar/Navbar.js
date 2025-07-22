@@ -473,8 +473,8 @@ export default function Navbar(props) {
             link: "/extrnal-research-links"
           },
           {
-            title: "The TNT Story: Cemeteries",
-            link: "/cemetry-virtual-tour "
+            // title: "The TNT Story: Cemeteries",
+            // link: "/cemetry-virtual-tour "
           }
         ]
       },

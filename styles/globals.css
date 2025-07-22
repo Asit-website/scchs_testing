@@ -7882,11 +7882,17 @@ th {
 
 .surname-details-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns:  auto 1fr;
   row-gap: 24px;
-  column-gap: 40px;
-  align-items: center;
+  column-gap: 30px;
+  align-items: start;
 }
+.surname-details-grid div a {
+  color: #003366;
+  text-decoration: none;
+  font-weight: 600;
+}
+
 
 .surname-details-grid div {
   color: rgba(8, 13, 23, 1);
