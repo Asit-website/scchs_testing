@@ -62,6 +62,10 @@ export default function register1(pageProp) {
     const [passwordError, setPasswordError] = useState("");
     const [passwordError1, setPasswordError1] = useState("");
 
+    // Add these lines for password visibility toggling
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
     // const [showEmail, setShowEmail] = useState(true);
 
     // const handleCheckboxChange = (e) => {
@@ -1135,7 +1139,7 @@ export default function register1(pageProp) {
                                             <input required onChange={handleChange} name="username" value={formData?.username} className="nameform-input" type="text" placeholder="UserName" />
                                             {errors?.username && <p className="text_red">{errors.username}</p>}
                                         </div>
-                                        <div className="nameform-group">
+                                        <div className="nameform-group" style={{ position: 'relative' }}>
                                             <input required onChange={(e) => {
                                                 const value = e.target.value;
                                                 setFormData({ ...formData, password: value });
@@ -1149,7 +1153,25 @@ export default function register1(pageProp) {
                                                 } else {
                                                     setPasswordError("");
                                                 }
-                                            }} name="password" value={formData?.password} className="nameform-input" type="password" placeholder="Password" />
+                                            }} name="password" value={formData?.password} className="nameform-input" type={passwordVisible ? "text" : "password"} placeholder="Password" />
+                                            <span
+                                                style={{ position: "absolute", right: 20, top: 15, cursor: "pointer" }}
+                                                onClick={() => setPasswordVisible((v) => !v)}
+                                            >
+                                                {passwordVisible ? (
+                                                    // Eye open SVG
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
+                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2"/>
+                                                    </svg>
+                                                ) : (
+                                                    // Eye closed SVG
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
+                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2"/>
+                                                    </svg>
+                                                )}
+                                            </span>
                                             {/* {errors?.password && <p className="text_red">{errors.password}</p>} */}
                                             {passwordError && (
                                                 <p className="text_red">
@@ -1158,7 +1180,7 @@ export default function register1(pageProp) {
                                             )}
                                         </div>
 
-                                        <div className="nameform-group">
+                                        <div className="nameform-group" style={{ position: 'relative' }}>
                                             <input required name="password_confirmation" onChange={(e) => {
                                                 const value = e.target.value;
                                                 const updatedFormData = { ...formData, password_confirmation: value };
@@ -1169,7 +1191,25 @@ export default function register1(pageProp) {
                                                 } else {
                                                     setPasswordError1("");
                                                 }
-                                            }} value={formData?.password_confirmation} className="nameform-input" type="password" placeholder="Confirm Password" />
+                                            }} value={formData?.password_confirmation} className="nameform-input" type={confirmPasswordVisible ? "text" : "password"} placeholder="Confirm Password" />
+                                            <span
+                                                style={{ position: "absolute", right: 20, top: 15, cursor: "pointer" }}
+                                                onClick={() => setConfirmPasswordVisible((v) => !v)}
+                                            >
+                                                {confirmPasswordVisible ? (
+                                                    // Eye open SVG
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
+                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2"/>
+                                                    </svg>
+                                                ) : (
+                                                    // Eye closed SVG
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
+                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2"/>
+                                                    </svg>
+                                                )}
+                                            </span>
                                             {/* {errors?.password_confirmation && <p className="text_red">{errors.password_confirmation}</p>} */}
                                             {passwordError1 && (
                                                 <p className="text_red">

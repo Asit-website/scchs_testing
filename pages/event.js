@@ -417,7 +417,7 @@ export default function events(pageProp) {
                                     </button>
                                 )}
                             </div>
-                            
+
                         </div>
 
                         {/* <div className="filters-right">
@@ -597,7 +597,7 @@ export default function events(pageProp) {
                                             sorted.slice(0, visibleCount).map((card, index) => (
                                                 <div className="event-card" key={index}>
                                                     <div className="card-header">
-                                                        <span>
+                                                        {/* <span>
                                                             {new Intl.DateTimeFormat('en-US', {
                                                                 month: 'long',
                                                                 day: 'numeric',
@@ -605,7 +605,19 @@ export default function events(pageProp) {
                                                             })
                                                                 .format(new Date(card.date))
                                                                 .replace(',', '')}
+                                                        </span> */}
+
+                                                        <span>
+                                                            {new Intl.DateTimeFormat('en-US', {
+                                                                timeZone: 'America/Chicago', // Central Time
+                                                                month: 'long',
+                                                                day: 'numeric',
+                                                                year: 'numeric',
+                                                            })
+                                                                .format(new Date(card.date))
+                                                                .replace(',', '')}
                                                         </span>
+
 
                                                         <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
                                                     </div>
