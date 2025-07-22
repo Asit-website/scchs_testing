@@ -271,7 +271,8 @@ export default function contribute(pageProp) {
                                         //     opacity: isVerified ? 1 : 0.5,
                                         //     cursor: isVerified ? "pointer" : "not-allowed"
                                         // }}
-                                    >Confirm & Pay with Paypal</button>
+                                    >Confirm & Pay 
+                                    </button>
 
                                 </>
                             ) : (
