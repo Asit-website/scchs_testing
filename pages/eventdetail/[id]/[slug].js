@@ -509,6 +509,13 @@ export default function eventdetail(pageProp) {
                                             membershipStatus === "active" ? <>
                                                 <div className="detail-row">
 
+                                                    <span className="icon">
+                                                        {/* member ticket icon */}
+                                                        <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
+                                                            <rect width="48" height="48" rx="4" fill="white" />
+                                                            <path d="M10 16V32H38V16H10ZM12 18H36V21.5C34.1 21.5 32.5 23.1 32.5 25C32.5 26.9 34.1 28.5 36 28.5V30H12V28.5C13.9 28.5 15.5 26.9 15.5 25C15.5 23.1 13.9 21.5 12 21.5V18Z" fill="#AB0635" />
+                                                        </svg>
+                                                    </span>
                                                     <div className="text">
                                                         <span>Ticket Price</span><br />
                                                         {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
@@ -517,7 +524,13 @@ export default function eventdetail(pageProp) {
 
                                                 </div>
                                                 <div className="detail-row">
-
+                                                    <span className="icon">
+                                                        {/* ticket icon */}
+                                                        <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
+                                                            <rect width="48" height="48" rx="4" fill="white" />
+                                                            <path d="M10 16V32H38V16H10ZM12 18H36V21.5C34.1 21.5 32.5 23.1 32.5 25C32.5 26.9 34.1 28.5 36 28.5V30H12V28.5C13.9 28.5 15.5 26.9 15.5 25C15.5 23.1 13.9 21.5 12 21.5V18Z" fill="#AB0635" />
+                                                        </svg>
+                                                    </span>
                                                     <div className="text">
                                                         <span>Membership Ticket Price</span><br />
                                                         {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
@@ -526,7 +539,13 @@ export default function eventdetail(pageProp) {
 
                                                 </div>
                                             </> : <div className="detail-row">
-
+                                            <span className="icon">
+                                                        {/* ticket icon */}
+                                                        <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
+                                                            <rect width="48" height="48" rx="4" fill="white" />
+                                                            <path d="M10 16V32H38V16H10ZM12 18H36V21.5C34.1 21.5 32.5 23.1 32.5 25C32.5 26.9 34.1 28.5 36 28.5V30H12V28.5C13.9 28.5 15.5 26.9 15.5 25C15.5 23.1 13.9 21.5 12 21.5V18Z" fill="#AB0635" />
+                                                        </svg>
+                                                    </span>
                                                 <div className="text">
                                                     <span>Ticket Price</span><br />
                                                     {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
@@ -588,6 +607,8 @@ export default function eventdetail(pageProp) {
                                     <p className="presented-by">
                                         Presented by the Saint Charles County Historical Society
                                     </p>
+
+
                                 </div>
 
                             </div>

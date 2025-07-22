@@ -160,7 +160,7 @@ export default function surenamelook(pageProp) {
                     <div className="surname-btn-group">
                         <button onClick={handlePrint} className="btn-primary">Print</button>
                         <Link href={"/surenamelook"}><button className="btn-outline">Back</button></Link>
-                    </div>
+                    </div>                              
                     <div className="surname-details-wrapper">
                         <div className="surname-details-grid px-4 md:px-12" ref={printRef}>
                             {data?.surname && (
