@@ -609,6 +609,9 @@ export default function register1(pageProp) {
 
             <div className="event_system_main event_system_main1">
                 <div className="event_main">
+                <Link href="/user/userlogin" style={{ textDecoration: "none", }}>
+                                    <button className="store_det_back">Back</button>
+                                </Link>
                     <form onSubmit={handleSubmit}>
                         {
                             // step === 1 && <div className="scchs-wrapper">
@@ -787,7 +790,7 @@ export default function register1(pageProp) {
                                 <>
                                     <div className="form_scch_btn">
                                         <h2>New user</h2>
-                                        {step > 1 && <button type="button" onClick={handlePrevious}>Back</button>}
+                                        {/* {step > 1 && <button type="button" onClick={handlePrevious}>Back</button>} */}
                                     </div>
                                     <div className="nameform-container">
                                         <h2>Main Contact Information</h2>
