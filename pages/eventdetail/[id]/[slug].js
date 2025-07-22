@@ -162,7 +162,7 @@ export default function eventdetail(pageProp) {
             if (resp.status === 200) {
                 const formateddata = await resp.json();
                 console.log("formare ", formateddata);
-                console.log(formateddata?.event?.image[0])
+                console.log(formateddata?.event)
                 setaboutnew(formateddata?.event);
 
             }
