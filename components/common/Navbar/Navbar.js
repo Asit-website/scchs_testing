@@ -22,7 +22,7 @@ import { ShoppingCart } from 'lucide-react';
 import { userInfo } from "os";
 
 const staticItems = [
-  { id: "Archives", title: "ARCHIVES", link: "/archieve" },
+  // { id: "Archives", title: "ARCHIVES", link: "/archieve" },
   { id: "Photos", title: "PHOTOS", link: "/photos/mainhome" },
   { id: "surname", title: "SURNAME LOOKUP", link: "/surenamelook" },
   { id: "business", title: "OUR BUSINESS FRIENDS", link: "/business" },
@@ -846,9 +846,9 @@ export default function Navbar(props) {
               </div>
 
 
-              <li>
+              {/* <li>
                 <Link href={"/archieve"}>Archives</Link>
-              </li>
+              </li> */}
               <li>
                 <Link href={"/checkout"}>photos</Link>
               </li>
