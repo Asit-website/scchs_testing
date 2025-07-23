@@ -90,120 +90,145 @@ export default function business(pageProp) {
     const totalPages = Math.ceil(totalListings / perPage);
 
 
+  
+       
+
+        const handleClear = () => {
+            setSearch("");
+        }
 
 
-    return (
-        <div className="page_shopping_list sop">
-            <HeadSEO title={"login"} description={"this is member login page"} image={null} />
+        return (
+            <div className="page_shopping_list sop">
+                <HeadSEO title={"login"} description={"this is member login page"} image={null} />
 
-            <HeadSEO1 />
+                <HeadSEO1 />
 
 
-            <div className="event_system_main">
-                <div className="event_main" id="eventsynopsis">
+                <div className="event_system_main">
 
-                    <div className="pagination-settings">
-                        <label>Listings Per Page:&nbsp;</label>
-                        <select value={perPage} onChange={(e) => {
-                            setPerPage(Number(e.target.value));
-                            setCurrentPage(1); // reset to page 1 on perPage change
-                        }}>
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
+                    <div className="event_main" id="eventsynopsis">
 
-                    <div style={{ margin: "20px 0" }}>
-                        <input
-                            type="text"
-                            placeholder="Search businesses..."
-                            value={search}
-                            onChange={(e) => {
-                                setSearch(e.target.value);
-                                setCurrentPage(1); // reset to page 1 on search
-                            }}
-                            style={{
-                                padding: "8px",
-                                width: "100%",
-                                maxWidth: "400px",
-                                border: "1px solid #ccc",
-                                borderRadius: "4px"
-                            }}
-                        />
-                    </div>
+                        <div className="pagination-settings">
+                            <label>Listings Per Page:&nbsp;</label>
+                            <select value={perPage} onChange={(e) => {
+                                setPerPage(Number(e.target.value));
+                                setCurrentPage(1);
+                            }}>
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
 
-                    <p style={{textAlign:"right"}}>
-                        Listings: {startIndex + 1} to {Math.min(endIndex, totalListings)} of {totalListings}
-                    </p>
+                        <div style={{ margin: "20px 0", position: "relative", display: "flex", gap: "8px" }}>
+                            <input
+                                type="text"
+                                placeholder="Search businesses..."
+                                value={search}
+                                onChange={(e) => {
+                                    setSearch(e.target.value);
+                                }}
+                                style={{
+                                    padding: "8px",
+                                    width: "100%",
+                                    maxWidth: "400px",
+                                    border: "1px solid #ccc",
+                                    borderRadius: "4px",
+                                }}
+                            />
 
-                    {/* Removed filters-left (category and timeframe filters) */}
+                            {search && (
+                                <button
+                                    onClick={handleClear}
+                                    style={{
+                                        backgroundColor: "#aa0033",
+                                        color: "white",
+                                        border: "none",
+                                        padding: "8px 12px",
+                                        borderRadius: "4px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Clear
+                                </button>
+                            )}
 
-                    <div className="flying1-container">
-                        {
-                            paginatedBusinesses?.map((item, index) => {
-                                return <div key={index} className="flying1-box">
-                                    {/* <div className="flying1-img">
-                                    <img
-                                        src="https://res.cloudinary.com/djz3wn3fl/image/upload/v1745835404/Group_1171281827_rx2hpl.png"
-                                        width="100%"
-                                        alt="Al Droste & Sons"
-                                    />
-                                </div> */}
-                                    <div className="flying1-name">
-                                        <a href="#">{item?.title}</a>
-                                    </div>
-                                    <div className="flying1-text">
-                                        <p style={{ marginTop: "12px" }} dangerouslySetInnerHTML={{ __html: item.description }}></p>
-                                    </div>
-                                    <p className="flying1-text-1">
-                                        <span>Located in Category:</span> {item.category?.name}
-                                    </p>
-                                    {
-                                        item?.link && <div className="flying1-btn">
-                                            <a href={`${item?.link ? item.link : "#"}`} target="_blank" rel="noopener noreferrer">
-                                                View Website
-                                            </a>
+                            <button
+                                type="submit"
+                                className="searchiconn bg-[#aa0033] px-4 flex items-center justify-center"
+                                style={{ borderRadius: "4px", color: "white" }}
+                            >
+                                🔍
+                            </button>
+                        </div>
+
+                        <p style={{ textAlign: "right" }}>
+                            Listings: {startIndex + 1} to {Math.min(endIndex, totalListings)} of {totalListings}
+                        </p>
+
+
+
+                        <div className="flying1-container">
+                            {
+                                paginatedBusinesses?.map((item, index) => {
+                                    return <div key={index} className="flying1-box">
+
+                                        <div className="flying1-name">
+                                            <a href="#">{item?.title}</a>
                                         </div>
-                                    }
+                                        <div className="flying1-text">
+                                            <p style={{ marginTop: "12px" }} dangerouslySetInnerHTML={{ __html: item.description }}></p>
+                                        </div>
+                                        <p className="flying1-text-1">
+                                            <span>Located in Category:</span> {item.category?.name}
+                                        </p>
+                                        {
+                                            item?.link && <div className="flying1-btn">
+                                                <a href={`${item?.link ? item.link : "#"}`} target="_blank" rel="noopener noreferrer">
+                                                    View Website
+                                                </a>
+                                            </div>
+                                        }
 
-                                </div>
-                            })
-                        }
+                                    </div>
+                                })
+                            }
+
+                        </div>
 
                     </div>
 
                 </div>
+
             </div>
 
-        </div>
-
-    );
-}
-
-export async function getServerSideProps(context) {
-    try {
-
-        const globalSettings = await GlobalHeaderFooter();
-        return {
-            props: {
-                page_content: false,
-                navbar: globalSettings?.header,
-                footer: globalSettings?.footer
-            },
-        };
-
-    } catch (error) {
-
-        return {
-            props: {
-                page_content: false,
-                navbar: false,
-                footer: false
-            },
-            notFound: true
-        };
-
+        );
     }
-}
+
+    export async function getServerSideProps(context) {
+        try {
+
+            const globalSettings = await GlobalHeaderFooter();
+            return {
+                props: {
+                    page_content: false,
+                    navbar: globalSettings?.header,
+                    footer: globalSettings?.footer
+                },
+            };
+
+        } catch (error) {
+
+            return {
+                props: {
+                    page_content: false,
+                    navbar: false,
+                    footer: false
+                },
+                notFound: true
+            };
+
+        }
+    }
