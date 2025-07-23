@@ -610,8 +610,15 @@ export default function events(pageProp) {
                                                         </span> */}
 
                                                         <span>
-                                                            {card.date ? new Date(card.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).replace(',', '') : ''}
+                                                            {card.date ? (() => {
+                                                                const d = new Date(card.date);
+                                                                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                                                                const dd = String(d.getDate()).padStart(2, '0');
+                                                                const yy = String(d.getFullYear()).slice(-2);
+                                                                return `${mm}/${dd}/${yy}`;
+                                                            })() : ''}
                                                         </span>
+
 
 
                                                         <span>

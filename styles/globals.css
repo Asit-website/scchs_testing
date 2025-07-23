@@ -78,6 +78,35 @@ body {
   margin: 0;
   padding: 0;
 }
+.popover-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.popover-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  transform: translateY(6px);
+  background-color: #000;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.popover-container:hover .popover-tooltip {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 
 /* ==============renew css======= */
 .profile-container {
