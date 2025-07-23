@@ -610,18 +610,13 @@ export default function events(pageProp) {
                                                         </span> */}
 
                                                         <span>
-                                                            {new Intl.DateTimeFormat('en-US', {
-                                                                timeZone: 'America/Chicago', // Central Time
-                                                                month: 'long',
-                                                                day: 'numeric',
-                                                                year: 'numeric',
-                                                            })
-                                                                .format(new Date(card.date))
-                                                                .replace(',', '')}
+                                                            {card.date ? new Date(card.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).replace(',', '') : ''}
                                                         </span>
 
 
-                                                        <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
+                                                        <span>
+                                                            {card.start_time} - {card.end_time}
+                                                        </span>
                                                     </div>
                                                     <Link href={`/eventdetail/${card?.id}/${card?.slug}`}>
                                                         <img
