@@ -68,22 +68,19 @@ export default function business(pageProp) {
     //     ? businesses.filter((biz) => biz.category_id == selectedCategory)
     //     : businesses;
 
-    const filtered = businesses.filter((biz) => {
-        const categoryMatch = selectedCategory ? biz.category_id == selectedCategory : true;
-
-        let timeframeMatch = true;
-        if (timeframe === "1") timeframeMatch = isWithinMonths(biz.created_at, 1);
-        else if (timeframe === "3") timeframeMatch = isWithinMonths(biz.created_at, 3);
-        else if (timeframe === "6") timeframeMatch = isWithinMonths(biz.created_at, 6);
-        else if (timeframe === "12") timeframeMatch = isWithinMonths(biz.created_at, 12);
-
-        return categoryMatch && timeframeMatch;
-    });
-
     const [perPage, setPerPage] = useState(10); // default 10
     const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState("");
 
     // Calculate page-wise data
+    const filtered = businesses.filter((biz) => {
+        if (!search) return true;
+        const lower = search.toLowerCase();
+        return (
+            (biz.title && biz.title.toLowerCase().includes(lower)) ||
+            (biz.description && biz.description.toLowerCase().includes(lower))
+        );
+    });
     const startIndex = (currentPage - 1) * perPage;
     const endIndex = startIndex + perPage;
     const paginatedBusinesses = filtered.slice(startIndex, endIndex);
@@ -116,45 +113,32 @@ export default function business(pageProp) {
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
-
                     </div>
+
+                    <div style={{ margin: "20px 0" }}>
+                        <input
+                            type="text"
+                            placeholder="Search businesses..."
+                            value={search}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+                                setCurrentPage(1); // reset to page 1 on search
+                            }}
+                            style={{
+                                padding: "8px",
+                                width: "100%",
+                                maxWidth: "400px",
+                                border: "1px solid #ccc",
+                                borderRadius: "4px"
+                            }}
+                        />
+                    </div>
+
                     <p style={{textAlign:"right"}}>
                         Listings: {startIndex + 1} to {Math.min(endIndex, totalListings)} of {totalListings}
                     </p>
 
-
-                    <div className="filters-left">
-                        <div className="custom_drop">
-                            {/* <span>Filter by category</span> */}
-                            <select
-                                className="dropdown"
-                                value={selectedCategory}
-                                onChange={(e) => setSelectedCategory(e.target.value)}
-                            >
-                                <option value="">Filter by category</option>
-                                {categories.map((cat) => (
-                                    <option key={cat.id} value={cat.id}>
-                                        {cat.name}
-                                    </option>
-                                ))}
-
-                            </select>
-                        </div>
-                        <div className="custom_drop">
-                            {/* <p>Filter by Timeframe</p> */}
-                            <select
-                                className="dropdown"
-                                value={timeframe}
-                                onChange={(e) => setTimeframe(e.target.value)}
-                            >
-                                <option value="all">Timeframe</option>
-                                <option value="1">Within 1 Month</option>
-                                <option value="3">Within 3 Months</option>
-                                <option value="6">Within 6 Months</option>
-                                <option value="12">Within 12 Months</option>
-                            </select>
-                        </div>
-                    </div>
+                    {/* Removed filters-left (category and timeframe filters) */}
 
                     <div className="flying1-container">
                         {

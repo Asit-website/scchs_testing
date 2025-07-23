@@ -106,6 +106,8 @@ export default function Navbar(props) {
     };
   }, []);
 
+
+
   // ============dropdown==============
 
   const [open, setOpen] = useState(false);
@@ -974,7 +976,8 @@ export default function Navbar(props) {
                   setInstaUser(null)
                   toast.success("Logout successfully");
                   window.location.href = "/"
-                }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
+                // }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
+              }}>Logout</button> : <Link href="/user/userlogin"><button>Member Log In</button></Link>}
               </li>
               <li>
                 <Link href={"/storeorder"}><div className="cart-container">
@@ -1345,7 +1348,9 @@ export default function Navbar(props) {
                 setInstaUser(null)
                 toast.success("Logout successfully");
                 window.location.href = "/"
-              }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
+              // }}>Logout</button> : <a href="/user/userlogin"><button >SIGN IN</button></a>}
+            }}>Logout</button> : <a href="/user/userlogin"><button > Member Log In</button></a>}
+             
             </li>
 
             {instaUser && <div className="user-dropdown-wrapper">

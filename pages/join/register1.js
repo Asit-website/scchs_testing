@@ -25,6 +25,7 @@ var settingsMorePhotos = {
 };
 
 
+
 // const itemsPerPage = 10;
 export default function register1(pageProp) {
 
@@ -52,6 +53,8 @@ export default function register1(pageProp) {
         }
     }, []);
 
+
+    const navigate = useRouter();
     // =============fetch member============
 
     const [validPlans, setValidPlans] = useState([]);
@@ -427,8 +430,9 @@ export default function register1(pageProp) {
 
             if (!formData.address) newErrors.address = "Address is required";
             if (!formData.city) newErrors.city = "City is required";
+            if (!formData.country) newErrors.country = "Country is required";
             if (!formData.state) newErrors.state = "State is required";
-            if(!formData.mobile_number) newErrors.state = "mobile number is required"
+            if (!formData.mobile_number) newErrors.state = "mobile number is required"
             if (!formData.postal_code) {
                 newErrors.postal_code = "Postal code is required";
             }
@@ -1075,9 +1079,9 @@ export default function register1(pageProp) {
 
             <div className="event_system_main event_system_main1">
                 <div className="event_main">
-                <Link href="/user/userlogin" style={{ textDecoration: "none", }}>
+                    {/* <Link href="/user/userlogin" style={{ textDecoration: "none", }}>
                         <button className="store_det_back">Back</button>
-                    </Link>
+                    </Link> */}
                     <form onSubmit={handleSubmit}>
                         {
                             // step === 1 && <div className="scchs-wrapper">
@@ -1155,7 +1159,7 @@ export default function register1(pageProp) {
                                 <>
                                     <div className="form_scch_btn">
                                         <h2>New Membership</h2>
-                                        {/* {step>1 &&  <button type="button" onClick={handlePrevious}>Back</button>}    */}
+                                        {step === 1 && <button type="button" onClick={()=> router.push('/user/userlogin')}>Back</button>}
                                     </div>
                                     <div className="nameform-container">
                                         <h2>{instaUser?.id ? "Secondary Member Information" : "Primary Member Information"}</h2>
@@ -1243,7 +1247,7 @@ export default function register1(pageProp) {
                                             </select>
                                         </div>
 
-                                        <div className="nameform-group nameform-date-group">
+                                        {/* <div className="nameform-group nameform-date-group">
                                             <div className="dibm">
                                                 <input onChange={handleChange} name="dobMonth" value={formData?.dobMonth} className="nameform-input" type="text" placeholder="MM" />
                                                 {errors.dobMonth && <p className="text_red">{errors.dobMonth}</p>}
@@ -1256,8 +1260,8 @@ export default function register1(pageProp) {
                                                 <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
                                                 {errors.dobYear && <p className="text_red">{errors.dobYear}</p>}
                                             </div>
-                                        </div>
-                                        <p style={{ color: "green", fontSize: "18px" }}>Please enter your date of birth</p>
+                                        </div> */}
+                                        {/* <p style={{ color: "green", fontSize: "18px" }}>Please enter your date of birth</p> */}
                                     </div>
                                     {
                                         step < 3 && <button type="button" onClick={() => {
@@ -1274,6 +1278,7 @@ export default function register1(pageProp) {
                                 <>
                                     <div className="form_scch_btn">
                                         <h2>New Member</h2>
+                                        
                                         {step > 1 && <button type="button" onClick={handlePrevious}>Back</button>}
                                     </div>
                                     <div className="nameform-container">
@@ -1350,7 +1355,7 @@ export default function register1(pageProp) {
                                                 className="w-full"
                                             />
 
-
+                                            {errors.country && <p className="text_red">{errors.country}</p>}
 
 
                                         </div>
@@ -1686,7 +1691,7 @@ export default function register1(pageProp) {
                                         {step > 1 && <button type="button" onClick={handlePrevious}>Back</button>}
                                     </div>
                                     <div className="nameform-container">
-                                      <h2>{instaUser?.id ? "Secondary Member Information" : "Primary Member Information"}</h2>
+                                        <h2>{instaUser?.id ? "Secondary Member Information" : "Primary Member Information"}</h2>
                                         <div className="nameform-group nams_group">
                                             <input required onChange={handleChange} name="username" value={formData?.username} className="nameform-input" type="text" placeholder="UserName" />
                                             {errors?.username && <p className="text_red">{errors.username}</p>}
@@ -1713,14 +1718,14 @@ export default function register1(pageProp) {
                                                 {passwordVisible ? (
                                                     // Eye open SVG
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
-                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2"/>
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
+                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2" />
                                                     </svg>
                                                 ) : (
                                                     // Eye closed SVG
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
-                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2"/>
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
+                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2" />
                                                     </svg>
                                                 )}
                                             </span>
@@ -1751,14 +1756,14 @@ export default function register1(pageProp) {
                                                 {confirmPasswordVisible ? (
                                                     // Eye open SVG
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
-                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2"/>
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
+                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2" />
                                                     </svg>
                                                 ) : (
                                                     // Eye closed SVG
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
-                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2"/>
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
+                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2" />
                                                     </svg>
                                                 )}
                                             </span>

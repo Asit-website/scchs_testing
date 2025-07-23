@@ -10435,10 +10435,15 @@ label {
 
 .member-sub-item {
   padding: 6px 10px;
-  background-color: #00509e;
+  color: #fff;
+  text-decoration: none !important;
+  /* background-color: #00509e; */
   margin-top: 4px;
   border-radius: 4px;
   transition: background 0.2s;
+}
+.member-sub-item a {
+  text-decoration: none !important;
 }
 
 .member-sub-item:hover {
