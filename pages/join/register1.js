@@ -1247,21 +1247,21 @@ export default function register1(pageProp) {
                                             </select>
                                         </div>
 
-                                        {/* <div className="nameform-group nameform-date-group">
-                                            <div className="dibm">
+                                        <div className="nameform-group nameform-date-group">
+                                            {/* <div className="dibm">
                                                 <input onChange={handleChange} name="dobMonth" value={formData?.dobMonth} className="nameform-input" type="text" placeholder="MM" />
                                                 {errors.dobMonth && <p className="text_red">{errors.dobMonth}</p>}
-                                            </div>
-                                            <div className="dibm">
+                                            </div> */}
+                                            {/* <div className="dibm">
                                                 <input onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
                                                 {errors.dob && <p className="text_red">{errors.dob}</p>}
-                                            </div>
+                                            </div> */}
                                             <div className="dibm">
                                                 <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
                                                 {errors.dobYear && <p className="text_red">{errors.dobYear}</p>}
                                             </div>
-                                        </div> */}
-                                        {/* <p style={{ color: "green", fontSize: "18px" }}>Please enter your date of birth</p> */}
+                                        </div>
+                                        <p style={{ color: "green", fontSize: "18px" }}>Please enter your date of year</p>
                                     </div>
                                     {
                                         step < 3 && <button type="button" onClick={() => {
