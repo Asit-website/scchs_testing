@@ -99,7 +99,8 @@ export default function Footer(footerProps) {
                   <div className="widget widget_getintuch" height="240px">
                     <div className='foot_logs'>
                       {/* https://res.cloudinary.com/dgif730br/image/upload/v1743836030/SCCHS_Logo_vFINAL_1_1_1_valuvw.svg */}
-                      <img src={data?.footer_logo} alt='hh' />
+                      {/* <img src={data?.footer_logo} alt='hh' /> */}
+                      <img src="https://res.cloudinary.com/dbcmdtr3r/image/upload/v1753223453/High_Res_SCCHS_Logo_vFINAl_LOgo_gpm1z8.png"/>
                     </div>
 
                     <div className='footer_para'>
