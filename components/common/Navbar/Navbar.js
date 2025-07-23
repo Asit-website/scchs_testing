@@ -104,6 +104,8 @@ export default function Navbar(props) {
     };
   }, []);
 
+
+
   // ============dropdown==============
 
   const [open, setOpen] = useState(false);
@@ -972,6 +974,7 @@ export default function Navbar(props) {
                   setInstaUser(null)
                   toast.success("Logout successfully");
                   window.location.href = "/"
+<<<<<<< HEAD
                 }}>Logout</button> : }
               </li> */}
 
@@ -979,6 +982,11 @@ export default function Navbar(props) {
 
               {instaUser && <li className="test_sign"><a href="/join/memberplan"><button>{membershipStatus === "active" ? "Purchase Another Membership" : "Purchase Membership"}</button></a></li>}
 
+=======
+                // }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
+              }}>Logout</button> : <Link href="/user/userlogin"><button>Member Log In</button></Link>}
+              </li>
+>>>>>>> a127257fccdbdc63855abac2ca06a0520c064213
               <li>
                 <Link href={"/storeorder"}><div className="cart-container">
                   {/* <svg className="cart-icon" viewBox="0 0 24 24" fill="none">

@@ -112,7 +112,7 @@ export default function register1(pageProp) {
         }
     };
 
-
+        const navigate = useRouter();
 
     // const handleChange = (e) => {
     //     setFormData((prev) => ({
@@ -615,9 +615,9 @@ export default function register1(pageProp) {
 
             <div className="event_system_main event_system_main1">
                 <div className="event_main">
-                    <Link href="/user/userlogin" style={{ textDecoration: "none", }}>
+                    {/* <Link href="/user/userlogin" style={{ textDecoration: "none", }}>
                         <button className="store_det_back">Back</button>
-                    </Link>
+                    </Link> */}
                     <form onSubmit={handleSubmit}>
                         {
                             // step === 1 && <div className="scchs-wrapper">
@@ -696,6 +696,7 @@ export default function register1(pageProp) {
                                     <div className="form_scch_btn">
                                         <h2>New user</h2>
                                         {/* {step>1 &&  <button type="button" onClick={handlePrevious}>Back</button>}    */}
+                                        {step === 1 && <button type="button" onClick={()=> router.push('/user/userlogin')}>Back</button>}
                                     </div>
                                     <div className="nameform-container">
                                         <h2>Primary user Information</h2>
@@ -765,21 +766,21 @@ export default function register1(pageProp) {
                                         </div>
 
                                         <div className="nameform-group nameform-date-group">
-                                            <div className="dibm">
+                                            {/* <div className="dibm">
                                                 <input onChange={handleChange} name="dobMonth" value={formData?.dobMonth} className="nameform-input" type="text" placeholder="MM" />
                                                 {errors.dobMonth && <p className="text_red">{errors.dobMonth}</p>}
-                                            </div>
-                                            <div className="dibm">
+                                            </div> */}
+                                            {/* <div className="dibm">
                                                 <input onChange={handleChange} name="dob" value={formData?.dob} className="nameform-input" type="text" placeholder="DD" />
                                                 {errors.dob && <p className="text_red">{errors.dob}</p>}
-                                            </div>
+                                            </div> */}
                                             <div className="dibm">
                                                 <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
                                                 {errors.dobYear && <p className="text_red">{errors.dobYear}</p>}
                                             </div>
                                         </div>
 
-                                        <p style={{ color: "green", fontSize: "18px" }}>Please enter your date of birth</p>
+                                        <p style={{ color: "green", fontSize: "18px" }}>Please enter your date of Year</p>
                                     </div>
                                     {
                                         step < 3 && <button type="button" onClick={() => {
@@ -796,7 +797,7 @@ export default function register1(pageProp) {
                                 <>
                                     <div className="form_scch_btn">
                                         <h2>New user</h2>
-                                        {/* {step > 1 && <button type="button" onClick={handlePrevious}>Back</button>} */}
+                                        {step > 1 && <button type="button" onClick={handlePrevious}>Back</button>}
                                     </div>
                                     <div className="nameform-container">
                                         <h2>Main Contact Information</h2>
@@ -836,6 +837,7 @@ export default function register1(pageProp) {
                                                     }))
                                                 }
                                             />
+                                             {errors.country && <p className="text_red">{errors.country}</p>}
 
                                         </div>
 

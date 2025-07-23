@@ -83,7 +83,7 @@ export default function researchs(pageProp) {
                                     <div>
                                         <p>1. Using our convenient <a href="/contact-us">
                                             {/* RESEARCH&nbsp;CONTACT FORM */}
-                                            By&nbsp;Email
+                                           <a href="/research-contact"> By&nbsp;Email</a>
                                         </a></p>
                                         <p>2. Calling us at&nbsp;<span>(636) 946-9828</span>&nbsp;</p>
                                         <p>3. Visiting the Archives at&nbsp;<span>101 South Main Street,&nbsp;St. Charles, MO. 63301-2802</span></p>
