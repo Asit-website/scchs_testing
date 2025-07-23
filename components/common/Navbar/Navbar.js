@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useRef, useState } from "react";
 import style from "../../../pages/css/header.module.scss";
 import Image from "next/image";
@@ -966,7 +964,7 @@ export default function Navbar(props) {
                   </div>
                 ))}
 
-              <li className="test_sign">
+              {/* <li className="test_sign">
                 {instaUser ? <button onClick={() => {
                   localStorage.removeItem("scchs_Access");
                   localStorage.removeItem("scchs_User");
@@ -974,8 +972,13 @@ export default function Navbar(props) {
                   setInstaUser(null)
                   toast.success("Logout successfully");
                   window.location.href = "/"
-                }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
-              </li>
+                }}>Logout</button> : }
+              </li> */}
+
+              {!instaUser && <li className="test_sign"> <Link href="/user/userlogin"><button>SIGN IN</button></Link></li>}
+
+              {instaUser && <li className="test_sign"><a href="/join/memberplan"><button>{membershipStatus === "active" ? "Purchase Another Membership" : "Purchase Membership"}</button></a></li>}
+
               <li>
                 <Link href={"/storeorder"}><div className="cart-container">
                   {/* <svg className="cart-icon" viewBox="0 0 24 24" fill="none">
@@ -1028,9 +1031,17 @@ export default function Navbar(props) {
                       <a href="/eventhistory">Event Order History</a>
                       <a href="/donationhistory">Donation History</a>
                       <a href="/storeorder">View Cart</a>
+                      {instaUser && <a style={{ cursor: "pointer" }} onClick={() => {
+                        localStorage.removeItem("scchs_Access");
+                        localStorage.removeItem("scchs_User");
+                        setAccessToken(null)
+                        setInstaUser(null)
+                        toast.success("Logout successfully");
+                        window.location.href = "/"
+                      }}>Logout</a>}
                       {/* onClick={handleRenewClick} */}
-                      <a href="/join/memberplan">{membershipStatus === "active" ? "Purchase another plan" : "Purchase Plan"}</a>
-                      {membershipStatus === "active" && <Link href={"/renew"}><p style={{ cursor: "pointer" }} >RENEW ONLINE</p></Link>}
+                      {/* <a href="/join/memberplan">{membershipStatus === "active" && "Purchase another plan"}</a> */}
+                      {membershipStatus === "active" && <Link href={"/renew"}><p style={{ cursor: "pointer" }} >Membership History</p></Link>}
 
                       {membershipStatus === "active" && usedSlot < allowedSlot && (
                         <a href="/join/register1">Create Member</a>
@@ -1300,6 +1311,8 @@ export default function Navbar(props) {
                 </div>
               ))}
 
+            {instaUser && <li style={{ listStyle: "none" }} className="test_sign"><a href="/join/memberplan"><button>{membershipStatus === "active" ? "Purchase Another Membership" : "Purchase Membership"}</button></a></li>}
+
             <Link style={{ marginLeft: "auto" }} href={"/storeorder"}><div className="cart-container">
 
               <ShoppingCart />
@@ -1337,7 +1350,7 @@ export default function Navbar(props) {
   }
                     `}</style>
 
-            <li style={{ listStyle: "none", marginTop: "15px" }} className="test_sign">
+            {/* <li style={{ listStyle: "none", marginTop: "15px" }} className="test_sign">
               {instaUser ? <button onClick={() => {
                 localStorage.removeItem("scchs_Access");
                 localStorage.removeItem("scchs_User");
@@ -1345,9 +1358,13 @@ export default function Navbar(props) {
                 setInstaUser(null)
                 toast.success("Logout successfully");
                 window.location.href = "/"
-              }}>Logout</button> : <Link href="/user/userlogin"><button>SIGN IN</button></Link>}
-            </li>
+              }}>Logout</button> : 
+            </li> */}
 
+            {!instaUser && <li className="test_sign"><a href="/user/userlogin"><button>SIGN IN</button></a></li>}
+
+
+            <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
             {instaUser && <div className="user-dropdown-wrapper">
               <div className="user-avatar" onClick={toggleDropdown112}>
                 <img src="https://res.cloudinary.com/dgif730br/image/upload/v1748089475/user_xegqs3.png" alt="User" />
@@ -1363,8 +1380,16 @@ export default function Navbar(props) {
                   <li> <a href="/eventhistory">Event Order History</a></li>
                   <li><a href="/donationhistory">Donation History</a></li>
                   <li><a href="/storeorder">View Cart</a></li>
-                  <li><a href="/join/memberplan">{membershipStatus === "active" ? "Purchase another plan" : "Purchase Plan"}</a></li>
-                  {membershipStatus === "active" && <li><a href="/renew" style={{ cursor: "pointer" }}>Renew Online</a></li>}
+                  <li><a onClick={() => {
+                    localStorage.removeItem("scchs_Access");
+                    localStorage.removeItem("scchs_User");
+                    setAccessToken(null)
+                    setInstaUser(null)
+                    toast.success("Logout successfully");
+                    window.location.href = "/"
+                  }}>Logout</a></li>
+                  {/* <li><a href="/join/memberplan">{membershipStatus === "active" && "Purchase another plan"}</a></li> */}
+                  {membershipStatus === "active" && <li><a href="/renew" style={{ cursor: "pointer" }}>Membership History</a></li>}
                   {membershipStatus === "active" && usedSlot < allowedSlot && (
                     <a href="/join/register1">Create Member</a>
                   )}
@@ -1372,6 +1397,8 @@ export default function Navbar(props) {
               )}
             </div>}
 
+            {instaUser && <li style={{ listStyle: "none", color: "black" }} className="test_sign"><a style={{ textDecoration: "none", color: "black" }}>Hi, <span style={{ fontWeight: "bold" }}>{instaUser?.first_name?.slice(0, 10)}</span></a></li>}
+            </div>
 
 
           </div>
