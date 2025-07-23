@@ -14455,3 +14455,9 @@ body {
   background-color: #AB0535;
   color: white;
 }
+
+/* search icon in business */
+.searchiconn {
+  background-color: #aa0033;
+  padding: 9px;
+}

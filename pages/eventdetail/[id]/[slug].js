@@ -564,10 +564,16 @@ export default function eventdetail(pageProp) {
                                             </div>
                                         }
 
-                                        <div
+                                        {/* <div
                                             className="aspect-video"
                                             dangerouslySetInnerHTML={{ __html: aboutnew?.location_iframe }}
-                                        />
+                                        /> */}
+                                        <div className="w-full aspect-video rounded-xl overflow-hidden">
+                                            <div
+                                                className="[&>iframe]:w-full [&>iframe]:h-full [&>iframe]:absolute [&>iframe]:top-0 [&>iframe]:left-0 relative"
+                                                dangerouslySetInnerHTML={{ __html: aboutnew?.location_iframe }}
+                                            />
+                                        </div>
 
                                     </div>
                                 </div>
