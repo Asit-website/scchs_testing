@@ -64,7 +64,7 @@ export default function register1(pageProp) {
     //         if (!instaUser?.id) return;
 
     //         try {
-    //             const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+    //             const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
     //             const data = await res.json();
 
     //             const today = new Date();
@@ -90,7 +90,7 @@ export default function register1(pageProp) {
             if (!instaUser?.id) return;
 
             try {
-                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
                 const data = await res.json();
 
                 const today = new Date();
@@ -579,7 +579,7 @@ export default function register1(pageProp) {
     //          }
 
     //          try {
-    //              const response = await fetch('https://admin.scchs.co.in/api/registration', {
+    //              const response = await fetch('https://admin.scchs.org/api/registration', {
     //                  method: 'POST',
     //                  headers: {
     //                      'Content-Type': 'application/json',
@@ -639,7 +639,7 @@ export default function register1(pageProp) {
     //     }
 
     //     try {
-    //         const response = await fetch('https://admin.scchs.co.in/api/registration', {
+    //         const response = await fetch('https://admin.scchs.org/api/registration', {
     //             method: 'POST',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -705,12 +705,12 @@ export default function register1(pageProp) {
 
 
     //         const url = isMemberCreation
-    //             ? "https://admin.scchs.co.in/api/members/create"
-    //             : "https://admin.scchs.co.in/api/registration";
+    //             ? "https://admin.scchs.org/api/members/create"
+    //             : "https://admin.scchs.org/api/registration";
 
     //         if (isMemberCreation) {
     //             // Get active membership plan for user
-    //             const userMembershipRes = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+    //             const userMembershipRes = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
     //             const membershipData = await userMembershipRes.json();
 
     //             const today = new Date();
@@ -839,13 +839,13 @@ export default function register1(pageProp) {
     //         const isMemberCreation = instaUser?.id ? true : false;
 
     //         const url = isMemberCreation
-    //             ? "https://admin.scchs.co.in/api/members/create"
-    //             : "https://admin.scchs.co.in/api/registration";
+    //             ? "https://admin.scchs.org/api/members/create"
+    //             : "https://admin.scchs.org/api/registration";
 
     //         let memberPayload = { ...formData };
 
     //         if (isMemberCreation) {
-    //             const userMembershipRes = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+    //             const userMembershipRes = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
     //             const membershipData = await userMembershipRes.json();
 
     //             const today = new Date();
@@ -961,13 +961,13 @@ export default function register1(pageProp) {
             const isMemberCreation = instaUser?.id ? true : false;
 
             const url = isMemberCreation
-                ? "https://admin.scchs.co.in/api/members/create"
-                : "https://admin.scchs.co.in/api/registration";
+                ? "https://admin.scchs.org/api/members/create"
+                : "https://admin.scchs.org/api/registration";
 
             let memberPayload = { ...formData };
 
             if (isMemberCreation) {
-                const userMembershipRes = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const userMembershipRes = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
                 const membershipData = await userMembershipRes.json();
 
                 const selectedPlan = membershipData?.data?.find(plan => plan.membership_plan_id === parseInt(formData.membership_plan_id));

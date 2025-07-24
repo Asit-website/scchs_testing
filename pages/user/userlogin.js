@@ -39,7 +39,7 @@ export default function userlogin(pageProp) {
             if (!instaUser?.id) return;
 
             try {
-                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
                 const data = await res.json();
 
                 const today = new Date();
@@ -62,7 +62,7 @@ export default function userlogin(pageProp) {
 
     const addToCartApi = async (id, access) => {
 
-        const resp = await fetch('https://admin.scchs.co.in/api/cart/add', {
+        const resp = await fetch('https://admin.scchs.org/api/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export default function userlogin(pageProp) {
     const submitLogin = async (e) => {
         e.preventDefault();
 
-        const url = `https://admin.scchs.co.in/api/login`;
+        const url = `https://admin.scchs.org/api/login`;
         const payload = {
             username: username,
             password: password

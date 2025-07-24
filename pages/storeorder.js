@@ -54,7 +54,7 @@ export default function storeorder(pageProp) {
         const fetchSavedAddress = async () => {
             try {
                 const token = JSON.parse(localStorage.getItem("scchs_Access"));
-                const res = await fetch("https://admin.scchs.co.in/api/listalladdress", {
+                const res = await fetch("https://admin.scchs.org/api/listalladdress", {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }
@@ -113,7 +113,7 @@ export default function storeorder(pageProp) {
     const getCarts = async () => {
 
         try {
-            const response = await fetch("https://admin.scchs.co.in/api/cart", {
+            const response = await fetch("https://admin.scchs.org/api/cart", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -131,7 +131,7 @@ export default function storeorder(pageProp) {
 
     const removeCarts = async (id, qty) => {
         try {
-            const response = await fetch("https://admin.scchs.co.in/api/cart/remove", {
+            const response = await fetch("https://admin.scchs.org/api/cart/remove", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -171,7 +171,7 @@ export default function storeorder(pageProp) {
         if (!result.isConfirmed) return;
 
         try {
-            const response = await fetch("https://admin.scchs.co.in/api/cart/clear", {
+            const response = await fetch("https://admin.scchs.org/api/cart/clear", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -193,7 +193,7 @@ export default function storeorder(pageProp) {
 
     const clearCarts1 = async () => {
         try {
-            const response = await fetch("https://admin.scchs.co.in/api/cart/clear", {
+            const response = await fetch("https://admin.scchs.org/api/cart/clear", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -218,7 +218,7 @@ export default function storeorder(pageProp) {
     const getAddress = async () => {
 
         try {
-            const response = await fetch("https://admin.scchs.co.in/api/listalladdress", {
+            const response = await fetch("https://admin.scchs.org/api/listalladdress", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -239,7 +239,7 @@ export default function storeorder(pageProp) {
     const fetchOrders = async () => {
         try {
 
-            const resp = await fetch("https://admin.scchs.co.in/api/orders", {
+            const resp = await fetch("https://admin.scchs.org/api/orders", {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -474,7 +474,7 @@ export default function storeorder(pageProp) {
             if (!instaUser?.id) return;
 
             try {
-                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
                 const data = await res.json();
 
                 const today = new Date();
@@ -500,7 +500,7 @@ export default function storeorder(pageProp) {
 
     // const paymentHandler = async () => {
 
-    //     const response = await fetch("https://admin.scchs.co.in/api/order/create",
+    //     const response = await fetch("https://admin.scchs.org/api/order/create",
     //         {
     //             method: "POST",
     //             headers: {
@@ -549,7 +549,7 @@ export default function storeorder(pageProp) {
     //             //     clearCarts();
     //             //   }
 
-    //             const resp = await fetch("https://admin.scchs.co.in/api/ecommerce/transactions", {
+    //             const resp = await fetch("https://admin.scchs.org/api/ecommerce/transactions", {
     //                 method: "POST",
     //                 headers: {
     //                     "content-type": "application/json",
@@ -601,7 +601,7 @@ export default function storeorder(pageProp) {
 
     const paymentHandler = async () => {
         try {
-            const response = await fetch("https://admin.scchs.co.in/api/order/create", {
+            const response = await fetch("https://admin.scchs.org/api/order/create", {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
@@ -986,7 +986,7 @@ export default function storeorder(pageProp) {
                                     // clearCarts();
 
                                     // Send to backend if needed
-                                    await fetch("https://admin.scchs.co.in/api/ecommerce/transactions", {
+                                    await fetch("https://admin.scchs.org/api/ecommerce/transactions", {
                                         method: "POST",
                                         headers: {
                                             "Content-Type": "application/json",

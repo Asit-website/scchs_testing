@@ -61,7 +61,7 @@ export default function storedetail(pageProp) {
             if (!instaUser?.id) return;
 
             try {
-                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
                 const data = await res.json();
 
                 const today = new Date();
@@ -87,7 +87,7 @@ export default function storedetail(pageProp) {
     const fetchProductDetails = async () => {
         try {
 
-            const resp = await fetch(`https://admin.scchs.co.in/api/products/${id}`, {
+            const resp = await fetch(`https://admin.scchs.org/api/products/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ export default function storedetail(pageProp) {
 
     const addToCartApi = async (id) => {
 
-        const resp = await fetch('https://admin.scchs.co.in/api/cart/add', {
+        const resp = await fetch('https://admin.scchs.org/api/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

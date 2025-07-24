@@ -106,7 +106,7 @@ export default function eventdetail(pageProp) {
         //     return;
         // }
         try {
-            const res = await fetch(`https://admin.scchs.co.in/api/events/${aboutnew.id}/orders`, {
+            const res = await fetch(`https://admin.scchs.org/api/events/${aboutnew.id}/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ export default function eventdetail(pageProp) {
     const fetchnewsbyycat = async (name) => {
         try {
 
-            const resp = await fetch(`https://admin.scchs.co.in/api/get-event-details/${id}`, {
+            const resp = await fetch(`https://admin.scchs.org/api/get-event-details/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -355,7 +355,7 @@ export default function eventdetail(pageProp) {
                                                         const details = await actions.order.capture();
                                                         console.log(details);
                                                         const captureId = details?.purchase_units?.[0]?.payments?.captures?.[0]?.id;
-                                                        await fetch(`https://admin.scchs.co.in/api/orders/${orderId}/confirm`, {
+                                                        await fetch(`https://admin.scchs.org/api/orders/${orderId}/confirm`, {
                                                             method: "POST",
                                                             headers: {
                                                                 "Content-Type": "application/json",

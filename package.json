@@ -2,7 +2,7 @@
   "name": "fairchildfun",
   "version": "1.0.0",
   "private": true,
-  "proxy": "https://admin.scchs.co.in",
+  "proxy": "https://admin.scchs.org",
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",

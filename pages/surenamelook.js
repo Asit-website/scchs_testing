@@ -349,7 +349,7 @@ export default function surenamelook(pageProp) {
     // const [visibleCount, setVisibleCount] = useState(20);
 
     useEffect(() => {
-        fetch("https://admin.scchs.co.in/api/surname/data")
+        fetch("https://admin.scchs.org/api/surname/data")
             .then((res) => res.json())
             .then((res) => {
                 console.log("API response:", res); // 🪵 Check what the API gives

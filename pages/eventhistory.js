@@ -26,7 +26,7 @@ export default function eventhistory(pageProp) {
     useEffect(() => {
         const fetchOrderHistory = async () => {
             try {
-                const res = await fetch('https://admin.scchs.co.in/api/orders/event/history', {
+                const res = await fetch('https://admin.scchs.org/api/orders/event/history', {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
@@ -90,7 +90,7 @@ export default function eventhistory(pageProp) {
                     // <div key={order.id} className="order-card">
                     //     <div className="order-card-header">
                     //         <img
-                    //             src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${order.event.images?.[0] || ''}`}
+                    //             src={`https://admin.scchs.org/backend/admin/images/event_management/events/${order.event.images?.[0] || ''}`}
                     //             alt={order.event.title}
                     //             className="order-event-image"
                     //         />
@@ -115,7 +115,7 @@ export default function eventhistory(pageProp) {
                     <div key={order.id} className="oderset1">
                         <div className="oderset1-header">
                             <img
-                                src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${order.event.images?.[0] || ''}`}
+                                src={`https://admin.scchs.org/backend/admin/images/event_management/events/${order.event.images?.[0] || ''}`}
                                 alt={order.event.title}
                                 className="oderset1-event-image"
                             />

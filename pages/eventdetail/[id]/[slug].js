@@ -76,7 +76,7 @@ export default function eventdetail(pageProp) {
             if (!instaUser?.id) return;
 
             try {
-                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
                 const data = await res.json();
 
                 const today = new Date();
@@ -126,7 +126,7 @@ export default function eventdetail(pageProp) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(`https://admin.scchs.co.in/api/events/${aboutnew.id}/orders`, {
+            const res = await fetch(`https://admin.scchs.org/api/events/${aboutnew.id}/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ export default function eventdetail(pageProp) {
     const fetchnewsbyycat = async (name) => {
         try {
 
-            const resp = await fetch(`https://admin.scchs.co.in/api/get-event-details/${id}/${slug}`, {
+            const resp = await fetch(`https://admin.scchs.org/api/get-event-details/${id}/${slug}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -426,7 +426,7 @@ export default function eventdetail(pageProp) {
                                                         const details = await actions.order.capture();
                                                         console.log(details);
                                                         const captureId = details?.purchase_units?.[0]?.payments?.captures?.[0]?.id;
-                                                        await fetch(`https://admin.scchs.co.in/api/orders/${orderId}/confirm`, {
+                                                        await fetch(`https://admin.scchs.org/api/orders/${orderId}/confirm`, {
                                                             method: "POST",
                                                             headers: {
                                                                 "Content-Type": "application/json",

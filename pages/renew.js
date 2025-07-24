@@ -52,7 +52,7 @@ export default function renew(pageProp) {
     useEffect(() => {
         const fetchPlans = async () => {
             try {
-                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser?.id}`);
+                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser?.id}`);
                 const result = await res.json();
                 setMembershipPlans(result?.data || []);
             } catch (err) {
@@ -79,7 +79,7 @@ export default function renew(pageProp) {
                 payment_gateway: "paypal",
             };
 
-            const response = await fetch("https://admin.scchs.co.in/api/membership/renew", {
+            const response = await fetch("https://admin.scchs.org/api/membership/renew", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

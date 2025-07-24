@@ -21,7 +21,7 @@ export default function Footer(footerProps) {
 
     const fetchFooter = async () => {
       try {
-        const resp = await fetch("https://admin.scchs.co.in/api/footer", {
+        const resp = await fetch("https://admin.scchs.org/api/footer", {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

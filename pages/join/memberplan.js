@@ -66,7 +66,7 @@ export default function memberplan(pageProp) {
   const fetchPlan = async () => {
     try {
 
-      const resp = await fetch("https://admin.scchs.co.in/api/get/subscription/plan", {
+      const resp = await fetch("https://admin.scchs.org/api/get/subscription/plan", {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export default function memberplan(pageProp) {
 
   // const handlePurchaseSuccess = async (details) => {
   //   try {
-  //     const response = await fetch("https://admin.scchs.co.in/api/membership/purchase", {
+  //     const response = await fetch("https://admin.scchs.org/api/membership/purchase", {
   //       method: "POST",
   //       headers: { "Content-Type": "application/json" },
   //       //  "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`,
@@ -147,7 +147,7 @@ export default function memberplan(pageProp) {
   useEffect(() => {
     const checkMembership = async () => {
       try {
-        const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser?.id}`);
+        const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser?.id}`);
         const data = await res.json();
 
         const today = new Date();
@@ -355,7 +355,7 @@ export default function memberplan(pageProp) {
 
                               console.log(payload);
 
-                              const response = await fetch("https://admin.scchs.co.in/api/membership/purchase", {
+                              const response = await fetch("https://admin.scchs.org/api/membership/purchase", {
                                 method: "POST",
                                 headers: {
                                   "Content-Type": "application/json",
@@ -433,7 +433,7 @@ export default function memberplan(pageProp) {
 
                                                     console.log("Sending payload to Laravel API:", payload);
 
-                                                    const response = await fetch("https://admin.scchs.co.in/api/membership/purchase", {
+                                                    const response = await fetch("https://admin.scchs.org/api/membership/purchase", {
                                                         method: "POST",
                                                         headers: {
                                                             "Content-Type": "application/json",

@@ -24,11 +24,11 @@ export default function cementryrecord(pageProp) {
   const [surname, setSurname] = useState("");
 
   useEffect(() => {
-    fetch("https://admin.scchs.co.in/api/counties")
+    fetch("https://admin.scchs.org/api/counties")
       .then((res) => res.json())
       .then((data) => setCounties(data));
 
-    fetch("https://admin.scchs.co.in/api/cemeteries")
+    fetch("https://admin.scchs.org/api/cemeteries")
       .then((res) => res.json())
       .then((data) => {
         setCemeteries(data);

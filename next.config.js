@@ -21,7 +21,7 @@ const nextConfig = {
     ignoreDuringBuilds: true
   },
   images: {
-    domains: ['admin.scchs.co.in','cdn11.bigcommerce.com'],
+    domains: ['admin.scchs.org','cdn11.bigcommerce.com'],
   }
 }
 
