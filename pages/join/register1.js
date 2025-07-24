@@ -1354,7 +1354,7 @@ export default function register1(pageProp) {
                                                 }}
                                                 className="w-full"
                                             />
-
+                                             <p style={{marginTop:"5px"}}>Enter your country name (e.g., United States).</p>
                                             {errors.country && <p className="text_red">{errors.country}</p>}
 
 
@@ -1457,7 +1457,7 @@ export default function register1(pageProp) {
                                                 }}
                                                 className="w-full"
                                             />
-
+                                             <p style={{marginTop:"5px"}}>Enter your state name (e.g., Missouri).</p>
 
                                             {errors.state && <p className="text_red">{errors.state}</p>}
                                         </div>
@@ -1556,6 +1556,7 @@ export default function register1(pageProp) {
                                                 }}
                                                 className="w-full"
                                             />
+                                             <p style={{marginTop:"5px"}}>Enter your city name (e.g., Saint Charles).</p>
                                             {errors.city && <p className="text_red">{errors.city}</p>}
                                         </div>
 
@@ -1596,6 +1597,7 @@ export default function register1(pageProp) {
                                                     }}
                                                     countryCodeEditable={false}
                                                 />
+                                                 <p style={{marginTop:"5px"}}> Enter your 10-digit phone number.</p>
                                             </div>
                                             {
                                                 // !errors.mobile_number ? <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span> :
