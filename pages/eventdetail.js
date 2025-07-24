@@ -397,11 +397,11 @@ export default function eventdetail(pageProp) {
                                     <h2>{formatDateToLongLabel(aboutnew?.start_date)}</h2>
 
                                     <div className="timing-box">
-                                        <div className="item">
+                                        {/* <div className="item">
                                             <h4>Doors open at</h4>
-                                            {/* <p>Sat, March 29, 6:00 PM</p> */}
+                                            <p>Sat, March 29, 6:00 PM</p>
                                             <p>{formatDateToLongLabel(aboutnew?.start_date)}, {formatTime(aboutnew?.start_time)}</p>
-                                        </div>
+                                        </div> */}
                                         <div className="item">
                                             <h4>Event Starts</h4>
                                             {/* <p>Sat, March 29, At 7:00 PM</p> */}
