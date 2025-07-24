@@ -18,6 +18,7 @@ import Head from "next/head";
 import HeadSEO1 from "/components/common/Head/head1";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import moment from "moment";
 // import { useRouter } from "next/router";
 
 
@@ -469,20 +470,26 @@ export default function eventdetail(pageProp) {
                                         </h2>
                                     )}
                                     {/* <h2>Saturday, March 29</h2> */}
-                                    <h2>
+
+                                    {/* <h2>
                                         {aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).replace(',', '') : ''}
+                                    </h2> */}
+                                    <h2>
+                                        {aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd MMMM DD') : ''}
                                     </h2>
 
                                     <div className="timing-box">
                                         <div className="item">
                                             <h4>Doors open at</h4>
                                             {/* <p>Sat, March 29, 6:00 PM</p> */}
-                                            <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time}</p>
+                                            {/* <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time}</p> */}
+                                            <p>{aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd MMMM DD') : ''}, {aboutnew?.start_time}</p>
                                         </div>
                                         <div className="item">
                                             <h4>Event Starts</h4>
                                             {/* <p>Sat, March 29, At 7:00 PM</p> */}
-                                            <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time} - , {aboutnew?.end_time}</p>
+                                            {/* <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time} - , {aboutnew?.end_time}</p> */}
+                                            <p>{aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd MMMM DD') : ''}, {aboutnew?.start_time} - , {aboutnew?.end_time}</p>
                                         </div>
                                     </div>
 

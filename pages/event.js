@@ -16,6 +16,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import ShoppingCollections from "../components/common/shopping/collections";
 import Head from "next/head";
 import HeadSEO1 from "../components/common/Head/head1";
+import moment from "moment";
 
 
 
@@ -610,9 +611,12 @@ export default function events(pageProp) {
                                                         </span> */}
 
                                                         <span>
-                                                            {card.date ? new Date(card.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).replace(',', '') : ''}
+                                                            { moment(card.date).format('MMMM DD Y') }
                                                         </span>
 
+                                                        {/* <span>
+                                                            {card.date ? new Date(card.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).replace(',', '') : ''}
+                                                        </span> */}
 
                                                         <span>
                                                             {card.start_time} - {card.end_time}
