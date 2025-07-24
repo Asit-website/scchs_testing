@@ -632,7 +632,7 @@ export default function eventdetail(pageProp) {
                                         </div> */}
                                         </div>
                                     </div>
-                                    <p className="presented-by">
+                                    <p style={{visibility:"hidden"}} className="presented-by">
                                         Presented by the Saint Charles County Historical Society
                                     </p>
 

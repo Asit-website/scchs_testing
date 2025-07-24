@@ -3701,6 +3701,9 @@ button {
   .site-footer br {
     display: none !important;
   }
+  table{
+    width: 100% !important;
+  }
   .membership-renew-container{
     padding: 0px;
   }
@@ -4304,6 +4307,9 @@ justify-content: center !important;
   .apple {
     display: flex;
     flex-wrap: wrap;
+  }
+  table{
+    width: 100% !important;
   }
 }
 
