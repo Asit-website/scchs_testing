@@ -8,8 +8,8 @@ const nextConfig = {
     },
     // "proxy": "https://admin.instacertify.com",
     server : {
-		path:"https://admin.scchs.co.in/",
-   		api:"https://admin.scchs.co.in/api/",
+		path:"https://admin.scchs.org/",
+   		api:"https://admin.scchs.org/api/",
       	jwt_secret:"UOUkeFnqauTf3qw0Hy6pv1JQq572l82gRBgnNbemPEjV2bTG2Bg0A3avm1svL9gs"
     }
   },
