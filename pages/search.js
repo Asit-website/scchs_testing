@@ -49,6 +49,7 @@ export default function business(pageProp) {
             try {
                 const res = await fetch(`https://admin.scchs.co.in/api/search?query=${encodeURIComponent(query)}`);
                 const data = await res.json();
+                console.log(data)
                 setResults(data);
             } catch (err) {
                 console.error("Search error:", err);
@@ -119,7 +120,11 @@ export default function business(pageProp) {
                                             <Link href={`/storedetail?id=${product?.slug}`}><img
                                                 className="custom-card-image"
                                                 // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
-                                                src={`https://admin.scchs.co.in//ecommerce/products/${product?.images[0]}`}
+                                                src={
+                                                    product?.images && product.images[0]
+                                                        ? `https://admin.scchs.co.in//ecommerce/products/${product.images[0]}`
+                                                        : 'https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png'
+                                                }
                                                 alt="Product"
                                             /></Link>
                                             <div className="custom-card-content">
@@ -183,12 +188,12 @@ export default function business(pageProp) {
                                         <h4 className="font-medium">{biz.title}</h4>
                                         <p dangerouslySetInnerHTML={{ __html: biz.description }} />
                                         {
-                                        biz?.link && <div className="flying1-btn">
-                                            <a href={`${biz?.link ? biz.link : "#"}`} target="_blank" rel="noopener noreferrer">
-                                                View Website
-                                            </a>
-                                        </div>
-                                    }
+                                            biz?.link && <div className="flying1-btn">
+                                                <a href={`${biz?.link ? biz.link : "#"}`} target="_blank" rel="noopener noreferrer">
+                                                    View Website
+                                                </a>
+                                            </div>
+                                        }
                                     </div>
                                 ))}
                             </div>
@@ -207,7 +212,7 @@ export default function business(pageProp) {
                                         <div className="event-card" key={event.id}>
                                             <div className="card-header">
                                                 <span>
-                                                      { moment(event.date).format('MMMM DD Y') }
+                                                    {moment(event.date).format('MMMM DD Y')}
                                                 </span>
                                                 <span>{(event?.start_time)} - {(event?.end_time)}</span>
                                             </div>
