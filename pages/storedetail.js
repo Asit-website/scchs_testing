@@ -177,9 +177,9 @@ export default function storedetail(pageProp) {
                         <button className="store_det_back">Back</button>
                     </Link>
 
-                   
+
                     <div className="product-detail-wrapper">
-                        
+
                         <div className="product-detail-container">
                             {
                                 productdetail?.images?.length > 1
@@ -216,9 +216,9 @@ export default function storedetail(pageProp) {
                             }
 
 
-                            
+
                             <div className="product-detail-info">
-                                
+
                                 <h2 className="product-title">{productdetail?.product_name}</h2>
                                 {/* <p className="product-subtitle"> */}
                                 {/* Street car (interurban) terminal, St.Charles, */}
@@ -227,16 +227,20 @@ export default function storedetail(pageProp) {
 
                                 <div className="price-box">
 
-                                    
-                                         <p>
-                                            <span>Sale price :</span> ${
-                                                productdetail?.price 
-                                            }
+
+                                    <div className="price-container">
+                                        <p className="price-text">
+                                            <span>Sale price :</span> ${productdetail?.price}
+                                            {membershipStatus !== "active" && (
+                                                <Link href={"/join/register1"}> <span className="tooltip">Become a member now</span></Link>
+                                            )}
                                         </p>
-                                    
+                                    </div>
+
+
 
                                     <p>
-                                        <span>Membership Price :</span> ${ productdetail?.membership_price  
+                                        <span>Membership Price :</span> ${productdetail?.membership_price
 
                                         }
                                     </p>

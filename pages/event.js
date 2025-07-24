@@ -614,6 +614,8 @@ export default function events(pageProp) {
                                                             { moment(card.date).format('MMMM DD Y') }
                                                         </span>
 
+
+
                                                         {/* <span>
                                                             {card.date ? new Date(card.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).replace(',', '') : ''}
                                                         </span> */}
