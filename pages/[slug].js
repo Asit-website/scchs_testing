@@ -72,7 +72,7 @@ export default function ContentDetails(pageProp) {
 
     return (
         <div>
-          <HeadSEO title={seo_data?.seo_title} description={seo_data?.seo_description} image={false}  />
+          <HeadSEO title={seo_data?.seo_title}  description={seo_data?.seo_description} image={false}  />
           <div role="article" dangerouslySetInnerHTML={ {__html:pageProp?.page_content} }></div>
         </div>
     )

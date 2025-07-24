@@ -135,20 +135,25 @@ export default function userlogin(pageProp) {
     };
 
     return (
-        <div className="page_shopping_list sop">
+        <div className="page_shopping_list sop">           
             <HeadSEO title={"login"} description={"this is user login page"} image={null} />
 
             <HeadSEO1 />
-
-
+            <div className="deeping-btn" style={{marginBottom: "20px"}}>
+          <a href="javascript:history.back()" className="deep-btn">
+            ← Back
+          </a>
+        </div>
             <div className="scchs-login-wrapper">
+                
+              
                 <div className="scchs-login-card">
                     <p className="scchs-info-text">
                         {/* if you are a new user you can  <Link href="/join/register"> <span className="scchs-click-here"> Sign up free  </span> </Link>
                         If you are member then login in */}
 
                         {/* <Link href="/join/register"> <span className="scchs-click-here"> Sign up for free. </span> </Link>  Already a member? Log in here. */}
-                        <span >   Already a member? </span>  Login here  Or <br/> <span style={{fontWeight:"bold"}}></span><Link className="scchs-click-here" href="/join/register"> sign up for free </Link>
+                        <span >   Already a member? </span>  Login here  Or <br /> <span style={{ fontWeight: "bold" }}></span><Link className="scchs-click-here" href="/join/register"> sign up for free </Link>
                     </p>
                     <h2 className="scchs-login-title">Sign in</h2>
                     <form onSubmit={submitLogin}>

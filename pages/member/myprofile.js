@@ -1328,12 +1328,12 @@ export default function myprofile(pageProp) {
                             ))}
                         </div>
                         {
-                            activeTab === "Member Info" &&
+                            activeTab === "Member Info" &&                     
                             <div className="card cardissso">
                                 <div className="grid-2col">
-                                    <div><strong className="lable1">Member Active:</strong>{memberships[0]?.status === "active" ? "Yes" : "No"}</div>
+                                    <div><strong className="lable1">Member Active :</strong>{memberships[0]?.status === "active" ? "Yes" : "No"}</div>
                                     {/* <div><strong className="lable1">Address :</strong> Yes <span className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div> */}
-                                    <div><strong className="lable1">Join Date:</strong>{memberships[0]?.end_date &&
+                                    <div><strong className="lable1">Join Date :</strong>{memberships[0]?.end_date &&
                                         (() => {
                                             const date = new Date(memberships[0].start_date);
                                             const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -1341,19 +1341,19 @@ export default function myprofile(pageProp) {
                                             const yy = String(date.getFullYear()).slice(-2);
                                             return `${mm}-${dd}-${yy}`;
                                         })()}</div>
-                                    <div><strong className="lable1">Prefix:</strong>{memberships[0]?.prefix}</div>
-                                    <div><strong className="lable1">First Name:</strong>{memberships[0]?.user.first_name}</div>
-                                    <div><strong className="lable1">Last Name:</strong>{memberships[0]?.user.last_name}</div>
-                                    <div><strong className="lable1">Preferred Name:</strong>{memberships[0]?.user.preferred_name}</div>
-                                    <div><strong className="lable1">Middle:</strong>{memberships[0]?.user.middle}</div>
-                                    <div><strong className="lable1">Maiden Name:</strong>{memberships[0]?.user.maiden_name}</div>
+                                    <div><strong className="lable1">Prefix :</strong>{memberships[0]?.prefix}</div>
+                                    <div><strong className="lable1">First Name :</strong>{memberships[0]?.user.first_name}</div>
+                                    <div><strong className="lable1">Last Namen :</strong>{memberships[0]?.user.last_name}</div>
+                                    <div><strong className="lable1">Preferred Name :</strong>{memberships[0]?.user.preferred_name}</div>
+                                    <div><strong className="lable1">Middle :</strong>{memberships[0]?.user.middle}</div>
+                                    <div><strong className="lable1">Maiden Name :</strong>{memberships[0]?.user.maiden_name}</div>
                                     {/* maiden_name */}
-                                    <div><strong className="lable1">Use Maiden Name:</strong>{memberships[0]?.user.maiden_name}</div>
-                                    <div><strong className="lable1">Suffix:</strong>{memberships[0]?.user.suffix}</div>
+                                    <div><strong className="lable1">Use Maiden Name :</strong>{memberships[0]?.user.maiden_name}</div>
+                                    <div><strong className="lable1">Suffix :</strong>{memberships[0]?.user.suffix}</div>
                                     {/* <div><strong className="lable1">Photo:</strong> No</div> */}
                                     {/* <div><strong className="lable1">Date of birth:</strong>{memberships[0]?.user.dobMonth} {memberships[0]?.user.dob}{memberships[0]?.user.dobYear}</div> */}
                                     <div>
-                                        <strong className="lable1">Date of birth: </strong>
+                                        <strong className="lable1">Date of birth : </strong>
                                         {memberships[0]?.user.dob}-{memberships[0]?.user.dobMonth}-{memberships[0]?.user.dobYear}
                                     </div>
                                 </div>
@@ -1362,26 +1362,26 @@ export default function myprofile(pageProp) {
                         {
                             activeTab === "Contact Info" && <div className="card cardissso">
                                 <div className="grid-2col">
-                                    <div><strong className="lable1">Address:</strong>{memberships[0]?.user?.address}</div>
+                                    <div><strong className="lable1">Address :</strong>{memberships[0]?.user?.address}</div>
                                     <div><strong className="lable1">Phone :</strong> {memberships[0]?.user?.mobile_number} <span onClick={handleEditClick1} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div>
-                                    <div><strong className="lable1">Address 2:</strong>{memberships[0]?.user?.address2}  </div>
-                                    <div><strong className="lable1">Cell Phone:</strong> {memberships[0]?.user.cell_phone}</div>
-                                    <div><strong className="lable1">City:</strong>{memberships[0]?.user?.city}</div>
-                                    <div><strong className="lable1">Int'l. Phone:</strong>{memberships[0]?.user?.
+                                    <div><strong className="lable1">Address 2 :</strong>{memberships[0]?.user?.address2}  </div>
+                                    <div><strong className="lable1">Cell Phone :</strong> {memberships[0]?.user.cell_phone}</div>
+                                    <div><strong className="lable1">City :</strong>{memberships[0]?.user?.city}</div>
+                                    <div><strong className="lable1">Int'l. Phone :</strong>{memberships[0]?.user?.
                                         int_phone
                                     }</div>
-                                    <div><strong className="lable1">State / Province:</strong>{memberships[0]?.user?.
+                                    <div><strong className="lable1">State / Province :</strong>{memberships[0]?.user?.
                                         state}</div>
-                                    <div><strong className="lable1">Preferred #:</strong>{memberships[0]?.user?.
+                                    <div><strong className="lable1">Preferred # :</strong>{memberships[0]?.user?.
                                         preferred
                                     }</div>
                                     {/* preferred */}
-                                    <div><strong className="lable1">Postal Code:</strong>{memberships[0]?.user?.
+                                    <div><strong className="lable1">Postal Code :</strong>{memberships[0]?.user?.
                                         postal_code
                                     }</div>
-                                    <div><strong className="lable1">Country:</strong>{memberships[0]?.user?.country}</div>
-                                    <div><strong className="lable1">Email:</strong>{memberships[0]?.user?.email}</div>
-                                    <div><strong className="lable1">Website:</strong>{memberships[0]?.user?.website}</div>
+                                    <div><strong className="lable1">Country :</strong>{memberships[0]?.user?.country}</div>
+                                    <div><strong className="lable1">Email :</strong>{memberships[0]?.user?.email}</div>
+                                    <div><strong className="lable1">Website :</strong>{memberships[0]?.user?.website}</div>
 
                                 </div>
                             </div>
@@ -1393,11 +1393,11 @@ export default function myprofile(pageProp) {
                                     <h2 className="alt-popup-title">Edit Contact Info</h2>
                                     <div className="alt-popup-form">
                                         <div className="alt-popup-field">
-                                            <label>Address:</label>
+                                            <label>Address :</label>
                                             <input type="text" name="address" value={formData1?.address} onChange={handleChange1} className="alt-popup-input" />
                                         </div>
                                         <div className="alt-popup-field">
-                                            <label>Phone:</label>
+                                            <label>Phone :</label>
                                             {/* <input type="text" name="mobile_number" value={formData1?.mobile_number} onChange={handleChange1} className="alt-popup-input" /> */}
                                             <PhoneInput
                                                 className="test_inpuy"
@@ -1414,11 +1414,11 @@ export default function myprofile(pageProp) {
                                             />
                                         </div>
                                         <div className="alt-popup-field">
-                                            <label>Address 2:</label>
+                                            <label>Address 2 :</label>
                                             <input type="text" name="address2" value={formData1?.address2} onChange={handleChange1} className="alt-popup-input" />
                                         </div>
                                         <div className="alt-popup-field">
-                                            <label>Cell Phone:</label>
+                                            <label>Cell Phone :</label>
                                             {/* <input type="text" name="cell_phone" value={formData1?.cell_phone} onChange={handleChange1} className="alt-popup-input" /> */}
                                             <PhoneInput
                                                 className="test_inpuy"
@@ -1436,7 +1436,7 @@ export default function myprofile(pageProp) {
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>Int'l Phone:</label>
+                                            <label>Int'l Phone :</label>
                                             {/* <input type="text" name="int_phone" value={formData1?.int_phone} onChange={handleChange1} className="alt-popup-input" /> */}
                                             <PhoneInput
                                                 className="test_inpuy"
@@ -1454,7 +1454,7 @@ export default function myprofile(pageProp) {
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>Preferred #:</label>
+                                            <label>Preferred # :</label>
                                             {/* <input type="text" name="preferred" value={formData1?.preferred} onChange={handleChange1} className="alt-popup-input" /> */}
                                             <select name="preferred" value={formData1?.preferred} onChange={handleChange1} className="alt-popup-input">
                                                 <option disabled>Select Preferred</option>
@@ -1524,16 +1524,16 @@ export default function myprofile(pageProp) {
                                             />
                                         </div>
                                         <div className="alt-popup-field">
-                                            <label>Postal Code:</label>
+                                            <label>Postal Code :</label>
                                             <input type="text" name="postal_code" value={formData1?.postal_code} onChange={handleChange1} className="alt-popup-input" />
                                         </div>
                                         <div className="alt-popup-field">
-                                            <label>Email:</label>
+                                            <label>Email :</label>
                                             <input type="email" name="email" value={formData1?.email} onChange={handleChange1} className="alt-popup-input" />
                                             {errors.email && <p style={{ color: "red" }} className="error-text">{errors.email}</p>}
                                         </div>
                                         <div className="alt-popup-field">
-                                            <label>Website:</label>
+                                            <label>Website :</label>
                                             <input type="text" name="website" value={formData1?.website} onChange={handleChange1} className="alt-popup-input" />
                                             {errors.website && <p style={{ color: "red" }} className="error-text">{errors.website}</p>}
                                         </div>
@@ -1548,36 +1548,36 @@ export default function myprofile(pageProp) {
                         {
                             activeTab === "Alt. Contact Info" && <div className="card cardissso">
                                 <div className="grid-2col">
-                                    <div><strong className="lable1">Seasonal Use:</strong>{memberships[0]?.user.
+                                    <div><strong className="lable1">Seasonal Use :</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.seasonal}</div>
                                     <div><strong className="lable1">Address :</strong> {memberships[0]?.user.
                                         alt_contact_infos[0]?.address} <span onClick={handleEditClick} className="edit-icon edit-icon1"><img width={24} height={24} src="https://res.cloudinary.com/dgif730br/image/upload/v1744636032/Mask_group_gzjnak.png" /></span></div>
 
-                                    <div><strong className="lable1">From:</strong> {memberships[0]?.user.
+                                    <div><strong className="lable1">From :</strong> {memberships[0]?.user.
                                         alt_contact_infos[0]?.from_year} {memberships[0]?.user.
                                             alt_contact_infos[0]?.from_day_month} </div>
-                                    <div><strong className="lable1">To:</strong>  {memberships[0]?.user.
+                                    <div><strong className="lable1">To :</strong>  {memberships[0]?.user.
                                         alt_contact_infos[0]?.to_year} {memberships[0]?.user.
                                             alt_contact_infos[0]?.to_day_month}</div>
 
-                                    <div><strong className="lable1">Phone:</strong>{memberships[0]?.user.
+                                    <div><strong className="lable1">Phone :</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.phone}</div>
-                                    <div><strong className="lable1">Address 2:</strong>{memberships[0]?.user.
+                                    <div><strong className="lable1">Address 2 :</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.address2}</div>
-                                    <div><strong className="lable1">Int'l Phone:</strong>{memberships[0]?.user.
+                                    <div><strong className="lable1">Int'l Phone :</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.intl_phone}</div>
-                                    <div><strong className="lable1">City:</strong>{memberships[0]?.user.
+                                    <div><strong className="lable1">City :</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.city}</div>
                                     {/* preferred */}
-                                    <div><strong className="lable1">Preferred #:</strong>{memberships[0]?.user.
+                                    <div><strong className="lable1">Preferred # :</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.preferred}</div>
-                                    <div><strong className="lable1">State / Province:</strong>{memberships[0]?.user.
+                                    <div><strong className="lable1">State / Province :</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.state}</div>
-                                    <div><strong className="lable1">Postal Code:</strong>{memberships[0]?.user.
+                                    <div><strong className="lable1">Postal Code :</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.postal_code}</div>
-                                    <div><strong className="lable1">Country:</strong>{memberships[0]?.user.
+                                    <div><strong className="lable1">Country :</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.country}</div>
-                                    <div><strong className="lable1">Email:</strong>{memberships[0]?.user.
+                                    <div><strong className="lable1">Email :</strong>{memberships[0]?.user.
                                         alt_contact_infos[0]?.email}</div>
                                 </div>
                             </div>
@@ -1590,7 +1590,7 @@ export default function myprofile(pageProp) {
                                     <h2 className="alt-popup-title">Edit Alt Contact Info</h2>
                                     <div className="alt-popup-form">
                                         <div className="alt-popup-field">
-                                            <label>Seasonal Use:</label>
+                                            <label>Seasonal Use :</label>
                                             <input
                                                 type="text"
                                                 name="seasonal"
@@ -1601,7 +1601,7 @@ export default function myprofile(pageProp) {
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>From Month:</label>
+                                            <label>From Month :</label>
                                             {/* <input
                                                 type="text"
                                                 name="from_year"
@@ -1741,7 +1741,7 @@ export default function myprofile(pageProp) {
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>Address:</label>
+                                            <label>Address :</label>
                                             <input
                                                 type="text"
                                                 name="address"
@@ -1752,7 +1752,7 @@ export default function myprofile(pageProp) {
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>Address 2:</label>
+                                            <label>Address 2 :</label>
                                             <input
                                                 type="text"
                                                 name="address2"
@@ -1763,7 +1763,7 @@ export default function myprofile(pageProp) {
                                         </div>
 
                                         <div className="alt-popup-field">
-                                            <label>Country:</label>
+                                            <label>Country :</label>
                                             {/* <input
                                                 type="text"
                                                 name="country"
