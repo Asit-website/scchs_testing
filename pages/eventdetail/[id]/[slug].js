@@ -505,7 +505,19 @@ export default function eventdetail(pageProp) {
                                             <div className="text">
                                                 <span>Date and time</span><br />
                                                 {/* <p>Sat, March 29, 6:00 PM – Sat, March 29, 10:00 PM</p> */}
-                                                <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time} - {aboutnew?.end_date ? new Date(aboutnew.end_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.end_time}</p>
+                                                {/* <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time} - {aboutnew?.end_date ? new Date(aboutnew.end_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.end_time}</p> */}
+                                                {/* import moment from 'moment'; */}
+
+                                                <p>
+                                                    {aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd, MMMM D') : ''} ,
+
+                                                    {aboutnew?.start_time} -
+
+                                                    {aboutnew?.end_date ? moment(aboutnew.end_date).format('dddd, MMMM D') : ''} ,
+                                                    
+                                                    {aboutnew?.end_time}
+                                                </p>
+
                                             </div>
                                         </div>
 
@@ -523,7 +535,7 @@ export default function eventdetail(pageProp) {
                                         </div>
 
 
-                                      <Link style={{textDecoration:"none"}} href={`${membershipStatus !== "active" && "/join/register1"}`}>  <div className="detail-row popover-container">
+                                        <Link style={{ textDecoration: "none" }} href={`${membershipStatus !== "active" && "/join/register1"}`}>  <div className="detail-row popover-container">
                                             <span className="icon">
                                                 <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
                                                     <rect width="48" height="48" rx="4" fill="white" />
@@ -570,7 +582,7 @@ export default function eventdetail(pageProp) {
                                                 className="[&>iframe]:w-full [&>iframe]:h-full [&>iframe]:absolute [&>iframe]:top-0 [&>iframe]:left-0 relative"
                                                 dangerouslySetInnerHTML={{ __html: aboutnew?.location_iframe }}
                                             />
-                                        </div>
+                                        </div>
 
                                     </div>
                                 </div>

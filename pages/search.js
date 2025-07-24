@@ -8,6 +8,7 @@ import GlobalHeaderFooter from "../utils/common/global-header-footer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../components/common/Head/head1";
+import moment from "moment";
 // import { useRouter } from "next/router";
 // import "../css/login.module.scss";
 import { toast } from "react-toastify";
@@ -58,6 +59,7 @@ export default function business(pageProp) {
 
         if (query) fetchSearchResults();
     }, [query]);
+
 
     const addToCartApi = async (id) => {
 
@@ -205,13 +207,9 @@ export default function business(pageProp) {
                                         <div className="event-card" key={event.id}>
                                             <div className="card-header">
                                                 <span>
-                                                    {new Intl.DateTimeFormat('en-GB', {
-                                                        day: 'numeric',
-                                                        month: 'long',
-                                                        year: 'numeric',
-                                                    }).format(new Date(event.date))}
+                                                      { moment(event.date).format('MMMM DD Y') }
                                                 </span>
-                                                <span>{formatTime(event?.start_time)} - {formatTime(event?.end_time)}</span>
+                                                <span>{(event?.start_time)} - {(event?.end_time)}</span>
                                             </div>
                                             <img
                                                 src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${event?.images[0]}`}
@@ -221,7 +219,7 @@ export default function business(pageProp) {
                                             <div className="card-content">
                                                 <h3>{event.title}</h3>
                                                 <p>{event.short_description}</p>
-                                                <Link href={`/eventdetail?id=${event?.slug}`}>
+                                                <Link href={`/eventdetail/${event?.id}/${event?.slug}`}>
                                                     <button className="info-btn">
                                                         More Info <span className="arrow-icon"></span>
                                                     </button>
