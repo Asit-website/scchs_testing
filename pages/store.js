@@ -47,13 +47,15 @@ export default function store(pageProp) {
 
     const [allProduct, setAllProduct] = useState([]);
     const [allCategory, setAllCategory] = useState([]);
-    const [selectedSlug, setSelectedSlug] = useState('');
+    // Remove selectedSlug from useState
+    // const [selectedSlug, setSelectedSlug] = useState('');
+    const router = useRouter();
+    const selectedSlug = router.query.category || '';
     const [hasSearched, setHasSearched] = useState(false);
     const [limit, setLimit] = useState(1000);
     const [totalProducts, setTotalProducts] = useState(0);
     const [offset, setOffset] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
-    const router = useRouter();
     // const fetchProduct = async () => {
     //     try {
     //         const resp = await fetch(`https://admin.scchs.co.in/api/products?limit=${limit}&offset=0&all=1`, {
@@ -120,15 +122,9 @@ export default function store(pageProp) {
     };
 
     useEffect(() => {
-        // Read category from URL on load
-        if (router.query.category) {
-            setSelectedSlug(router.query.category);
-            setHasSearched(true);
-        }
         fetchCategory();
     }, []);
 
-    // Fetch products whenever selectedSlug or limit changes
     useEffect(() => {
         fetchProductByCat();
     }, [selectedSlug, limit]);
@@ -215,7 +211,7 @@ export default function store(pageProp) {
     // Update selectedSlug and URL when category changes
     const handleCategoryChange = (e) => {
         const value = e.target.value;
-        setSelectedSlug(value);
+        // setSelectedSlug(value); // No longer needed
         // Update URL with selected category
         if (value) {
             router.replace({
@@ -264,7 +260,7 @@ export default function store(pageProp) {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        setSelectedSlug('');
+                                        // setSelectedSlug(''); // No longer needed
                                         // Remove category from URL
                                         const { category, ...rest } = router.query;
                                         router.replace({
