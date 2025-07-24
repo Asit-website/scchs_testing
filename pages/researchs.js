@@ -63,6 +63,11 @@ export default function researchs(pageProp) {
             <HeadSEO1 />
 
             <div className="event_system_main">
+            <div className="deeping-btn">
+          <a href="javascript:history.back()" className="deep-btn">
+            ← Back
+          </a>
+        </div>
                 <div className="event_main">
 
                     <section className="main-section">
