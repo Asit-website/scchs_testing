@@ -8,6 +8,7 @@ import GlobalHeaderFooter from "../utils/common/global-header-footer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../components/common/Head/head1";
+import moment from "moment";
 // import { useRouter } from "next/router";
 // import "../css/login.module.scss";
 import { toast } from "react-toastify";
@@ -48,6 +49,7 @@ export default function business(pageProp) {
             try {
                 const res = await fetch(`https://admin.scchs.co.in/api/search?query=${encodeURIComponent(query)}`);
                 const data = await res.json();
+                console.log(data)
                 setResults(data);
             } catch (err) {
                 console.error("Search error:", err);
@@ -58,6 +60,7 @@ export default function business(pageProp) {
 
         if (query) fetchSearchResults();
     }, [query]);
+
 
     const addToCartApi = async (id) => {
 
@@ -117,7 +120,11 @@ export default function business(pageProp) {
                                             <Link href={`/storedetail?id=${product?.slug}`}><img
                                                 className="custom-card-image"
                                                 // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
-                                                src={`https://admin.scchs.co.in//ecommerce/products/${product?.images[0]}`}
+                                                src={
+                                                    product?.images && product.images[0]
+                                                        ? `https://admin.scchs.co.in//ecommerce/products/${product.images[0]}`
+                                                        : 'https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png'
+                                                }
                                                 alt="Product"
                                             /></Link>
                                             <div className="custom-card-content">
@@ -181,12 +188,12 @@ export default function business(pageProp) {
                                         <h4 className="font-medium">{biz.title}</h4>
                                         <p dangerouslySetInnerHTML={{ __html: biz.description }} />
                                         {
-                                        biz?.link && <div className="flying1-btn">
-                                            <a href={`${biz?.link ? biz.link : "#"}`} target="_blank" rel="noopener noreferrer">
-                                                View Website
-                                            </a>
-                                        </div>
-                                    }
+                                            biz?.link && <div className="flying1-btn">
+                                                <a href={`${biz?.link ? biz.link : "#"}`} target="_blank" rel="noopener noreferrer">
+                                                    View Website
+                                                </a>
+                                            </div>
+                                        }
                                     </div>
                                 ))}
                             </div>
@@ -205,13 +212,9 @@ export default function business(pageProp) {
                                         <div className="event-card" key={event.id}>
                                             <div className="card-header">
                                                 <span>
-                                                    {new Intl.DateTimeFormat('en-GB', {
-                                                        day: 'numeric',
-                                                        month: 'long',
-                                                        year: 'numeric',
-                                                    }).format(new Date(event.date))}
+                                                    {moment(event.date).format('MMMM DD Y')}
                                                 </span>
-                                                <span>{formatTime(event?.start_time)} - {formatTime(event?.end_time)}</span>
+                                                <span>{(event?.start_time)} - {(event?.end_time)}</span>
                                             </div>
                                             <img
                                                 src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${event?.images[0]}`}
@@ -221,7 +224,7 @@ export default function business(pageProp) {
                                             <div className="card-content">
                                                 <h3>{event.title}</h3>
                                                 <p>{event.short_description}</p>
-                                                <Link href={`/eventdetail?id=${event?.slug}`}>
+                                                <Link href={`/eventdetail/${event?.id}/${event?.slug}`}>
                                                     <button className="info-btn">
                                                         More Info <span className="arrow-icon"></span>
                                                     </button>

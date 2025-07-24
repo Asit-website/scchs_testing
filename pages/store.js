@@ -47,13 +47,15 @@ export default function store(pageProp) {
 
     const [allProduct, setAllProduct] = useState([]);
     const [allCategory, setAllCategory] = useState([]);
-    const [selectedSlug, setSelectedSlug] = useState('');
+    // Remove selectedSlug from useState
+    // const [selectedSlug, setSelectedSlug] = useState('');
+    const router = useRouter();
+    const selectedSlug = router.query.category || '';
     const [hasSearched, setHasSearched] = useState(false);
     const [limit, setLimit] = useState(1000);
     const [totalProducts, setTotalProducts] = useState(0);
     const [offset, setOffset] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
-    const router = useRouter();
     // const fetchProduct = async () => {
     //     try {
     //         const resp = await fetch(`https://admin.scchs.co.in/api/products?limit=${limit}&offset=0&all=1`, {
@@ -120,9 +122,14 @@ export default function store(pageProp) {
     };
 
     useEffect(() => {
-        fetchProduct();
         fetchCategory();
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        fetchProductByCat();
+    }, [selectedSlug, limit]);
+
+    // (Remove the useEffect that fetches on every selectedSlug or limit change)
 
     // const fetchProductByCat = async () => {
     //     if (!selectedSlug) return;
@@ -201,6 +208,26 @@ export default function store(pageProp) {
         // alert(resp)
     }
 
+    // Update selectedSlug and URL when category changes
+    const handleCategoryChange = (e) => {
+        const value = e.target.value;
+        // setSelectedSlug(value); // No longer needed
+        // Update URL with selected category
+        if (value) {
+            router.replace({
+                pathname: '/store',
+                query: { ...router.query, category: value },
+            }, undefined, { shallow: true });
+        } else {
+            // Remove category from URL if 'All' selected
+            const { category, ...rest } = router.query;
+            router.replace({
+                pathname: '/store',
+                query: rest,
+            }, undefined, { shallow: true });
+        }
+    };
+
     return (
         <div className="page_shopping_list sop">
             <HeadSEO title={"Store"} description={"This is store"} image={null} />
@@ -219,7 +246,7 @@ export default function store(pageProp) {
                             </div>
                             <div className="event-title-filter ev_tight_fill">
                                 <div className="custom_drop">
-                                    <select value={selectedSlug} onChange={(e) => setSelectedSlug(e.target.value)} className="dropdown small" id="dropdownnn">
+                                    <select value={selectedSlug} onChange={handleCategoryChange} className="dropdown small" id="dropdownnn">
                                         <option value="">All</option>
                                         {
                                             allCategory?.map((item, index) => {
@@ -230,8 +257,20 @@ export default function store(pageProp) {
                                 </div>
                                 {/* <span className="for-label">FOR:</span>
                                 <input type="text" className="search-input" /> */}
-                                <button type="button" onClick={fetchProductByCat} className="search-button">
-                                    <img width="28" src="https://res.cloudinary.com/dgif730br/image/upload/v1744279927/Mask_group_zicocm.png" alt="this is search image" />
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        // setSelectedSlug(''); // No longer needed
+                                        // Remove category from URL
+                                        const { category, ...rest } = router.query;
+                                        router.replace({
+                                            pathname: '/store',
+                                            query: rest,
+                                        }, undefined, { shallow: true });
+                                    }}
+                                    className="search-button"
+                                >
+                                    Clear
                                 </button>
                             </div>
                         </div>
@@ -314,20 +353,29 @@ export default function store(pageProp) {
                         {hasSearched && allProduct.length === 0 && <p>No Products Found</p>}
                         {allProduct?.map((product, index) => (
                             <div className="custom-card" key={index}>
-                                <Link href={`/storedetail?id=${product?.slug}`}><img
-                                    className="custom-card-image"
-                                    // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
-                                    // src={product?.image}
-                                    src={product?.image?.trim() || "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png"}
-                                    onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png";
-                                    }}
-                                    alt="Product"
-                                /></Link>
+                                <Link href={{
+                                    pathname: '/storedetail',
+                                    query: { id: product?.slug, category: selectedSlug }
+                                }}>
+                                    <img
+                                        className="custom-card-image"
+                                        // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
+                                        // src={product?.image}
+                                        src={product?.image?.trim() || "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png"}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png";
+                                        }}
+                                        alt="Product"
+                                    />
+                                </Link>
                                 <div className="custom-card-content">
-                                    <Link style={{ textDecoration: "none" }} href={`/storedetail?id=${product?.slug}`}>
-                                        <h3 className="custom-card-title">{product.name}</h3></Link>
+                                    <Link style={{ textDecoration: "none" }} href={{
+                                        pathname: '/storedetail',
+                                        query: { id: product?.slug, category: selectedSlug }
+                                    }}>
+                                        <h3 className="custom-card-title">{product.name}</h3>
+                                    </Link>
                                     <p className="custom-card-subtitle">{product.short_description}</p>
                                     {/* <p className="custom-card-location">{product.location}</p> */}
                                     {/* <p className="custom-card-location">MO 1918</p> */}

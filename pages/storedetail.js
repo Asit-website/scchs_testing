@@ -44,7 +44,7 @@ export default function storedetail(pageProp) {
 
 
     const router = useRouter();
-    const { id } = router.query;
+    const { id, category } = router.query;
 
     const [instaUser, setInstaUser] = useState(null);
     const [membershipStatus, setMembershipStatus] = useState("loading");
@@ -173,7 +173,7 @@ export default function storedetail(pageProp) {
 
             <div className="event_system_main">
                 <div className="event_main">
-                    <Link href="/store" style={{ textDecoration: "none", }}>
+                    <Link href={{ pathname: "/store", query: category ? { category } : {} }} style={{ textDecoration: "none", }}>
                         <button className="store_det_back">Back</button>
                     </Link>
 
