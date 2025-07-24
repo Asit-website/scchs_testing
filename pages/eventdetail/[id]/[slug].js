@@ -387,7 +387,7 @@ export default function eventdetail(pageProp) {
 
                                 }} className="ticket-btn">Purchase Tickets</button>
                                 <Link href="/event" style={{ textDecoration: "none" }}>
-                                    <button className="event_det_back">Back</button>
+                                    <button className="event_det_back"> ← Back</button>
                                 </Link>
                             </div>
                             {showModal1 && (

@@ -12762,7 +12762,8 @@ label {
   position: fixed;
   top: 60px; /* header height */
   left: 0;
-  height: calc(100vh - 60px); /* subtract header */
+  /* height: calc(100vh - 60px);  */
+  height: calc(100vh); 
   width: 100%;
   background-color: #fff;
   transform: translateX(-100%);
