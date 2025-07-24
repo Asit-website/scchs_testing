@@ -479,12 +479,12 @@ export default function eventdetail(pageProp) {
                                     </h2>
 
                                     <div className="timing-box">
-                                        <div className="item">
+                                        {/* <div className="item">
                                             <h4>Doors open at</h4>
-                                            {/* <p>Sat, March 29, 6:00 PM</p> */}
-                                            {/* <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time}</p> */}
+                                            <p>Sat, March 29, 6:00 PM</p>
+                                            <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time}</p>
                                             <p>{aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd MMMM DD') : ''}, {aboutnew?.start_time}</p>
-                                        </div>
+                                        </div> */}
                                         <div className="item">
                                             <h4>Event Starts</h4>
                                             {/* <p>Sat, March 29, At 7:00 PM</p> */}
@@ -635,12 +635,9 @@ export default function eventdetail(pageProp) {
                                     <p style={{visibility:"hidden"}} className="presented-by">
                                         Presented by the Saint Charles County Historical Society
                                     </p>
+                                       
 
-
-                                </div>
-
-                            </div>
-                            <div className="event-about">
+                                    <div className="event-about">
                                 <h4>About this event</h4>
                                 {/* <ul>
                                     <li>1) <b>$200</b> per table of 8 or <b>$25</b> per person</li>
@@ -652,9 +649,20 @@ export default function eventdetail(pageProp) {
                                 </ul> */}
                                 <div className="makepoppinsfont" dangerouslySetInnerHTML={{ __html: aboutnew?.description }} />
                             </div>
+
+                                </div>
+
+                                
+
+                            </div>
+                            {/* <div className="event-about">
+                                <h4>About this event</h4>
+                               
+                                <div className="makepoppinsfont" dangerouslySetInnerHTML={{ __html: aboutnew?.description }} />
+                            </div>
                             <div className="event_payment">
                                 <h3>Payment can be made by check or phone with a credit card. Make checks payable to SCCHS</h3>
-                            </div>
+                            </div> */}
 
                         </div>
                     </div>
