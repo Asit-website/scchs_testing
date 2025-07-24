@@ -32,7 +32,7 @@ export default function loginchange(pageProp) {
         setStatus('loading');
 
         try {
-            const res = await fetch('https://admin.scchs.co.in/api/forgot-password', {
+            const res = await fetch('https://admin.scchs.org/api/forgot-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

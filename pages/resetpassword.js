@@ -40,7 +40,7 @@ export default function resetpassword(pageProp) {
         };
 
         try {
-            const response = await fetch("https://admin.scchs.co.in/api/reset-password", {
+            const response = await fetch("https://admin.scchs.org/api/reset-password", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

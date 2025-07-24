@@ -507,7 +507,7 @@ export default function register1(pageProp) {
 
 
     //     try {
-    //         const response = await fetch('https://admin.scchs.co.in/api/registration', {
+    //         const response = await fetch('https://admin.scchs.org/api/registration', {
     //             method: 'POST',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -562,7 +562,7 @@ export default function register1(pageProp) {
         }
 
         try {
-            const response = await fetch('https://admin.scchs.co.in/api/registration', {
+            const response = await fetch('https://admin.scchs.org/api/registration', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

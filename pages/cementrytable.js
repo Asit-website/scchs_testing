@@ -29,7 +29,7 @@ export default function cementrytable(pageProp) {
 
     useEffect(() => {
         if (id) {
-            fetch(`https://admin.scchs.co.in/api/cemeteries/${id}/people`)
+            fetch(`https://admin.scchs.org/api/cemeteries/${id}/people`)
                 .then((res) => res.json())
                 .then((data) => {
                     setPeople(data);

@@ -30,7 +30,7 @@ export default function business(pageProp) {
     useEffect(() => {
         const fetchBusinesses = async () => {
             try {
-                const res = await fetch("https://admin.scchs.co.in/api/businesses");
+                const res = await fetch("https://admin.scchs.org/api/businesses");
                 const data = await res.json();
                 setBusinesses(data);
             } catch (error) {
@@ -45,7 +45,7 @@ export default function business(pageProp) {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch("https://admin.scchs.co.in/api/business-categories");
+                const res = await fetch("https://admin.scchs.org/api/business-categories");
                 const data = await res.json();
                 setCategories(data);
             } catch (error) {

@@ -87,7 +87,7 @@ export default function myprofile(pageProp) {
 
         const fetchMemberships = async () => {
             try {
-                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
                 if (!res.ok) {
                     throw new Error('Failed to fetch');
                 }
@@ -113,7 +113,7 @@ export default function myprofile(pageProp) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("https://admin.scchs.co.in/api/donaction/payment/history", {
+                const res = await fetch("https://admin.scchs.org/api/donaction/payment/history", {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json',
@@ -288,7 +288,7 @@ export default function myprofile(pageProp) {
     const handleEditClick1 = async () => {
         setOpen1(true);
         try {
-            const res = await fetch('https://admin.scchs.co.in/api/contact-info', {
+            const res = await fetch('https://admin.scchs.org/api/contact-info', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` },
                 body: JSON.stringify({ userId })
@@ -318,7 +318,7 @@ export default function myprofile(pageProp) {
             return;
         }
         try {
-            const res = await fetch('https://admin.scchs.co.in/api/contact-info', {
+            const res = await fetch('https://admin.scchs.org/api/contact-info', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` },
                 body: JSON.stringify({ userId, ...formData1 })
@@ -342,7 +342,7 @@ export default function myprofile(pageProp) {
     const handleEditClick = async () => {
         setOpen(true);
         try {
-            const res = await fetch(`https://admin.scchs.co.in/api/alt-contact-info`, {
+            const res = await fetch(`https://admin.scchs.org/api/alt-contact-info`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` },
                 body: JSON.stringify({ userId })
@@ -492,7 +492,7 @@ export default function myprofile(pageProp) {
             return;
         }
         try {
-            const res = await fetch(`https://admin.scchs.co.in/api/alt-contact-info`, {
+            const res = await fetch(`https://admin.scchs.org/api/alt-contact-info`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` },
                 body: JSON.stringify({ userId, ...formData })
@@ -607,7 +607,7 @@ export default function myprofile(pageProp) {
 
     // const handleAdd = async () => {
     //     try {
-    //         const res = await fetch('https://admin.scchs.co.in/api/surnames', {
+    //         const res = await fetch('https://admin.scchs.org/api/surnames', {
     //             method: 'POST',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -649,8 +649,8 @@ export default function myprofile(pageProp) {
         }
         const method = isEditMode ? 'PUT' : 'POST';
         const url = isEditMode
-            ? `https://admin.scchs.co.in/api/surnames/${editId}`
-            : `https://admin.scchs.co.in/api/surnames`;
+            ? `https://admin.scchs.org/api/surnames/${editId}`
+            : `https://admin.scchs.org/api/surnames`;
 
         try {
             const res = await fetch(url, {
@@ -715,7 +715,7 @@ export default function myprofile(pageProp) {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch(`https://admin.scchs.co.in/api/surnames/${id}`, {
+                    const res = await fetch(`https://admin.scchs.org/api/surnames/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
@@ -836,7 +836,7 @@ export default function myprofile(pageProp) {
 
     // const handleSubmit = async () => {
     //     try {
-    //         const res = await fetch('https://admin.scchs.co.in/api/member-settings-store', {
+    //         const res = await fetch('https://admin.scchs.org/api/member-settings-store', {
     //             method: 'POST',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -861,7 +861,7 @@ export default function myprofile(pageProp) {
 
     const handleSubmit = async () => {
         try {
-            const res = await fetch('https://admin.scchs.co.in/api/member-settings-store', {
+            const res = await fetch('https://admin.scchs.org/api/member-settings-store', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -951,7 +951,7 @@ export default function myprofile(pageProp) {
 
     // const handleSubmit11 = async () => {
     //     try {
-    //         const res = await fetch("https://admin.scchs.co.in/api/login-name-update", {
+    //         const res = await fetch("https://admin.scchs.org/api/login-name-update", {
     //             method: "POST",
     //             headers: {
     //                 "Content-Type": "application/json",
@@ -987,7 +987,7 @@ export default function myprofile(pageProp) {
 
     const handleSubmit11 = async () => {
         try {
-            const res = await fetch("https://admin.scchs.co.in/api/login-name-update", {
+            const res = await fetch("https://admin.scchs.org/api/login-name-update", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1030,7 +1030,7 @@ export default function myprofile(pageProp) {
         }
 
         try {
-            const res = await fetch("https://admin.scchs.co.in/api/login-password-update", {
+            const res = await fetch("https://admin.scchs.org/api/login-password-update", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1065,7 +1065,7 @@ export default function myprofile(pageProp) {
     // useEffect(() => {
     //     const fetchPlans = async () => {
     //         try {
-    //             const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser?.id}`);
+    //             const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser?.id}`);
     //             const data = await res.json();
 
     //             const today = new Date();
@@ -1107,7 +1107,7 @@ export default function myprofile(pageProp) {
     useEffect(() => {
         const fetchPlans = async () => {
             try {
-                const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser?.id}`);
+                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser?.id}`);
                 const data = await res.json();
 
                 const today = new Date();

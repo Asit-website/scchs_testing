@@ -45,7 +45,7 @@ export default function orderhistory(pageProp) {
     const fetchOrders = async () => {
       try {
         const token = JSON.parse(localStorage.getItem("scchs_Access"));
-        const res = await fetch('https://admin.scchs.co.in/api/orders', {
+        const res = await fetch('https://admin.scchs.org/api/orders', {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -102,7 +102,7 @@ export default function orderhistory(pageProp) {
               //         {order?.order_items?.map((item) => (
               //           <div key={item.id} className="product-item">
               //             <img
-              //               src={`https://admin.scchs.co.in//ecommerce/products/${item.product.images[0]}`}
+              //               src={`https://admin.scchs.org//ecommerce/products/${item.product.images[0]}`}
               //               alt={item.product.product_name}
               //               className="product-image"
               //             />
@@ -142,7 +142,7 @@ export default function orderhistory(pageProp) {
                         return (
                           <div key={item.id} className="product-item">
                             <img
-                              src={`https://admin.scchs.co.in//ecommerce/products/${product.images[0]}`}
+                              src={`https://admin.scchs.org//ecommerce/products/${product.images[0]}`}
                               alt={product.product_name}
                               className="product-image"
                               style={{ width: '100px', height: '100px', objectFit: 'cover' }}

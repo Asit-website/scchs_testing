@@ -16,7 +16,7 @@ export default function cementrytable(pageProp) {
 
     useEffect(() => {
         if (id && personId) {
-            fetch(`https://admin.scchs.co.in/api/cemeteries/${id}/people/${personId}`)
+            fetch(`https://admin.scchs.org/api/cemeteries/${id}/people/${personId}`)
                 .then((res) => res.json())
                 .then((data) => setPersonData(data));
         }
@@ -125,7 +125,7 @@ export default function cementrytable(pageProp) {
                                                 src={
                                                     imgUrl.startsWith("http")
                                                         ? imgUrl
-                                                        : `https://admin.scchs.co.in/uploads/${imgUrl}`
+                                                        : `https://admin.scchs.org/uploads/${imgUrl}`
                                                 }
                                                 alt={`Person Image ${idx + 1}`}
                                                 className="cemetery-image"

@@ -301,7 +301,7 @@ export default function Navbar(props) {
   const getCarts = async () => {
 
     try {
-      const response = await fetch("https://admin.scchs.co.in/api/cart", {
+      const response = await fetch("https://admin.scchs.org/api/cart", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -558,7 +558,7 @@ export default function Navbar(props) {
 
       const fetchSubscription = async () => {
         try {
-          const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+          const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
           const result = await res.json();
           console.log(result);
           const data = result.data;
@@ -607,7 +607,7 @@ export default function Navbar(props) {
     //     if (!instaUser?.id) return;
 
     //     try {
-    //       const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+    //       const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
     //       const data = await res.json();
 
     //       console.log(data);
@@ -642,7 +642,7 @@ export default function Navbar(props) {
         if (!instaUser?.id) return;
 
         try {
-          const res = await fetch(`https://admin.scchs.co.in/api/user-memberships/${instaUser.id}`);
+          const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
           const data = await res.json();
 
           const today = new Date();

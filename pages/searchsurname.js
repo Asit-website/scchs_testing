@@ -30,9 +30,9 @@ export default function searchsurname(pageProp) {
         if (surname) {
             let apiUrl = "";
             if (cemetery_id) {
-                apiUrl = `https://admin.scchs.co.in/api/cemetert/surname/search?cemetery_id=${cemetery_id}&surname=${encodeURIComponent(surname)}`;
+                apiUrl = `https://admin.scchs.org/api/cemetert/surname/search?cemetery_id=${cemetery_id}&surname=${encodeURIComponent(surname)}`;
             } else {
-                apiUrl = `https://admin.scchs.co.in/api/people/search?surname=${encodeURIComponent(surname)}`;
+                apiUrl = `https://admin.scchs.org/api/people/search?surname=${encodeURIComponent(surname)}`;
             }
             fetch(apiUrl)
                 .then((res) => res.json())

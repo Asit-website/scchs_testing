@@ -24,7 +24,7 @@ export default function eventhistory(pageProp) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("https://admin.scchs.co.in/api/donaction/payment/history", {
+                const res = await fetch("https://admin.scchs.org/api/donaction/payment/history", {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json',

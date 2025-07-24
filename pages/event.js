@@ -204,7 +204,7 @@ export default function events(pageProp) {
 
     const fetchCategory = async () => {
         try {
-            const resp = await fetch(`https://admin.scchs.co.in/api/get-event-category`, {
+            const resp = await fetch(`https://admin.scchs.org/api/get-event-category`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -223,7 +223,7 @@ export default function events(pageProp) {
 
     const fetchAllNews = async () => {
         try {
-            const resp = await fetch(`https://admin.scchs.co.in/api/get-event`, {
+            const resp = await fetch(`https://admin.scchs.org/api/get-event`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -515,7 +515,7 @@ export default function events(pageProp) {
                                             <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
                                         </div>
                                         <Link href={`/eventdetail?id=${card?.slug}`}>  <img
-                                            src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
+                                            src={`https://admin.scchs.org/backend/admin/images/event_management/events/${card?.images[0]}`}
                                             alt="Event"
                                             className="card-image"
                                         /></Link>
@@ -626,7 +626,7 @@ export default function events(pageProp) {
                                                     </div>
                                                     <Link href={`/eventdetail/${card?.id}/${card?.slug}`}>
                                                         <img
-                                                            src={`https://admin.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
+                                                            src={`https://admin.scchs.org/backend/admin/images/event_management/events/${card?.images[0]}`}
                                                             alt="Event"
                                                             className="card-image"
                                                         />

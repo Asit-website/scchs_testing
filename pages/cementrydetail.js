@@ -27,7 +27,7 @@ export default function cementrydetail(pageProp) {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://admin.scchs.co.in/api/cemeteries/${id}`)
+      fetch(`https://admin.scchs.org/api/cemeteries/${id}`)
         .then((res) => res.json())
         .then((data) => {
           setCemetery(data);

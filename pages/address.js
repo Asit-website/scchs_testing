@@ -325,7 +325,7 @@ export default function Cart(props) {
     const getAddress = async () => {
 
         try {
-            const response = await fetch("https://admin.scchs.co.in/api/listalladdress", {
+            const response = await fetch("https://admin.scchs.org/api/listalladdress", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -426,7 +426,7 @@ export default function Cart(props) {
     const fetchAddressForEditing = async () => {
         try {
             const token = JSON.parse(localStorage.getItem("scchs_Access"));
-            const res = await fetch("https://admin.scchs.co.in/api/listalladdress", {
+            const res = await fetch("https://admin.scchs.org/api/listalladdress", {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -457,7 +457,7 @@ export default function Cart(props) {
 
         try {
             const token = JSON.parse(localStorage.getItem("scchs_Access"));
-            const response = await fetch("https://admin.scchs.co.in/api/createaddress", {
+            const response = await fetch("https://admin.scchs.org/api/createaddress", {
                 method: 'POST',
                 headers: {
                     "content-type": "application/json",
@@ -496,7 +496,7 @@ export default function Cart(props) {
             console.log("SENDING PAYLOAD:", addressDetail); // ✅ debug
 
             const response = await fetch(
-                `https://admin.scchs.co.in/api/updateaddress/${addressDetail.id}`,
+                `https://admin.scchs.org/api/updateaddress/${addressDetail.id}`,
                 {
                     method: 'PUT',
                     headers: {

@@ -114,7 +114,7 @@ export default function contribute(pageProp) {
                     };
 
                     try {
-                        const res = await fetch("https://admin.scchs.co.in/api/donations", {
+                        const res = await fetch("https://admin.scchs.org/api/donations", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
