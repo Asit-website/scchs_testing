@@ -24,11 +24,11 @@ export default function cementryrecord(pageProp) {
   const [surname, setSurname] = useState("");
 
   useEffect(() => {
-    fetch("https://admin.scchs.org/api/counties")
+    fetch("https://uat.scchs.co.in/api/counties")
       .then((res) => res.json())
       .then((data) => setCounties(data));
 
-    fetch("https://admin.scchs.org/api/cemeteries")
+    fetch("https://uat.scchs.co.in/api/cemeteries")
       .then((res) => res.json())
       .then((data) => {
         setCemeteries(data);
@@ -77,24 +77,24 @@ export default function cementryrecord(pageProp) {
   // };
 
   const handleSearch = () => {
-  if (surname.trim()) {
-    // Agar user ne specific cemetery select ki hai, toh uske hisaab se redirect karo
-    if (selectedCemetery !== "All") {
-      // Find selected cemetery object to get its id
-      const cemeteryObj = filteredCemeteries.find(
-        (c) => c.name.toLowerCase().trim() === selectedCemetery.toLowerCase().trim()
-      );
-      if (cemeteryObj && cemeteryObj.id) {
-        router.push(
-          `/searchsurname?surname=${encodeURIComponent(surname)}&cemetery_id=${cemeteryObj.id}`
+    if (surname.trim()) {
+      // Agar user ne specific cemetery select ki hai, toh uske hisaab se redirect karo
+      if (selectedCemetery !== "All") {
+        // Find selected cemetery object to get its id
+        const cemeteryObj = filteredCemeteries.find(
+          (c) => c.name.toLowerCase().trim() === selectedCemetery.toLowerCase().trim()
         );
-        return;
+        if (cemeteryObj && cemeteryObj.id) {
+          router.push(
+            `/searchsurname?surname=${encodeURIComponent(surname)}&cemetery_id=${cemeteryObj.id}`
+          );
+          return;
+        }
       }
+      // Agar "All" hai toh purane tarike se redirect karo (all cemeteries)
+      router.push(`/searchsurname?surname=${encodeURIComponent(surname)}`);
     }
-    // Agar "All" hai toh purane tarike se redirect karo (all cemeteries)
-    router.push(`/searchsurname?surname=${encodeURIComponent(surname)}`);
-  }
-};
+  };
 
   const handlePerPageChange = (e) => {
     setResultsPerPage(parseInt(e.target.value));
@@ -165,10 +165,25 @@ export default function cementryrecord(pageProp) {
             <div className="cemetery-wrapper">
 
               <div className="cemetery-header">
-                <div className="filters-left">
+                <div
+                  className="filters-left"
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                    gap: "10px",
+                    marginBottom: "20px",
+                  }}
+                >
                   <select
                     value={selectedCounty}
                     onChange={(e) => setSelectedCounty(e.target.value)}
+                    style={{
+                      padding: "8px",
+                      minWidth: "200px",
+                      borderRadius: "4px",
+                      border: "1px solid #ccc",
+                    }}
                   >
                     <option value="All">Filter List by County / Region</option>
                     {counties.map((county) => (
@@ -181,6 +196,12 @@ export default function cementryrecord(pageProp) {
                   <select
                     value={selectedCemetery}
                     onChange={(e) => setSelectedCemetery(e.target.value)}
+                    style={{
+                      padding: "8px",
+                      minWidth: "200px",
+                      borderRadius: "4px",
+                      border: "1px solid #ccc",
+                    }}
                   >
                     <option value="All">Select Cemetery</option>
                     {filteredCemeteries.map((cemetery) => (
@@ -190,7 +211,15 @@ export default function cementryrecord(pageProp) {
                     ))}
                   </select>
 
-                  <div className="surname-search">
+                  <div
+                    className="surname-search"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      flexWrap: "wrap",
+                    }}
+                  >
                     <input
                       type="text"
                       value={surname}
@@ -199,17 +228,44 @@ export default function cementryrecord(pageProp) {
                       onKeyDown={(e) => {
                         if (e.key === "Enter") handleSearch();
                       }}
+                      style={{
+                        padding: "8px",
+                        border: "1px solid #ccc",
+                        borderRadius: "4px",
+                        minWidth: "180px",
+                      }}
                     />
-                    <button onClick={handleSearch}>🔍</button>
                     <button
-                      style={{marginLeft: "10px"}}
+                      onClick={handleSearch}
+                      style={{
+                        padding: "8px 12px",
+                        backgroundColor: "#9d0030",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      🔍
+                    </button>
+                    <button
                       className="cemetery-clear-btn"
                       onClick={() => setSurname("")}
+                      style={{
+                        padding: "8px 8px",
+                        fontSize:"15px",
+                        backgroundColor: "#9d0030",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
                     >
                       Clear
                     </button>
                   </div>
                 </div>
+
 
                 <div className="filters-right">
                   {/* <div className="dropdown-group">
@@ -453,7 +509,7 @@ export default function cementryrecord(pageProp) {
 
 .filters-right {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 16px;
   flex-wrap: wrap;
   background: #fff;

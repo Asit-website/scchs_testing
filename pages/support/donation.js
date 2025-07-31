@@ -246,7 +246,7 @@ export default function donation(pageProp) {
 
         if (addressDetail.donation_amount === undefined || addressDetail.donation_amount === null || addressDetail.donation_amount === '') {
             errors.donation_amount = 'Donation amount is required';
-        } else if (isNaN(addressDetail.donation_amount) || Number(addressDetail.donation_amount) < 10) {
+        } else if (isNaN(addressDetail.donation_amount) || Number(addressDetail.donation_amount) < 1) {
             errors.donation_amount = 'Minimum donation amount is $10';
         }
 

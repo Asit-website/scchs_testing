@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import HeadSEO1 from "../components/common/Head/head1";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { X } from "lucide-react";
 
 
 
@@ -29,7 +30,7 @@ export default function cementrytable(pageProp) {
 
     useEffect(() => {
         if (id) {
-            fetch(`https://admin.scchs.org/api/cemeteries/${id}/people`)
+            fetch(`https://uat.scchs.co.in/api/cemeteries/${id}/people`)
                 .then((res) => res.json())
                 .then((data) => {
                     setPeople(data);
@@ -51,9 +52,13 @@ export default function cementrytable(pageProp) {
 
 
             <div className="event_system_main event_system_main1">
-                <div className="event_main">
-                    
-                    <div className="cemetery-records-wrapper">
+                <div className="event_main" id="eve-ent">
+                    <div className="deeping-btn" id="open-btn">
+                        <a href="javascript:history.back()" className="deep-btn">
+                            ← Back
+                        </a>
+                    </div>
+                    <div className="cemetery-records-wrapper" >
                         <div className="cemetery-records-filters">
                             <div className="cemetery-filter-group">
                                 <label>Search for Surname:</label>
@@ -79,39 +84,48 @@ export default function cementrytable(pageProp) {
                             </div>
                         </div>
 
-                        <table className="cemetery-table">
-                            <thead>
-                                <tr>
-                                    <th>Actions</th>
-                                    {/* ⬆ */}
-                                    <th>Surname </th>
-                                    <th>Given Name</th>
-                                    <th>Age</th>
-                                    <th>Birth Year</th>
-                                    <th>Death Year</th>
-                                    <th>Burial Year</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredPeople.map((person, idx) => (
-                                    <tr key={idx}>
-                                        <td style={{ cursor: "pointer" }} onClick={() => router.push(`/cementrytabledetail?id=${id}&personId=${person?.index}`)}>👁</td>
-                                        <td>{person.surname}</td>
-                                        <td>{person.name}</td>
-                                        <td>{person.age}</td>
-                                        <td>{person.birth_year}</td>
-                                        <td>{person.death_year}</td>
-                                        <td style={{width:"20%"}}>{person.burial_year}</td>
+                        <div style={{ overflowX: "auto" }}>
+                            <table className="cemetery-table" style={{ minWidth: "900px" }}>
+                                <thead>
+                                    <tr>
+                                        <th>Actions</th>
+                                        <th>Surname</th>
+                                        <th>Given Name</th>
+                                        <th>Age</th>
+                                        <th>Birth Year</th>
+                                        <th>Death Year</th>
+                                        <th>Burial Year</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                       
-                       
+                                </thead>
+                                <tbody>
+                                    {filteredPeople.map((person, idx) => (
+                                        <tr key={idx}>
+                                            <td
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() =>
+                                                    router.push(`/cementrytabledetail?id=${id}&personId=${person?.index}`)
+                                                }
+                                            >
+                                                👁
+                                            </td>
+                                            <td>{person.surname}</td>
+                                            <td>{person.name}</td>
+                                            <td>{person.age}</td>
+                                            <td>{person.birth_year}</td>
+                                            <td>{person.death_year}</td>
+                                            <td>{person.burial_year}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
 
 
                     </div>
-                    
+
                 </div>
             </div>
         </div>

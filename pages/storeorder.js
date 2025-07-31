@@ -54,7 +54,7 @@ export default function storeorder(pageProp) {
         const fetchSavedAddress = async () => {
             try {
                 const token = JSON.parse(localStorage.getItem("scchs_Access"));
-                const res = await fetch("https://admin.scchs.org/api/listalladdress", {
+                const res = await fetch("https://uat.scchs.co.in/api/listalladdress", {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }
@@ -113,7 +113,7 @@ export default function storeorder(pageProp) {
     const getCarts = async () => {
 
         try {
-            const response = await fetch("https://admin.scchs.org/api/cart", {
+            const response = await fetch("https://uat.scchs.co.in/api/cart", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -131,7 +131,7 @@ export default function storeorder(pageProp) {
 
     const removeCarts = async (id, qty) => {
         try {
-            const response = await fetch("https://admin.scchs.org/api/cart/remove", {
+            const response = await fetch("https://uat.scchs.co.in/api/cart/remove", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -171,7 +171,7 @@ export default function storeorder(pageProp) {
         if (!result.isConfirmed) return;
 
         try {
-            const response = await fetch("https://admin.scchs.org/api/cart/clear", {
+            const response = await fetch("https://uat.scchs.co.in/api/cart/clear", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -193,7 +193,7 @@ export default function storeorder(pageProp) {
 
     const clearCarts1 = async () => {
         try {
-            const response = await fetch("https://admin.scchs.org/api/cart/clear", {
+            const response = await fetch("https://uat.scchs.co.in/api/cart/clear", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -218,7 +218,7 @@ export default function storeorder(pageProp) {
     const getAddress = async () => {
 
         try {
-            const response = await fetch("https://admin.scchs.org/api/listalladdress", {
+            const response = await fetch("https://uat.scchs.co.in/api/listalladdress", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -239,7 +239,7 @@ export default function storeorder(pageProp) {
     const fetchOrders = async () => {
         try {
 
-            const resp = await fetch("https://admin.scchs.org/api/orders", {
+            const resp = await fetch("https://uat.scchs.co.in/api/orders", {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -469,23 +469,68 @@ export default function storeorder(pageProp) {
         }
     }, []);
 
+    // useEffect(() => {
+    //     const fetchMembership = async () => {
+    //         if (!instaUser?.id) return;
+
+    //         try {
+    //             const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
+    //             const data = await res.json();
+
+    //             const today = new Date();
+
+    //             const activePlan = data?.data?.find(plan => {
+    //                 const isActive = plan.status === "active";
+    //                 const endDate = new Date(plan.grace_end_date);
+    //                 return isActive && endDate >= today;
+    //             });
+
+    //             setMembershipStatus(activePlan ? "active" : "none");
+    //         } catch (err) {
+    //             console.error("Error fetching membership:", err);
+    //             setMembershipStatus("none");
+    //         }
+    //     };
+
+    //     fetchMembership();
+    // }, [instaUser]);
+
+
+    // ==============fetch member=======
+
     useEffect(() => {
         const fetchMembership = async () => {
             if (!instaUser?.id) return;
 
             try {
-                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
                 const data = await res.json();
+
+                console.log(data)
 
                 const today = new Date();
 
-                const activePlan = data?.data?.find(plan => {
+                // Filter all active (not expired) plans
+                const activePlans = (data?.data || []).filter(plan => {
+                    // Check for lifetime membership in various possible locations
+                    const isLifetime = plan.is_lifetime === 1 || 
+                                     plan.isLifetime === 1 || 
+                                     plan.lifetime === 1 ||
+                                     plan.plan?.is_lifetime === 1 ||
+                                     plan.plan?.isLifetime === 1;
+                    
+                    // If it's a lifetime membership, always consider it active
+                    if (isLifetime) {
+                        return true;
+                    }
+                    
+                    // For non-lifetime memberships, check the status and end date
                     const isActive = plan.status === "active";
                     const endDate = new Date(plan.grace_end_date);
                     return isActive && endDate >= today;
                 });
 
-                setMembershipStatus(activePlan ? "active" : "none");
+                setMembershipStatus(activePlans.length > 0 ? "active" : "none");
             } catch (err) {
                 console.error("Error fetching membership:", err);
                 setMembershipStatus("none");
@@ -500,7 +545,7 @@ export default function storeorder(pageProp) {
 
     // const paymentHandler = async () => {
 
-    //     const response = await fetch("https://admin.scchs.org/api/order/create",
+    //     const response = await fetch("https://uat.scchs.co.in/api/order/create",
     //         {
     //             method: "POST",
     //             headers: {
@@ -549,7 +594,7 @@ export default function storeorder(pageProp) {
     //             //     clearCarts();
     //             //   }
 
-    //             const resp = await fetch("https://admin.scchs.org/api/ecommerce/transactions", {
+    //             const resp = await fetch("https://uat.scchs.co.in/api/ecommerce/transactions", {
     //                 method: "POST",
     //                 headers: {
     //                     "content-type": "application/json",
@@ -601,7 +646,7 @@ export default function storeorder(pageProp) {
 
     const paymentHandler = async () => {
         try {
-            const response = await fetch("https://admin.scchs.org/api/order/create", {
+            const response = await fetch("https://uat.scchs.co.in/api/order/create", {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
@@ -945,7 +990,7 @@ export default function storeorder(pageProp) {
                                                 // paymentHandler();
                                             }
                                             else {
-                                                router.push('/user/userlogin');
+                                                router.push('/user/userlogin1');
                                             }
 
                                         }} className="btn-primarys">Checkout</button>
@@ -966,7 +1011,7 @@ export default function storeorder(pageProp) {
                     }
 
                     {payNow && (
-                        <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency: "USD" }}>
+                        <PayPalScriptProvider options={{ "client-id": "Af_ZCWYSNIFxW40vhmNqszsLaxINVe56bgFxygzXbeg8czi1NFaSYQKgxmR4KQIufcCG_Pi_t_8amsyE", currency: "USD" }}>
                             <PayPalButtons
                                 style={{ layout: "vertical" }}
                                 createOrder={(data, actions) => {
@@ -986,7 +1031,7 @@ export default function storeorder(pageProp) {
                                     // clearCarts();
 
                                     // Send to backend if needed
-                                    await fetch("https://admin.scchs.org/api/ecommerce/transactions", {
+                                    await fetch("https://uat.scchs.co.in/api/ecommerce/transactions", {
                                         method: "POST",
                                         headers: {
                                             "Content-Type": "application/json",

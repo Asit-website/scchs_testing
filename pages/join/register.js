@@ -507,7 +507,7 @@ export default function register1(pageProp) {
 
 
     //     try {
-    //         const response = await fetch('https://admin.scchs.org/api/registration', {
+    //         const response = await fetch('https://uat.scchs.co.in/api/registration', {
     //             method: 'POST',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -562,7 +562,7 @@ export default function register1(pageProp) {
         }
 
         try {
-            const response = await fetch('https://admin.scchs.org/api/registration', {
+            const response = await fetch('https://uat.scchs.co.in/api/registration', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -694,9 +694,10 @@ export default function register1(pageProp) {
                             step === 1 && (
                                 <>
                                     <div className="form_scch_btn">
-                                        <h2>New user</h2>
+                                        {/* <h2>New user</h2> */}
+                                        <h2>Register Here</h2>
                                         {/* {step>1 &&  <button type="button" onClick={handlePrevious}>Back</button>}    */}
-                                        {step === 1 && <button type="button" onClick={()=> router.push('/user/userlogin')}>Back</button>}
+                                        {step === 1 && <button type="button" onClick={()=> router.push('/user/userlogin')}> ← Back</button>}
                                     </div>
                                     <div className="nameform-container">
                                         <h2>Primary user Information</h2>
@@ -775,12 +776,12 @@ export default function register1(pageProp) {
                                                 {errors.dob && <p className="text_red">{errors.dob}</p>}
                                             </div> */}
                                             <div className="dibm">
-                                                <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YY" />
+                                                <input onChange={handleChange} name="dobYear" value={formData?.dobYear} className="nameform-input" type="text" placeholder="YYYY" />
                                                 {errors.dobYear && <p className="text_red">{errors.dobYear}</p>}
                                             </div>
                                         </div>
 
-                                        <p style={{ color: "green", fontSize: "18px" }}>Please enter your date of Year</p>
+                                        <p style={{ color: "green", fontSize: "18px" }}>Please enter your Year of Birth</p>
                                     </div>
                                     {
                                         step < 3 && <button type="button" onClick={() => {
@@ -796,8 +797,8 @@ export default function register1(pageProp) {
                             step === 2 && (
                                 <>
                                     <div className="form_scch_btn">
-                                        <h2>New user</h2>
-                                        {step > 1 && <button type="button" onClick={handlePrevious}>Back</button>}
+                                        <h2>Register Here</h2>
+                                        {step > 1 && <button type="button" onClick={handlePrevious}> ← Back</button>}
                                     </div>
                                     <div className="nameform-container">
                                         <h2>Main Contact Information</h2>
@@ -1004,7 +1005,7 @@ export default function register1(pageProp) {
                                                     }))
                                                 }
                                             />
-                                            <p style={{marginTop:"5px"}}>Enter your city name (e.g., Saint Charles).</p>
+                                            <p style={{marginTop:"5px"}}>Enter your city name (e.g., Saint Charles or Saint Peters).</p>
                                             {errors.city && <p className="text_red">{errors.city}</p>}
                                         </div>
 
@@ -1138,8 +1139,8 @@ export default function register1(pageProp) {
                             step === 3 && (
                                 <>
                                     <div className="form_scch_btn">
-                                        <h2>New user</h2>
-                                        {step > 1 && <button type="button" onClick={handlePrevious}>Back</button>}
+                                        <h2>Register Here</h2>
+                                        {step > 1 && <button type="button" onClick={handlePrevious}> ← Back</button>}
                                     </div>
                                     <div className="nameform-container">
                                         <h2>Primary user Information</h2>
@@ -1196,11 +1197,11 @@ export default function register1(pageProp) {
                                                     const value = e.target.value;
                                                     setFormData({ ...formData, password: value });
 
-                                                    const passwordRegex = /^(?=[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
+                                                    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
                                                     if (value && !passwordRegex.test(value)) {
                                                         setPasswordError(
-                                                            "Password must start with a capital letter, include at least one number, one special character, and be at least 8 characters long."
+                                                            "Password must include atleast one capital letter, one number, one special character (e.g., !@#$%^&*), and be at least 8 characters long"
                                                         );
                                                     } else {
                                                         setPasswordError("");

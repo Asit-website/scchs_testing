@@ -45,7 +45,7 @@ const records = [
     description: "Business & Industry Files Index contains historical records and documents related to local businesses and industries in the region. This index serves as a reference tool for researchers interested in the commercial history and development of the area.",
     updated: "26 March 2021",
     category: "City/State/Federal Records",
-    link: "https://admin.scchs.org/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf",
+    link: "https://uat.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf",
     
   },
   {
@@ -89,7 +89,7 @@ const records = [
     description: "The Family Files are compiled genealogies and research notes organized by family surname. These records are useful for tracing lineage, local family histories, and relationships between community members.",
     updated: "20 March 2024",
     category: "Family History",
-    link: "https://admin.scchs.org/backend/admin/media/Family%20Files/Family%20Files.pdf",
+    link: "https://uat.scchs.co.in/backend/admin/media/Family%20Files/Family%20Files.pdf",
    
   },
   {
@@ -146,7 +146,7 @@ const records = [
     description: "This index catalogues historical newspaper articles collected by McElhiney Olson, covering events, people, and places of interest in the local area.",
     updated: "7 May 2021",
     category: "Newspapers",
-    link: "https://admin.scchs.org/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20McElhiney%20Olson%20Index.pdf",
+    link: "https://uat.scchs.co.in/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20McElhiney%20Olson%20Index.pdf",
    
   },
   {
@@ -203,7 +203,7 @@ const records = [
     description: "The Sibley Diary offers a glimpse into life in mid-19th century Missouri, detailing events, personal reflections, and historical context.",
     updated: "15 July 2016",
     category: "Cemeteries",
-    link: "https://admin.scchs.org/backend/admin/media/hisrical_record/St.%20Charles%20County%20Historical%20Society%20-%20Sibley%20Diary%201844-1855.pdf",
+    link: "https://uat.scchs.co.in/backend/admin/media/hisrical_record/St.%20Charles%20County%20Historical%20Society%20-%20Sibley%20Diary%201844-1855.pdf",
   
   },
   {
@@ -211,14 +211,14 @@ const records = [
     description: "These records document stillbirths in the region and include names (if known), parents, and burial locations. They are important for genealogical completeness.",
     updated: "23 April 2016",
     category: "City/State/Federal Records",
-    link: "https://admin.scchs.org/backend/admin/media/Stillbirths.pdf"
+    link: "https://uat.scchs.co.in/backend/admin/media/Stillbirths.pdf"
   },
   {
     title: "Subject/Topic Files",
     description: "These files contain newspaper clippings, research notes, and references organized by topic such as schools, military, or local events.",
     updated: "26 March 2021",
     category: "City/State/Federal Records",
-    link: "https://admin.scchs.org/backend/admin/media/St.%20Charles%20County%20Historical%20Society%20-%20Subject_Topic%20Files.pdf",
+    link: "https://uat.scchs.co.in/backend/admin/media/St.%20Charles%20County%20Historical%20Society%20-%20Subject_Topic%20Files.pdf",
   },
   {
     title: "World War II Marriages",
@@ -284,7 +284,7 @@ export default function research(pageProp) {
               The <span>St. Charles County Historical Society's</span> Archives has an extensive collection of County and City records. Over the years, a number of the research items have been indexed by various volunteers to enable researchers to more readily locate information for genealogical or family history.
             </p>
             <p>
-              Please note that the <span>original documents</span> referenced by the indexes on our website are not available online.  For more information about an original document please submit a <Link href={"/contact-us"}><span className="research_req">RESEARCH REQUEST.</span></Link>
+              Please note that the <span>original documents</span> referenced by the indexes on our website are not available online.  For more information about an original document please submit a <Link href={"/research-contact"}><span className="research_req">RESEARCH REQUEST.</span></Link>
             </p>
           </div>
         </div>
@@ -349,7 +349,18 @@ export default function research(pageProp) {
                     <strong>Located in Category:</strong> {record.category}
                   </span>
                 </div>
-                <Link href={`${record?.link}`}><button className="record-box-button">More</button></Link>
+                {(() => {
+                  const isPdfLink = record?.link?.includes('.pdf') || record?.link?.includes('admin.scchs.org');
+                  return isPdfLink ? (
+                    <a href={record?.link} target="_blank" rel="noopener noreferrer">
+                      <button className="record-box-button">More</button>
+                    </a>
+                  ) : (
+                    <Link href={`${record?.link}`}>
+                      <button className="record-box-button">More</button>
+                    </Link>
+                  );
+                })()}
               </div>
             ))}
             <div className="custom-pagination">

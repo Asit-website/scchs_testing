@@ -13,6 +13,7 @@ import CreatableSelect from 'react-select/creatable';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { useRouter } from "next/router";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 var settingsMorePhotos = {
     arrows: true,
@@ -46,7 +47,7 @@ export default function myprofile(pageProp) {
 
     // const [activeTab, setActiveTab] = useState("Member Info");
 
-    const [activeTab, setActiveTab] = useState(tabList[0]);
+    const [activeTab, setActiveTab] = useState(tabList[5]);
     const [errors, setErrors] = useState({})
     const [errors1, setErrors1] = useState({})
     const [errors2, setErrors2] = useState({})
@@ -87,7 +88,7 @@ export default function myprofile(pageProp) {
 
         const fetchMemberships = async () => {
             try {
-                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
                 if (!res.ok) {
                     throw new Error('Failed to fetch');
                 }
@@ -113,7 +114,7 @@ export default function myprofile(pageProp) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("https://admin.scchs.org/api/donaction/payment/history", {
+                const res = await fetch("https://uat.scchs.co.in/api/donaction/payment/history", {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json',
@@ -283,12 +284,12 @@ export default function myprofile(pageProp) {
 
         return errors;
     };
-
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleEditClick1 = async () => {
         setOpen1(true);
         try {
-            const res = await fetch('https://admin.scchs.org/api/contact-info', {
+            const res = await fetch('https://uat.scchs.co.in/api/contact-info', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` },
                 body: JSON.stringify({ userId })
@@ -318,7 +319,7 @@ export default function myprofile(pageProp) {
             return;
         }
         try {
-            const res = await fetch('https://admin.scchs.org/api/contact-info', {
+            const res = await fetch('https://uat.scchs.co.in/api/contact-info', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` },
                 body: JSON.stringify({ userId, ...formData1 })
@@ -342,7 +343,7 @@ export default function myprofile(pageProp) {
     const handleEditClick = async () => {
         setOpen(true);
         try {
-            const res = await fetch(`https://admin.scchs.org/api/alt-contact-info`, {
+            const res = await fetch(`https://uat.scchs.co.in/api/alt-contact-info`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` },
                 body: JSON.stringify({ userId })
@@ -492,7 +493,7 @@ export default function myprofile(pageProp) {
             return;
         }
         try {
-            const res = await fetch(`https://admin.scchs.org/api/alt-contact-info`, {
+            const res = await fetch(`https://uat.scchs.co.in/api/alt-contact-info`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` },
                 body: JSON.stringify({ userId, ...formData })
@@ -607,7 +608,7 @@ export default function myprofile(pageProp) {
 
     // const handleAdd = async () => {
     //     try {
-    //         const res = await fetch('https://admin.scchs.org/api/surnames', {
+    //         const res = await fetch('https://uat.scchs.co.in/api/surnames', {
     //             method: 'POST',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -649,8 +650,8 @@ export default function myprofile(pageProp) {
         }
         const method = isEditMode ? 'PUT' : 'POST';
         const url = isEditMode
-            ? `https://admin.scchs.org/api/surnames/${editId}`
-            : `https://admin.scchs.org/api/surnames`;
+            ? `https://uat.scchs.co.in/api/surnames/${editId}`
+            : `https://uat.scchs.co.in/api/surnames`;
 
         try {
             const res = await fetch(url, {
@@ -715,7 +716,7 @@ export default function myprofile(pageProp) {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch(`https://admin.scchs.org/api/surnames/${id}`, {
+                    const res = await fetch(`https://uat.scchs.co.in/api/surnames/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
@@ -836,7 +837,7 @@ export default function myprofile(pageProp) {
 
     // const handleSubmit = async () => {
     //     try {
-    //         const res = await fetch('https://admin.scchs.org/api/member-settings-store', {
+    //         const res = await fetch('https://uat.scchs.co.in/api/member-settings-store', {
     //             method: 'POST',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -861,7 +862,7 @@ export default function myprofile(pageProp) {
 
     const handleSubmit = async () => {
         try {
-            const res = await fetch('https://admin.scchs.org/api/member-settings-store', {
+            const res = await fetch('https://uat.scchs.co.in/api/member-settings-store', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -951,7 +952,7 @@ export default function myprofile(pageProp) {
 
     // const handleSubmit11 = async () => {
     //     try {
-    //         const res = await fetch("https://admin.scchs.org/api/login-name-update", {
+    //         const res = await fetch("https://uat.scchs.co.in/api/login-name-update", {
     //             method: "POST",
     //             headers: {
     //                 "Content-Type": "application/json",
@@ -987,7 +988,7 @@ export default function myprofile(pageProp) {
 
     const handleSubmit11 = async () => {
         try {
-            const res = await fetch("https://admin.scchs.org/api/login-name-update", {
+            const res = await fetch("https://uat.scchs.co.in/api/login-name-update", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1015,22 +1016,31 @@ export default function myprofile(pageProp) {
     // ===================password reset============
     const [showPopup1, setShowPopup1] = useState(false);
     const [password, setPassword] = useState("");
+    const [passwordError, setPasswordError] = useState("");
 
     const handleEditClick22 = () => {
         setPassword(""); // input box empty rahe
         setShowPopup1(true);
     };
+     const validatePassword = (pass) => {
+        const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+        return regex.test(pass);
+    };
+    
 
     const handleSubmit22 = async () => {
-        const passwordRegex = /^(?=[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
         if (!passwordRegex.test(password)) {
-            // alert("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
-            Swal.fire('Error', 'Password must start with a capital letter, include a special character, and be at least 8 characters long.', 'error');
-            return;
+          setPasswordError(
+            "Password must include atleast one capital letter, one number, one special character (e.g., !@#$%^&*), and be at least 8 characters long"
+          );
+          return;
         }
+        
 
         try {
-            const res = await fetch("https://admin.scchs.org/api/login-password-update", {
+            const res = await fetch("https://uat.scchs.co.in/api/login-password-update", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1065,7 +1075,7 @@ export default function myprofile(pageProp) {
     // useEffect(() => {
     //     const fetchPlans = async () => {
     //         try {
-    //             const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser?.id}`);
+    //             const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser?.id}`);
     //             const data = await res.json();
 
     //             const today = new Date();
@@ -1107,7 +1117,7 @@ export default function myprofile(pageProp) {
     useEffect(() => {
         const fetchPlans = async () => {
             try {
-                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser?.id}`);
+                const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser?.id}`);
                 const data = await res.json();
 
                 const today = new Date();
@@ -1168,6 +1178,8 @@ export default function myprofile(pageProp) {
 
     // if (validPlans.length === 0) return ;
     //    ========================fetch active member plan finished======
+
+   
 
     return (
         <div className="page_shopping_list sop">
@@ -1237,17 +1249,17 @@ export default function myprofile(pageProp) {
 
                         </div>
                         <div className="membership_info_right">
-                            <p><span>Password Note :</span>Only letters and numbers, please. Special characters like punctuation will not be saved, and you will not be able to</p>
-                            <p>log in with a password like that.</p>
+                            <p><span>Password Note :</span>Password must include atleast one capital letter, one number, one special character (e.g., !@#$%^&*), and be at least 8 characters long.</p>
+                            {/* <p>.</p> */}
                         </div>
 
                     </div>
-                   
+
                     <div className="membership-container">
                         <div className="section-header">Membership Info</div>
-                         <div>
-                        <span style={{marginLeft:"15px"}}>Membership Id: {memberships[0]?.membership_number}</span>
-                    </div>
+                        <div>
+                            {/* <span style={{ marginLeft: "15px" }}>Membership Id: {memberships[0]?.membership_number}</span> */}
+                        </div>
 
                         <div className="card-wrapper">
                             <div className="info-section info-section1">
@@ -1257,7 +1269,8 @@ export default function myprofile(pageProp) {
                                         return (
                                             <div key={index} className="info-card">
                                                 <p><strong>Membership Plan :</strong>{val?.plan.name}</p>
-                                                <p><strong>Membership Plan Id  :</strong>{val?.membership_plan_id}</p>
+                                                {/* <p><strong>Membership Plan Id  :</strong>{val?.membership_plan_id}</p> */}
+                                                <p><strong>Membership Number  :</strong>{memberships[0]?.membership_number}</p>
                                             </div>
                                         )
                                     })
@@ -1286,16 +1299,16 @@ export default function myprofile(pageProp) {
                                 </div> */}
                                 <div className="info-card">
                                     <div className="grid-2col">
-                                        <div><strong className="lable1">Expiration Date  :</strong>{memberships[0]?.end_date &&
+                                        {/* <div><strong className="lable1">Expiration Date  :</strong>{memberships[0]?.end_date &&
                                             (() => {
                                                 const date = new Date(memberships[0].end_date);
                                                 const mm = String(date.getMonth() + 1).padStart(2, '0');
                                                 const dd = String(date.getDate()).padStart(2, '0');
                                                 const yy = String(date.getFullYear()).slice(-2);
                                                 return `${mm}-${dd}-${yy}`;
-                                            })()}</div>
-                                        <div><strong className="lable1">Amount Paid       :</strong>${memberships[0]?.plan?.monthly_price}</div>
-                                        <div><strong className="lable1">Donation             :</strong>${totalAmount}</div>
+                                            })()}</div> */}
+                                        {/* <div><strong className="lable1">Amount Paid       :</strong>${memberships[0]?.plan?.monthly_price}</div> */}
+                                        <div><strong className="lable1">Total Donation             :</strong>${totalAmount}</div>
                                         <div><strong className="lable1">Date                      :</strong>{new Date(donations[0]?.created_at).toLocaleString("en-US", {
                                             year: "numeric",
                                             month: "long",
@@ -1328,7 +1341,7 @@ export default function myprofile(pageProp) {
                             ))}
                         </div>
                         {
-                            activeTab === "Member Info" &&                     
+                            activeTab === "Member Info" &&
                             <div className="card cardissso">
                                 <div className="grid-2col">
                                     <div><strong className="lable1">Member Active :</strong>{memberships[0]?.status === "active" ? "Yes" : "No"}</div>
@@ -1354,7 +1367,7 @@ export default function myprofile(pageProp) {
                                     {/* <div><strong className="lable1">Date of birth:</strong>{memberships[0]?.user.dobMonth} {memberships[0]?.user.dob}{memberships[0]?.user.dobYear}</div> */}
                                     <div>
                                         <strong className="lable1">Date of birth : </strong>
-                                        {memberships[0]?.user.dob}-{memberships[0]?.user.dobMonth}-{memberships[0]?.user.dobYear}
+                                        {memberships[0]?.user.dobMonth}-{memberships[0]?.user.dob}-{memberships[0]?.user.dobYear}
                                     </div>
                                 </div>
                             </div>
@@ -2067,7 +2080,7 @@ export default function myprofile(pageProp) {
 
                                 {/* ===========reset password======== */}
 
-                                {showPopup1 && (
+                                {/* {showPopup1 && (
                                     <div className="password-popup-overlay-unique">
                                         <div className="password-popup-box-unique">
                                             <h3>Set New Password</h3>
@@ -2077,13 +2090,97 @@ export default function myprofile(pageProp) {
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
+                                            <span
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className="scchs-eye-icon"
+                                                style={{
+                                                    cursor: "pointer",
+                                                    position: "relative",
+                                                    right: "-220px",
+                                                    top: "-48px",
+                                                    transform: "translateY(-50%)",
+                                                }}
+                                            >
+                                                {showPassword ? (
+                                                    <FaEyeSlash size={20} color="blue" />
+                                                ) : (
+                                                    <FaEye size={20} color="blue" />
+                                                )}
+                                            </span>
+
                                             <div className="password-popup-actions-unique">
                                                 <button onClick={handleSubmit22}>Save</button>
                                                 <button onClick={() => setShowPopup1(false)}>Cancel</button>
                                             </div>
                                         </div>
                                     </div>
+                                )} */}
+
+                                {showPopup1 && (
+                                    <div className="password-popup-overlay-unique">
+                                        <div className="password-popup-box-unique">
+                                            <h3>Set New Password</h3>
+
+                                            <div style={{ position: "relative" }}>
+                                                <input
+                                                    type={showPassword ? "text" : "password"}
+                                                    placeholder="Enter new password"
+                                                    value={password}
+                                                    onChange={(e) => {
+                                                        setPassword(e.target.value);
+                                                        setPasswordError(""); // clear previous error on typing
+                                                    }}
+                                                    autoComplete="new-password"
+                                                    style={{
+                                                        paddingRight: "40px",
+                                                        width: "100%",
+                                                        boxSizing: "border-box",
+                                                        border: passwordError ? "1px solid red" : "1px solid #ccc",
+                                                    }}
+                                                />
+
+                                                <span
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        position: "absolute",
+                                                        right: "10px",
+                                                        top: "50%",
+                                                        transform: "translateY(-50%)",
+                                                        zIndex: 2,
+                                                        backgroundColor: "#fff",
+                                                        padding: "0 5px",
+                                                    }}
+                                                >
+                                                    {showPassword ? (
+                                                        <FaEyeSlash size={20} color="blue" />
+                                                    ) : (
+                                                        <FaEye size={20} color="blue" />
+                                                    )}
+                                                </span>
+                                            </div>
+
+                                            {passwordError && (
+                                                <div style={{ color: "red", marginTop: "5px", fontSize: "14px" }}>
+                                                    {passwordError}
+                                                </div>
+                                            )}
+
+                                            <div className="password-popup-actions-unique" style={{ marginTop: "15px" }}>
+                                                <button onClick={handleSubmit22}>Save</button>
+                                                <button
+                                                    style={{ backgroundColor: "#ae0035" }}
+                                                    onClick={() => setShowPopup1(false)}
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 )}
+
+
+
 
                                 <div className="card-section">
                                     <h2 className="section-title">Membership List :</h2>

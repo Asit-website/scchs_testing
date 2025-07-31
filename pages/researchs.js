@@ -28,25 +28,68 @@ export default function researchs(pageProp) {
     }, []);
 
 
+    // useEffect(() => {
+    //     const fetchMembership = async () => {
+    //         if (!instaUser?.id) return;
+
+    //         try {
+    //             const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
+    //             const data = await res.json();
+
+    //             console.log(data);
+
+    //             const today = new Date();
+
+    //             const activePlan = data?.data?.find(plan => {
+    //                 const isActive = plan.status === "active";
+    //                 const endDate = new Date(plan.end_date);
+    //                 return isActive && endDate >= today;
+    //             });
+
+    //             setMembershipStatus(activePlan ? "active" : "none");
+    //         } catch (err) {
+    //             console.error("Error fetching membership:", err);
+    //             setMembershipStatus("none");
+    //         }
+    //     };
+
+    //     fetchMembership();
+    // }, [instaUser]);
+
+
     useEffect(() => {
         const fetchMembership = async () => {
             if (!instaUser?.id) return;
 
             try {
-                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
                 const data = await res.json();
 
                 console.log(data);
 
                 const today = new Date();
 
-                const activePlan = data?.data?.find(plan => {
+                // Filter all active (not expired) plans
+                const activePlans = (data?.data || []).filter(plan => {
+                    // Check for lifetime membership in various possible locations
+                    const isLifetime = plan.is_lifetime === 1 || 
+                                     plan.isLifetime === 1 || 
+                                     plan.lifetime === 1 ||
+                                     plan.plan?.is_lifetime === 1 ||
+                                     plan.plan?.isLifetime === 1;
+                    
+                    // If it's a lifetime membership, always consider it active
+                    if (isLifetime) {
+                        return true;
+                    }
+                    
+                    // For non-lifetime memberships, check the status and end date
                     const isActive = plan.status === "active";
-                    const endDate = new Date(plan.end_date);
+                    const endDate = new Date(plan.grace_end_date);
                     return isActive && endDate >= today;
                 });
 
-                setMembershipStatus(activePlan ? "active" : "none");
+                setMembershipStatus(activePlans.length > 0 ? "active" : "none");
             } catch (err) {
                 console.error("Error fetching membership:", err);
                 setMembershipStatus("none");
@@ -55,6 +98,7 @@ export default function researchs(pageProp) {
 
         fetchMembership();
     }, [instaUser]);
+
 
     return (
         <div className="page_shopping_list sop">
@@ -121,8 +165,8 @@ export default function researchs(pageProp) {
                                         <li><a href={membershipStatus === "active" ? "/cementry-records" : "/join/memberplan"}>Baue Funeral Home Records Index (in progress)</a></li>
                                         <li><a href={membershipStatus === "active" ? "/Br-permit" : "/join/memberplan"}>Burial or Removal Permits</a></li>
                                         <li><a href={membershipStatus === "active" ? "/Burials-By-Church" : "/join/memberplan"}>Burials by Church</a></li>
-                                        {/* https://admin.scchs.org/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf */}
-                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.org/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf" : "/join/memberplan"} target="_blank">Business &amp; Industry Files Index</a></li>
+                                        {/* https://uat.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf */}
+                                        <li><a href={membershipStatus === "active" ? "https://uat.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf" : "/join/memberplan"} target="_blank">Business &amp; Industry Files Index</a></li>
                                         <li>
                                             <a href={membershipStatus === "active" ? "/cementryrecord" : "/join/memberplan"}>Cemetery Records</a>
                                             <p className="cemetery-text text-[18px] text-black  mt-2 text-sm leading-relaxed">
@@ -143,26 +187,26 @@ export default function researchs(pageProp) {
 
                                         <li><a href={membershipStatus === "active" ? "	/census" : "/join/memberplan"}>Census, St. Charles County, 1876 Family Files</a></li>
                                         {/*  */}
-                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.org/backend/admin/media/Family%20Files/Family%20Files.pdf" : "/join/memberplan"} target="_blank">Family Files</a></li>
+                                        <li><a href={membershipStatus === "active" ? "https://uat.scchs.co.in/backend/admin/media/Family%20Files/Family%20Files.pdf" : "/join/memberplan"} target="_blank">Family Files</a></li>
                                         <li><a href={membershipStatus === "active" ? "/guardian-book-search" : "/join/memberplan"}>Guardian Books</a></li>
                                         <li><a href={membershipStatus === "active" ? "/land-and-property" : "/join/memberplan"}>Land and Property Record by Last Name</a></li>
                                         <li><a href={membershipStatus === "active" ? "/land-and-property 1" : "/join/memberplan"}>Land and Property Records by Year</a></li>
                                         <li><a href={membershipStatus === "active" ? "	/marriages-by-church" : "/join/memberplan"}>Marriages by Church</a></li>
                                         <li><a href={membershipStatus === "active" ? "/marriage1" : "/join/memberplan"}>Marriage Index 1836 - 1858</a></li>
-                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.org/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20McElhiney%20Olson%20Index.pdf " : "/join/memberplan"} target="blank">McElhiney Olson Historical Newspaper Articles Index</a></li>
+                                        <li><a href={membershipStatus === "active" ? "https://uat.scchs.co.in/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20McElhiney%20Olson%20Index.pdf " : "/join/memberplan"} target="blank">McElhiney Olson Historical Newspaper Articles Index</a></li>
                                         <li><a href={membershipStatus === "active" ? "/naturalization-records" : "/member/memberlogin"}>Naturalization Records</a></li>
                                         <li><a href={membershipStatus === "active" ? "	/obituaries" : "/member/memberlogin"}>Obituaries</a></li>
-                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.org/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20Demokrat%20obits%201852-1894.pdf " : "/join/memberplan"} target="_blank">Obituaries from the Demokrat w/English translations (1852-1894)</a></li>
+                                        <li><a href={membershipStatus === "active" ? "https://uat.scchs.co.in/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20Demokrat%20obits%201852-1894.pdf " : "/join/memberplan"} target="_blank">Obituaries from the Demokrat w/English translations (1852-1894)</a></li>
                                         <li><a href={membershipStatus === "active" ? "/Probate Records" : "/member/memberlogin"}>Probate Records</a></li>
                                         <li><a href={membershipStatus === "active" ? "/Church-Baptisms	" : "/member/memberlogin"}>Selected Church Baptisms</a></li>
-                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.org/backend/admin/media/hisrical_record/St.%20Charles%20County%20Historical%20Society%20-%20Sibley%20Diary%201844-1855.pdf " : "/join/memberplan"} target="_blank">Sibley Diary 1844 - 1855</a></li>
-                                        {/* https://admin.scchs.org/backend/admin/media/Stillbirths.pdf */}
-                                        <li><a href={membershipStatus === "active" ? "https://admin.scchs.org/backend/admin/media/Stillbirths.pdf" : "/join/memberplan"} target="_blank">Stillbirths</a></li>
+                                        <li><a href={membershipStatus === "active" ? "https://uat.scchs.co.in/backend/admin/media/hisrical_record/St.%20Charles%20County%20Historical%20Society%20-%20Sibley%20Diary%201844-1855.pdf " : "/join/memberplan"} target="_blank">Sibley Diary 1844 - 1855</a></li>
+                                        {/* https://uat.scchs.co.in/backend/admin/media/Stillbirths.pdf */}
+                                        <li><a href={membershipStatus === "active" ? "https://uat.scchs.co.in/backend/admin/media/Stillbirths.pdf" : "/join/memberplan"} target="_blank">Stillbirths</a></li>
                                         <li>
                                             <a
                                                 href={
                                                     membershipStatus === "active"
-                                                        ? "https://admin.scchs.org/backend/admin/media/St.%20Charles%20County%20Historical%20Society%20-%20Subject_Topic%20Files.pdf"
+                                                        ? "https://uat.scchs.co.in/backend/admin/media/St.%20Charles%20County%20Historical%20Society%20-%20Subject_Topic%20Files.pdf"
                                                         : "/join/memberplan"
                                                 }
                                                 target="_blank"
@@ -219,7 +263,7 @@ export default function researchs(pageProp) {
                                     <p>
                                         2. The&nbsp;St. Charles County Circuit Court online index&nbsp;is the result of a-partnership between the Local
                                         Records Division of the Missouri State Archives, the St. Charles County' circuit clerk and the
-                                        SCCHS.&nbsp; See <a href="https://admin.scchs.org/backend/admin/media/scchs/Historical_Research_with_St._Charles_County_Circuit_Court_Records.pdf" target="_blank">Historical Research with St Charles County Circuit Court Records</a>&nbsp;for more
+                                        SCCHS.&nbsp; See <a href="https://uat.scchs.co.in/backend/admin/media/scchs/Historical_Research_with_St._Charles_County_Circuit_Court_Records.pdf" target="_blank">Historical Research with St Charles County Circuit Court Records</a>&nbsp;for more
                                         information.&nbsp;&nbsp;The index:
                                     </p>
 

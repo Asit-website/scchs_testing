@@ -47,7 +47,7 @@ export default function business(pageProp) {
     useEffect(() => {
         const fetchSearchResults = async () => {
             try {
-                const res = await fetch(`https://admin.scchs.org/api/search?query=${encodeURIComponent(query)}`);
+                const res = await fetch(`https://uat.scchs.co.in/api/search?query=${encodeURIComponent(query)}`);
                 const data = await res.json();
                 console.log(data)
                 setResults(data);
@@ -64,7 +64,7 @@ export default function business(pageProp) {
 
     const addToCartApi = async (id) => {
 
-        const resp = await fetch('https://admin.scchs.org/api/cart/add', {
+        const resp = await fetch('https://uat.scchs.co.in/api/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export default function business(pageProp) {
                                     {results.products.map((product) => (
                                         // <div key={product.id} className="p-4 border rounded">
                                         //     <img
-                                        //         src={`https://admin.scchs.org/storage/${product.images?.[0]}`}
+                                        //         src={`https://uat.scchs.co.in/storage/${product.images?.[0]}`}
                                         //         alt={product.product_name}
                                         //         className="w-full h-40 object-contain mb-2"
                                         //     />
@@ -122,8 +122,8 @@ export default function business(pageProp) {
                                                 // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
                                                 src={
                                                     product?.images && product.images[0]
-                                                        ? `https://admin.scchs.org//ecommerce/products/${product.images[0]}`
-                                                        : 'https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png'
+                                                        ? `https://uat.scchs.co.in//ecommerce/products/${product.images[0]}`
+                                                        : 'https://uat.scchs.co.in/backend/admin/media/Group 1171281838.png'
                                                 }
                                                 alt="Product"
                                             /></Link>
@@ -217,7 +217,7 @@ export default function business(pageProp) {
                                                 <span>{(event?.start_time)} - {(event?.end_time)}</span>
                                             </div>
                                             <img
-                                                src={`https://admin.scchs.org/backend/admin/images/event_management/events/${event?.images[0]}`}
+                                                src={`https://uat.scchs.co.in/backend/admin/images/event_management/events/${event?.images[0]}`}
                                                 alt="Event"
                                                 className="card-image"
                                             />

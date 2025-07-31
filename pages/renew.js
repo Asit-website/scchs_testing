@@ -52,8 +52,9 @@ export default function renew(pageProp) {
     useEffect(() => {
         const fetchPlans = async () => {
             try {
-                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser?.id}`);
+                const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser?.id}`);
                 const result = await res.json();
+                console.log(result);
                 setMembershipPlans(result?.data || []);
             } catch (err) {
                 console.error("Failed to fetch membership plans", err);
@@ -79,7 +80,7 @@ export default function renew(pageProp) {
                 payment_gateway: "paypal",
             };
 
-            const response = await fetch("https://admin.scchs.org/api/membership/renew", {
+            const response = await fetch("https://uat.scchs.co.in/api/membership/renew", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -196,21 +197,30 @@ export default function renew(pageProp) {
                                     <div className="membership-renew-card" key={plan.id}>
                                         <h3 className="membership-renew-name">{plan.plan?.name}</h3>
 
-                                        <p className="membership-renew-dates">
-                                            Expiration Date: {new Date(plan.end_date).toLocaleDateString("en-US", {
-                                                month: "long",
-                                                day: "numeric",
-                                                year: "numeric",
-                                            })}
-                                        </p>
+                                        {/* Check for lifetime membership */}
+                                        {plan.is_lifetime === 1 || plan.isLifetime === 1 || plan.lifetime === 1 || plan.plan?.is_lifetime === 1 || plan.plan?.isLifetime === 1 ? (
+                                            <p className="membership-renew-dates">
+                                                This plan is for lifetime
+                                            </p>
+                                        ) : (
+                                            <>
+                                                <p className="membership-renew-dates">
+                                                    Start Date: {new Date(plan.start_date).toLocaleDateString("en-US", {
+                                                        month: "long",
+                                                        day: "numeric",
+                                                        year: "numeric",
+                                                    })}
+                                                </p>
 
-                                        <p className="membership-renew-dates">
-                                            Grace end date: {new Date(plan.grace_end_date).toLocaleDateString("en-US", {
-                                                month: "long",
-                                                day: "numeric",
-                                                year: "numeric",
-                                            })}
-                                        </p>
+                                                <p className="membership-renew-dates">
+                                                    Expired Date: {new Date(plan.end_date).toLocaleDateString("en-US", {
+                                                        month: "long",
+                                                        day: "numeric",
+                                                        year: "numeric",
+                                                    })}
+                                                </p>
+                                            </>
+                                        )}
 
                                         {/* <p
                                         className="membership-renew-status"
@@ -231,37 +241,49 @@ export default function renew(pageProp) {
                                                 : 'Active'}
                                     </p> */}
                                         <div className="ren_dis">
-                                            <span
-                                                className={`status-badge ${now > graceEndDate
-                                                    ? 'expired'
-                                                    : now > endDate
-                                                        ? 'grace'
-                                                        : 'active'
-                                                    }`}
-                                            >
-                                                {now > graceEndDate
-                                                    ? 'Expired'
-                                                    : now > endDate
-                                                        ? 'Grace Period'
-                                                        : 'Active'}
-                                            </span>
+                                            {/* Check for lifetime membership and show appropriate status */}
+                                            {(() => {
+                                                const isLifetime = plan.is_lifetime === 1 || plan.isLifetime === 1 || plan.lifetime === 1 || plan.plan?.is_lifetime === 1 || plan.plan?.isLifetime === 1;
+                                                
+                                                if (isLifetime) {
+                                                    return (
+                                                        <span className="status-badge active">
+                                                            Active
+                                                        </span>
+                                                    );
+                                                } else {
+                                                    return (
+                                                        <span
+                                                            className={`status-badge ${now > graceEndDate
+                                                                ? 'expired'
+                                                                : now > endDate
+                                                                    ? 'grace'
+                                                                    : 'active'
+                                                                }`}
+                                                        >
+                                                            {now > graceEndDate
+                                                                ? 'Expired'
+                                                                : now > endDate
+                                                                    ? 'Grace Period'
+                                                                    : 'Active'}
+                                                        </span>
+                                                    );
+                                                }
+                                            })()}
 
-                                            {/*  <button
-                                            className="membership-renew-btn"
-                                            onClick={() => handleRenew(plan)}
-                                            disabled={!isRenewVisible}
-                                        >
-                                            {isRenewVisible ? 'Renew Now' : 'Renew Disabled'}
-                                        </button> */}
-                                            {now <= graceEndDate && (
-                                                <button
-                                                    className="membership-renew-btn"
-                                                    onClick={() => handleRenew(plan)}
-                                                    disabled={!isRenewVisible}
-                                                >
-                                                    {isRenewVisible ? 'Renew Now' : 'Renew Disabled'}
-                                                </button>
-                                            )}
+                                            {/* Hide renew button for lifetime plans */}
+                                            {(() => {
+                                                const isLifetime = plan.is_lifetime === 1 || plan.isLifetime === 1 || plan.lifetime === 1 || plan.plan?.is_lifetime === 1 || plan.plan?.isLifetime === 1;
+                                                return !isLifetime && now <= graceEndDate ? (
+                                                    <button
+                                                        className="membership-renew-btn"
+                                                        onClick={() => handleRenew(plan)}
+                                                        disabled={!isRenewVisible}
+                                                    >
+                                                        {isRenewVisible ? 'Renew Now' : 'Renew Disabled'}
+                                                    </button>
+                                                ) : null;
+                                            })()}
                                         </div>
                                     </div>
                                 );
@@ -276,7 +298,7 @@ export default function renew(pageProp) {
                                 </h3>
                                 <PayPalScriptProvider
                                     options={{
-                                        "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy",
+                                        "client-id": "Af_ZCWYSNIFxW40vhmNqszsLaxINVe56bgFxygzXbeg8czi1NFaSYQKgxmR4KQIufcCG_Pi_t_8amsyE",
                                         currency: "USD",
                                     }}
                                 >

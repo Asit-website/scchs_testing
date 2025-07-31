@@ -23,7 +23,7 @@ import { userInfo } from "os";
 
 const staticItems = [
   // { id: "Archives", title: "ARCHIVES", link: "/archieve" },
-  { id: "Photos", title: "PHOTOS", link: "/photos/mainhome" },
+  { id: "Photos", title: "PHOTOS", link: "/checkout" },
   { id: "surname", title: "SURNAME LOOKUP", link: "/surenamelook" },
   { id: "business", title: "OUR BUSINESS FRIENDS", link: "/business" },
   { id: "contact", title: "CONTACT US", link: "/contact-us" },
@@ -301,7 +301,7 @@ export default function Navbar(props) {
   const getCarts = async () => {
 
     try {
-      const response = await fetch("https://admin.scchs.org/api/cart", {
+      const response = await fetch("https://uat.scchs.co.in/api/cart", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -414,7 +414,7 @@ export default function Navbar(props) {
       setIsDropdownOpen(false);
       setIsDropdownOpen2(false);
       setIsDropdownOpen3(false);
-      setIsDropdownOpen4(false)
+      setIsDropdownOpen4(false);
       setIsDropdownOpen6(false);
       setIsDropdownOpen5((prev) => !prev);
     };
@@ -424,7 +424,7 @@ export default function Navbar(props) {
       setIsDropdownOpen2(false);
       setIsDropdownOpen3(false);
       setIsDropdownOpen4(false);
-      setIsDropdownOpen5(false)
+      setIsDropdownOpen5(false);
       setIsDropdownOpen6((prev) => !prev);
     };
 
@@ -558,7 +558,7 @@ export default function Navbar(props) {
 
       const fetchSubscription = async () => {
         try {
-          const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
+          const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
           const result = await res.json();
           console.log(result);
           const data = result.data;
@@ -607,7 +607,7 @@ export default function Navbar(props) {
     //     if (!instaUser?.id) return;
 
     //     try {
-    //       const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
+    //       const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
     //       const data = await res.json();
 
     //       console.log(data);
@@ -642,21 +642,30 @@ export default function Navbar(props) {
         if (!instaUser?.id) return;
 
         try {
-          const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
+          const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
           const data = await res.json();
 
           const today = new Date();
 
           // Filter all active (not expired) plans
           const activePlans = (data?.data || []).filter(plan => {
+            // Check for lifetime membership in various possible locations
+            const isLifetime = plan.is_lifetime === 1 || 
+                             plan.isLifetime === 1 || 
+                             plan.lifetime === 1 ||
+                             plan.plan?.is_lifetime === 1 ||
+                             plan.plan?.isLifetime === 1;
+            
+            // If it's a lifetime membership, always consider it active
+            if (isLifetime) {
+              return true;
+            }
+            
+            // For non-lifetime memberships, check the status and end date
             const isActive = plan.status === "active";
-            const endDate = new Date(plan.
-              grace_end_date
-            );
+            const endDate = new Date(plan.grace_end_date);
             return isActive && endDate >= today;
           });
-
-          console.log(activePlans);
 
           setMembershipStatus(activePlans.length > 0 ? "active" : "none");
 
@@ -672,6 +681,7 @@ export default function Navbar(props) {
           setAllowedSlot(totalAllowed);
 
         } catch (err) {
+          console.error("Error fetching membership:", err);
           setMembershipStatus("none");
           setUsedSlot(0);
           setAllowedSlot(0);
@@ -927,7 +937,7 @@ export default function Navbar(props) {
                 </div>
               ))} */}
 
-              {navbarItems
+              {navbarItems && navbarItems
                 .filter(item => !(instaUser && item?.parentItems?.title === "JOIN US"))
                 .map((item, index) => (
                   <div
@@ -977,9 +987,9 @@ export default function Navbar(props) {
                 }}>Logout</button> : }
               </li> */}
 
-              {!instaUser && <li className="test_sign"> <Link href="/user/userlogin"><button>SIGN IN</button></Link></li>}
+              {!instaUser && <li className="test_sign"> <Link href="/user/userlogin"><button>MEMBER LOGIN</button></Link></li>}
 
-              {instaUser && <li className="test_sign"><a href="/join/memberplan"><button>{membershipStatus === "active" ? "Purchase Another Membership" : "Purchase Membership"}</button></a></li>}
+              {instaUser &&  <li className="test_sign"><a href="/join/memberplan"><button>{membershipStatus === "active" ? "Purchase Another Membership" : "Purchase Membership"}</button></a></li>}
 
               <li>
                 <Link href={"/storeorder"}><div className="cart-container">
@@ -1043,7 +1053,7 @@ export default function Navbar(props) {
                       }}>Logout</a>}
                       {/* onClick={handleRenewClick} */}
                       {/* <a href="/join/memberplan">{membershipStatus === "active" && "Purchase another plan"}</a> */}
-                      {membershipStatus === "active" && <Link href={"/renew"}><p style={{ cursor: "pointer" }} >Membership History</p></Link>}
+                      {membershipStatus === "active" && <Link href={"/renew"}><p className="appoint" style={{ cursor: "pointer", marginBottom: "0px" }} >Membership History</p></Link>}
 
                       {membershipStatus === "active" && usedSlot < allowedSlot && (
                         <a href="/join/register1">Create Member</a>
@@ -1283,7 +1293,7 @@ export default function Navbar(props) {
             ))}
 
             {/* Dynamic Items */}
-            {navbarItems
+            {navbarItems && navbarItems
               .filter(item => !(instaUser && item?.parentItems?.title === "JOIN US"))
               .map((item) => (
                 <div key={item.parentId} className="mobile-navbar-item">
@@ -1363,10 +1373,10 @@ export default function Navbar(props) {
               }}>Logout</button> : 
             </li> */}
 
-            {!instaUser && <li className="test_sign"><a href="/user/userlogin"><button>SIGN IN</button></a></li>}
+            {!instaUser && <li className="test_sign"><a href="/user/userlogin"><button>MEMBER LOGIN</button></a></li>}
 
 
-            <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
+            <div style={{display:"flex",alignItems:"baseline",gap:"10px"}}>
             {instaUser && <div className="user-dropdown-wrapper">
               <div className="user-avatar" onClick={toggleDropdown112}>
                 <img src="https://res.cloudinary.com/dgif730br/image/upload/v1748089475/user_xegqs3.png" alt="User" />
@@ -1393,7 +1403,7 @@ export default function Navbar(props) {
                   {/* <li><a href="/join/memberplan">{membershipStatus === "active" && "Purchase another plan"}</a></li> */}
                   {membershipStatus === "active" && <li><a href="/renew" style={{ cursor: "pointer" }}>Membership History</a></li>}
                   {membershipStatus === "active" && usedSlot < allowedSlot && (
-                    <a href="/join/register1">Create Member</a>
+                    <a className="membernav" href="/join/register1">Create Member</a>
                   )}
                 </ul>
               )}
