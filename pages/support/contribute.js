@@ -139,6 +139,7 @@ export default function contribute(pageProp) {
             }).render(paypalRef.current);
         }
     }, [showPayPal, savedData]);
+    
 
     useEffect(() => {
         // Load PayPal SDK
