@@ -234,11 +234,13 @@ export default function userlogin(pageProp) {
 
                     <div className="scchs-login-card">
                         <p className="scchs-info-text">
-                            <span>Already a member? </span> Login here Or <br />
+                            <span>Already a member? </span> Login below   <br /> OR <br/>
                             <Link className="scchs-click-here" href="/join/register">
                             {/* sign up for free */}
-                            Register as Guest
-                            </Link>
+                            {/* Register as Guest */}
+                             Register Here  as  guest<br/>
+                            </Link> &nbsp;
+                            to complete your order, otherwise, please contact our office at    <a href="tel:+16369469828" className="num2">+1 (636) 946-9828</a>.
                         </p>
 
                         <h2 className="scchs-login-title">Sign in</h2>

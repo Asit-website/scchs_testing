@@ -32,7 +32,7 @@ export default function loginchange(pageProp) {
         setStatus('loading');
 
         try {
-            const res = await fetch('https://admin.scchs.org/api/forgot-password', {
+            const res = await fetch('https://uat.scchs.co.in/api/forgot-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export default function loginchange(pageProp) {
 
 
             <div className="scchs-login-wrapper scchs-dev-card">
-                <Link href="/user/userlogin"><button className="black_set">Back</button></Link>
+                <Link href="/user/userlogin"><button className="black_set"> ← Back</button></Link>
                 <div className="scchs-login-card scchs-reset-card">
                     <form onSubmit={handleSubmit}>
                         {/* <p className="scchs-info-text">

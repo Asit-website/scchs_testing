@@ -204,7 +204,7 @@ export default function events(pageProp) {
 
     const fetchCategory = async () => {
         try {
-            const resp = await fetch(`https://admin.scchs.org/api/get-event-category`, {
+            const resp = await fetch(`https://uat.scchs.co.in/api/get-event-category`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -223,7 +223,7 @@ export default function events(pageProp) {
 
     const fetchAllNews = async () => {
         try {
-            const resp = await fetch(`https://admin.scchs.org/api/get-event`, {
+            const resp = await fetch(`https://uat.scchs.co.in/api/get-event`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -337,9 +337,121 @@ export default function events(pageProp) {
         });
     };
 
+    // New moment-based functions
+    const getEventStatus = (eventDate) => {
+        const now = moment();
+        const eventMoment = moment(eventDate);
+        const diffDays = eventMoment.diff(now, 'days');
+        
+        if (diffDays < 0) {
+            return { status: 'past', text: 'Event has passed' };
+        } else if (diffDays === 0) {
+            return { status: 'today', text: 'Today!' };
+        } else if (diffDays === 1) {
+            return { status: 'tomorrow', text: 'Tomorrow' };
+        } else if (diffDays <= 7) {
+            return { status: 'this-week', text: `${diffDays} days away` };
+        } else {
+            return { status: 'upcoming', text: `${diffDays} days away` };
+        }
+    };
 
+    const getEventDuration = (startTime, endTime) => {
+        if (!startTime || !endTime) return '';
+        
+        const start = moment(startTime, 'HH:mm');
+        const end = moment(endTime, 'HH:mm');
+        
+        if (!start.isValid() || !end.isValid()) return '';
+        
+        const duration = moment.duration(end.diff(start));
+        const hours = Math.floor(duration.asHours());
+        const minutes = duration.minutes();
+        
+        if (hours > 0 && minutes > 0) {
+            return `${hours}h ${minutes}m`;
+        } else if (hours > 0) {
+            return `${hours}h`;
+        } else {
+            return `${minutes}m`;
+        }
+    };
 
+    const formatEventDate = (date) => {
+        const eventMoment = moment(date);
+        const now = moment();
+        
+        // If event is today
+        if (eventMoment.isSame(now, 'day')) {
+            return 'Today';
+        }
+        
+        // If event is tomorrow
+        if (eventMoment.isSame(now.clone().add(1, 'day'), 'day')) {
+            return 'Tomorrow';
+        }
+        
+        // If event is this week
+        if (eventMoment.isSame(now, 'week')) {
+            return eventMoment.format('dddd, MMMM DD');
+        }
+        
+        // If event is this year
+        if (eventMoment.isSame(now, 'year')) {
+            return eventMoment.format('MMMM DD');
+        }
+        
+        // Default format
+        return eventMoment.format('MMMM DD, YYYY');
+    };
 
+    const getRelativeTime = (date) => {
+        const eventMoment = moment(date);
+        const now = moment();
+        
+        if (eventMoment.isBefore(now)) {
+            return eventMoment.fromNow();
+        } else {
+            return eventMoment.fromNow();
+        }
+    };
+
+    // New function to check if event is upcoming using moment
+    const isEventUpcoming = (eventDate) => {
+        const now = moment();
+        const eventMoment = moment(eventDate);
+        return eventMoment.isSameOrAfter(now, 'day');
+    };
+
+    // New function to check if event is past using moment
+    const isEventPast = (eventDate) => {
+        const now = moment();
+        const eventMoment = moment(eventDate);
+        return eventMoment.isBefore(now, 'day');
+    };
+
+    // New function to check if event is within timeframe using moment
+    const isEventWithinTimeframe = (eventDate, timeframe) => {
+        const now = moment();
+        const eventMoment = moment(eventDate);
+        
+        switch (timeframe) {
+            case 'within1Month':
+                const oneMonthLater = now.clone().add(1, 'month');
+                return eventMoment.isBetween(now, oneMonthLater, 'day', '[]');
+            case 'within3Months':
+                const threeMonthsLater = now.clone().add(3, 'months');
+                return eventMoment.isBetween(now, threeMonthsLater, 'day', '[]');
+            case 'within6Months':
+                const sixMonthsLater = now.clone().add(6, 'months');
+                return eventMoment.isBetween(now, sixMonthsLater, 'day', '[]');
+            case 'within12Months':
+                const twelveMonthsLater = now.clone().add(12, 'months');
+                return eventMoment.isBetween(now, twelveMonthsLater, 'day', '[]');
+            default:
+                return true;
+        }
+    };
 
 
     return (
@@ -515,7 +627,7 @@ export default function events(pageProp) {
                                             <span>{formatTime(card?.start_time)} - {formatTime(card?.end_time)}</span>
                                         </div>
                                         <Link href={`/eventdetail?id=${card?.slug}`}>  <img
-                                            src={`https://admin.scchs.org/backend/admin/images/event_management/events/${card?.images[0]}`}
+                                            src={`https://uat.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
                                             alt="Event"
                                             className="card-image"
                                         /></Link>
@@ -537,42 +649,23 @@ export default function events(pageProp) {
                     ) : (
                         (() => {
                             const filtered = cards.filter(card => {
-                                const eventDate = new Date(card.date);
-                                const now = new Date();
-                                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                                const eventOnlyDate = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
-
-                                // ======= TIMEFRAME FILTER =======
-                                if (timeframe === 'past' && eventOnlyDate >= today) return false;
-                                if (timeframe === 'upcoming' && eventOnlyDate < today) return false;
-
-                                if (timeframe === 'within1Month') {
-                                    const oneMonthLater = new Date(today);
-                                    oneMonthLater.setMonth(today.getMonth() + 1);
-                                    if (eventOnlyDate < today || eventOnlyDate > oneMonthLater) return false;
-                                }
-
-                                if (timeframe === 'within3Months') {
-                                    const threeMonthsLater = new Date(today);
-                                    threeMonthsLater.setMonth(today.getMonth() + 3);
-                                    if (eventOnlyDate < today || eventOnlyDate > threeMonthsLater) return false;
-                                }
-
-                                if (timeframe === 'within6Months') {
-                                    const sixMonthsLater = new Date(today);
-                                    sixMonthsLater.setMonth(today.getMonth() + 6);
-                                    if (eventOnlyDate < today || eventOnlyDate > sixMonthsLater) return false;
-                                }
-
-                                if (timeframe === 'within12Months') {
-                                    const twelveMonthsLater = new Date(today);
-                                    twelveMonthsLater.setMonth(today.getMonth() + 12);
-                                    if (eventOnlyDate < today || eventOnlyDate > twelveMonthsLater) return false;
+                                // ======= TIMEFRAME FILTER USING MOMENT =======
+                                if (timeframe === 'past') {
+                                    if (!isEventPast(card.date)) return false;
+                                } else if (timeframe === 'upcoming') {
+                                    if (!isEventUpcoming(card.date)) return false;
+                                } else if (['within1Month', 'within3Months', 'within6Months', 'within12Months'].includes(timeframe)) {
+                                    if (!isEventWithinTimeframe(card.date, timeframe)) return false;
                                 }
 
                                 // ======= CATEGORY FILTER =======
-                                if (typeof selectedCategory === 'string' && selectedCategory !== 'all') {
-                                    if ((card.category_name || '').toLowerCase() !== selectedCategory.toLowerCase()) return false;
+                                if (selectedCategory && selectedCategory !== '') {
+                                    let ids = card.category_ids;
+                                    if (!ids) return false;
+                                    
+                                    // Ensure it's an array of numbers
+                                    const idNumbers = ids.map(id => parseInt(id));
+                                    if (!idNumbers.includes(selectedCategory)) return false;
                                 }
 
                                 // ======= SEARCH FILTER =======
@@ -588,8 +681,14 @@ export default function events(pageProp) {
                                 return true;
                             });
 
-                            // Sort filtered data by date ascending (soonest event first)
-                            const sorted = filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+                            // Sort filtered data by date ascending (soonest event first) using moment
+                            // const sorted = filtered.sort((a, b) => moment(a.date).diff(moment(b.date)));
+                            const sorted = filtered.sort((a, b) => {
+                                if (timeframe === 'past') {
+                                    return new Date(b.date) - new Date(a.date); 
+                                }
+                                return new Date(a.date) - new Date(b.date); 
+                            });
 
                             return (
                                 <>
@@ -600,33 +699,16 @@ export default function events(pageProp) {
                                             sorted.slice(0, visibleCount).map((card, index) => (
                                                 <div className="event-card" key={index}>
                                                     <div className="card-header">
-                                                        {/* <span>
-                                                            {new Intl.DateTimeFormat('en-US', {
-                                                                month: 'long',
-                                                                day: 'numeric',
-                                                                year: 'numeric',
-                                                            })
-                                                                .format(new Date(card.date))
-                                                                .replace(',', '')}
-                                                        </span> */}
-
                                                         <span>
-                                                            { moment(card.date).format('MMMM DD Y') }
+                                                             {moment(card.date).format('MMMM DD Y')}
                                                         </span>
-
-
-
-                                                        {/* <span>
-                                                            {card.date ? new Date(card.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).replace(',', '') : ''}
-                                                        </span> */}
-
                                                         <span>
-                                                            {card.start_time} - {card.end_time}
+                                                             {formatTime(card.start_time)} - {formatTime(card.end_time)}
                                                         </span>
                                                     </div>
                                                     <Link href={`/eventdetail/${card?.id}/${card?.slug}`}>
                                                         <img
-                                                            src={`https://admin.scchs.org/backend/admin/images/event_management/events/${card?.images[0]}`}
+                                                            src={`https://uat.scchs.co.in/backend/admin/images/event_management/events/${card?.images[0]}`}
                                                             alt="Event"
                                                             className="card-image"
                                                         />

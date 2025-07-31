@@ -106,7 +106,7 @@ export default function eventdetail(pageProp) {
         //     return;
         // }
         try {
-            const res = await fetch(`https://admin.scchs.org/api/events/${aboutnew.id}/orders`, {
+            const res = await fetch(`https://uat.scchs.co.in/api/events/${aboutnew.id}/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ export default function eventdetail(pageProp) {
     const fetchnewsbyycat = async (name) => {
         try {
 
-            const resp = await fetch(`https://admin.scchs.org/api/get-event-details/${id}`, {
+            const resp = await fetch(`https://uat.scchs.co.in/api/get-event-details/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -303,7 +303,7 @@ export default function eventdetail(pageProp) {
                         </div>
                     )} */}
 
-                    <PayPalScriptProvider options={{ clientId: 'AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy', currency: 'USD' }}>
+                    <PayPalScriptProvider options={{ clientId: 'Af_ZCWYSNIFxW40vhmNqszsLaxINVe56bgFxygzXbeg8czi1NFaSYQKgxmR4KQIufcCG_Pi_t_8amsyE', currency: 'USD' }}>
                         <div>
                             <button
                                 onClick={() => {
@@ -355,7 +355,7 @@ export default function eventdetail(pageProp) {
                                                         const details = await actions.order.capture();
                                                         console.log(details);
                                                         const captureId = details?.purchase_units?.[0]?.payments?.captures?.[0]?.id;
-                                                        await fetch(`https://admin.scchs.org/api/orders/${orderId}/confirm`, {
+                                                        await fetch(`https://uat.scchs.co.in/api/orders/${orderId}/confirm`, {
                                                             method: "POST",
                                                             headers: {
                                                                 "Content-Type": "application/json",
@@ -394,7 +394,7 @@ export default function eventdetail(pageProp) {
                                 <div className="event-info">
                                     <h1>{aboutnew?.title}</h1>
                                     {/* <h2>Saturday, March 29</h2> */}
-                                    <h2>{formatDateToLongLabel(aboutnew?.start_date)}</h2>
+                                    {/* <h2>{formatDateToLongLabel(aboutnew?.start_date)}</h2> */}
 
                                     <div className="timing-box">
                                         {/* <div className="item">

@@ -26,7 +26,7 @@ export default function memberlogin(pageProp) {
 
      const addToCartApi = async (id , access) => {
 
-        const resp = await fetch('https://admin.scchs.org/api/cart/add', {
+        const resp = await fetch('https://uat.scchs.co.in/api/cart/add', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export default function memberlogin(pageProp) {
     const submitLogin = async (e) => {
         e.preventDefault();
 
-        const url = `https://admin.scchs.org/api/login`;
+        const url = `https://uat.scchs.co.in/api/login`;
         const payload = {
             username: username,
             password: password

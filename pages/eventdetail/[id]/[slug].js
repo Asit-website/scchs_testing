@@ -76,18 +76,34 @@ export default function eventdetail(pageProp) {
             if (!instaUser?.id) return;
 
             try {
-                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
                 const data = await res.json();
+
+                console.log(data)
 
                 const today = new Date();
 
-                const activePlan = data?.data?.find(plan => {
+                // Filter all active (not expired) plans
+                const activePlans = (data?.data || []).filter(plan => {
+                    // Check for lifetime membership in various possible locations
+                    const isLifetime = plan.is_lifetime === 1 || 
+                                     plan.isLifetime === 1 || 
+                                     plan.lifetime === 1 ||
+                                     plan.plan?.is_lifetime === 1 ||
+                                     plan.plan?.isLifetime === 1;
+                    
+                    // If it's a lifetime membership, always consider it active
+                    if (isLifetime) {
+                        return true;
+                    }
+                    
+                    // For non-lifetime memberships, check the status and end date
                     const isActive = plan.status === "active";
                     const endDate = new Date(plan.grace_end_date);
                     return isActive && endDate >= today;
                 });
 
-                setMembershipStatus(activePlan ? "active" : "none");
+                setMembershipStatus(activePlans.length > 0 ? "active" : "none");
             } catch (err) {
                 console.error("Error fetching membership:", err);
                 setMembershipStatus("none");
@@ -125,31 +141,86 @@ export default function eventdetail(pageProp) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Check if there are available tickets
+        if (!aboutnew?.number_of_tickets || aboutnew.number_of_tickets <= 0) {
+            toast.error('No tickets available');
+            return;
+        }
+        
+        // Check if requested quantity is available
+        if (Number(qty) > aboutnew.number_of_tickets) {
+            toast.error(`Only ${aboutnew.number_of_tickets} tickets available`);
+            return;
+        }
+        
         try {
-            const res = await fetch(`https://admin.scchs.org/api/events/${aboutnew.id}/orders`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-                },
-                body: JSON.stringify({ qty: Number(qty) }),
-            });
+            // Check if the ticket price is free based on membership status
+            const isFree = membershipStatus === "active" 
+                ? (aboutnew?.member_price === 0 || aboutnew?.member_price === 0.00 || aboutnew?.member_price === "0.00")
+                : (aboutnew?.user_price === 0 || aboutnew?.user_price === 0.00 || aboutnew?.user_price === "0.00");
 
-            if (!res.ok) throw new Error('Order API failed');
+            if (isFree) {
+                // If free, call the free API endpoint directly
+                const freeRes = await fetch(`https://uat.scchs.co.in/api/events/${aboutnew.id}/orders/free`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                    },
+                    body: JSON.stringify({ qty: Number(qty) }),
+                });
 
-            const data = await res.json();
+                if (!freeRes.ok) {
+                    const errorData = await freeRes.json();
+                    if (errorData.message && errorData.message.includes('ticket')) {
+                        toast.error('No tickets available');
+                    } else {
+                        throw new Error('Free Order API failed');
+                    }
+                    return;
+                }
 
-            console.log(data)
+                const freeData = await freeRes.json();
+                console.log('Free order data:', freeData);
 
-            // Use API amount for PayPal
-            setOrderAmount(data.amount);
-            setOrderId(data.order_id); // optional
-            setShowPayPal(true); // now show PayPal button
+                // Show success message and redirect using ONLY free API data
+                toast.success("Free tickets purchased successfully!");
+                closeModal();
+                router.push(`/eventpayment?orderId=${freeData.order_id}`);
+            } else {
+                // If not free, call the regular order API for PayPal payment
+                const orderRes = await fetch(`https://uat.scchs.co.in/api/events/${aboutnew.id}/orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                    },
+                    body: JSON.stringify({ qty: Number(qty) }),
+                });
+
+                if (!orderRes.ok) {
+                    const errorData = await orderRes.json();
+                    if (errorData.message && errorData.message.includes('ticket')) {
+                        toast.error('No tickets available');
+                    } else {
+                        throw new Error('Order API failed');
+                    }
+                    return;
+                }
+
+                const orderData = await orderRes.json();
+                console.log(orderData);
+
+                // Proceed with PayPal payment
+                setOrderAmount(orderData.amount);
+                setOrderId(orderData.order_id);
+                setShowPayPal(true);
+            }
         } catch (err) {
             console.error(err);
             toast.error('Failed to place order');
         }
-
     };
     console.log(orderId);
     // useEffect(() => {
@@ -181,7 +252,7 @@ export default function eventdetail(pageProp) {
     const fetchnewsbyycat = async (name) => {
         try {
 
-            const resp = await fetch(`https://admin.scchs.org/api/get-event-details/${id}/${slug}`, {
+            const resp = await fetch(`https://uat.scchs.co.in/api/get-event-details/${id}/${slug}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -383,7 +454,7 @@ export default function eventdetail(pageProp) {
                         <div>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "20px", marginBottom: "30px" }}>
                                 <button onClick={() => {
-                                    instaUser ? setShowModal1(true) : router.push("/user/userlogin")
+                                    instaUser ? setShowModal1(true) : router.push("/user/userlogin1")
 
                                 }} className="ticket-btn">Purchase Tickets</button>
                                 <Link href="/event" style={{ textDecoration: "none" }}>
@@ -395,19 +466,25 @@ export default function eventdetail(pageProp) {
                                     <div className="modal-box" onClick={(e) => e.stopPropagation()}>
                                         <h2>Buy Tickets</h2>
 
-                                        <p>Avilable Tickets: <span>{aboutnew?.number_of_tickets}</span></p>
+                                        <p>Available Tickets: <span>{aboutnew?.number_of_tickets}</span></p>
 
                                         {!showPayPal ? (
-                                            <form onSubmit={handleSubmit}>
-                                                <input
-                                                    type="number"
-                                                    placeholder="Enter Quantity"
-                                                    required
-                                                    value={qty}
-                                                    onChange={(e) => setQty(e.target.value)}
-                                                />
-                                                <button type="submit" className="modal-submit">Proceed</button>
-                                            </form>
+                                            aboutnew?.number_of_tickets > 0 ? (
+                                                <form onSubmit={handleSubmit}>
+                                                    <input
+                                                        type="number"
+                                                        placeholder="Enter Quantity"
+                                                        required
+                                                        value={qty}
+                                                        onChange={(e) => setQty(e.target.value)}
+                                                    />
+                                                    <button type="submit" className="modal-submit">Proceed</button>
+                                                </form>
+                                            ) : (
+                                                <div style={{ textAlign: 'center', padding: '20px' }}>
+                                                    <p style={{ color: '#AB0535', fontWeight: 'bold' }}>No tickets available</p>
+                                                </div>
+                                            )
                                         ) : (
                                             <div className="paypal-box">
                                                 <h3>Pay ${orderAmount}</h3>
@@ -426,7 +503,7 @@ export default function eventdetail(pageProp) {
                                                         const details = await actions.order.capture();
                                                         console.log(details);
                                                         const captureId = details?.purchase_units?.[0]?.payments?.captures?.[0]?.id;
-                                                        await fetch(`https://admin.scchs.org/api/orders/${orderId}/confirm`, {
+                                                        await fetch(`https://uat.scchs.co.in/api/orders/${orderId}/confirm`, {
                                                             method: "POST",
                                                             headers: {
                                                                 "Content-Type": "application/json",
@@ -474,23 +551,23 @@ export default function eventdetail(pageProp) {
                                     {/* <h2>
                                         {aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).replace(',', '') : ''}
                                     </h2> */}
-                                    <h2>
+                                    {/* <h2>
                                         {aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd, MMMM DD') : ''}
-                                    </h2>
+                                    </h2> */}
 
                                     <div className="timing-box">
-                                        <div className="item">
+                                        {/* <div className="item">
                                             <h4>Doors open at</h4>
-                                            {/* <p>Sat, March 29, 6:00 PM</p> */}
-                                            {/* <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time}</p> */}
+                                            <p>Sat, March 29, 6:00 PM</p>
+                                            <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time}</p>
                                             <p>{aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd MMMM DD') : ''}, {aboutnew?.start_time}</p>
-                                        </div>
-                                        <div className="item">
+                                        </div> */}
+                                        {/* <div className="item">
                                             <h4>Event Starts</h4>
-                                            {/* <p>Sat, March 29, At 7:00 PM</p> */}
-                                            {/* <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time} - , {aboutnew?.end_time}</p> */}
+                                            <p>Sat, March 29, At 7:00 PM</p>
+                                            <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time} - , {aboutnew?.end_time}</p>
                                             <p>{aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd MMMM DD') : ''}, {aboutnew?.start_time} -  {aboutnew?.end_time}</p>
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                     <div className="event-details">
@@ -539,7 +616,7 @@ export default function eventdetail(pageProp) {
                                         </div>
 
 
-                                        <Link style={{ textDecoration: "none" }} href={`${membershipStatus !== "active" && "/join/register1"}`}>  <div className="detail-row popover-container">
+                                        <Link style={{ textDecoration: "none" }} href={`${membershipStatus !== "active" && "/join/registe1"}`}>  <div className="detail-row popover-container">
                                             <span className="icon">
                                                 <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
                                                     <rect width="48" height="48" rx="4" fill="white" />
@@ -548,8 +625,8 @@ export default function eventdetail(pageProp) {
                                             </span>
 
                                             <div className="text">
-                                                <span>Ticket Price</span><br />
-                                                <p>${aboutnew?.user_price}</p>
+                                                <span>Ticket Price(User/Non&nbsp;member)</span><br />
+                                                <p>{aboutnew?.user_price === 0 || aboutnew?.user_price === "0.00" || aboutnew?.user_price === 0.00 ? "Free" : `$${aboutnew?.user_price}`}</p>
                                             </div>
 
                                             {/* Only show tooltip if member is NOT active */}
@@ -570,7 +647,7 @@ export default function eventdetail(pageProp) {
                                             <div className="text">
                                                 <span>Membership Ticket Price</span><br />
                                                 {/* <p> St. Peter Catholic Church Parish Center, 3rd & 1st Capital Drive, St. Charles, MO 63301</p> */}
-                                                <p>${aboutnew?.member_price}</p>
+                                                <p>{aboutnew?.member_price === 0 || aboutnew?.member_price === "0.00" || aboutnew?.member_price === 0.00 ? "Free" : `$${aboutnew?.member_price}`}</p>
                                             </div>
 
                                         </div>
@@ -635,12 +712,9 @@ export default function eventdetail(pageProp) {
                                     <p style={{visibility:"hidden"}} className="presented-by">
                                         Presented by the Saint Charles County Historical Society
                                     </p>
+                                       
 
-
-                                </div>
-
-                            </div>
-                            <div className="event-about">
+                                    <div className="event-about">
                                 <h4>About this event</h4>
                                 {/* <ul>
                                     <li>1) <b>$200</b> per table of 8 or <b>$25</b> per person</li>
@@ -652,9 +726,20 @@ export default function eventdetail(pageProp) {
                                 </ul> */}
                                 <div className="makepoppinsfont" dangerouslySetInnerHTML={{ __html: aboutnew?.description }} />
                             </div>
+
+                                </div>
+
+                                
+
+                            </div>
+                            {/* <div className="event-about">
+                                <h4>About this event</h4>
+                               
+                                <div className="makepoppinsfont" dangerouslySetInnerHTML={{ __html: aboutnew?.description }} />
+                            </div>
                             <div className="event_payment">
                                 <h3>Payment can be made by check or phone with a credit card. Make checks payable to SCCHS</h3>
-                            </div>
+                            </div> */}
 
                         </div>
                     </div>
@@ -666,7 +751,7 @@ export default function eventdetail(pageProp) {
                         </div>
                         <div className="payment_right">
                             <button onClick={() => {
-                                instaUser ? setShowModal1(true) : router.push("/user/userlogin")
+                                instaUser ? setShowModal1(true) : router.push("/user/userlogin1")
 
                             }}>Purchase Tickets</button>
                         </div>

@@ -23,14 +23,16 @@ export default function business(pageProp) {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [timeframe, setTimeframe] = useState("all");
-
-
-
+    const [perPage, setPerPage] = useState(10); // default 10
+    const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState("");
+    const [notFound, setNotFound] = useState(false);
+    const [results, setResults] = useState([]);
 
     useEffect(() => {
         const fetchBusinesses = async () => {
             try {
-                const res = await fetch("https://admin.scchs.org/api/businesses");
+                const res = await fetch("https://uat.scchs.co.in/api/businesses");
                 const data = await res.json();
                 setBusinesses(data);
             } catch (error) {
@@ -41,11 +43,11 @@ export default function business(pageProp) {
         fetchBusinesses();
     }, []);
 
-    // ✅ Get Categories
+  
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch("https://admin.scchs.org/api/business-categories");
+                const res = await fetch("https://uat.scchs.co.in/api/business-categories");
                 const data = await res.json();
                 setCategories(data);
             } catch (error) {
@@ -68,33 +70,46 @@ export default function business(pageProp) {
     //     ? businesses.filter((biz) => biz.category_id == selectedCategory)
     //     : businesses;
 
-    const [perPage, setPerPage] = useState(10); // default 10
-    const [currentPage, setCurrentPage] = useState(1);
-    const [search, setSearch] = useState("");
-
     // Calculate page-wise data
-    const filtered = businesses.filter((biz) => {
-        if (!search) return true;
-        const lower = search.toLowerCase();
-        return (
-            (biz.title && biz.title.toLowerCase().includes(lower)) ||
-            (biz.description && biz.description.toLowerCase().includes(lower))
-        );
-    });
+    const displayData = results.length > 0 ? results : businesses;
+    
     const startIndex = (currentPage - 1) * perPage;
     const endIndex = startIndex + perPage;
-    const paginatedBusinesses = filtered.slice(startIndex, endIndex);
+    const paginatedBusinesses = displayData.slice(startIndex, endIndex);
 
     // Total listings count
-    const totalListings = filtered.length;
+    const totalListings = displayData.length;
     const totalPages = Math.ceil(totalListings / perPage);
-
-
-  
-       
+    
+    const handleSearch = () => {
+        if (!search.trim()) {
+            // If search is empty, show all businesses
+            setResults(businesses);
+            setNotFound(false);
+            return;
+        }
+        
+        const filtered = businesses.filter((item) =>
+            (item.title && item.title.toLowerCase().includes(search.toLowerCase())) ||
+            (item.description && item.description.toLowerCase().includes(search.toLowerCase())) ||
+            (item.category?.name && item.category.name.toLowerCase().includes(search.toLowerCase()))
+        );
+    
+        if (filtered.length > 0) {
+            setResults(filtered); 
+            setNotFound(false);
+        } else {
+            setResults([]);
+            setNotFound(true);
+        }
+    };
+   
+    
 
         const handleClear = () => {
             setSearch("");
+            setResults([]);
+            setNotFound(false);
         }
 
 
@@ -130,6 +145,9 @@ export default function business(pageProp) {
                                 onChange={(e) => {
                                     setSearch(e.target.value);
                                 }}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") handleSearch();
+                                  }}
                                 style={{
                                     padding: "8px",
                                     width: "100%",
@@ -157,6 +175,7 @@ export default function business(pageProp) {
 
                             <button
                                 type="submit"
+                                onClick={handleSearch}
                                 className="searchiconn bg-[#aa0033] px-4 flex items-center justify-center"
                                 style={{ borderRadius: "4px", color: "white" }}
                             >
@@ -171,7 +190,16 @@ export default function business(pageProp) {
 
 
                         <div className="flying1-container">
-                            {
+                            {notFound && search.trim() ? (
+                                <div style={{ 
+                                    textAlign: "center", 
+                                    padding: "40px", 
+                                    color: "#666",
+                                    fontSize: "18px"
+                                }}>
+                                    No businesses found matching "{search}". Please try a different search term.
+                                </div>
+                            ) : (
                                 paginatedBusinesses?.map((item, index) => {
                                     return <div key={index} className="flying1-box">
 
@@ -194,7 +222,7 @@ export default function business(pageProp) {
 
                                     </div>
                                 })
-                            }
+                            )}
 
                         </div>
 

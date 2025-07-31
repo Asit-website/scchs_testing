@@ -40,7 +40,7 @@ export default function Cart(props) {
   const getCarts = async () => {
 
     try {
-      const response = await fetch("https://admin.scchs.org/api/cart", {
+      const response = await fetch("https://uat.scchs.co.in/api/cart", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export default function Cart(props) {
 
   const removeCarts = async (id, qty) => {
     try {
-      const response = await fetch("https://admin.scchs.org/api/cart/remove", {
+      const response = await fetch("https://uat.scchs.co.in/api/cart/remove", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export default function Cart(props) {
   if (!result.isConfirmed) return;
 
   try {
-    const response = await fetch("https://admin.scchs.org/api/cart/clear", {
+    const response = await fetch("https://uat.scchs.co.in/api/cart/clear", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export default function Cart(props) {
 
 const clearCarts1 = async () => {
     try {
-      const response = await fetch("https://admin.scchs.org/api/cart/clear", {
+      const response = await fetch("https://uat.scchs.co.in/api/cart/clear", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -143,7 +143,7 @@ const clearCarts1 = async () => {
   const getAddress = async () => {
 
     try {
-      const response = await fetch("https://admin.scchs.org/api/listalladdress", {
+      const response = await fetch("https://uat.scchs.co.in/api/listalladdress", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -164,7 +164,7 @@ const clearCarts1 = async () => {
   const fetchOrders = async () => {
     try {
 
-      const resp = await fetch("https://admin.scchs.org/api/orders", {
+      const resp = await fetch("https://uat.scchs.co.in/api/orders", {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -234,7 +234,7 @@ const clearCarts1 = async () => {
 
   const paymentHandler = async () => {
 
-    const response = await fetch("https://admin.scchs.org/api/order/create",
+    const response = await fetch("https://uat.scchs.co.in/api/order/create",
       {
         method: "POST",
         headers: {
@@ -283,7 +283,7 @@ const clearCarts1 = async () => {
       //     clearCarts();
       //   }
 
-      const resp = await fetch("https://admin.scchs.org/api/ecommerce/transactions",{
+      const resp = await fetch("https://uat.scchs.co.in/api/ecommerce/transactions",{
         method:"POST",
         headers: {
           "content-type": "application/json",

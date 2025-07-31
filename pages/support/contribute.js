@@ -108,13 +108,13 @@ export default function contribute(pageProp) {
                     const payload = {
                         ...savedData,
                         transaction_id: details.id,
-                        payment_status: details.status.toLowerCase(),
+                        payment_type: details.status.toLowerCase(),
                         payment_method: "paypal",
                         payload: JSON.stringify(details),
                     };
 
                     try {
-                        const res = await fetch("https://admin.scchs.org/api/donations", {
+                        const res = await fetch("https://uat.scchs.co.in/api/donations", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -143,7 +143,7 @@ export default function contribute(pageProp) {
     useEffect(() => {
         // Load PayPal SDK
         const script = document.createElement("script");
-        script.src = `https://www.paypal.com/sdk/js?client-id=AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy&currency=USD`;
+        script.src = `https://www.paypal.com/sdk/js?client-id=Af_ZCWYSNIFxW40vhmNqszsLaxINVe56bgFxygzXbeg8czi1NFaSYQKgxmR4KQIufcCG_Pi_t_8amsyE&currency=USD`;
         script.addEventListener("load", () => {
             if (showPayPal) {
                 window.paypal?.Buttons().render(paypalRef.current);

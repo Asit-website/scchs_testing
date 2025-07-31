@@ -27,7 +27,7 @@ const UserProfile = () => {
   const fetchUserProfile = async () => {
     try {
       const token = localStorage.getItem("scchs_Access");
-      const response = await fetch("https://admin.scchs.org/api/user-profile", {
+      const response = await fetch("https://uat.scchs.co.in/api/user-profile", {
         method: "GET",
         headers: {
           headers: { "Content-Type": "application/json" },
@@ -94,7 +94,7 @@ const UserProfile = () => {
 
     try {
       const token = localStorage.getItem("scchs_Access");
-      const res = await fetch("https://admin.scchs.org/api/profile-update", {
+      const res = await fetch("https://uat.scchs.co.in/api/profile-update", {
         method: "POST",
         headers: {
           headers: { "Content-Type": "application/json" },

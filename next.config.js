@@ -2,14 +2,14 @@
 const nextConfig = {
   env: {
     NEXTAUTH_SECRET:"Instacertify",
-    NEXTAUTH_URL:"https://scchs.co.in/",
+    NEXTAUTH_URL:"https://scchs-testing.vercel.app/",
     next:{
-      api_url:"https://scchs.co.in/api/v1/"
+      api_url:"https://scchs-testing.vercel.app/api/v1/"
     },
     // "proxy": "https://admin.instacertify.com",
     server : {
-		path:"https://admin.scchs.org/",
-   		api:"https://admin.scchs.org/api/",
+		path:"https://uat.scchs.co.in/",
+   		api:"https://uat.scchs.co.in/api/",
       	jwt_secret:"UOUkeFnqauTf3qw0Hy6pv1JQq572l82gRBgnNbemPEjV2bTG2Bg0A3avm1svL9gs"
     }
   },
@@ -21,7 +21,7 @@ const nextConfig = {
     ignoreDuringBuilds: true
   },
   images: {
-    domains: ['admin.scchs.org','cdn11.bigcommerce.com'],
+    domains: ['uat.scchs.co.in','cdn11.bigcommerce.com'],
   }
 }
 

@@ -58,7 +58,7 @@ export default function store(pageProp) {
     const [totalCount, setTotalCount] = useState(0);
     // const fetchProduct = async () => {
     //     try {
-    //         const resp = await fetch(`https://admin.scchs.org/api/products?limit=${limit}&offset=0&all=1`, {
+    //         const resp = await fetch(`https://uat.scchs.co.in/api/products?limit=${limit}&offset=0&all=1`, {
     //             method: 'GET',
     //             headers: {
     //                 'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default function store(pageProp) {
     // };
     const fetchProduct = async (customLimit = limit) => {
         try {
-            const resp = await fetch(`https://admin.scchs.org/api/products?limit=${customLimit}&offset=0&all=1`, {
+            const resp = await fetch(`https://uat.scchs.co.in/api/products?limit=${customLimit}&offset=0&all=1`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -101,7 +101,7 @@ export default function store(pageProp) {
     const fetchCategory = async () => {
         try {
 
-            const resp = await fetch("https://admin.scchs.org/api/categories", {
+            const resp = await fetch("https://uat.scchs.co.in/api/categories", {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export default function store(pageProp) {
     //     if (!selectedSlug) return;
     //     setHasSearched(true);
     //     try {
-    //         const res = await fetch(`https://admin.scchs.org/api/products/category/${selectedSlug}?&offset=0`);
+    //         const res = await fetch(`https://uat.scchs.co.in/api/products/category/${selectedSlug}?&offset=0`);
     //         const data = await res.json();
     //         console.log(data);
     //         setAllProduct(data?.products || []);
@@ -147,7 +147,7 @@ export default function store(pageProp) {
     // const fetchProductByCat = () => {
     //     if (!selectedSlug) return;
 
-    //     fetch(`https://admin.scchs.org/api/products/category/${selectedSlug}?limit=${limit}&offset=0`)
+    //     fetch(`https://uat.scchs.co.in/api/products/category/${selectedSlug}?limit=${limit}&offset=0`)
     //         .then((res) => res.json())
     //         .then((data) => {
     //             setAllProduct(data?.products || []);
@@ -160,10 +160,10 @@ export default function store(pageProp) {
 
         if (!selectedSlug) {
             // fetch all products
-            url = `https://admin.scchs.org/api/products?limit=${limit}&offset=0&all=1`;
+            url = `https://uat.scchs.co.in/api/products?limit=${limit}&offset=0&all=1`;
         } else {
             // fetch by category slug
-            url = `https://admin.scchs.org/api/products/category/${selectedSlug}?limit=${limit}&offset=0`;
+            url = `https://uat.scchs.co.in/api/products/category/${selectedSlug}?limit=${limit}&offset=0`;
         }
 
         fetch(url)
@@ -185,7 +185,7 @@ export default function store(pageProp) {
 
     const addToCartApi = async (id) => {
 
-        const resp = await fetch('https://admin.scchs.org/api/cart/add', {
+        const resp = await fetch('https://uat.scchs.co.in/api/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -287,7 +287,7 @@ export default function store(pageProp) {
 
                                             // Only fetch if user already searched once
                                             if (hasSearched && selectedSlug) {
-                                                fetch(`https://admin.scchs.org/api/products/category/${selectedSlug}?limit=${newLimit}&offset=0`)
+                                                fetch(`https://uat.scchs.co.in/api/products/category/${selectedSlug}?limit=${newLimit}&offset=0`)
                                                     .then((res) => res.json())
                                                     .then((data) => {
                                                         setAllProduct(data?.products || []);
@@ -309,7 +309,7 @@ export default function store(pageProp) {
                                             if (selectedSlug) {
                                                 // If a category is selected, fetch filtered products
                                                 try {
-                                                    const resp = await fetch(`https://admin.scchs.org/api/products/category/${selectedSlug}?limit=${newLimit}&offset=0`, {
+                                                    const resp = await fetch(`https://uat.scchs.co.in/api/products/category/${selectedSlug}?limit=${newLimit}&offset=0`, {
                                                         method: 'GET',
                                                         headers: {
                                                             'Content-Type': 'application/json',
@@ -361,10 +361,10 @@ export default function store(pageProp) {
                                         className="custom-card-image"
                                         // https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png
                                         // src={product?.image}
-                                        src={product?.image?.trim() || "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png"}
+                                        src={product?.image?.trim() || "https://uat.scchs.co.in/backend/admin/media/Group 1171281838.png"}
                                         onError={(e) => {
                                             e.target.onerror = null;
-                                            e.target.src = "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png";
+                                            e.target.src = "https://uat.scchs.co.in/backend/admin/media/Group 1171281838.png";
                                         }}
                                         alt="Product"
                                     />

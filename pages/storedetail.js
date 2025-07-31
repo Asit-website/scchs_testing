@@ -56,23 +56,65 @@ export default function storedetail(pageProp) {
         }
     }, []);
 
+    // useEffect(() => {
+    //     const fetchMembership = async () => {
+    //         if (!instaUser?.id) return;
+
+    //         try {
+    //             const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
+    //             const data = await res.json();
+
+    //             const today = new Date();
+
+    //             const activePlan = data?.data?.find(plan => {
+    //                 const isActive = plan.status === "active";
+    //                 const endDate = new Date(plan.grace_end_date);
+    //                 return isActive && endDate >= today;
+    //             });
+
+    //             setMembershipStatus(activePlan ? "active" : "none");
+    //         } catch (err) {
+    //             console.error("Error fetching membership:", err);
+    //             setMembershipStatus("none");
+    //         }
+    //     };
+
+    //     fetchMembership();
+    // }, [instaUser]);
+
     useEffect(() => {
         const fetchMembership = async () => {
             if (!instaUser?.id) return;
 
             try {
-                const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser.id}`);
+                const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
                 const data = await res.json();
+
+                console.log(data)
 
                 const today = new Date();
 
-                const activePlan = data?.data?.find(plan => {
+                // Filter all active (not expired) plans
+                const activePlans = (data?.data || []).filter(plan => {
+                    // Check for lifetime membership in various possible locations
+                    const isLifetime = plan.is_lifetime === 1 || 
+                                     plan.isLifetime === 1 || 
+                                     plan.lifetime === 1 ||
+                                     plan.plan?.is_lifetime === 1 ||
+                                     plan.plan?.isLifetime === 1;
+                    
+                    // If it's a lifetime membership, always consider it active
+                    if (isLifetime) {
+                        return true;
+                    }
+                    
+                    // For non-lifetime memberships, check the status and end date
                     const isActive = plan.status === "active";
                     const endDate = new Date(plan.grace_end_date);
                     return isActive && endDate >= today;
                 });
 
-                setMembershipStatus(activePlan ? "active" : "none");
+                setMembershipStatus(activePlans.length > 0 ? "active" : "none");
             } catch (err) {
                 console.error("Error fetching membership:", err);
                 setMembershipStatus("none");
@@ -81,13 +123,13 @@ export default function storedetail(pageProp) {
 
         fetchMembership();
     }, [instaUser]);
-
+    
     const [productdetail, setProductDetails] = useState({});
 
     const fetchProductDetails = async () => {
         try {
 
-            const resp = await fetch(`https://admin.scchs.org/api/products/${id}`, {
+            const resp = await fetch(`https://uat.scchs.co.in/api/products/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +165,7 @@ export default function storedetail(pageProp) {
 
     const addToCartApi = async (id) => {
 
-        const resp = await fetch('https://admin.scchs.org/api/cart/add', {
+        const resp = await fetch('https://uat.scchs.co.in/api/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -174,7 +216,7 @@ export default function storedetail(pageProp) {
             <div className="event_system_main">
                 <div className="event_main">
                     <Link href={{ pathname: "/store", query: category ? { category } : {} }} style={{ textDecoration: "none", }}>
-                        <button className="store_det_back">Back</button>
+                        <button className="store_det_back"> ← Back</button>
                     </Link>
 
 
@@ -204,10 +246,10 @@ export default function storedetail(pageProp) {
                                     </Swiper>
                                     : <img
                                         className="product-detail-image"
-                                        src={productdetail?.images || "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png"}
+                                        src={productdetail?.images || "https://uat.scchs.co.in/backend/admin/media/Group 1171281838.png"}
                                         onError={(e) => {
                                             e.target.onerror = null;
-                                            e.target.src = "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png";
+                                            e.target.src = "https://uat.scchs.co.in/backend/admin/media/Group 1171281838.png";
                                         }}
                                         // src={productdetail?.images ? productdetail?.images : "https://res.cloudinary.com/dgif730br/image/upload/v1745405452/image_1_ip1mnv.png"}
                                         alt="Print"
@@ -232,7 +274,7 @@ export default function storedetail(pageProp) {
                                         <p className="price-text">
                                             <span>Sale price :</span> ${productdetail?.price}
                                             {membershipStatus !== "active" && (
-                                                <Link href={"/join/register1"}> <span className="tooltip">Become a member now</span></Link>
+                                                <Link href={"/join/register"}> <span className="tooltip">Become a member now</span></Link>
                                             )}
                                         </p>
                                     </div>

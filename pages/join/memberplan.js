@@ -66,7 +66,7 @@ export default function memberplan(pageProp) {
   const fetchPlan = async () => {
     try {
 
-      const resp = await fetch("https://admin.scchs.org/api/get/subscription/plan", {
+      const resp = await fetch("https://uat.scchs.co.in/api/get/subscription/plan", {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export default function memberplan(pageProp) {
 
   // const handlePurchaseSuccess = async (details) => {
   //   try {
-  //     const response = await fetch("https://admin.scchs.org/api/membership/purchase", {
+  //     const response = await fetch("https://uat.scchs.co.in/api/membership/purchase", {
   //       method: "POST",
   //       headers: { "Content-Type": "application/json" },
   //       //  "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`,
@@ -145,27 +145,55 @@ export default function memberplan(pageProp) {
 
 
   useEffect(() => {
+    // const checkMembership = async () => {
+    //   try {
+    //     const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser?.id}`);
+    //     const data = await res.json();
+
+    //     const today = new Date();
+
+    //     const alreadyPurchased = data?.data?.some(plan => {
+    //       const isSamePlan = plan.membership_plan_id === selectedPlan.id;
+    //       const isActive = plan.status === "active";
+    //       const endDate = new Date(plan.end_date); // assuming `end_date` is in ISO format
+    //       const stillValid = endDate >= today;
+
+    //       return isSamePlan && isActive && stillValid;
+    //     });
+
+    //     setHasSameActivePlan(alreadyPurchased);
+    //   } catch (err) {
+    //     console.error("Error checking membership:", err);
+    //   }
+    // };
     const checkMembership = async () => {
       try {
-        const res = await fetch(`https://admin.scchs.org/api/user-memberships/${instaUser?.id}`);
+        const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser?.id}`);
         const data = await res.json();
-
+    
+        console.log("Fetched Data:", data);
+        console.log("Selected Plan:", selectedPlan);
+    
         const today = new Date();
-
+    
         const alreadyPurchased = data?.data?.some(plan => {
+          console.log("Checking Plan:", plan);
+    
           const isSamePlan = plan.membership_plan_id === selectedPlan.id;
           const isActive = plan.status === "active";
-          const endDate = new Date(plan.end_date); // assuming `end_date` is in ISO format
+          const endDate = new Date(plan.end_date);
           const stillValid = endDate >= today;
-
+    
           return isSamePlan && isActive && stillValid;
         });
-
+    
+        console.log("Already Purchased:", alreadyPurchased);
         setHasSameActivePlan(alreadyPurchased);
       } catch (err) {
         console.error("Error checking membership:", err);
       }
     };
+    
 
     if (instaUser?.id && selectedPlan?.id) {
       checkMembership();
@@ -298,7 +326,7 @@ export default function memberplan(pageProp) {
 
 
                 {showPaypal && selectedPlan && (
-                  <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency: "USD" }}>
+                  <PayPalScriptProvider options={{ "client-id": "Af_ZCWYSNIFxW40vhmNqszsLaxINVe56bgFxygzXbeg8czi1NFaSYQKgxmR4KQIufcCG_Pi_t_8amsyE", currency: "USD" }}>
                     {
                       hasSameActivePlan ? <div className="text-red-600 font-semibold">
                         You have already purchased this membership.
@@ -355,7 +383,7 @@ export default function memberplan(pageProp) {
 
                               console.log(payload);
 
-                              const response = await fetch("https://admin.scchs.org/api/membership/purchase", {
+                              const response = await fetch("https://uat.scchs.co.in/api/membership/purchase", {
                                 method: "POST",
                                 headers: {
                                   "Content-Type": "application/json",
@@ -433,7 +461,7 @@ export default function memberplan(pageProp) {
 
                                                     console.log("Sending payload to Laravel API:", payload);
 
-                                                    const response = await fetch("https://admin.scchs.org/api/membership/purchase", {
+                                                    const response = await fetch("https://uat.scchs.co.in/api/membership/purchase", {
                                                         method: "POST",
                                                         headers: {
                                                             "Content-Type": "application/json",

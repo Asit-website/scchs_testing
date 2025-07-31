@@ -176,7 +176,7 @@ export default function CreateAccount() {
         }
 
 
-        const url = "https://admin.scchs.org/api/registration"
+        const url = "https://uat.scchs.co.in/api/registration"
         const payload = {
             name: name,
             email: email,

@@ -27,7 +27,7 @@ export default function cementrydetail(pageProp) {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://admin.scchs.org/api/cemeteries/${id}`)
+      fetch(`https://uat.scchs.co.in/api/cemeteries/${id}`)
         .then((res) => res.json())
         .then((data) => {
           setCemetery(data);
@@ -45,15 +45,15 @@ export default function cementrydetail(pageProp) {
   // };
 
   const handleSearch = () => {
-  if (surname.trim()) {
-    // Agar cemetery id available hai toh uske basis pe redirect karo
-    if (id) {
-      router.push(`/searchsurname?surname=${encodeURIComponent(surname)}&cemetery_id=${id}`);
-    } else {
-      router.push(`/searchsurname?surname=${encodeURIComponent(surname)}`);
+    if (surname.trim()) {
+      // Agar cemetery id available hai toh uske basis pe redirect karo
+      if (id) {
+        router.push(`/searchsurname?surname=${encodeURIComponent(surname)}&cemetery_id=${id}`);
+      } else {
+        router.push(`/searchsurname?surname=${encodeURIComponent(surname)}`);
+      }
     }
-  }
-};
+  };
 
 
   return (
@@ -65,7 +65,12 @@ export default function cementrydetail(pageProp) {
 
 
       <div className="event_system_main event_system_main1">
-        <div className="event_main">
+        <div className="deeping-btn">
+          <a href="javascript:history.back()" className="deep-btn" >
+            ← Back
+          </a>
+        </div>
+        <div className="event_main" id="eve-ent">
           <div className="cementry_record">
             <div className="cemetery-wrapper">
               <div className="cemetery-filters">
