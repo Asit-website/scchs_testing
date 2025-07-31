@@ -562,7 +562,10 @@ export default function eventdetail(pageProp) {
                                             <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time}</p>
                                             <p>{aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd MMMM DD') : ''}, {aboutnew?.start_time}</p>
                                         </div> */}
+
                                         {/* <div className="item">
+
+                                        <div className="item">
                                             <h4>Event Starts</h4>
                                             <p>Sat, March 29, At 7:00 PM</p>
                                             <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time} - , {aboutnew?.end_time}</p>
