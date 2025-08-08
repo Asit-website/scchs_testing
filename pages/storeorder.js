@@ -662,12 +662,51 @@ export default function storeorder(pageProp) {
             });
 
             const formattedResponse = await response.json();
-            console.log("Order created:", formattedResponse);
+            console.log("Order creation response:", formattedResponse);
+
+            // Check if there are stock issues in the response
+            if (formattedResponse.error || formattedResponse.length > 0) {
+                let errorMessage = "Some products have insufficient stock:\n\n";
+                
+                if (formattedResponse.length > 0) {
+                    formattedResponse.forEach((item, index) => {
+                        if (item.requested_qty > item.available_qty) {
+                            errorMessage += `${index + 1}. ${item.product_name}\n`;
+                            errorMessage += `   Available: ${item.available_qty}, Requested: ${item.requested_qty}\n`;
+                            errorMessage += `   This reached maximum\n\n`;
+                        }
+                    });
+                } else if (formattedResponse.error) {
+                    // Check if there are details in the response
+                    if (formattedResponse.details && formattedResponse.details.length > 0) {
+                        errorMessage = "Some products have insufficient stock:\n\n";
+                        formattedResponse.details.forEach((item, index) => {
+                            errorMessage += `${index + 1}. ${item.product_name}\n`;
+                            errorMessage += `   Available: ${item.available_qty}, Requested: ${item.requested_qty}\n`;
+                            errorMessage += `   This reached maximum\n\n`;
+                        });
+                    } else {
+                        errorMessage = formattedResponse.error;
+                    }
+                }
+
+                // Show alert with stock issues
+                Swal.fire({
+                    title: 'Stock Issue',
+                    text: errorMessage,
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return; // Don't proceed with PayPal
+            }
+
+            // If no stock issues, proceed with PayPal
             setPayment(formattedResponse);
             setPayNow(true);
             payPalBtn.current.scrollIntoView({ behavior: 'smooth' });
         } catch (error) {
             console.error("Order creation failed", error);
+            toast.error("Failed to create order. Please try again.");
         }
     };
 

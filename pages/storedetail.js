@@ -203,7 +203,14 @@ export default function storedetail(pageProp) {
     // const increase = () => setQuantity(prev => prev + 1);
     // const decrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
-    const increaseQuantity = () => setQuantity(prev => prev + 1);
+    const increaseQuantity = () => {
+        if (quantity >= 99) {
+            toast.error("Maximum quantity reached!");
+            return;
+        }
+        setQuantity(prev => prev + 1);
+    };
+    
     const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
 
