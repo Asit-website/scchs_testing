@@ -121,7 +121,7 @@ export default function userlogin(pageProp) {
                 await addToCartApi(cart?.id, data?.user?.access_token);
             }
             toast.success(data?.message);
-            window.location.href = "/";
+            // window.location.href = "/";
             setUserName('');
             setPassword('');
 

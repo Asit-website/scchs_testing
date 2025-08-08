@@ -318,7 +318,8 @@ export default function Navbar(props) {
 
 
   useEffect(() => {
-    const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
+    const storedAccess = localStorage.getItem("scchs_Access");
+    const isLoggedIn = storedAccess && storedAccess !== "undefined" ? JSON.parse(storedAccess) : null;
     if (isLoggedIn) {
       getCarts(); // Call getCarts if logged in
     } else {
