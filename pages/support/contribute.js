@@ -139,11 +139,12 @@ export default function contribute(pageProp) {
             }).render(paypalRef.current);
         }
     }, [showPayPal, savedData]);
+    
 
     useEffect(() => {
         // Load PayPal SDK
         const script = document.createElement("script");
-        script.src = `https://www.paypal.com/sdk/js?client-id=Af_ZCWYSNIFxW40vhmNqszsLaxINVe56bgFxygzXbeg8czi1NFaSYQKgxmR4KQIufcCG_Pi_t_8amsyE&currency=USD`;
+        script.src = `https://www.paypal.com/sdk/js?client-id=AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy&currency=USD`;
         script.addEventListener("load", () => {
             if (showPayPal) {
                 window.paypal?.Buttons().render(paypalRef.current);

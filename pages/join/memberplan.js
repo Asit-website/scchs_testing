@@ -326,7 +326,7 @@ export default function memberplan(pageProp) {
 
 
                 {showPaypal && selectedPlan && (
-                  <PayPalScriptProvider options={{ "client-id": "Af_ZCWYSNIFxW40vhmNqszsLaxINVe56bgFxygzXbeg8czi1NFaSYQKgxmR4KQIufcCG_Pi_t_8amsyE", currency: "USD" }}>
+                  <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency: "USD" }}>
                     {
                       hasSameActivePlan ? <div className="text-red-600 font-semibold">
                         You have already purchased this membership.

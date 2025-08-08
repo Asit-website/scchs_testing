@@ -41,6 +41,66 @@ export default function orderhistory(pageProp) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [membershipStatus, setMembershipStatus] = useState("loading");
+
+  const [instaUser, setInstaUser] = useState(null);
+
+  useEffect(() => {
+      if (typeof window !== "undefined") { // Ensures code only runs in the browser
+          const storedInstaUser = localStorage.getItem("scchs_User");
+          setInstaUser(storedInstaUser ? JSON.parse(storedInstaUser) : null);
+      }
+  }, []);
+
+  useEffect(() => {
+      const storedUser = localStorage.getItem("scchs_User");
+      if (storedUser) {
+          setInstaUser(JSON.parse(storedUser));
+      }
+  }, []);
+
+  useEffect(() => {
+    const fetchMembership = async () => {
+        if (!instaUser?.id) return;
+
+        try {
+            const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
+            const data = await res.json();
+
+            console.log(data)
+
+            const today = new Date();
+
+            // Filter all active (not expired) plans
+            const activePlans = (data?.data || []).filter(plan => {
+                // Check for lifetime membership in various possible locations
+                const isLifetime = plan.is_lifetime === 1 || 
+                                 plan.isLifetime === 1 || 
+                                 plan.lifetime === 1 ||
+                                 plan.plan?.is_lifetime === 1 ||
+                                 plan.plan?.isLifetime === 1;
+                
+                // If it's a lifetime membership, always consider it active
+                if (isLifetime) {
+                    return true;
+                }
+                
+                // For non-lifetime memberships, check the status and end date
+                const isActive = plan.status === "active";
+                const endDate = new Date(plan.grace_end_date);
+                return isActive && endDate >= today;
+            });
+
+            setMembershipStatus(activePlans.length > 0 ? "active" : "none");
+        } catch (err) {
+            console.error("Error fetching membership:", err);
+            setMembershipStatus("none");
+        }
+    };
+
+    fetchMembership();
+}, [instaUser]);
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -133,11 +193,29 @@ export default function orderhistory(pageProp) {
                     <div className="product-items">
                       {order?.order?.order_items?.map((item) => {
                         const product = item.product;
-                        const price =
-                          item?.sale_price ||
-                          product?.sale_price ||
-                          product?.price ||
-                          0;
+                        
+                        // Determine which price to show based on user membership status
+                        let displayPrice;
+                        let priceLabel;
+                        
+                        // Check if it's a member store product (has membership_price but no sale_price)
+                        const isMemberStoreProduct = product?.membership_price && !product?.sale_price;
+                        
+                        if (membershipStatus === "active") {
+                          // User has active membership - show member price for member store products
+                          if (isMemberStoreProduct) {
+                            displayPrice = product?.membership_price || product?.price || 0;
+                            priceLabel = "Member Price";
+                          } else {
+                            // Normal product - show sale price
+                            displayPrice = item?.sale_price || product?.sale_price || product?.price || 0;
+                            priceLabel = "Price";
+                          }
+                        } else {
+                          // User doesn't have active membership - show normal price for all products
+                          displayPrice = item?.sale_price || product?.sale_price || product?.price || 0;
+                          priceLabel = "Price";
+                        }
 
                         return (
                           <div key={item.id} className="product-item">
@@ -149,7 +227,7 @@ export default function orderhistory(pageProp) {
                             />
                             <div className="product-info">
                               <h3>{product.product_name}</h3>
-                              <p><strong>Price:</strong> ${parseFloat(price).toFixed(2)} × {item.qty}</p>
+                              <p><strong>{priceLabel}:</strong> ${parseFloat(displayPrice).toFixed(2)} × {item.qty}</p>
                               <div
                                 className="product-description"
                                 dangerouslySetInnerHTML={{ __html: product.product_detail }}
