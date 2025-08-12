@@ -107,7 +107,8 @@ export default function contribute(pageProp) {
 
                     const payload = {
                         ...savedData,
-                        transaction_id: details.id,
+                        paypal_order_id: details.id,
+                        transaction_id: details.purchase_units[0].payments.captures[0].id,
                         payment_type: details.status.toLowerCase(),
                         payment_method: "paypal",
                         payload: JSON.stringify(details),

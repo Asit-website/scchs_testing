@@ -1079,7 +1079,8 @@ export default function storeorder(pageProp) {
                                         body: JSON.stringify({
                                             user_id: parseInt(instaUser.id),
                                             order_id: payment?.order_id,
-                                            transaction_id: details.id,
+                                            paypal_order_id:details.id,
+                                            transaction_id: details.purchase_units[0].payments.captures[0].id,
                                             payer_id: details.payer.payer_id,
                                             // amount: payment?.grand_sale_price?.toString(),
                                             // amount: cartData?.grand_total?.toString(),
