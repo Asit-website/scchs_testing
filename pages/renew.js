@@ -73,7 +73,8 @@ export default function renew(pageProp) {
             const payload = {
                 user_membership_id: selectedPlan.id,
                 user_id: instaUser.id,
-                transaction_id: details.id,
+                paypal_order_id:details.id,
+                transaction_id: details.purchase_units[0].payments.captures[0].id,
                 amount: Number(selectedPlan.plan.price).toFixed(2),
                 currency: "USD",
                 status: details.status,
