@@ -353,6 +353,7 @@ export default function memberplan(pageProp) {
                                   amount: {
                                     value: amount // like "45.00"
                                   },
+                                  description: `Membership Purchase - ${selectedPlan?.name || 'Membership Plan'}`
                                 },
                               ],
                             });

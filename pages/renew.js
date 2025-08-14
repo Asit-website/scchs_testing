@@ -68,6 +68,8 @@ export default function renew(pageProp) {
         setSelectedPlan(plan);
     };
 
+    // console.log(selectedPlan.plan.name)
+
     const handleApprove = async (details) => {
         try {
             const payload = {
@@ -312,6 +314,7 @@ export default function renew(pageProp) {
                                                         amount: {
                                                             value: Number(selectedPlan.plan.price).toFixed(2),
                                                         },
+                                                        description: `Membership Renewal - ${selectedPlan.plan.name}`
                                                     },
                                                 ],
                                             });

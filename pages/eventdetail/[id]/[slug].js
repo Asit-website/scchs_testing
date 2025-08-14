@@ -496,7 +496,7 @@ export default function eventdetail(pageProp) {
                                                                 amount: {
                                                                     value: orderAmount
                                                                 },
-                                                                description: `Event Tickets - ${aboutnew?.title || 'Event'}`
+                                                                description: `Event Tickets For - ${aboutnew?.title || 'Event'}`
                                                             }],
                                                         });
                                                     }}

@@ -98,6 +98,7 @@ export default function contribute(pageProp) {
                                 amount: {
                                     value: String(savedData?.donation_amount || "10.00"),
                                 },
+                                description: `SCCHS Contribution - ${savedData?.donation_type || 'Donation'}`
                             },
                         ],
                     });
