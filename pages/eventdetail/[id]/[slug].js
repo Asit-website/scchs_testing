@@ -450,7 +450,7 @@ export default function eventdetail(pageProp) {
                         </div>
                     )} */}
 
-                    <PayPalScriptProvider options={{ clientId: 'AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy', currency: 'USD' }}>
+                    <PayPalScriptProvider options={{ clientId: 'AUFQROBooagSJZBkKxkxmA1pfwSPGcQds957Lre0Mh5hcsuebPwh60ZPsuMyE49SCMZN3heQiYyCPsVy', currency: 'USD' }}>
                         <div>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "20px", marginBottom: "30px" }}>
                                 <button onClick={() => {
@@ -494,9 +494,23 @@ export default function eventdetail(pageProp) {
                                                         return actions.order.create({
                                                             purchase_units: [{
                                                                 amount: {
-                                                                    value: orderAmount
+                                                                    value: orderAmount,
+                                                                    breakdown: {
+                                                                        item_total: {
+                                                                            value: orderAmount,
+                                                                            currency_code: "USD"
+                                                                        }
+                                                                    }
                                                                 },
-                                                                description: `Event Tickets For - ${aboutnew?.title || 'Event'}`
+                                                                description: `Event Tickets For - ${aboutnew?.title || 'Event'}`,
+                                                                items: [{
+                                                                    name: `Event Tickets For - ${aboutnew?.title || 'Event Ticket'}`,
+                                                                    quantity: qty.toString(),
+                                                                    unit_amount: {
+                                                                        value: (parseFloat(orderAmount) / parseInt(qty)).toFixed(2),
+                                                                        currency_code: "USD"
+                                                                    }
+                                                                }]
                                                             }],
                                                         });
                                                     }}

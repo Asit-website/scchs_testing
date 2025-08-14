@@ -301,7 +301,7 @@ export default function renew(pageProp) {
                                 </h3>
                                 <PayPalScriptProvider
                                     options={{
-                                        "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy",
+                                        "client-id": "AUFQROBooagSJZBkKxkxmA1pfwSPGcQds957Lre0Mh5hcsuebPwh60ZPsuMyE49SCMZN3heQiYyCPsVy",
                                         currency: "USD",
                                     }}
                                 >

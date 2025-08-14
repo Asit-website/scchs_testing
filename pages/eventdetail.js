@@ -303,7 +303,7 @@ export default function eventdetail(pageProp) {
                         </div>
                     )} */}
 
-                    <PayPalScriptProvider options={{ clientId: 'AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy', currency: 'USD' }}>
+                    <PayPalScriptProvider options={{ clientId: 'AUFQROBooagSJZBkKxkxmA1pfwSPGcQds957Lre0Mh5hcsuebPwh60ZPsuMyE49SCMZN3heQiYyCPsVy', currency: 'USD' }}>
                         <div>
                             <button
                                 onClick={() => {
