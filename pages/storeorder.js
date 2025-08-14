@@ -1054,11 +1054,19 @@ export default function storeorder(pageProp) {
                             <PayPalButtons
                                 style={{ layout: "vertical" }}
                                 createOrder={(data, actions) => {
+                                    // Create description with all product details
+                                    const productDetails = cartData?.cart?.map(item => 
+                                        `${item.name || item.product_name} (Qty: ${item.quantity})`
+                                    ).join(', ');
+                                    
+                                    const description = `Store Purchase - ${productDetails || 'Products'}`;
+                                    
                                     return actions.order.create({
                                         purchase_units: [{
                                             amount: {
                                                 value: membershipStatus === "active" ? payment?.order_amount_m : payment?.order_amount,
-                                            }
+                                            },
+                                            description: description
                                         }]
                                     });
                                 }}
