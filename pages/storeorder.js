@@ -1050,7 +1050,7 @@ export default function storeorder(pageProp) {
                     }
 
                     {payNow && (
-                        <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency: "USD" }}>
+                        <PayPalScriptProvider options={{ "client-id": "AUFQROBooagSJZBkKxkxmA1pfwSPGcQds957Lre0Mh5hcsuebPwh60ZPsuMyE49SCMZN3heQiYyCPsVy", currency: "USD" }}>
                             <PayPalButtons
                                 style={{ layout: "vertical" }}
                                 createOrder={(data, actions) => {
@@ -1061,12 +1061,52 @@ export default function storeorder(pageProp) {
                                     
                                     const description = `Store Purchase - ${productDetails || 'Products'}`;
                                     
+                                    // Calculate total amount
+                                    const totalAmount = membershipStatus === "active" ? payment?.order_amount_m : payment?.order_amount;
+                                    
+                                    // Create items array for PayPal
+                                    const items = cartData?.cart?.map(item => ({
+                                        name: item.name || item.product_name,
+                                        quantity: item.quantity.toString(),
+                                        unit_amount: {
+                                            value: parseFloat(item.price || item.sale_price || 0).toFixed(2),
+                                            currency_code: "USD"
+                                        }
+                                    })) || [];
+                                    
+                                    // Calculate item_total (sum of unit_amount * quantity for all items)
+                                    const itemTotal = items.reduce((sum, item) => {
+                                        return sum + (parseFloat(item.unit_amount.value) * parseInt(item.quantity));
+                                    }, 0).toFixed(2);
+                                    
+                                    // Use cartData.shipping_cost directly since it's correct
+                                    const shippingCost = cartData?.shipping_cost || "0.00";
+                                    
+                                    // Debug to check cartData.shipping_cost issue
+                                    console.log('Cart Data Shipping Cost:', cartData?.shipping_cost);
+                                    console.log('Cart Data Shipping Cost Type:', typeof cartData?.shipping_cost);
+                                    console.log('Cart Data Shipping Cost Length:', cartData?.shipping_cost?.length);
+                                    console.log('Calculated Shipping Cost:', shippingCost);
+                                    console.log('Total Amount:', totalAmount);
+                                    console.log('Item Total:', itemTotal);
+                                    
                                     return actions.order.create({
                                         purchase_units: [{
                                             amount: {
-                                                value: membershipStatus === "active" ? payment?.order_amount_m : payment?.order_amount,
+                                                value: totalAmount,
+                                                breakdown: {
+                                                    item_total: {
+                                                        value: itemTotal,
+                                                        currency_code: "USD"
+                                                    },
+                                                    shipping: {
+                                                        value: shippingCost,
+                                                        currency_code: "USD"
+                                                    }
+                                                }
                                             },
-                                            description: description
+                                            description: description,
+                                            items: items
                                         }]
                                     });
                                 }}
