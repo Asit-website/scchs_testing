@@ -68,14 +68,12 @@ export default function renew(pageProp) {
         setSelectedPlan(plan);
     };
 
-    // console.log(selectedPlan.plan.name)
-
     const handleApprove = async (details) => {
         try {
             const payload = {
                 user_membership_id: selectedPlan.id,
                 user_id: instaUser.id,
-                paypal_order_id:details.id,
+                paypal_order_id: details.id,
                 transaction_id: details.purchase_units[0].payments.captures[0].id,
                 amount: Number(selectedPlan.plan.price).toFixed(2),
                 currency: "USD",
@@ -247,7 +245,7 @@ export default function renew(pageProp) {
                                             {/* Check for lifetime membership and show appropriate status */}
                                             {(() => {
                                                 const isLifetime = plan.is_lifetime === 1 || plan.isLifetime === 1 || plan.lifetime === 1 || plan.plan?.is_lifetime === 1 || plan.plan?.isLifetime === 1;
-                                                
+
                                                 if (isLifetime) {
                                                     return (
                                                         <span className="status-badge active">

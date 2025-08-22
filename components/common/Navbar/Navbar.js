@@ -318,8 +318,7 @@ export default function Navbar(props) {
 
 
   useEffect(() => {
-    const storedAccess = localStorage.getItem("scchs_Access");
-    const isLoggedIn = storedAccess && storedAccess !== "undefined" ? JSON.parse(storedAccess) : null;
+    const isLoggedIn = JSON?.parse(localStorage.getItem("scchs_Access"));
     if (isLoggedIn) {
       getCarts(); // Call getCarts if logged in
     } else {
@@ -1038,7 +1037,8 @@ export default function Navbar(props) {
                   {open && (
                     <div ref={dropdownRef12} className="dropdown-menusss">
                       {/* <a>Hello, </a> */}
-                      <a href="/ViewProfile">View Profile</a>
+                      {/* <a href="/ViewProfile">View Profile</a> */}
+                      <a href="/ViewProfile">Edit Profile</a>
                       <a href="/orderhistory">Order History</a>
                       {/* <a href="/eventhistory">🎫 Event Orders</a> */}
                       <a href="/eventhistory">Event Order History</a>
@@ -1388,6 +1388,7 @@ export default function Navbar(props) {
                   {/* <li><a href="/cart">Add to Cart</a></li>
                   <li><a href="/order-history">Order History</a></li>
                   <li><a href="/logout">Logout</a></li> */}
+                  <li><a href="/ViewProfile">Edit Profile</a></li>
                   <li><a href="/orderhistory">Order History</a></li>
                   {/* <a href="/eventhistory">🎫 Event Orders</a> */}
                   <li> <a href="/eventhistory">Event Order History</a></li>

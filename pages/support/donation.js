@@ -501,6 +501,8 @@ export default function donation(pageProp) {
                                 }}
                                 countryCodeEditable={false}
                             />
+                            <p style={{marginTop:"5px"}}> Enter your 10-digit phone number.</p>
+                            
                             {errors.phone && <p className="text_red">{errors.phone}</p>}
                             {/* <div className="warning">Required, formatted as (000) 000-0000</div> */}
                             <input
@@ -668,6 +670,8 @@ export default function donation(pageProp) {
                                         }),
                                     }}
                                 />
+                                  <p style={{marginTop:"5px"}}>Enter your country name (e.g., United States).</p>
+                                  {errors.country && <p className="text_red">{errors.country}</p>}
 
                             </div>
                             {/* <input
@@ -738,6 +742,9 @@ export default function donation(pageProp) {
                                         }),
                                     }}
                                 />
+                                <p style={{marginTop:"5px"}}>Enter your state name (e.g., Missouri).</p>
+
+{errors.state && <p className="text_red">{errors.state}</p>}
 
                             </div>
                             {errors.state && <p className="text_red">{errors.state}</p>}
@@ -811,6 +818,8 @@ export default function donation(pageProp) {
                                         }),
                                     }}
                                 />
+                                 <p style={{marginTop:"5px"}}>Enter your city name (e.g., Saint Charles or Saint Peters).</p>
+                                 {errors.city && <p className="text_red">{errors.city}</p>}
                             </div>
 
                             {errors.city && <p className="text_red">{errors.city}</p>}

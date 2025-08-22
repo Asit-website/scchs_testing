@@ -372,6 +372,31 @@ export default function surenamelook(pageProp) {
         currentPage * itemsPerPage
     );
 
+    useEffect(() => {
+        const storedSearchTerm = localStorage.getItem("prevSearchTerm");
+        const storedCurrentPage = localStorage.getItem("prevCurrentPage");
+        const storedItemsPerPage = localStorage.getItem("prevItemsPerPage");
+      
+        if (storedSearchTerm) {
+          setSearchTerm(storedSearchTerm);
+          setSearchTrigger(storedSearchTerm);
+        }
+      
+        if (storedCurrentPage) {
+          setCurrentPage(Number(storedCurrentPage));
+        }
+      
+        if (storedItemsPerPage) {
+          setItemsPerPage(Number(storedItemsPerPage));
+        }
+      
+        // Clear it so if user comes from somewhere else it won’t persist
+        localStorage.removeItem("prevSearchTerm");
+        localStorage.removeItem("prevCurrentPage");
+        localStorage.removeItem("prevItemsPerPage");
+      }, []);
+      
+
     // const currentItems = data.slice(0, visibleCount);
 
     // console.log(currentItems)
@@ -527,7 +552,7 @@ export default function surenamelook(pageProp) {
                                             </button>
                                             {openIndex === idx && (
                                                 <div className="action-dropdown">
-                                                    <Link href={{
+                                                    {/* <Link href={{
                                                         pathname: "/surenamedetail",
                                                         query: {
                                                             surname: item.surname,
@@ -545,7 +570,40 @@ export default function surenamelook(pageProp) {
                                                             <img width={18} height={18} src="https://res.cloudinary.com/dgif730br/image/upload/v1745394773/Mask_group_1_u2msed.svg" />
                                                             <p>View</p>
                                                         </div>
+                                                    </Link> */}
+
+                                                    <Link
+                                                        href={{
+                                                            pathname: "/surenamedetail",
+                                                            query: {
+                                                                surname: item.surname,
+                                                                city: item.city,
+                                                                county: item.county,
+                                                                state: item.state,
+                                                                country: item.country,
+                                                                start_year: item.start_year,
+                                                                end_year: item.end_year,
+                                                                alt: item.alt_spelling,
+                                                                commant: item?.commant,
+                                                            },
+                                                        }}
+                                                        onClick={() => {
+                                                            localStorage.setItem("prevSearchTerm", searchTrigger);
+                                                            localStorage.setItem("prevCurrentPage", currentPage);
+                                                            localStorage.setItem("prevItemsPerPage", itemsPerPage);
+                                                        }}
+                                                        style={{ textDecoration: "none" }}
+                                                    >
+                                                        <div className="act_btn">
+                                                            <img
+                                                                width={18}
+                                                                height={18}
+                                                                src="https://res.cloudinary.com/dgif730br/image/upload/v1745394773/Mask_group_1_u2msed.svg"
+                                                            />
+                                                            <p>View</p>
+                                                        </div>
                                                     </Link>
+
                                                     <Link style={{ textDecoration: "none" }} href="/contact-us">
                                                         <div className="act_btn">
                                                             <img width={18} height={18} src="https://res.cloudinary.com/dgif730br/image/upload/v1745394773/Mask_group_3_zsyixz.svg" />

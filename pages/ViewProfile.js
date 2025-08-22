@@ -1,14 +1,31 @@
 import React, { useState, useEffect } from "react";
 import GlobalHeaderFooter from "../utils/common/global-header-footer";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+
 import { useRouter } from "next/navigation";
 
 const UserProfile = () => {
   const [form, setForm] = useState({});
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEdit] = useState(true); // Always edit mode
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
+  const [passwords, setPasswords] = useState({
+    current_password: "",
+    new_password: "",
+    confirm_password: "",
+  });
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
+  const toggleShow = (field) => {
+    setShowPasswords((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  }
 
-  // LocalStorage load on first render
   useEffect(() => {
     const storedUser = localStorage.getItem("scchs_User");
     if (storedUser) {
@@ -18,24 +35,20 @@ const UserProfile = () => {
         console.error("Failed to parse stored user", err);
       }
     } else {
-      fetchUserProfile(); // fallback if no localStorage
+      fetchUserProfile();
     }
     setLoading(false);
   }, []);
 
-  // GET API
   const fetchUserProfile = async () => {
     try {
-      const token = localStorage.getItem("scchs_Access");
-      const response = await fetch("https://uat.scchs.co.in/api/user-profile", {
+      const res = await fetch("https://uat.scchs.co.in/api/user-profile", {
         method: "GET",
         headers: {
-          headers: { "Content-Type": "application/json" },
-          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`,
+          Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`,
         },
       });
-
-      const data = await response.json();
+      const data = await res.json();
       if (data.status) {
         setForm({ ...data.data });
         localStorage.setItem("scchs_User", JSON.stringify(data.data));
@@ -45,71 +58,92 @@ const UserProfile = () => {
     }
   };
 
-  // POST API
-  const updateProfileApi = async () => {
-    // if (form.mobile_number && !/^\d{10}$/.test(form.mobile_number)) {
-    //   alert("Mobile Number must be exactly 10 digits.");
-    //   return false;
-    // }
-    // Email validation
-    if (form.email && !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(form.email)) {
-      alert("Please enter a valid email address.");
+  const validatePassword = () => {
+    const { new_password, confirm_password } = passwords;
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+    if (!passwordRegex.test(new_password)) {
+      alert("Password must include atleast one capital letter, one number, one special character (e.g., !@#$%^&*), and be at least 8 characters long.");
       return false;
     }
 
-    // const payload = {
-    //   prefix: clean(form.prefix),
-    //   preferred_name: clean(form.preferred_name),
-    //   middle: clean(form.middle),
-    //   maiden_name: clean(form.maiden_name),
-    //   use_maiden: clean(form.use_maiden),
-    //   suffix: clean(form.suffix),
-    //   dob: clean(form.dob),
-    //   address2: clean(form.address2),
-    //   postal_code: clean(form.postal_code),
-    //   cell_phone: clean(form.cell_phone),
-    //   int_phone: clean(form.int_phone),
-    //   preferred: clean(form.preferred),
-    //   website: clean(form.website),
-    //   first_name: clean(form.first_name),
-    //   last_name: clean(form.last_name), // ✅ proper required field
-    //   company: clean(form.company),
-    //   email: clean(form.email),
-    //   username: clean(form.username),
-    //   mobile_number: clean(form.mobile_number),
-    //   avatar: clean(form.avatar) || "",
-    //   address: clean(form.address),
-    //   state: clean(form.state),
-    //   city: clean(form.city),
-    //   country: clean(form.country),
-    //   dobMonth: clean(form.dobMonth),
-    //   dobYear: clean(form.dobYear),
-    // };
+    if (new_password !== confirm_password) {
+      alert("Passwords do not match.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const updatePasswordApi = async () => {
+    const { current_password, new_password } = passwords;
+
+    try {
+      const res = await fetch("https://uat.scchs.co.in/api/login-password-update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`,
+        },
+        body: JSON.stringify({
+          current_password,
+          new_password,
+        }),
+      });
+
+      const result = await res.json();
+      if (result.status) {
+        setShowPopup(true);
+        setPasswords({
+          current_password: "",
+          new_password: "",
+          confirm_password: "",
+        });
+        return true;
+      } else {
+        alert(result?.message || "Password update failed.");
+        return false;
+      }
+    } catch (err) {
+      console.error("Password update error:", err);
+      return false;
+    }
+  };
+
+  const updateProfileApi = async () => {
+    if (form.email && !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(form.email)) {
+      alert("Enter valid email address.");
+      return;
+    }
+
+    if (passwords.new_password) {
+      if (!validatePassword()) return;
+      const success = await updatePasswordApi();
+      if (!success) return;
+    }
+
     const formData = new FormData();
     Object.entries(form).forEach(([key, val]) => {
       formData.append(key, val ?? "");
     });
-    console.log("form.last_name:", form.last_name);
-
 
     try {
-      const token = localStorage.getItem("scchs_Access");
       const res = await fetch("https://uat.scchs.co.in/api/profile-update", {
         method: "POST",
         headers: {
-          headers: { "Content-Type": "application/json" },
-          "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`,
+          Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`,
         },
         body: formData,
       });
 
       const result = await res.json();
       if (result.status) {
-        await fetchUserProfile(); // get fresh data
+        await fetchUserProfile();
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 3000);
       } else {
-        console.error("Update failed", result);
+        alert(result?.message || "Profile update failed.");
       }
     } catch (err) {
       console.error("Update error:", err);
@@ -124,11 +158,12 @@ const UserProfile = () => {
     }));
   };
 
-  const toggleEdit = async () => {
-    if (isEdit) {
-      await updateProfileApi();
-    }
-    setIsEdit(!isEdit);
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswords((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   if (loading) return <p>Loading...</p>;
@@ -146,8 +181,6 @@ const UserProfile = () => {
           ["Maiden Name", "maiden_name"],
           ["Use Maiden", "use_maiden"],
           ["Suffix", "suffix"],
-          // ["Date of Birth", "dob"],
-          // ["DOB Month", "dobMonth"],
           ["DOB Year", "dobYear"],
           ["Address", "address"],
           ["Address 2", "address2"],
@@ -164,27 +197,96 @@ const UserProfile = () => {
         ].map(([label, key]) => (
           <div key={key} className="profile-field">
             <label className="font-medium">{label}</label>
-            {isEdit ? (
-              <input
-                type="text"
-                name={key}
-                value={form?.[key] || ""}
-                onChange={handleChange}
-                className="border rounded px-2 py-1"
-              />
-            ) : (
-              <p className="readonly">{form?.[key] || "-"}</p>
-            )}
+            <input
+              type="text"
+              name={key}
+              value={form?.[key] || ""}
+              onChange={handleChange}
+              className="border rounded px-2 py-1"
+            />
           </div>
         ))}
+
+        {/* Password Fields */}
+        {/* Current Password */}
+        <div className="profile-field col-span-2 relative">
+          <label className="font-medium">Current Password</label>
+          <input
+            type={showPasswords.current ? "text" : "password"}
+            name="current_password"
+            value={passwords.current_password}
+            onChange={handlePasswordChange}
+            className="border rounded px-2 py-1 w-full pr-10"
+          />
+          <span
+            className="newicon"
+            onClick={() => toggleShow("current")}
+          >
+            {showPasswords.current ? <FiEyeOff /> : <FiEye />}
+          </span>
+        </div>
+
+        {/* New Password */}
+        <div className="profile-field col-span-2 relative">
+          <label className="font-medium">New Password</label>
+          <input
+            type={showPasswords.new ? "text" : "password"}
+            name="new_password"
+            value={passwords.new_password}
+            onChange={handlePasswordChange}
+            className="border rounded px-2 py-1 w-full pr-10"
+          />
+          <span
+            className="newicon"
+            onClick={() => toggleShow("new")}
+          >
+            {showPasswords.new ? <FiEyeOff /> : <FiEye />}
+          </span>
+        </div>
+
+        {/* Confirm Password */}
+        <div className="profile-field col-span-2 relative">
+          <label className="font-medium">Confirm Password</label>
+          <input
+            type={showPasswords.confirm ? "text" : "password"}
+            name="confirm_password"
+            value={passwords.confirm_password}
+            onChange={handlePasswordChange}
+            className="border rounded px-2 py-1 w-full pr-10"
+          />
+          <span
+            className="newicon"
+            onClick={() => toggleShow("confirm")}
+          >
+            {showPasswords.confirm ? <FiEyeOff /> : <FiEye />}
+          </span>
+        </div>
+
+        
+
       </div>
 
-      <div className="button-row">
-        <button
-          onClick={toggleEdit}
+      <div className="membership_info">
+          <div className="membership_info_left">
+            <svg width="34" height="34" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="22" cy="22" r="22" fill="#AB0635" />
+              <path d="M21.616 25.672L21.208 20.776V13.96H23.296V20.776L22.888 25.672H21.616ZM23.488 30.664C23.152 31.016 22.736 31.192 22.24 31.192C21.744 31.192 21.32 31.016 20.968 30.664C20.632 30.312 20.464 29.888 20.464 29.392C20.464 28.912 20.64 28.496 20.992 28.144C21.344 27.776 21.76 27.592 22.24 27.592C22.72 27.592 23.136 27.776 23.488 28.144C23.84 28.496 24.016 28.912 24.016 29.392C24.016 29.888 23.84 30.312 23.488 30.664Z" fill="white" />
+            </svg>
 
+          </div>
+          <div className="membership_info_right">
+            <p><span>Password Note :</span>Password must include atleast one capital letter, one number, one special character (e.g., !@#$%^&*), and be at least 8 characters long.</p>
+            {/* <p>.</p> */}
+          </div>
+
+        </div>
+
+      <div className="button-row mt-4">
+        <button
+          onClick={updateProfileApi}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
         >
-          {isEdit ? "Save" : "Edit"}
+          Save
         </button>
       </div>
 

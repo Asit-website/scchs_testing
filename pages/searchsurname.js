@@ -62,36 +62,38 @@ export default function searchsurname(pageProp) {
                     </div>
                     <div className="cemetery-records-wrapper">
                         <h2>Search Results for: <strong>{surname}</strong></h2>
+
                         <div style={{ overflowX: "auto" }}>
-                            <table className="cemetery-table" style={{ minWidth: "700px", width: "100%", overflowX: "auto" }}>
+                            <table className="cemetery-table w-full border-collapse border border-gray-300" style={{ minWidth: "800px" }}>
                                 <thead>
-                                    <tr>
-                                        <th>Actions</th>
-                                        <th>Surname</th>
-                                        <th>Given Name</th>
-                                        <th>Age</th>
-                                        <th>Birth Year</th>
-                                        <th>Death Year</th>
-                                        <th>Burial Year</th>
+                                    <tr className="bg-gray-100">
+                                        <th className="px-4 py-2 border border-gray-300 text-left">Actions</th>
+                                        <th className="px-4 py-2 border border-gray-300 text-left">Surname</th>
+                                        <th className="px-4 py-2 border border-gray-300 text-left">Given Name</th>
+                                        <th className="px-4 py-2 border border-gray-300 text-center">Age</th>
+                                        <th className="px-4 py-2 border border-gray-300 text-center">Birth Year</th>
+                                        <th className="px-4 py-2 border border-gray-300 text-center">Death Year</th>
+                                        <th className=" dominate px-8 py-2 border border-gray-300 text-center ">Burial Year</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {searchResults.map((person) => (
-                                        <tr key={person.id}>
-                                            <td>
-                                                <Link href={`/cementrytabledetail?id=${person.cemetery_id}&personId=${person.index}`}>👁</Link>
+                                        <tr key={person.id} className="hover:bg-gray-50">
+                                            <td className="px-4 py-2 border border-gray-300 text-center">
+                                                <Link href={`/cementrytabledetail?id=${person.cemetery_id}&personId=${person.index}`} className="text-blue-600 hover:text-blue-800">👁</Link>
                                             </td>
-                                            <td>{person.surname}</td>
-                                            <td>{person.name}</td>
-                                            <td>{person.age}</td>
-                                            <td>{person.birth_year}</td>
-                                            <td>{person.death_year}</td>
-                                            <td>{person.burial_year}</td>
+                                            <td className="px-4 py-2 border border-gray-300">{person.surname}</td>
+                                            <td className="px-4 py-2 border border-gray-300">{person.name}</td>
+                                            <td className="px-4 py-2 border border-gray-300 text-center">{person.age}</td>
+                                            <td className="px-4 py-2 border border-gray-300 text-center">{person.birth_year}</td>
+                                            <td className="px-4 py-2 border border-gray-300 text-center">{person.death_year}</td>
+                                            <td className="dominate px-8 py-2 border border-gray-300 text-center ">{person.burial_year}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
+
                     </div>
                 </div>
             </div>

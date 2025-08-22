@@ -25,11 +25,8 @@ var settingsMorePhotos = {
 };
 
 
-
 // const itemsPerPage = 10;
 export default function register1(pageProp) {
-
-
 
     // const [currentPage, setCurrentPage] = useState(1);
 
@@ -45,90 +42,16 @@ export default function register1(pageProp) {
 
     const [step, setStep] = useState(1);
 
-    const [instaUser, setInstaUser] = useState(null);
-    useEffect(() => {
-        const storedUser = localStorage.getItem("scchs_User");
-        if (storedUser) {
-            setInstaUser(JSON.parse(storedUser));
-        }
-    }, []);
-
-
-    const navigate = useRouter();
-    // =============fetch member============
-
-    const [validPlans, setValidPlans] = useState([]);
-
-    // useEffect(() => {
-    //     const fetchMembershipPlans = async () => {
-    //         if (!instaUser?.id) return;
-
-    //         try {
-    //             const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
-    //             const data = await res.json();
-
-    //             const today = new Date();
-    //             const purchasedPlans = data?.data?.filter(plan => {
-    //                 const isActive = plan.status === "active";
-    //                 const endDate = new Date(plan.end_date);
-    //                 return isActive && plan.type === "Purchased" && endDate >= today;
-    //             });
-    //             console.log(purchasedPlans)
-    //             setValidPlans(purchasedPlans);
-    //             console.log(validPlans);
-    //         } catch (err) {
-    //             console.error("Error fetching membership plans:", err);
-    //         }
-    //     };
-
-    //     fetchMembershipPlans();
-    // }, [instaUser]);
-
-
-    useEffect(() => {
-        const fetchMembershipPlans = async () => {
-            if (!instaUser?.id) return;
-
-            try {
-                const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
-                const data = await res.json();
-
-                const today = new Date();
-                const filteredPlans = (data?.data || []).filter(plan => {
-                    const endDate = new Date(plan.end_date);
-                    const isActive = plan.status === "active";
-                    const isPurchased = plan.type === "Purchased";
-                    const allowMember = parseInt(plan.plan?.allow_member || "0");
-                    const usedSlots = parseInt(plan.used_slots || "0");
-
-                    return (
-                        isActive &&
-                        isPurchased &&
-                        endDate >= today &&
-                        allowMember > 1 &&           // hide if allow_member == 1
-                        usedSlots < allowMember      // hide if slots are full
-                    );
-                });
-
-                setValidPlans(filteredPlans);
-            } catch (err) {
-                console.error("Error fetching membership plans:", err);
-            }
-        };
-
-        fetchMembershipPlans();
-    }, [instaUser]);
-
-    // ===================fetch member end===============
-
     const [loading, setLoading] = useState(false);
+
+
 
     const router = useRouter();
 
     const [formData, setFormData] = useState({
         prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
         dob: '', dobMonth: '', dobYear: '',
-        address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
+        address: '', address2: '',  city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
         preferred: '', email: '', website: '',
         username: '', password: '', password_confirmation: ''
     });
@@ -147,19 +70,6 @@ export default function register1(pageProp) {
 
     // const handleCheckboxChange = (e) => {
     //     setShowEmail(!e.target.checked); // If checkbox is checked, hide email
-    // };
-
-
-
-    // const handleChange = (e) => {
-    //     setFormData((prev) => ({
-    //         ...prev,
-    //         [e.target.name]: e.target.value,
-    //     }));
-    //     setErrors((prev) => ({
-    //         ...prev,
-    //         [e.target.name]: '',
-    //     }));
     // };
 
 
@@ -202,6 +112,18 @@ export default function register1(pageProp) {
         }
     };
 
+        const navigate = useRouter();
+
+    // const handleChange = (e) => {
+    //     setFormData((prev) => ({
+    //         ...prev,
+    //         [e.target.name]: e.target.value,
+    //     }));
+    //     setErrors((prev) => ({
+    //         ...prev,
+    //         [e.target.name]: '',
+    //     }));
+    // };
 
 
     // ===========for phone number============
@@ -401,6 +323,8 @@ export default function register1(pageProp) {
                 }
             }
 
+
+
             // else {
             //     const cleanPhone = formData.mobile_number.replace(/\D/g, '');
 
@@ -430,9 +354,9 @@ export default function register1(pageProp) {
 
             if (!formData.address) newErrors.address = "Address is required";
             if (!formData.city) newErrors.city = "City is required";
-            if (!formData.country) newErrors.country = "Country is required";
+            if(!formData.country) newErrors.country ="country is required"
             if (!formData.state) newErrors.state = "State is required";
-            if (!formData.mobile_number) newErrors.state = "mobile number is required"
+
             if (!formData.postal_code) {
                 newErrors.postal_code = "Postal code is required";
             }
@@ -554,7 +478,7 @@ export default function register1(pageProp) {
             setStep((prev) => prev + 1);
         }
         else {
-            //  toast.error("Please fill out all the required field ");
+            // toast.error("Please fill out all the required field");
         }
 
     }
@@ -563,80 +487,24 @@ export default function register1(pageProp) {
         setStep((prev) => prev - 1)
     }
 
-    //    const handleSubmit = async (e) => {
-    //          e.preventDefault();
-
-    //          const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
-
-    //          if (formData.password !== formData.password_confirmation) {
-    //              toast.error("Password and confirm password must be the same.");
-    //              return;
-    //          }
-
-    //          if (!passwordRegex.test(formData.password)) {
-    //              toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
-    //              return;
-    //          }
-
-    //          try {
-    //              const response = await fetch('https://uat.scchs.co.in/api/registration', {
-    //                  method: 'POST',
-    //                  headers: {
-    //                      'Content-Type': 'application/json',
-    //                  },
-    //                  body: JSON.stringify(formData),
-    //              });
-
-    //              const result = await response.json();
-    //              console.log(result);
-
-    //              if (result.status === false) {
-    //                  if (result.message?.email?.length > 0) {
-    //                      toast.error(result.message.email[0]);
-    //                  } else if (result.message?.username?.length > 0) {
-    //                      toast.error(result.message.username[0]);
-    //                  } else {
-    //                      toast.error("Registration failed. Please check your input.");
-    //                  }
-    //                  return;
-    //              }
-
-    //              toast.success("Registered successfully!");
-
-    //              setFormData({
-    //                  prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
-    //                  dob: '', dobMonth: '', dobYear: '',
-    //                  address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
-    //                  preferred: '', email: '', website: '',
-    //                  username: '', password: '', password_confirmation: ''
-    //              });
-
-    //              router.push("/user/userlogin");
-
-    //          } catch (error) {
-    //              console.error('Error:', error);
-    //              toast.error("Something went wrong. Please try again later.");
-    //          }
-    //      };
-
-
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
-    //     setLoading(true); // show loader
+
+    //     // const newerrors1 = {}
+
 
     //     const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
     //     if (formData.password !== formData.password_confirmation) {
     //         toast.error("Password and confirm password must be the same.");
-    //         setLoading(false);
     //         return;
     //     }
 
     //     if (!passwordRegex.test(formData.password)) {
     //         toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
-    //         setLoading(false);
     //         return;
     //     }
+
 
     //     try {
     //         const response = await fetch('https://uat.scchs.co.in/api/registration', {
@@ -648,22 +516,16 @@ export default function register1(pageProp) {
     //         });
 
     //         const result = await response.json();
+
     //         console.log(result);
 
-    //         if (result.status === false) {
-    //             if (result.message?.email?.length > 0) {
-    //                 toast.error(result.message.email[0]);
-    //             } else if (result.message?.username?.length > 0) {
-    //                 toast.error(result.message.username[0]);
-    //             } else {
-    //                 toast.error("Registration failed. Please check your input.");
-    //             }
-    //             setLoading(false);
-    //             return;
-    //         }
+    //         // if (result.status === false) {
+    //         //     toast.error(result?.message?.email[0]);
+    //         //     return;
+    //         // }
 
+    //         //   alert('Registration successful!');
     //         toast.success("Registered successfully!");
-
     //         setFormData({
     //             prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
     //             dob: '', dobMonth: '', dobYear: '',
@@ -676,272 +538,14 @@ export default function register1(pageProp) {
 
     //     } catch (error) {
     //         console.error('Error:', error);
-    //         toast.error("Something went wrong. Please try again later.");
-    //     } finally {
-    //         setLoading(false); // hide loader
+    //         //   alert(error.message || 'Something went wrong!');
+    //         toast.error("username already purchased");
     //     }
     // };
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setLoading(true);
-
-    //     const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
-
-    //     if (formData.password !== formData.password_confirmation) {
-    //         toast.error("Password and confirm password must be the same.");
-    //         setLoading(false);
-    //         return;
-    //     }
-
-    //     if (!passwordRegex.test(formData.password)) {
-    //         toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
-    //         setLoading(false);
-    //         return;
-    //     }
-
-    //     try {
-    //         const isMemberCreation = instaUser?.id ? true : false;
-
-
-    //         const url = isMemberCreation
-    //             ? "https://uat.scchs.co.in/api/members/create"
-    //             : "https://uat.scchs.co.in/api/registration";
-
-    //         if (isMemberCreation) {
-    //             // Get active membership plan for user
-    //             const userMembershipRes = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
-    //             const membershipData = await userMembershipRes.json();
-
-    //             const today = new Date();
-    //             const activePlan = membershipData?.data?.find(plan => {
-    //                 const isActive = plan.status === "active";
-    //                 const endDate = new Date(plan.end_date);
-    //                 return isActive && endDate >= today;
-    //             });
-
-    //             // Block if plan is "Reference"
-    //             if (activePlan?.type?.toLowerCase() === "reference") {
-    //                 toast.error("You cannot create members under a reference membership.");
-    //                 setLoading(false);
-    //                 return;
-    //             }
-
-    //             const allowMember = parseInt(activePlan?.plan?.allow_member || "0", 10);
-
-    //             // No count check here – assuming backend validates limit
-    //             console.log("Skipping client-side count check – backend handles it.");
-    //         }
-
-    //         const response = await fetch(url, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 ...(isMemberCreation && JSON?.parse(localStorage.getItem("scchs_Access")) ? { Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}` } : {}),
-    //             },
-    //             body: JSON.stringify(
-    //                 isMemberCreation
-    //                     ? { ...formData, parent_user_id: instaUser.id }
-    //                     : formData
-    //             ),
-    //         });
-
-    //         const result = await response.json();
-    //         console.log(result);
-
-    //         if (result.status === false) {
-    //             if (result.message?.email?.length > 0) {
-    //                 toast.error(result.message.email[0]);
-    //             } else if (result.message?.username?.length > 0) {
-    //                 toast.error(result.message.username[0]);
-    //             } else {
-    //                 toast.error("Submission failed. Please check either username aur email is alreday taken");
-    //             }
-    //             setLoading(false);
-    //             return;
-    //         }
-
-    //         // if (result.status === false) {
-    //         //     if (result.message?.email?.length > 0) {
-    //         //         toast.error(result.message.email[0]);
-    //         //     } else if (result.message?.username?.length > 0) {
-    //         //         toast.error(result.message.username[0]);
-    //         //     } else if (typeof result.message === 'string') {
-    //         //         toast.error(result.message);
-    //         //     } else if (typeof result.errors === 'object') {
-    //         //         const firstKey = Object.keys(result.errors)[0];
-    //         //         const firstErrorMsg = result.errors[firstKey]?.[0] || "Something went wrong.";
-    //         //         toast.error(firstErrorMsg);
-    //         //     } else {
-    //         //         toast.error("Submission failed. Please check your input.");
-    //         //     }
-    //         //     setLoading(false);
-    //         //     return;
-    //         // }
-
-
-    //         console.log(isMemberCreation);
-    //         if (isMemberCreation) {
-    //             toast.success(result?.message || "Member created successfully!");
-    //             // window.location.href = "/"
-    //         }
-    //         else {
-    //             if (result.message?.email?.length > 0) {
-    //                 toast.error(result.message.email[0]);
-    //             } else if (result.message?.username?.length > 0) {
-    //                 toast.error(result.message.username[0]);
-    //             } else {
-    //                 toast.success("Registered successfully!");
-    //             }
-    //         }
-
-    //         setFormData({});
-
-    //         if (!isMemberCreation) {
-    //             router.push("/user/userlogin");
-    //         }
-
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //         toast.error("Something went wrong. Please try again later.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-
-
-
-
-
-
-
-    // ==================ye memebership fetched ke accorroding hain======
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     setLoading(true);
-
-    //     const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
-
-    //     if (formData.password !== formData.password_confirmation) {
-    //         toast.error("Password and confirm password must be the same.");
-    //         setLoading(false);
-    //         return;
-    //     }
-
-    //     if (!passwordRegex.test(formData.password)) {
-    //         toast.error("Password must start with a capital letter, include a special character, and be at least 8 characters long.");
-    //         setLoading(false);
-    //         return;
-    //     }
-
-    //     try {
-    //         const isMemberCreation = instaUser?.id ? true : false;
-
-    //         const url = isMemberCreation
-    //             ? "https://uat.scchs.co.in/api/members/create"
-    //             : "https://uat.scchs.co.in/api/registration";
-
-    //         let memberPayload = { ...formData };
-
-    //         if (isMemberCreation) {
-    //             const userMembershipRes = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
-    //             const membershipData = await userMembershipRes.json();
-
-    //             const today = new Date();
-    //             const validPlans = membershipData?.data?.filter(plan => {
-    //                 const isActive = plan.status === "active";
-    //                 const endDate = new Date(plan.end_date);
-    //                 const isPurchased = plan.type === "Purchased";
-    //                 const allowed = parseInt(plan.plan?.allow_member || "0", 10);
-    //                 return isActive && isPurchased && endDate >= today && allowed > 0;
-    //             });
-
-    //             let selectedPlan = null;
-
-    //             for (const plan of validPlans) {
-    //                 // We'll try member creation — backend will validate
-    //                 selectedPlan = plan;
-    //                 break;
-    //             }
-
-    //             console.log(selectedPlan);
-
-    //             if (!selectedPlan) {
-    //                 toast.error("You have already created maximum members for all active membership plans.");
-    //                 setLoading(false);
-    //                 return;
-    //             }
-
-    //             memberPayload = {
-    //                 ...formData,
-    //                 parent_user_id: instaUser.id,
-    //                 membership_plan_id: selectedPlan.membership_plan_id
-    //             };
-    //         }
-
-    //         const response = await fetch(url, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 ...(isMemberCreation && JSON?.parse(localStorage.getItem("scchs_Access")) ? {
-    //                     Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-    //                 } : {}),
-    //             },
-    //             body: JSON.stringify(memberPayload),
-    //         });
-
-    //         const result = await response.json();
-    //         console.log(result);
-
-    //         if (result.status === false) {
-    //             if (result.message?.email?.length > 0) {
-    //                 toast.error(result.message.email[0]);
-    //             } else if (result.message?.username?.length > 0) {
-    //                 toast.error(result.message.username[0]);
-    //             } else if (typeof result.message === 'string') {
-    //                 toast.error(result.message);
-    //             } else if (typeof result.errors === 'object') {
-    //                 const firstKey = Object.keys(result.errors)[0];
-    //                 const firstErrorMsg = result.errors[firstKey]?.[0] || "Something went wrong.";
-    //                 toast.error(firstErrorMsg);
-    //             } else {
-    //                 toast.error("Submission failed. Please check your input.");
-    //             }
-    //             setLoading(false);
-    //             return;
-    //         }
-
-    //         if (isMemberCreation) {
-    //             toast.success(result?.message || "Member created successfully!");
-    //         } else {
-    //             if (result.message?.email?.length > 0) {
-    //                 toast.error(result.message.email[0]);
-    //             } else if (result.message?.username?.length > 0) {
-    //                 toast.error(result.message.username[0]);
-    //             } else {
-    //                 toast.success("Registered successfully!");
-    //             }
-    //         }
-
-    //         setFormData({});
-
-    //         if (!isMemberCreation) {
-    //             router.push("/user/userlogin");
-    //         }
-
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //         toast.error("Something went wrong. Please try again later.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
+        setLoading(true); // show loader
 
         const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
 
@@ -958,64 +562,12 @@ export default function register1(pageProp) {
         }
 
         try {
-            const isMemberCreation = instaUser?.id ? true : false;
-
-            const url = isMemberCreation
-                ? "https://uat.scchs.co.in/api/members/create"
-                : "https://uat.scchs.co.in/api/registration";
-
-            let memberPayload = { ...formData };
-
-            if (isMemberCreation) {
-                const userMembershipRes = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser.id}`);
-                const membershipData = await userMembershipRes.json();
-
-                const selectedPlan = membershipData?.data?.find(plan => plan.membership_plan_id === parseInt(formData.membership_plan_id));
-
-                if (!selectedPlan) {
-                    toast.error("Selected membership plan not found or invalid.");
-                    setLoading(false);
-                    return;
-                }
-
-                if (selectedPlan.type?.toLowerCase() === "reference") {
-                    toast.error("You cannot create members under a reference membership.");
-                    setLoading(false);
-                    return;
-                }
-
-                memberPayload = {
-                    ...formData,
-                    parent_user_id: instaUser.id,
-                    membership_plan_id: selectedPlan.membership_plan_id
-                };
-            }
-
-            //  if (isMemberCreation) {
-            //     const selectedPlanId = localStorage.getItem("selected_member_plan_id");
-
-            //     if (!selectedPlanId) {
-            //         toast.error("No membership plan selected for member creation.");
-            //         setLoading(false);
-            //         return;
-            //     }
-
-            //     memberPayload = {
-            //         ...formData,
-            //         parent_user_id: instaUser.id,
-            //         membership_plan_id: selectedPlanId
-            //     };
-            // }
-
-            const response = await fetch(url, {
+            const response = await fetch('https://uat.scchs.co.in/api/registration', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    ...(isMemberCreation && JSON?.parse(localStorage.getItem("scchs_Access")) ? {
-                        Authorization: `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-                    } : {}),
                 },
-                body: JSON.stringify(memberPayload),
+                body: JSON.stringify(formData),
             });
 
             const result = await response.json();
@@ -1026,48 +578,32 @@ export default function register1(pageProp) {
                     toast.error(result.message.email[0]);
                 } else if (result.message?.username?.length > 0) {
                     toast.error(result.message.username[0]);
-                } else if (typeof result.message === 'string') {
-                    toast.error(result.message);
-                } else if (typeof result.errors === 'object') {
-                    const firstKey = Object.keys(result.errors)[0];
-                    const firstErrorMsg = result.errors[firstKey]?.[0] || "Something went wrong.";
-                    toast.error(firstErrorMsg);
                 } else {
-                    toast.error("Submission failed. Please check your input.");
+                    toast.error("Registration failed. Please check your input.");
                 }
                 setLoading(false);
                 return;
             }
 
-            if (isMemberCreation) {
-                toast.success(result?.message || "Member created successfully!");
-                window.location.href = "/";
-            } else {
-                if (result.message?.email?.length > 0) {
-                    toast.error(result.message.email[0]);
-                } else if (result.message?.username?.length > 0) {
-                    toast.error(result.message.username[0]);
-                } else {
-                    toast.success("Registered successfully!");
-                }
-            }
+            toast.success("Registered successfully!");
 
-            setFormData({});
+            setFormData({
+                prefix: '', first_name: '', preferred_name: '', middle: '', maiden_name: '', use_maiden: '', last_name: '', suffix: '',
+                dob: '', dobMonth: '', dobYear: '',
+                address: '', address2: '', city: '', state: '', postal_code: '', country: '', mobile_number: '', cell_phone: '', int_phone: '',
+                preferred: '', email: '', website: '',
+                username: '', password: '', password_confirmation: ''
+            });
 
-            if (!isMemberCreation) {
-                router.push("/user/userlogin");
-            }
+            router.push("/user/userlogin");
 
         } catch (error) {
             console.error('Error:', error);
             toast.error("Something went wrong. Please try again later.");
         } finally {
-            setLoading(false);
+            setLoading(false); // hide loader
         }
     };
-
-
-
 
 
 
@@ -1158,33 +694,13 @@ export default function register1(pageProp) {
                             step === 1 && (
                                 <>
                                     <div className="form_scch_btn">
-                                        {/* <h2>New Membership</h2> */}
-                                        <h2>If you are not a member, please register below to complete your order; otherwise, please contact our office at (636) 946-9828.
-                                     <span style={{color: "rgba(171, 6, 53, 1)"}}> Register Here</span>   </h2>
+                                        {/* <h2>New user</h2> */}
+                                        <h2>Register Here</h2>
+                                        {/* {step>1 &&  <button type="button" onClick={handlePrevious}>Back</button>}    */}
                                         {step === 1 && <button type="button" onClick={()=> router.push('/user/userlogin')}> ← Back</button>}
                                     </div>
-                                    {/* ← Back */}
                                     <div className="nameform-container">
-                                        <h2>{instaUser?.id ? "Secondary Member Information" : "Primary Member Information"}</h2>
-                                        <div className="nameform-group nams_group">
-
-                                            {/* <input onChange={handleChange} name="prefix" value={formData.prefix} className="nameform-input" type="text" placeholder="Prefix" /> */}
-                                            {instaUser?.id && <select value={formData.membership_plan_id || ""}
-                                                onChange={(e) =>
-                                                    setFormData((prev) => ({
-                                                        ...prev,
-                                                        membership_plan_id: parseInt(e.target.value),
-                                                    }))
-                                                } className="nameform-input" type="text" placeholder="Prefix">
-                                                <option value={""}>Select Membership Plan</option>
-                                                {validPlans.map((plan) => (
-                                                    <option key={plan.id} value={plan.membership_plan_id}>
-                                                        {plan.plan?.name}
-
-                                                    </option>
-                                                ))}
-                                            </select>}
-                                        </div>
+                                        <h2>Primary user Information</h2>
                                         <div className="nameform-group nams_group">
 
                                             {/* <input onChange={handleChange} name="prefix" value={formData.prefix} className="nameform-input" type="text" placeholder="Prefix" /> */}
@@ -1264,6 +780,7 @@ export default function register1(pageProp) {
                                                 {errors.dobYear && <p className="text_red">{errors.dobYear}</p>}
                                             </div>
                                         </div>
+
                                         <p style={{ color: "green", fontSize: "18px" }}>Please enter your Year of Birth</p>
                                     </div>
                                     {
@@ -1280,11 +797,8 @@ export default function register1(pageProp) {
                             step === 2 && (
                                 <>
                                     <div className="form_scch_btn">
-                                        {/* <h2>New Member</h2> */}
-                                        <h2>If you are not a member, please register below to complete your order; otherwise, please contact our office at (636) 946-9828.
-                                     <span style={{color: "rgba(171, 6, 53, 1)"}}>Register Here</span>   </h2>
-                                        
-                                        {step > 1 && <button type="button" onClick={handlePrevious}>← Back</button>}
+                                        <h2>Register Here</h2>
+                                        {step > 1 && <button type="button" onClick={handlePrevious}> ← Back</button>}
                                     </div>
                                     <div className="nameform-container">
                                         <h2>Main Contact Information</h2>
@@ -1311,7 +825,7 @@ export default function register1(pageProp) {
                                                     </option>
                                                 ))}
                                             </select> */}
-                                            {/* <CreatableSelect
+                                            <CreatableSelect
                                                 placeholder="Select or type country"
                                                 options={toOptions(countries)}
                                                 value={formData.country ? { label: formData.country, value: formData.country } : null}
@@ -1323,45 +837,9 @@ export default function register1(pageProp) {
                                                         city: '',
                                                     }))
                                                 }
-                                            /> */}
-
-                                            <CreatableSelect
-                                                placeholder="Select or type country"
-                                                options={toOptions(countries)}
-                                                value={
-                                                    formData.country
-                                                        ? { label: formData.country, value: formData.country }
-                                                        : null
-                                                }
-                                                onChange={(selected) =>
-                                                    setFormData((prev) => ({
-                                                        ...prev,
-                                                        country: selected?.value || '',
-                                                        state: '',
-                                                        city: '',
-                                                    }))
-                                                }
-                                                styles={{
-                                                    control: (base, state) => ({
-                                                        ...base,
-                                                        minHeight: '45px',
-                                                        padding: '10px 4px',
-                                                        borderColor: state.isFocused ? '#3b82f6' : '#888',
-                                                        boxShadow: 'none',
-                                                        '&:hover': {
-                                                            borderColor: '#3b82f6',
-                                                        },
-                                                    }),
-                                                    menu: (base) => ({
-                                                        ...base,
-                                                        zIndex: 9999,
-                                                    }),
-                                                }}
-                                                className="w-full"
                                             />
-                                             <p style={{marginTop:"5px"}}>Enter your country name (e.g., United States).</p>
-                                            {errors.country && <p className="text_red">{errors.country}</p>}
-
+                                            <p style={{marginTop:"5px"}}>Enter your country name (e.g., United States).</p>
+                                             {errors.country && <p className="text_red">{errors.country}</p>}
 
                                         </div>
 
@@ -1444,26 +922,9 @@ export default function register1(pageProp) {
                                                         city: '',
                                                     }))
                                                 }
-                                                styles={{
-                                                    control: (base, state) => ({
-                                                        ...base,
-                                                        minHeight: '45px',
-                                                        padding: '10px 4px',
-                                                        borderColor: state.isFocused ? '#3b82f6' : '#888',
-                                                        boxShadow: 'none',
-                                                        '&:hover': {
-                                                            borderColor: '#3b82f6',
-                                                        },
-                                                    }),
-                                                    menu: (base) => ({
-                                                        ...base,
-                                                        zIndex: 9999,
-                                                    }),
-                                                }}
-                                                className="w-full"
                                             />
-                                             <p style={{marginTop:"5px"}}>Enter your state name (e.g., Missouri).</p>
 
+                                             <p style={{marginTop:"5px"}}>Enter your state name (e.g., Missouri).</p>
                                             {errors.state && <p className="text_red">{errors.state}</p>}
                                         </div>
 
@@ -1543,25 +1004,8 @@ export default function register1(pageProp) {
                                                         city: selected?.value || '',
                                                     }))
                                                 }
-                                                styles={{
-                                                    control: (base, state) => ({
-                                                        ...base,
-                                                        minHeight: '50px',
-                                                        padding: '10px 4px',
-                                                        borderColor: state.isFocused ? '#3b82f6' : '#888',
-                                                        boxShadow: 'none',
-                                                        '&:hover': {
-                                                            borderColor: '#3b82f6',
-                                                        },
-                                                    }),
-                                                    menu: (base) => ({
-                                                        ...base,
-                                                        zIndex: 9999,
-                                                    }),
-                                                }}
-                                                className="w-full"
                                             />
-                                             <p style={{marginTop:"5px"}}>Enter your city name (e.g., Saint Charles or Saint Peters).</p>
+                                            <p style={{marginTop:"5px"}}>Enter your city name (e.g., Saint Charles or Saint Peters).</p>
                                             {errors.city && <p className="text_red">{errors.city}</p>}
                                         </div>
 
@@ -1604,6 +1048,7 @@ export default function register1(pageProp) {
                                                 />
                                                  <p style={{marginTop:"5px"}}> Enter your 10-digit phone number.</p>
                                             </div>
+                                          
                                             {
                                                 // !errors.mobile_number ? <span className="nameform-note name_int">(Phone or Cell Phone is Required, Format as (XXX) XXX-XXXX)</span> :
                                                 errors.mobile_number && <p style={{ marginLeft: "10px" }} className="text_red">{errors.mobile_number}</p>
@@ -1680,7 +1125,7 @@ export default function register1(pageProp) {
                                             </select>
                                         </div> */}
                                         {
-                                            step < 3 && <button type="button" onClick={() => {
+                                            step < 3 && <button disabled={!!errors.mobile_number} type="button" onClick={() => {
                                                 console.log("step", step);
                                                 handleNext()
                                             }} className="scchs_hj_btn testing_btn111">Next</button>
@@ -1694,28 +1139,26 @@ export default function register1(pageProp) {
                             step === 3 && (
                                 <>
                                     <div className="form_scch_btn">
-                                        {/* <h2>New Member</h2> */}
-                                        <h2>If you are not a member, please register below to complete your order; otherwise, please contact our office at (636) 946-9828.
-                                     <span style={{color: "rgba(171, 6, 53, 1)"}}>Register Here</span>   </h2>
-                                        {step > 1 && <button type="button" onClick={handlePrevious}>← Back</button>}
+                                        <h2>Register Here</h2>
+                                        {step > 1 && <button type="button" onClick={handlePrevious}> ← Back</button>}
                                     </div>
                                     <div className="nameform-container">
-                                        <h2>{instaUser?.id ? "Secondary Member Information" : "Primary Member Information"}</h2>
+                                        <h2>Primary user Information</h2>
                                         <div className="nameform-group nams_group">
                                             <input required onChange={handleChange} name="username" value={formData?.username} className="nameform-input" type="text" placeholder="UserName" />
                                             {errors?.username && <p className="text_red">{errors.username}</p>}
                                         </div>
-                                        <div className="nameform-group" style={{ position: 'relative' }}>
+
+                                        {/* <div className="nameform-group" style={{ position: 'relative' }}>
                                             <input required onChange={(e) => {
                                                 const value = e.target.value;
                                                 setFormData({ ...formData, password: value });
 
-                                                // const passwordRegex = /^(?=[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
-                                                const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+                                   const passwordRegex = /^(?=[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*[a-zA-Z]).{8,}$/;
 
                                                 if (value && !passwordRegex.test(value)) {
                                                     setPasswordError(
-                                                        "Password must include atleast one capital letter, one number, one special character (e.g., !@#$%^&*), and be at least 8 characters long."
+                                                        "Password must start with a capital letter, include a special character, a number, and be at least 8 characters long.."
                                                     );
                                                 } else {
                                                     setPasswordError("");
@@ -1726,26 +1169,73 @@ export default function register1(pageProp) {
                                                 onClick={() => setPasswordVisible((v) => !v)}
                                             >
                                                 {passwordVisible ? (
-                                                    // Eye open SVG
+                                                  
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
-                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2" />
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
+                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2"/>
                                                     </svg>
                                                 ) : (
-                                                    // Eye closed SVG
+                                                 
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
-                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2" />
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2"/>
+                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2"/>
                                                     </svg>
                                                 )}
                                             </span>
-                                            {/* {errors?.password && <p className="text_red">{errors.password}</p>} */}
+                                         
                                             {passwordError && (
                                                 <p className="text_red">
                                                     {passwordError}
                                                 </p>
                                             )}
+                                        </div> */}
+
+                                        <div className="nameform-group" style={{ position: 'relative' }}>
+                                            <input
+                                                required
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    setFormData({ ...formData, password: value });
+
+                                                    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+                                                    if (value && !passwordRegex.test(value)) {
+                                                        setPasswordError(
+                                                            "Password must include atleast one capital letter, one number, one special character (e.g., !@#$%^&*), and be at least 8 characters long"
+                                                        );
+                                                    } else {
+                                                        setPasswordError("");
+                                                    }
+                                                }}
+                                                name="password"
+                                                value={formData?.password}
+                                                className="nameform-input"
+                                                type={passwordVisible ? "text" : "password"}
+                                                placeholder="Password"
+                                            />
+
+                                            <span
+                                                style={{ position: "absolute", right: 20, top: 15, cursor: "pointer" }}
+                                                onClick={() => setPasswordVisible((v) => !v)}
+                                            >
+                                                {passwordVisible ? (
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
+                                                        <circle cx="10" cy="10" r="3" stroke="#888" strokeWidth="2" />
+                                                    </svg>
+                                                ) : (
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                        <path d="M1 10C1 10 4.5 4 10 4C15.5 4 19 10 19 10C19 10 15.5 16 10 16C4.5 16 1 10 1 10Z" stroke="#888" strokeWidth="2" />
+                                                        <path d="M4 4L16 16" stroke="#888" strokeWidth="2" />
+                                                    </svg>
+                                                )}
+                                            </span>
+
+                                            {passwordError && (
+                                                <p className="text_red">{passwordError}</p>
+                                            )}
                                         </div>
+
 
                                         <div className="nameform-group" style={{ position: 'relative' }}>
                                             <input required name="password_confirmation" onChange={(e) => {

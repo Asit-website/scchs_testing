@@ -169,14 +169,14 @@ export default function Cart(props) {
     };
 
     const handlePhoneChange = (value) => {
-         const numericValue = value.replace(/\D/g, ''); // Remove non-digits
+        const numericValue = value.replace(/\D/g, ''); // Remove non-digits
 
         setAddressDetail((prev) => ({
             ...prev,
             phone: value,
         }));
 
-         if (numericValue.length < 11) {
+        if (numericValue.length < 11) {
             setErrors((prev) => ({
                 ...prev,
                 phone: 'Phone number must be at least 10 digits',
@@ -419,7 +419,7 @@ export default function Cart(props) {
         }
     }, [addressDetail.state, addressDetail.country, countries]);
 
-    
+
     const toOptions = (list, key = 'name') =>
         list.map((item) => ({ label: item[key], value: item[key] }));
 
@@ -608,7 +608,7 @@ export default function Cart(props) {
                                         }))
                                     }
                                 />
-
+                                <p style={{ marginTop: "5px" }}>Enter your country name (e.g., United States).</p>
                                 {errors.country && <p style={{ color: "red" }} className="error-text">{errors.country}</p>}
                             </div>
                         </div>
@@ -630,8 +630,9 @@ export default function Cart(props) {
                                         required: true,
                                         autoFocus: false,
                                     }}
-                                     countryCodeEditable={false}
+                                    countryCodeEditable={false}
                                 />
+                                <p style={{ marginTop: "5px" }}> Enter your 10-digit phone number.</p>
                                 {errors.phone && <p style={{ color: "red" }} className="error-text">{errors.phone}</p>}
                             </div>
                             <div className="address_input nameform-group nams_group">
@@ -677,7 +678,7 @@ export default function Cart(props) {
                                         }))
                                     }
                                 />
-
+                                <p style={{ marginTop: "5px" }}>Enter your state name (e.g., Missouri).</p>
                                 {errors.state && <p style={{ color: "red" }} className="error-text">{errors.state}</p>}
                             </div>
 
@@ -725,6 +726,7 @@ export default function Cart(props) {
                                         }))
                                     }
                                 />
+                                <p style={{ marginTop: "5px" }}>Enter your city name (e.g., Saint Charles or Saint Peters).</p>
                                 {errors.city && <p style={{ color: "red" }} className="error-text">{errors.city}</p>}
                             </div>
                             <div className="address_input nameform-group nams_group">

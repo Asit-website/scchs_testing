@@ -150,19 +150,19 @@ export default function surenamelook(pageProp) {
 
 
     return (
-        <div className="page_shopping_list sop">
+        <div className="page_shopping_list sop " id="page_shopping_responsive">
             <HeadSEO title={"memberlogin"} description={"this member is login"} image={null} />
 
             <HeadSEO1 />
 
-            <div className="event_system_main event_system_main1">
-                <div className="event_main">
+            <div className="event_system_main event_system_main1 ">
+                <div className="event_main " >
                     <div className="surname-btn-group">
                         <button onClick={handlePrint} className="btn-primary">Print</button>
-                        <Link href={"/surenamelook"}><button className="btn-outline">Back</button></Link>
+                        <Link href={"/surenamelook"}><button className="btn-outline">← Back</button></Link>
                     </div>                              
                     <div className="surname-details-wrapper">
-                        <div className="surname-details-grid px-4 md:px-12" ref={printRef}>
+                        <div className="surname-details-grid px-4 md:px-12 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3" ref={printRef}>
                             {data?.surname && (
                                 <>
                                     <div>Surname</div>
@@ -213,8 +213,8 @@ export default function surenamelook(pageProp) {
                             )}
                             {data?.notes && (
                                 <>
-                                    <div>Notes / Comments</div>
-                                    <div>: <strong><a href="#">{data.notes}</a></strong></div>
+                                    <div className="break-all whitespace-pre-wrap text-[#003366] font-semibold">Notes / Comments</div>
+                                    <div>: <strong><a className="break-all whitespace-pre-wrap text-[#003366] font-semibold" href="#">{data.notes}</a></strong></div>
                                 </>
                             )}
                         </div>

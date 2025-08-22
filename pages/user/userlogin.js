@@ -61,23 +61,32 @@ export default function userlogin(pageProp) {
         fetchMembership();
     }, [instaUser]);
 
-    const addToCartApi = async (id, access) => {
+    const addToCartApi = async (cartItem, access) => {
+        try {
+            const response = await fetch('https://uat.scchs.co.in/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${access}`
+                },
+                body: JSON.stringify({
+                    product_id: cartItem.id,
+                    quantity: cartItem.quantity || 1,
+                }),
+            });
 
-        const resp = await fetch('https://uat.scchs.co.in/api/cart/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${access}`
-            },
-            body: JSON.stringify({
-                product_id: id,
-                quantity: 1,
-            }),
-        })
-            .then(response => response.json())
+            if (!response.ok) {
+                console.error('Failed to add item to cart:', response.status, response.statusText);
+                return false;
+            }
 
-            .catch(error => console.error('Error:', error));
-
+            const data = await response.json();
+            console.log('Successfully added item to cart:', data);
+            return true;
+        } catch (error) {
+            console.error('Error adding item to cart:', error);
+            return false;
+        }
     }
 
 
@@ -115,13 +124,28 @@ export default function userlogin(pageProp) {
             localStorage.setItem("scchs_User", JSON.stringify(data?.user?.user_info));
 
             let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+            let transferSuccess = true;
 
-            for (let cart of allCarts) {
-                console.log("cart", cart);
-                await addToCartApi(cart?.id, data?.user?.access_token);
+            if (allCarts.length > 0) {
+                console.log("Transferring cart items to backend...");
+                
+                for (let cart of allCarts) {
+                    console.log("cart", cart);
+                    const success = await addToCartApi(cart, data?.user?.access_token);
+                    if (!success) {
+                        transferSuccess = false;
+                        console.error("Failed to transfer cart item:", cart);
+                    }
+                }
+
+                // Add a small delay to ensure backend has processed the transfers
+                if (transferSuccess) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
             }
+
             toast.success(data?.message);
-            // window.location.href = "/";
+            window.location.href = "/";
             setUserName('');
             setPassword('');
 
@@ -207,7 +231,7 @@ export default function userlogin(pageProp) {
                 <HeadSEO title={"login"} description={"this is user login page"} image={null} />
                 <HeadSEO1 />
 
-                <div className="scchs-login-wrapper">
+                <div className="scchs-login-wrapper" id="scchs-loging">
 
                     {/* Back Button aligned right */}
                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px', marginTop: "20px" }}>
@@ -236,8 +260,8 @@ export default function userlogin(pageProp) {
                         <p className="scchs-info-text">
                             <span>Already a member? </span> Login here Or <br />
                             <Link className="scchs-click-here" href="/join/register">
-                            {/* sign up for free */}
-                            Register as Guest
+                                {/* sign up for free */}
+                                Register as Guest
                             </Link>
                         </p>
 
@@ -251,11 +275,15 @@ export default function userlogin(pageProp) {
                                     name="username"
                                     value={username}
                                     type="text"
-                                    placeholder="Login Name"
+                                    placeholder="Username"
                                 />
                                 <span onClick={() => setShowLogin(!showLogin)} className="scchs-eye-icon">
                                     {/* SVG */}
                                 </span>
+                                <a href="tel:+16369469828" style={{ textDecoration: "none", marginTop: "10px" }}>
+                            <p style={{ paddingTop: "12px"}} className="scchs-forgot-link">Forgot Username? (Call Us)</p>
+                                </a>
+
                             </div>
 
                             {/* <div className="scchs-input-group">
@@ -321,7 +349,7 @@ export default function userlogin(pageProp) {
                     <div className="login_problem_wrapper">
                         <h2>Login Problems?</h2>
                         <p>
-                            Click on the ? icon to the right of the Login Name or Password field if you have misplaced or don't know your login name or password. The login name or password re-set instructions will be sent to the email address in your profile on file at SCCHS. If you don't have an email address or don't know the one on file at SCCHS please call <span>(636) 946-9828.</span>
+                            Click on the ? icon to the right of the Username or Password field if you have misplaced or don't know your Username or password. The Username or password re-set instructions will be sent to the email address in your profile on file at SCCHS. If you don't have an email address or don't know the one on file at SCCHS please call <span>(636) 946-9828.</span>
                         </p>
                     </div>
                 </div>

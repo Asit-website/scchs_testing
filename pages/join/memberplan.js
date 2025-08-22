@@ -170,30 +170,30 @@ export default function memberplan(pageProp) {
       try {
         const res = await fetch(`https://uat.scchs.co.in/api/user-memberships/${instaUser?.id}`);
         const data = await res.json();
-    
+
         console.log("Fetched Data:", data);
         console.log("Selected Plan:", selectedPlan);
-    
+
         const today = new Date();
-    
+
         const alreadyPurchased = data?.data?.some(plan => {
           console.log("Checking Plan:", plan);
-    
+
           const isSamePlan = plan.membership_plan_id === selectedPlan.id;
           const isActive = plan.status === "active";
           const endDate = new Date(plan.end_date);
           const stillValid = endDate >= today;
-    
+
           return isSamePlan && isActive && stillValid;
         });
-    
+
         console.log("Already Purchased:", alreadyPurchased);
         setHasSameActivePlan(alreadyPurchased);
       } catch (err) {
         console.error("Error checking membership:", err);
       }
     };
-    
+
 
     if (instaUser?.id && selectedPlan?.id) {
       checkMembership();
@@ -326,7 +326,7 @@ export default function memberplan(pageProp) {
 
 
                 {showPaypal && selectedPlan && (
-                  <PayPalScriptProvider options={{ "client-id": "AQ5IvOr3xtXtOErP6Wwm9BYdiVPIZEvLr13wcS53uRxxWIuXYJL9l77bDYw5d7sJCme18awK5iEsTjAy", currency: "USD" }}>
+                  <PayPalScriptProvider options={{ "client-id": "AUFQROBooagSJZBkKxkxmA1pfwSPGcQds957Lre0Mh5hcsuebPwh60ZPsuMyE49SCMZN3heQiYyCPsVy", currency: "USD" }}>
                     {
                       hasSameActivePlan ? <div className="text-red-600 font-semibold">
                         You have already purchased this membership.
@@ -353,7 +353,7 @@ export default function memberplan(pageProp) {
                                   amount: {
                                     value: amount // like "45.00"
                                   },
-                                  description: `Membership Purchase - ${selectedPlan?.name || 'Membership Plan'}`
+                                   description: `Membership Purchase - ${selectedPlan?.name || 'Membership Plan'}`
                                 },
                               ],
                             });
@@ -375,7 +375,7 @@ export default function memberplan(pageProp) {
                                 user_id: parseInt(instaUser.id),
                                 membership_plan_id: parseInt(selectedPlan.id),
                                 amount: selectedPlan.price.toFixed(2),
-                                paypal_order_id:details.id,
+                                paypal_order_id: details.id,
                                 transaction_id: details.purchase_units[0].payments.captures[0].id,
                                 // status: "success", 
                                 status: details?.status,

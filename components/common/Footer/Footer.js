@@ -100,7 +100,7 @@ export default function Footer(footerProps) {
                     <div className='foot_logs'>
                       {/* https://res.cloudinary.com/dgif730br/image/upload/v1743836030/SCCHS_Logo_vFINAL_1_1_1_valuvw.svg */}
                       {/* <img src={data?.footer_logo} alt='hh' /> */}
-                      <img src="https://res.cloudinary.com/dbcmdtr3r/image/upload/v1753223453/High_Res_SCCHS_Logo_vFINAl_LOgo_gpm1z8.png"/>
+                      <img src="https://res.cloudinary.com/dbcmdtr3r/image/upload/v1753223453/High_Res_SCCHS_Logo_vFINAl_LOgo_gpm1z8.png" />
                     </div>
 
                     <div className='footer_para'>
@@ -340,27 +340,41 @@ export default function Footer(footerProps) {
                   Digitalgrowthus
                 </p>
               </div>
+
               <div className="footer-bottom-right">
                 <span className="footer-bottom-connect">Connect:</span>
-                <a href="#">
+
+                <a
+                  href="https://www.facebook.com/StCharlesCountyHistoricalSociety"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <img
                     src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg"
                     alt="Facebook"
                   />
                 </a>
-                <a href="#">
+
+                <a href="https://www.instagram.com/stcharlescountyhistoricalsoc">
                   <img
                     src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"
                     alt="Instagram"
                   />
                 </a>
-                <a href="#">
+
+                <a
+                  href="https://www.youtube.com/@SCCHS/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <img
                     src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg"
                     alt="YouTube"
                   />
                 </a>
               </div>
+
+
             </div>
           </footer>
 

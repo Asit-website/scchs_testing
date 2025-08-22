@@ -86,17 +86,17 @@ export default function eventdetail(pageProp) {
                 // Filter all active (not expired) plans
                 const activePlans = (data?.data || []).filter(plan => {
                     // Check for lifetime membership in various possible locations
-                    const isLifetime = plan.is_lifetime === 1 || 
-                                     plan.isLifetime === 1 || 
-                                     plan.lifetime === 1 ||
-                                     plan.plan?.is_lifetime === 1 ||
-                                     plan.plan?.isLifetime === 1;
-                    
+                    const isLifetime = plan.is_lifetime === 1 ||
+                        plan.isLifetime === 1 ||
+                        plan.lifetime === 1 ||
+                        plan.plan?.is_lifetime === 1 ||
+                        plan.plan?.isLifetime === 1;
+
                     // If it's a lifetime membership, always consider it active
                     if (isLifetime) {
                         return true;
                     }
-                    
+
                     // For non-lifetime memberships, check the status and end date
                     const isActive = plan.status === "active";
                     const endDate = new Date(plan.grace_end_date);
@@ -117,6 +117,7 @@ export default function eventdetail(pageProp) {
 
 
     const router = useRouter();
+    // const { user } = useAuth();
     const { id, slug } = router.query;
 
     console.log(id);
@@ -130,6 +131,20 @@ export default function eventdetail(pageProp) {
     const [showPayPal, setShowPayPal] = useState(false);
     const [orderId, setOrderId] = useState(null); // Optional: track internal order
 
+    const handlePurchaseClick = () => {
+        const user = localStorage.getItem("scchs_User");
+
+        if (!user) {
+            // Save the page user was on
+            localStorage.setItem("redirectAfterLogin", router.asPath);
+
+            // Redirect to login
+            router.push("/user/userlogin3");
+            return;
+        }
+
+        setShowModal1(true);
+    };
 
     const closeModal = () => {
         setShowModal1(false);
@@ -141,22 +156,22 @@ export default function eventdetail(pageProp) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         // Check if there are available tickets
         if (!aboutnew?.number_of_tickets || aboutnew.number_of_tickets <= 0) {
             toast.error('No tickets available');
             return;
         }
-        
+
         // Check if requested quantity is available
         if (Number(qty) > aboutnew.number_of_tickets) {
             toast.error(`Only ${aboutnew.number_of_tickets} tickets available`);
             return;
         }
-        
+
         try {
             // Check if the ticket price is free based on membership status
-            const isFree = membershipStatus === "active" 
+            const isFree = membershipStatus === "active"
                 ? (aboutnew?.member_price === 0 || aboutnew?.member_price === 0.00 || aboutnew?.member_price === "0.00")
                 : (aboutnew?.user_price === 0 || aboutnew?.user_price === 0.00 || aboutnew?.user_price === "0.00");
 
@@ -420,6 +435,7 @@ export default function eventdetail(pageProp) {
         });
     };
 
+
     return (
         <div className="page_shopping_list sop">
             <HeadSEO title={product?.seo?.pageTitle == "" ? product?.name : product?.seo?.pageTitle} description={product?.seo?.metaDescription} image={null} />
@@ -453,13 +469,44 @@ export default function eventdetail(pageProp) {
                     <PayPalScriptProvider options={{ clientId: 'AUFQROBooagSJZBkKxkxmA1pfwSPGcQds957Lre0Mh5hcsuebPwh60ZPsuMyE49SCMZN3heQiYyCPsVy', currency: 'USD' }}>
                         <div>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "20px", marginBottom: "30px" }}>
-                                <button onClick={() => {
-                                    instaUser ? setShowModal1(true) : router.push("/user/userlogin1")
+                                {/* <button onClick={() => {
+                                    instaUser ? setShowModal1(true) : router.push("/user/userlogin3")
 
-                                }} className="ticket-btn">Purchase Tickets</button>
-                                <Link href="/event" style={{ textDecoration: "none" }}>
+                                }} className="ticket-btn">Purchase Tickets</button> */}
+                                {/* <button
+                                    onClick={() => {
+                                        if (instaUser) {
+                                            setShowModal1(true);
+                                        } else {
+                                            // yaha URL store karega
+                                            localStorage.setItem("redirectAfterLogin", window.location.pathname);
+                                            router.push("/user/userlogin3");
+                                        }
+                                    }}
+                                    onClick={() => handlePurchaseClick()}
+                                    className="ticket-btn"
+                                >
+                                    Purchase Tickets
+                                </button> */}
+                                {aboutnew?.user_price === "0.00" && aboutnew?.member_price === "0.00" ? (
+                                    
+                                    <div></div>
+                                ) : (
+                                    <button
+                                        onClick={() => handlePurchaseClick()}
+                                        className="ticket-btn"
+                                    >
+                                        Purchase Tickets
+                                    </button>
+                                )}
+
+
+
+
+
+                                <a href="javascript:history.back()" style={{ textDecoration: "none" }}>
                                     <button className="event_det_back"> ← Back</button>
-                                </Link>
+                                </a>
                             </div>
                             {showModal1 && (
                                 <div className="modal-overlay" onClick={closeModal}>
@@ -490,6 +537,15 @@ export default function eventdetail(pageProp) {
                                                 <h3>Pay ${orderAmount}</h3>
                                                 <PayPalButtons
                                                     style={{ layout: 'vertical' }}
+                                                    // createOrder={(data, actions) => {
+                                                    //     return actions.order.create({
+                                                    //         purchase_units: [{
+                                                    //             amount: {
+                                                    //                 value: orderAmount
+                                                    //             },
+                                                    //         }],
+                                                    //     });
+                                                    // }}
                                                     createOrder={(data, actions) => {
                                                         return actions.order.create({
                                                             purchase_units: [{
@@ -577,10 +633,7 @@ export default function eventdetail(pageProp) {
                                             <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time}</p>
                                             <p>{aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd MMMM DD') : ''}, {aboutnew?.start_time}</p>
                                         </div> */}
-
                                         {/* <div className="item">
-
-                                        <div className="item">
                                             <h4>Event Starts</h4>
                                             <p>Sat, March 29, At 7:00 PM</p>
                                             <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time} - , {aboutnew?.end_time}</p>
@@ -603,7 +656,7 @@ export default function eventdetail(pageProp) {
                                                 {/* <p>{aboutnew?.start_date ? new Date(aboutnew.start_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.start_time} - {aboutnew?.end_date ? new Date(aboutnew.end_date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : ''}, {aboutnew?.end_time}</p> */}
                                                 {/* import moment from 'moment'; */}
 
-                                                <p>
+                                                {/* <p>
                                                     {aboutnew?.start_date ? moment(aboutnew.start_date).format('dddd, MMMM D') : ''},{' '}
                                                     {aboutnew?.start_time}
                                                     {' - '}
@@ -613,7 +666,64 @@ export default function eventdetail(pageProp) {
                                                         ? moment(aboutnew.end_date).format('dddd, MMMM D') + ', '
                                                         : ''}
                                                     {aboutnew?.end_time}
+                                                </p> */}
+
+                                                {/* <p>
+                                                    {aboutnew?.single_day === "1" ? (
+                                                        
+                                                        <>
+                                                            {aboutnew?.date ? moment(aboutnew.date).format("dddd, MMMM D") : ""},{" "}
+                                                            {aboutnew?.start_time} - {aboutnew?.end_time}
+                                                        </>
+                                                    ) : (
+                                                     
+                                                        <>
+                                                            {aboutnew?.start_date
+                                                                ? moment(aboutnew.start_date).format("dddd, MMMM D")
+                                                                : ""}
+                                                            , {aboutnew?.start_time} -{" "}
+                                                            {aboutnew?.end_date &&
+                                                                moment(aboutnew.end_date).format("dddd, MMMM D") !==
+                                                                moment(aboutnew.start_date).format("dddd, MMMM D")
+                                                                ? moment(aboutnew.end_date).format("dddd, MMMM D") + ", "
+                                                                : ""}
+                                                            {aboutnew?.end_time}
+                                                        </>
+                                                    )}
+                                                </p> */}
+                                                <p>
+                                                    {aboutnew?.single_day === "1" ? (
+                                                        // ✅ Single day event
+                                                        <>
+                                                            {aboutnew?.date ? moment(aboutnew.date).format("dddd, MMMM D") : ""}
+                                                            {aboutnew?.all_day === "0" && (
+                                                                <>
+                                                                    , {aboutnew?.start_time} - {aboutnew?.end_time}
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        // ✅ Multi day event
+                                                        <>
+                                                            {aboutnew?.start_date
+                                                                ? moment(aboutnew.start_date).format("dddd, MMMM D")
+                                                                : ""}
+                                                            {aboutnew?.all_day === "0" && (
+                                                                <>
+                                                                    , {aboutnew?.start_time} -{" "}
+                                                                    {aboutnew?.end_date &&
+                                                                        moment(aboutnew.end_date).format("dddd, MMMM D") !==
+                                                                        moment(aboutnew.start_date).format("dddd, MMMM D")
+                                                                        ? moment(aboutnew.end_date).format("dddd, MMMM D") + ", "
+                                                                        : ""}
+                                                                    {aboutnew?.end_time}
+                                                                </>
+                                                            )}
+                                                        </>
+                                                    )}
                                                 </p>
+
+
 
 
 
@@ -634,7 +744,7 @@ export default function eventdetail(pageProp) {
                                         </div>
 
 
-                                        <Link style={{ textDecoration: "none" }} href={`${membershipStatus !== "active" && "/join/registe1"}`}>  <div className="detail-row popover-container">
+                                        <Link style={{ textDecoration: "none" }} href={`${membershipStatus !== "active" && "/join/register"}`}>  <div className="detail-row popover-container">
                                             <span className="icon">
                                                 <svg width="38" height="38" viewBox="0 0 48 48" fill="none">
                                                     <rect width="48" height="48" rx="4" fill="white" />
@@ -727,14 +837,14 @@ export default function eventdetail(pageProp) {
                                         </div> */}
                                         </div>
                                     </div>
-                                    <p style={{visibility:"hidden"}} className="presented-by">
+                                    <p style={{ visibility: "hidden" }} className="presented-by">
                                         Presented by the Saint Charles County Historical Society
                                     </p>
-                                       
+
 
                                     <div className="event-about">
-                                <h4>About this event</h4>
-                                {/* <ul>
+                                        <h4>About this event</h4>
+                                        {/* <ul>
                                     <li>1) <b>$200</b> per table of 8 or <b>$25</b> per person</li>
                                     <li>2) Free soda and water, BYO snacks and adult beverages</li>
                                     <li>3) <b>50/50</b> raffle drawing, silent auction, game of Dead or Alive</li>
@@ -742,12 +852,12 @@ export default function eventdetail(pageProp) {
                                         Saint Charles County Historical Society 101 S. Main Street, St. Charles, MO <b>63301</b>
                                         <b>636-946-9828</b> sccshs.org</li>
                                 </ul> */}
-                                <div className="makepoppinsfont" dangerouslySetInnerHTML={{ __html: aboutnew?.description }} />
-                            </div>
+                                        <div className="makepoppinsfont" dangerouslySetInnerHTML={{ __html: aboutnew?.description }} />
+                                    </div>
 
                                 </div>
 
-                                
+
 
                             </div>
                             {/* <div className="event-about">
@@ -762,7 +872,7 @@ export default function eventdetail(pageProp) {
                         </div>
                     </div>
                 </div>
-                <div className="payment_advance">
+                {/* <div className="payment_advance">
                     <div className="payment_advance_flex">
                         <div className="payment_left">
                             <h3>Payment in advance is greatly appreciated, table hosts are responsible <br /> for ensuring full payment at or prior to event</h3>
@@ -773,14 +883,39 @@ export default function eventdetail(pageProp) {
 
                             }}>Purchase Tickets</button>
                         </div>
-                        {/* <div className="payment_right">
+                        <div className="payment_right">
                             <button>Download</button>
                         </div>
                         <div className="payment_right">
                             <button>Reserve Seats</button>
-                        </div> */}
+                        </div>
+                    </div>
+                </div> */}
+
+                <div className="payment_advance">
+                    <div className="payment_advance_flex">
+                        <div className="payment_left">
+                            <h3>
+                                Payment in advance is greatly appreciated, table hosts are responsible <br />
+                                for ensuring full payment at or prior to event
+                            </h3>
+                        </div>
+
+                        {/* Show button only if NOT free */}
+                        {!(aboutnew?.user_price === "0.00" && aboutnew?.member_price === "0.00") && (
+                            <div className="payment_right">
+                                <button
+                                    onClick={() => {
+                                        instaUser ? setShowModal1(true) : router.push("/user/userlogin1");
+                                    }}
+                                >
+                                    Purchase Tickets
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
+
 
                 <div>
                     {showModal && (

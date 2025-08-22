@@ -376,7 +376,11 @@ export default function store(pageProp) {
                                     }}>
                                         <h3 className="custom-card-title">{product.name}</h3>
                                     </Link>
-                                    <p className="custom-card-subtitle">{product.short_description}</p>
+                                    {/* <p className="custom-card-subtitle">{product.short_description}</p> */}
+                                    {product?.short_description?.trim() && (
+                                        <p className="custom-card-subtitle">{product.short_description}</p>
+                                    )}
+
                                     {/* <p className="custom-card-location">{product.location}</p> */}
                                     {/* <p className="custom-card-location">MO 1918</p> */}
                                     <p className="custom-card-updated">
@@ -384,6 +388,27 @@ export default function store(pageProp) {
                                         {/* {product.updated} */}
 
                                     </p>
+                                    <div className="price-container">
+                                        <p className="price-text">
+                                            <span>Sale price :</span><strong> ${parseFloat(product?.price).toFixed(2)}</strong>
+                                            {/* {membershipStatus !== "active" && (
+                                                <Link href={"/join/register"}>
+                                                    <span className="tooltip">Become a member now</span>
+                                                </Link>
+                                            )} */}
+                                        </p>
+
+                                        <p>
+                                            <span>Membership Price :</span> <strong>${parseFloat(product?.membership_price).toFixed(2)}</strong> 
+                                            {console.log("Membership Price:", product?.membership_price)}
+                                        </p>
+
+
+                                        <p>
+                                            <span>Shipping / Handling :</span> <strong>${product?.
+                                                shipping_cost}</strong> 
+                                        </p>
+                                    </div>
                                     <button
                                         disabled={product.status === "inactive"}
                                         //  out-stock
@@ -416,7 +441,8 @@ export default function store(pageProp) {
 
                                         }}
                                     >
-                                        {product?.status === "active" ? "Add to Cart" : "Out of Stock"}
+                                        {/* {product?.status === "active" ? "Add to Cart" : "Out of Stock"} */}
+                                        {product?.status === "active" ? "Add to Cart" : "Sold"}
                                     </button>
                                 </div>
                             </div>
