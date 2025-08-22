@@ -1702,7 +1702,7 @@ export default function register1(pageProp) {
                                     <div className="nameform-container">
                                         <h2>{instaUser?.id ? "Secondary Member Information" : "Primary Member Information"}</h2>
                                         <div className="nameform-group nams_group">
-                                            <input required onChange={handleChange} name="username" value={formData?.username} className="nameform-input" type="text" placeholder="UserName" />
+                                            <input required onChange={handleChange} name="username" value={formData?.username} className="nameform-input" type="text" placeholder="UserName" autoComplete="off" />
                                             {errors?.username && <p className="text_red">{errors.username}</p>}
                                         </div>
                                         <div className="nameform-group" style={{ position: 'relative' }}>
@@ -1720,7 +1720,7 @@ export default function register1(pageProp) {
                                                 } else {
                                                     setPasswordError("");
                                                 }
-                                            }} name="password" value={formData?.password} className="nameform-input" type={passwordVisible ? "text" : "password"} placeholder="Password" />
+                                            }} name="password" value={formData?.password} className="nameform-input" type={passwordVisible ? "text" : "password"} placeholder="Password" autoComplete="new-password"  />
                                             <span
                                                 style={{ position: "absolute", right: 20, top: 15, cursor: "pointer" }}
                                                 onClick={() => setPasswordVisible((v) => !v)}
@@ -1758,7 +1758,7 @@ export default function register1(pageProp) {
                                                 } else {
                                                     setPasswordError1("");
                                                 }
-                                            }} value={formData?.password_confirmation} className="nameform-input" type={confirmPasswordVisible ? "text" : "password"} placeholder="Confirm Password" />
+                                            }} value={formData?.password_confirmation} className="nameform-input" type={confirmPasswordVisible ? "text" : "password"} placeholder="Confirm Password"  autoComplete="new-password"/>
                                             <span
                                                 style={{ position: "absolute", right: 20, top: 15, cursor: "pointer" }}
                                                 onClick={() => setConfirmPasswordVisible((v) => !v)}

@@ -204,6 +204,33 @@ const UserProfile = () => {
               onChange={handleChange}
               className="border rounded px-2 py-1"
             />
+
+            {/* Helper text conditions */}
+            {key === "country" && (
+              <p className="text-sm text-gray-500">
+                Enter your country name (e.g., United States).
+              </p>
+            )}
+            {key === "state" && (
+              <p className="text-sm text-gray-500">
+                Enter your state name (e.g., Missouri).
+              </p>
+            )}
+            {key === "city" && (
+              <p className="text-sm text-gray-500">
+                Enter your city name (e.g., Saint Charles or Saint Peters).
+              </p>
+            )}
+            {(key === "cell_phone" || key === "mobile_number") && (
+              <p className="text-sm text-gray-500">
+                Enter your 10-digit phone number.
+              </p>
+            )}
+            {key === "postal_code" && (
+              <p className="text-sm text-gray-500">
+                Please mention applicable postal code, zip code, pin code, postcode.
+              </p>
+            )}
           </div>
         ))}
 
@@ -262,24 +289,24 @@ const UserProfile = () => {
           </span>
         </div>
 
-        
+
 
       </div>
 
       <div className="membership_info">
-          <div className="membership_info_left">
-            <svg width="34" height="34" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="22" cy="22" r="22" fill="#AB0635" />
-              <path d="M21.616 25.672L21.208 20.776V13.96H23.296V20.776L22.888 25.672H21.616ZM23.488 30.664C23.152 31.016 22.736 31.192 22.24 31.192C21.744 31.192 21.32 31.016 20.968 30.664C20.632 30.312 20.464 29.888 20.464 29.392C20.464 28.912 20.64 28.496 20.992 28.144C21.344 27.776 21.76 27.592 22.24 27.592C22.72 27.592 23.136 27.776 23.488 28.144C23.84 28.496 24.016 28.912 24.016 29.392C24.016 29.888 23.84 30.312 23.488 30.664Z" fill="white" />
-            </svg>
-
-          </div>
-          <div className="membership_info_right">
-            <p><span>Password Note :</span>Password must include atleast one capital letter, one number, one special character (e.g., !@#$%^&*), and be at least 8 characters long.</p>
-            {/* <p>.</p> */}
-          </div>
+        <div className="membership_info_left">
+          <svg width="34" height="34" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22" cy="22" r="22" fill="#AB0635" />
+            <path d="M21.616 25.672L21.208 20.776V13.96H23.296V20.776L22.888 25.672H21.616ZM23.488 30.664C23.152 31.016 22.736 31.192 22.24 31.192C21.744 31.192 21.32 31.016 20.968 30.664C20.632 30.312 20.464 29.888 20.464 29.392C20.464 28.912 20.64 28.496 20.992 28.144C21.344 27.776 21.76 27.592 22.24 27.592C22.72 27.592 23.136 27.776 23.488 28.144C23.84 28.496 24.016 28.912 24.016 29.392C24.016 29.888 23.84 30.312 23.488 30.664Z" fill="white" />
+          </svg>
 
         </div>
+        <div className="membership_info_right">
+          <p><span>Password Note :</span>Password must include atleast one capital letter, one number, one special character (e.g., !@#$%^&*), and be at least 8 characters long.</p>
+          {/* <p>.</p> */}
+        </div>
+
+      </div>
 
       <div className="button-row mt-4">
         <button
