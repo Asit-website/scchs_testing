@@ -104,6 +104,7 @@ export default function storeorder(pageProp) {
 
     const [payment, setPayment] = useState(null);
     const [payNow, setPayNow] = useState(false);
+    const [stockIssues, setStockIssues] = useState(false);
 
     //  const [instaUser, setInstaUser] = useState(null);
     const [membershipStatus, setMembershipStatus] = useState("loading");
@@ -111,7 +112,6 @@ export default function storeorder(pageProp) {
 
 
     const getCarts = async () => {
-
         try {
             const response = await fetch("https://uat.scchs.co.in/api/cart", {
                 method: "GET",
@@ -121,11 +121,21 @@ export default function storeorder(pageProp) {
                 }
             });
 
+            if (!response.ok) {
+                console.error("Failed to fetch cart data:", response.status, response.statusText);
+                // Set empty cart data to prevent undefined state
+                setCartData({ cart: [], total_amount: "0.00", grand_total: "0.00", shipping_cost: "0.00" });
+                return;
+            }
+
             const data = await response.json();
             console.log(data?.grand_total);
             console.log(data);
             setCartData(data);
         } catch (error) {
+            console.error("Error fetching cart data:", error);
+            // Set empty cart data to prevent undefined state
+            setCartData({ cart: [], total_amount: "0.00", grand_total: "0.00", shipping_cost: "0.00" });
         }
     };
 
@@ -272,6 +282,13 @@ export default function storeorder(pageProp) {
         if (isLoggedIn) {
             sessionStorage.removeItem("cartItems");
             getCarts();
+
+            // Add a retry mechanism in case the first call fails due to timing
+            const retryTimer = setTimeout(() => {
+                getCarts();
+            }, 1000);
+
+            return () => clearTimeout(retryTimer);
         }
         else {
             let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
@@ -513,17 +530,17 @@ export default function storeorder(pageProp) {
                 // Filter all active (not expired) plans
                 const activePlans = (data?.data || []).filter(plan => {
                     // Check for lifetime membership in various possible locations
-                    const isLifetime = plan.is_lifetime === 1 || 
-                                     plan.isLifetime === 1 || 
-                                     plan.lifetime === 1 ||
-                                     plan.plan?.is_lifetime === 1 ||
-                                     plan.plan?.isLifetime === 1;
-                    
+                    const isLifetime = plan.is_lifetime === 1 ||
+                        plan.isLifetime === 1 ||
+                        plan.lifetime === 1 ||
+                        plan.plan?.is_lifetime === 1 ||
+                        plan.plan?.isLifetime === 1;
+
                     // If it's a lifetime membership, always consider it active
                     if (isLifetime) {
                         return true;
                     }
-                    
+
                     // For non-lifetime memberships, check the status and end date
                     const isActive = plan.status === "active";
                     const endDate = new Date(plan.grace_end_date);
@@ -646,67 +663,176 @@ export default function storeorder(pageProp) {
 
     const paymentHandler = async () => {
         try {
+            // Check if user is authenticated
+            const token = JSON?.parse(localStorage.getItem("scchs_Access"));
+            if (!token) {
+                Swal.fire({
+                    title: 'Authentication Required!',
+                    text: 'Please log in to continue with checkout.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#AB0635'
+                });
+                router.push('/user/userlogin2');
+                return;
+            }
+
+            // Validate required data before making API call
+            if (!datas || datas.length === 0 || !datas[0]?.id) {
+                Swal.fire({
+                    title: 'Address Required!',
+                    text: 'Please add a shipping address before proceeding.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#AB0635'
+                });
+                return;
+            }
+
+            if (!cartData?.cart || cartData.cart.length === 0) {
+                Swal.fire({
+                    title: 'Empty Cart!',
+                    text: 'Your cart is empty. Please add items before checkout.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#AB0635'
+                });
+                return;
+            }
+
+            // Log the request data for debugging
+            const requestData = {
+                products: cartData?.cart?.map(x => ({
+                    id: x?.product_id,
+                    qty: x.quantity
+                })),
+                address_id: datas[0]?.id
+            };
+
+            console.log("Sending order creation request:", requestData);
+            console.log("Using token:", token ? "Token exists" : "No token");
+
             const response = await fetch("https://uat.scchs.co.in/api/order/create", {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
-                    "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
+                    "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({
-                    products: cartData?.cart?.map(x => ({
-                        id: x?.product_id,
-                        qty: x.quantity
-                    })),
-                    address_id: datas[0]?.id
-                }),
+                body: JSON.stringify(requestData),
             });
 
-            const formattedResponse = await response.json();
-            console.log("Order creation response:", formattedResponse);
+            console.log("Response status:", response.status);
+            console.log("Response headers:", response.headers);
 
-            // Check if there are stock issues in the response
-            if (formattedResponse.error || formattedResponse.length > 0) {
-                let errorMessage = "Some products have insufficient stock:\n\n";
-                
-                if (formattedResponse.length > 0) {
-                    formattedResponse.forEach((item, index) => {
-                        if (item.requested_qty > item.available_qty) {
-                            errorMessage += `${index + 1}. ${item.product_name}\n`;
-                            errorMessage += `   Available: ${item.available_qty}, Requested: ${item.requested_qty}\n`;
-                            errorMessage += `   This reached maximum\n\n`;
-                        }
-                    });
-                } else if (formattedResponse.error) {
-                    // Check if there are details in the response
-                    if (formattedResponse.details && formattedResponse.details.length > 0) {
-                        errorMessage = "Some products have insufficient stock:\n\n";
-                        formattedResponse.details.forEach((item, index) => {
-                            errorMessage += `${index + 1}. ${item.product_name}\n`;
-                            errorMessage += `   Available: ${item.available_qty}, Requested: ${item.requested_qty}\n`;
-                            errorMessage += `   This reached maximum\n\n`;
-                        });
-                    } else {
-                        errorMessage = formattedResponse.error;
+            if (!response.ok) {
+                console.error("API Error Status:", response.status);
+                console.error("API Error Status Text:", response.statusText);
+
+                // Try to get error details from response
+                let errorMessage = "Failed to create order. Please try again.";
+                let errorDetails = null;
+                try {
+                    const errorData = await response.json();
+                    console.error("API Error Data:", errorData);
+                    if (errorData.error) {
+                        errorMessage = errorData.error;
+                        errorDetails = errorData.details;
+                    } else if (errorData.message) {
+                        errorMessage = errorData.message;
+                        errorDetails = errorData.details;
                     }
+                } catch (parseError) {
+                    console.error("Could not parse error response:", parseError);
                 }
 
-                // Show alert with stock issues
+                // Check if there's an error with insufficient stock
+                if (errorMessage.includes("insufficient stock") && errorDetails && errorDetails.length > 0) {
+                    // Create alert message with product names
+                    let alertMessage = "The following products have reached maximum stock:\n\n";
+                    errorDetails.forEach((item, index) => {
+                        alertMessage += `${index + 1}. ${item.product_name} - Available: ${item.available_qty}, Requested: ${item.requested_qty}\n`;
+                    });
+                    alertMessage += "\nPlease reduce quantities and try again.";
+
+                    // Show SweetAlert2 instead of basic alert
+                    Swal.fire({
+                        title: 'Stock Insufficient!',
+                        html: alertMessage.replace(/\n/g, '<br>'),
+                        icon: 'warning',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#AB0635'
+                    });
+                    setStockIssues(true); // Set state to true
+                    return;
+                }
+
                 Swal.fire({
-                    title: 'Stock Issue',
+                    title: 'Order Creation Failed!',
                     text: errorMessage,
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#AB0635'
                 });
-                return; // Don't proceed with PayPal
+                return;
             }
 
-            // If no stock issues, proceed with PayPal
+            const formattedResponse = await response.json();
+            console.log("Order created successfully:", formattedResponse);
+
+            // Check if there's an error with insufficient stock
+            if (formattedResponse.error && formattedResponse.error.includes("insufficient stock")) {
+                // Create alert message with product names
+                let alertMessage = "The following products have reached maximum stock:\n\n";
+                if (formattedResponse.details && formattedResponse.details.length > 0) {
+                    formattedResponse.details.forEach((item, index) => {
+                        alertMessage += `${index + 1}. ${item.product_name} - Available: ${item.available_qty}, Requested: ${item.requested_qty}\n`;
+                    });
+                }
+                alertMessage += "\nPlease reduce quantities and try again.";
+
+                // Show SweetAlert2 instead of basic alert
+                Swal.fire({
+                    title: 'Stock Insufficient!',
+                    html: alertMessage.replace(/\n/g, '<br>'),
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#AB0635'
+                });
+                setStockIssues(true); // Set state to true
+                return;
+            }
+
+            // If no stock issues, proceed with payment
+            setStockIssues(false); // Reset stock issues state
             setPayment(formattedResponse);
             setPayNow(true);
-            payPalBtn.current.scrollIntoView({ behavior: 'smooth' });
+
+            // Add safety check for payPalBtn ref before scrolling
+            if (payPalBtn.current) {
+                payPalBtn.current.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                console.log("PayPal button ref not available, scrolling to bottom instead");
+                // Fallback: scroll to bottom of page
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
         } catch (error) {
-            console.error("Order creation failed", error);
-            toast.error("Failed to create order. Please try again.");
+            console.error("Order creation failed with exception:", error);
+            console.error("Error details:", {
+                message: error.message,
+                stack: error.stack,
+                name: error.name
+            });
+
+            Swal.fire({
+                title: 'Network Error!',
+                text: 'Failed to connect to the server. Please check your internet connection and try again.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#AB0635'
+            });
         }
     };
 
@@ -903,6 +1029,7 @@ export default function storeorder(pageProp) {
                                         <div className="qty-col">Quantity</div>
                                         <div className="price-col price-col11">Price</div>
                                     </div>
+
                                     {
                                         cartData?.cart?.map((val, index) => {
                                             return <div key={index} className="order-info-row">
@@ -973,7 +1100,7 @@ export default function storeorder(pageProp) {
                                                 </div>
 
                                                 <div className="price-col with-border">
-                                                    <div className="price-line">
+                                                    {/* <div className="price-line">
                                                         <span>{membershipStatus === "active" ? "Membership Price" : "Price"} :</span>
                                                         <strong>${membershipStatus === "active" ? val?.
                                                             membership_price
@@ -983,7 +1110,26 @@ export default function storeorder(pageProp) {
                                                     <div className="price-line price-line2">
                                                         <span>S & H :</span>
                                                         <strong>${parseFloat(val?.shipping_cost).toFixed(2) * val?.quantity}</strong>
+                                                    </div> */}
+
+                                                    <div className="price-line">
+                                                        <span>
+                                                            {membershipStatus === "active" ? "Membership Price" : "Price"} :
+                                                        </span>
+                                                        <strong>
+                                                            ${membershipStatus === "active"
+                                                                ? (val?.membership_price * val?.quantity).toFixed(2)
+                                                                : (val?.price * val?.quantity).toFixed(2)}
+                                                        </strong>
                                                     </div>
+
+                                                    <div className="price-line price-line2">
+                                                        <span>S & H :</span>
+                                                        <strong>
+                                                            ${(parseFloat(val?.shipping_cost) * val?.quantity).toFixed(2)}
+                                                        </strong>
+                                                    </div>
+
                                                     <div className="price-line">
                                                         <span>Item Total:</span>
                                                         <strong>{val?.quantity}</strong>
@@ -1029,7 +1175,7 @@ export default function storeorder(pageProp) {
                                                 // paymentHandler();
                                             }
                                             else {
-                                                router.push('/user/userlogin1');
+                                                router.push('/user/userlogin2');
                                             }
 
                                         }} className="btn-primarys">Checkout</button>
@@ -1049,111 +1195,157 @@ export default function storeorder(pageProp) {
                             </div>
                     }
 
-                    {payNow && (
-                        <PayPalScriptProvider options={{ "client-id": "AUFQROBooagSJZBkKxkxmA1pfwSPGcQds957Lre0Mh5hcsuebPwh60ZPsuMyE49SCMZN3heQiYyCPsVy", currency: "USD" }}>
-                            <PayPalButtons
-                                style={{ layout: "vertical" }}
-                                createOrder={(data, actions) => {
-                                    // Create description with all product details
-                                    const productDetails = cartData?.cart?.map(item => 
-                                        `${item.name || item.product_name} (Qty: ${item.quantity})`
-                                    ).join(', ');
-                                    
-                                    const description = `Store Purchase - ${productDetails || 'Products'}`;
-                                    
-                                    // Calculate total amount
-                                    const totalAmount = membershipStatus === "active" ? payment?.order_amount_m : payment?.order_amount;
-                                    
-                                    // Create items array for PayPal
-                                    const items = cartData?.cart?.map(item => ({
-                                        name: item.name || item.product_name,
-                                        quantity: item.quantity.toString(),
-                                        unit_amount: {
-                                            value: parseFloat(item.price || item.sale_price || 0).toFixed(2),
-                                            currency_code: "USD"
-                                        }
-                                    })) || [];
-                                    
-                                    // Calculate item_total (sum of unit_amount * quantity for all items)
-                                    const itemTotal = items.reduce((sum, item) => {
-                                        return sum + (parseFloat(item.unit_amount.value) * parseInt(item.quantity));
-                                    }, 0).toFixed(2);
-                                    
-                                    // Use cartData.shipping_cost directly since it's correct
-                                    const shippingCost = cartData?.shipping_cost || "0.00";
-                                    
-                                    // Debug to check cartData.shipping_cost issue
-                                    console.log('Cart Data Shipping Cost:', cartData?.shipping_cost);
-                                    console.log('Cart Data Shipping Cost Type:', typeof cartData?.shipping_cost);
-                                    console.log('Cart Data Shipping Cost Length:', cartData?.shipping_cost?.length);
-                                    console.log('Calculated Shipping Cost:', shippingCost);
-                                    console.log('Total Amount:', totalAmount);
-                                    console.log('Item Total:', itemTotal);
-                                    
-                                    return actions.order.create({
-                                        purchase_units: [{
-                                            amount: {
-                                                value: totalAmount,
-                                                breakdown: {
-                                                    item_total: {
-                                                        value: itemTotal,
-                                                        currency_code: "USD"
-                                                    },
-                                                    shipping: {
-                                                        value: shippingCost,
-                                                        currency_code: "USD"
+                    {payNow && !stockIssues && (
+                        <div
+                            className="paynow-scroll"
+                            ref={payPalBtn}
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: '100%',
+                                paddingTop: '70px',
+                                paddingBottom: '20px', // instead of marginTop/marginBottom
+                                boxSizing: 'border-box'
+                            }}
+                        >
+
+                            <PayPalScriptProvider options={{ "client-id": "AUFQROBooagSJZBkKxkxmA1pfwSPGcQds957Lre0Mh5hcsuebPwh60ZPsuMyE49SCMZN3heQiYyCPsVy", currency: "USD" }}>
+                                <PayPalButtons
+                                    style={{ layout: "vertical" }}
+                                    // createOrder={(data, actions) => {
+                                    //     return actions.order.create({
+                                    //         purchase_units: [{
+                                    //             amount: {
+                                    //                 value: membershipStatus === "active" ? payment?.order_amount_m : payment?.order_amount,
+                                    //             }
+                                    //         }]
+                                    //     });
+                                    // }}
+                                    createOrder={(data, actions) => {
+                                        // Create description with all product details
+                                        const productDetails = cartData?.cart?.map(item =>
+                                            `${item.name || item.product_name} (Qty: ${item.quantity})`
+                                        ).join(', ');
+
+                                        const description = `Store Purchase - ${productDetails || 'Products'}`;
+
+                                        // Calculate total amount
+                                        const totalAmount = membershipStatus === "active" ? payment?.order_amount_m : payment?.order_amount;
+
+                                        // Create items array for PayPal
+                                        const items = cartData?.cart?.map(item => ({
+                                            name: item.name || item.product_name,
+                                            quantity: item.quantity.toString(),
+                                            unit_amount: {
+                                                value: parseFloat(item.price || item.sale_price || 0).toFixed(2),
+                                                currency_code: "USD"
+                                            }
+                                        })) || [];
+
+                                        // Calculate item_total (sum of unit_amount * quantity for all items)
+                                        const itemTotal = items.reduce((sum, item) => {
+                                            return sum + (parseFloat(item.unit_amount.value) * parseInt(item.quantity));
+                                        }, 0).toFixed(2);
+
+                                        // Use cartData.shipping_cost directly since it's correct
+                                        const shippingCost = cartData?.shipping_cost || "0.00";
+
+                                        // Debug to check cartData.shipping_cost issue
+                                        console.log('Cart Data Shipping Cost:', cartData?.shipping_cost);
+                                        console.log('Cart Data Shipping Cost Type:', typeof cartData?.shipping_cost);
+                                        console.log('Cart Data Shipping Cost Length:', cartData?.shipping_cost?.length);
+                                        console.log('Calculated Shipping Cost:', shippingCost);
+                                        console.log('Total Amount:', totalAmount);
+                                        console.log('Item Total:', itemTotal);
+
+                                        return actions.order.create({
+                                            purchase_units: [{
+                                                amount: {
+                                                    value: totalAmount,
+                                                    breakdown: {
+                                                        item_total: {
+                                                            value: itemTotal,
+                                                            currency_code: "USD"
+                                                        },
+                                                        shipping: {
+                                                            value: shippingCost,
+                                                            currency_code: "USD"
+                                                        }
                                                     }
-                                                }
+                                                },
+                                                description: description,
+                                                items: items
+                                            }]
+                                        });
+                                    }}
+                                    onApprove={async (data, actions) => {
+                                        const details = await actions.order.capture();
+                                        console.log("Payment successful!", details);
+                                        toast.success("Payment successful!");
+                                        // clearCarts();
+
+                                        // Send to backend if needed
+                                        await fetch("https://uat.scchs.co.in/api/ecommerce/transactions", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json",
+                                                "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
                                             },
-                                            description: description,
-                                            items: items
-                                        }]
-                                    });
-                                }}
-                                ref={payPalBtn}
-                                onApprove={async (data, actions) => {
-                                    const details = await actions.order.capture();
-                                    console.log("Payment successful!", details);
-                                    toast.success("Payment successful!");
-                                    // clearCarts();
+                                            body: JSON.stringify({
+                                                user_id: parseInt(instaUser.id),
+                                                order_id: payment?.order_id,
+                                                paypal_order_id: details.id,
+                                                transaction_id: details.purchase_units[0].payments.captures[0].id,
+                                                payer_id: details.payer.payer_id,
+                                                // amount: payment?.grand_sale_price?.toString(),
+                                                // amount: cartData?.grand_total?.toString(),
+                                                amount: membershipStatus === "active" ? payment?.order_amount_m : payment?.order_amount,
+                                                status: details?.status,
+                                                // currency: "USD",
+                                                // payment_gateway: "paypal"
+                                            })
+                                        });
 
-                                    // Send to backend if needed
-                                    await fetch("https://uat.scchs.co.in/api/ecommerce/transactions", {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                            "Authorization": `Bearer ${JSON?.parse(localStorage.getItem("scchs_Access"))}`
-                                        },
-                                        body: JSON.stringify({
-                                            user_id: parseInt(instaUser.id),
-                                            order_id: payment?.order_id,
-                                            paypal_order_id:details.id,
-                                            transaction_id: details.purchase_units[0].payments.captures[0].id,
-                                            payer_id: details.payer.payer_id,
-                                            // amount: payment?.grand_sale_price?.toString(),
-                                            // amount: cartData?.grand_total?.toString(),
-                                            amount: membershipStatus === "active" ? payment?.order_amount_m : payment?.order_amount,
-                                            status: details?.status,
-                                            // currency: "USD",
-                                            // payment_gateway: "paypal"
-                                        })
-                                    });
+                                        // toast.success("payment done successfully");
 
-                                    // toast.success("payment done successfully");
+                                        clearCarts1();
+                                        // setTimeout(() => {
+                                        //     window.location.href = "/store";
+                                        // }, 2000)
 
-                                    clearCarts1();
-                                    // setTimeout(() => {
-                                    //     window.location.href = "/store";
-                                    // }, 2000)
+                                        router.push(`/paymentsuccess?orderId=${payment?.order_id}`);
 
-                                    router.push(`/paymentsuccess?orderId=${payment?.order_id}`);
+                                    }}
+                                    onCancel={() => {
+                                        alert("Payment cancelled");
+                                    }}
+                                />
+                            </PayPalScriptProvider>
+                        </div>
+                    )}
 
-                                }}
-                                onCancel={() => {
-                                    alert("Payment cancelled");
-                                }}
-                            />
-                        </PayPalScriptProvider>
+                    {payNow && stockIssues && (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: '100%',
+                            marginTop: '30px',
+                            marginBottom: '30px',
+                            padding: '20px',
+                            backgroundColor: '#fff3cd',
+                            border: '1px solid #ffeaa7',
+                            borderRadius: '8px',
+                            color: '#856404'
+                        }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <h4 style={{ margin: '0 0 10px 0', color: '#856404' }}>⚠️ Payment Unavailable</h4>
+                                <p style={{ margin: '0', fontSize: '14px' }}>
+                                    Some products in your cart have insufficient stock. Please adjust quantities and try again.
+                                </p>
+                            </div>
+                        </div>
                     )}
 
                 </div>

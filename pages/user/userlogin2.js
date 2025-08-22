@@ -62,31 +62,22 @@ export default function userlogin(pageProp) {
     }, [instaUser]);
 
     const addToCartApi = async (cartItem, access) => {
-        try {
-            const response = await fetch('https://uat.scchs.co.in/api/cart/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${access}`
-                },
-                body: JSON.stringify({
-                    product_id: cartItem.id,
-                    quantity: cartItem.quantity || 1,
-                }),
-            });
 
-            if (!response.ok) {
-                console.error('Failed to add item to cart:', response.status, response.statusText);
-                return false;
-            }
+        const resp = await fetch('https://uat.scchs.co.in/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${access}`
+            },
+            body: JSON.stringify({
+                product_id: cartItem.id,
+                quantity: cartItem.quantity || 1,
+            }),
+        })
+            .then(response => response.json())
 
-            const data = await response.json();
-            console.log('Successfully added item to cart:', data);
-            return true;
-        } catch (error) {
-            console.error('Error adding item to cart:', error);
-            return false;
-        }
+            .catch(error => console.error('Error:', error));
+
     }
 
 
@@ -124,28 +115,13 @@ export default function userlogin(pageProp) {
             localStorage.setItem("scchs_User", JSON.stringify(data?.user?.user_info));
 
             let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
-            let transferSuccess = true;
 
-            if (allCarts.length > 0) {
-                console.log("Transferring cart items to backend...");
-                
-                for (let cart of allCarts) {
-                    console.log("cart", cart);
-                    const success = await addToCartApi(cart, data?.user?.access_token);
-                    if (!success) {
-                        transferSuccess = false;
-                        console.error("Failed to transfer cart item:", cart);
-                    }
-                }
-
-                // Add a small delay to ensure backend has processed the transfers
-                if (transferSuccess) {
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                }
+            for (let cart of allCarts) {
+                console.log("cart", cart);
+                await addToCartApi(cart, data?.user?.access_token);
             }
-
             toast.success(data?.message);
-            window.location.href = "/";
+            window.location.href = "/storeorder";
             setUserName('');
             setPassword('');
 

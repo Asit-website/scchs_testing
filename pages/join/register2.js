@@ -1160,7 +1160,7 @@ export default function register1(pageProp) {
                                     <div className="form_scch_btn">
                                         {/* <h2>New Membership</h2> */}
                                         <h2>If you are not a member, please register below to complete your order; otherwise, please contact our office at (636) 946-9828.
-                                     <span style={{color: "rgba(171, 6, 53, 1)"}}>Register Here</span>   </h2>
+                                     <span style={{color: "rgba(171, 6, 53, 1)"}}> Register Here</span>   </h2>
                                         {step === 1 && <button type="button" onClick={()=> router.push('/user/userlogin')}> ← Back</button>}
                                     </div>
                                     {/* ← Back */}

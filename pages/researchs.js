@@ -128,23 +128,27 @@ export default function researchs(pageProp) {
                                 </div>
 
                                 <div className="research-request">
-                                    <h2>You may submit a research request by:</h2>
+                                    {/* <h2>You may submit a research request by:</h2> */}
+                                    <h2>Our Research fees are listed below:</h2>
                                     <div>
-                                        <p>1. Using our convenient <a href="/contact-us">
-                                            {/* RESEARCH&nbsp;CONTACT FORM */}
-                                           <a href="/research-contact"> By&nbsp;Email</a>
-                                        </a></p>
-                                        <p>2. Calling us at&nbsp;<span>(636) 946-9828</span>&nbsp;</p>
-                                        <p>3. Visiting the Archives at&nbsp;<span>101 South Main Street,&nbsp;St. Charles, MO. 63301-2802</span></p>
-                                    </div>
-
-                                    <h2>You may submit a research request by:</h2>
-                                    <div>
-                                        <p>1. In-Person Research: <span>$5.00/day</span> (Fee waived for SCCHS Members)</p>
+                                    <p>1. In-Person Research: <span>$5.00/day</span> (Fee waived for SCCHS Members)</p>
                                         <p>2. Remote Research Assistance: <span>$20.00</span>/hour (<span>$10.00 </span>minimum)</p>
                                         <p>3. Photocopies: <span>$.25</span>/page for black and white, $.50/page for color</p>
                                         <p>4. Scans: <span>$1.00</span>/page</p>
                                         <p className="text-primary">Fees can be paid by Credit Card, Check, or Cash.&nbsp;</p>
+                                    </div>
+
+                                    <h2>You may submit a research request by:</h2>
+                                    {/* <h2>Using Our Email form below the prices:</h2> */}
+                                    <div>
+                                      
+
+                                        <p>1. Using Our <a href="/contact-us">
+                                            {/* RESEARCH&nbsp;CONTACT FORM */}
+                                           <a href="/research-contact"> Email&nbsp;Form</a>
+                                        </a></p>
+                                        <p>2. Calling us at&nbsp;<span>(636) 946-9828</span>&nbsp;</p>
+                                        <p>3. Visiting the Archives at&nbsp;<span>101 South Main Street,&nbsp;St. Charles, MO. 63301-2802</span></p>
                                     </div>
                                 </div>
                             </section>

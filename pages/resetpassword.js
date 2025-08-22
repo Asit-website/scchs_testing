@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import HeadSEO from "../components/common/Head/head";
@@ -24,6 +25,8 @@ export default function resetpassword(pageProp) {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [formReady, setFormReady] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     useEffect(() => {
         if (token && email) {
@@ -70,26 +73,54 @@ export default function resetpassword(pageProp) {
 
 
             <div className="scchs-login-wrapper scchs-dev-card">
-                <Link href="/user/userlogin"><button className="black_set">Back</button></Link>
+                <Link href="/user/userlogin"><button  className="black_set" style={{marginRight: "20px"}}>  ← Back</button></Link>
                 <div className="scchs-login-card scchs-reset-card rt_card">
                     <div>
-                        <h2 style={{marginBottom:"30px"}}>Reset Your Password</h2>
-                        <div className="scchs-input-group">
-                        <input
-                            type="password"
-                            placeholder="New Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+                        <h2 style={{ marginBottom: "30px" }}>Reset Your Password</h2>
+                        <div className="scchs-input-group" style={{ position: "relative" }}>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="New Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <span
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{
+                                    position: "absolute",
+                                    right: "40px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                {showPassword ? <FiEye /> : <FiEyeOff />}
+                            </span>
                         </div>
-                        <div className="scchs-input-group">
-                        <input
-                            type="password"
-                            placeholder="Confirm Password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
+
+                        {/* Confirm Password Field */}
+                        <div className="scchs-input-group" style={{ position: "relative" }}>
+                            <input
+                                type={showConfirmPassword ? "text" : "password"}
+                                placeholder="Confirm Password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                            <span
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                style={{
+                                    position: "absolute",
+                                    right: "40px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                {showConfirmPassword ? <FiEye /> : <FiEyeOff />}
+                            </span>
                         </div>
+
+
                         <button className="scchs-login-button" onClick={handleReset}>Submit</button>
                     </div>
                 </div>

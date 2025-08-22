@@ -97,17 +97,17 @@ export default function storedetail(pageProp) {
                 // Filter all active (not expired) plans
                 const activePlans = (data?.data || []).filter(plan => {
                     // Check for lifetime membership in various possible locations
-                    const isLifetime = plan.is_lifetime === 1 || 
-                                     plan.isLifetime === 1 || 
-                                     plan.lifetime === 1 ||
-                                     plan.plan?.is_lifetime === 1 ||
-                                     plan.plan?.isLifetime === 1;
-                    
+                    const isLifetime = plan.is_lifetime === 1 ||
+                        plan.isLifetime === 1 ||
+                        plan.lifetime === 1 ||
+                        plan.plan?.is_lifetime === 1 ||
+                        plan.plan?.isLifetime === 1;
+
                     // If it's a lifetime membership, always consider it active
                     if (isLifetime) {
                         return true;
                     }
-                    
+
                     // For non-lifetime memberships, check the status and end date
                     const isActive = plan.status === "active";
                     const endDate = new Date(plan.grace_end_date);
@@ -123,7 +123,7 @@ export default function storedetail(pageProp) {
 
         fetchMembership();
     }, [instaUser]);
-    
+
     const [productdetail, setProductDetails] = useState({});
 
     const fetchProductDetails = async () => {
@@ -203,14 +203,7 @@ export default function storedetail(pageProp) {
     // const increase = () => setQuantity(prev => prev + 1);
     // const decrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
-    const increaseQuantity = () => {
-        if (quantity >= 99) {
-            toast.error("Maximum quantity reached!");
-            return;
-        }
-        setQuantity(prev => prev + 1);
-    };
-    
+    const increaseQuantity = () => setQuantity(prev => prev + 1);
     const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
 
@@ -277,7 +270,7 @@ export default function storedetail(pageProp) {
                                 <div className="price-box">
 
 
-                                    <div className="price-container">
+                                    {/* <div className="price-container">
                                         <p className="price-text">
                                             <span>Sale price :</span> ${productdetail?.price}
                                             {membershipStatus !== "active" && (
@@ -292,6 +285,21 @@ export default function storedetail(pageProp) {
                                         <span>Membership Price :</span> ${productdetail?.membership_price
 
                                         }
+                                    </p> */}
+
+                                    <div className="price-container">
+                                        <p className="price-text">
+                                            <span>Sale price :</span> ${parseFloat(productdetail?.price).toFixed(2)}
+                                            {membershipStatus !== "active" && (
+                                                <Link href={"/join/register"}>
+                                                    <span className="tooltip">Become a member now</span>
+                                                </Link>
+                                            )}
+                                        </p>
+                                    </div>
+
+                                    <p>
+                                        <span>Membership Price :</span> ${parseFloat(productdetail?.membership_price).toFixed(2)}
                                     </p>
 
 

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+// import { useRouter } from "next/router";
 
 import HeadSEO from "../../components/common/Head/head";
 import GlobalHeaderFooter from "../../utils/common/global-header-footer";
@@ -10,6 +11,7 @@ import HeadSEO1 from "../../components/common/Head/head1";
 import "../css/login.module.scss";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useRouter, useSearchParams } from "next/navigation";
 var settingsMorePhotos = {
     arrows: true,
     dots: false,
@@ -88,17 +90,86 @@ export default function userlogin(pageProp) {
             return false;
         }
     }
+     
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get("redirectTo") || "/";
+  
 
+    // const submitLogin = async (e) => {
+    //     e.preventDefault();
+
+    //     const url = `https://uat.scchs.co.in/api/login`;
+    //     const payload = {
+    //         username: username,
+    //         password: password
+    //     };
+
+    //     try {
+    //         const response = await fetch(url, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             body: JSON.stringify(payload),
+    //         });
+
+
+
+    //         const data = await response.json();
+    //         console.log(data);
+
+    //         if (data.status === false) {
+    //             toast.error(data.message);
+    //             return
+    //         }
+
+
+
+    //         localStorage.setItem("scchs_Access", JSON.stringify(data?.user?.access_token));
+    //         localStorage.setItem("scchs_User", JSON.stringify(data?.user?.user_info));
+
+    //         let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+    //         let transferSuccess = true;
+
+    //         if (allCarts.length > 0) {
+    //             console.log("Transferring cart items to backend...");
+                
+    //             for (let cart of allCarts) {
+    //                 console.log("cart", cart);
+    //                 const success = await addToCartApi(cart, data?.user?.access_token);
+    //                 if (!success) {
+    //                     transferSuccess = false;
+    //                     console.error("Failed to transfer cart item:", cart);
+    //                 }
+    //             }
+
+    //             // Add a small delay to ensure backend has processed the transfers
+    //             if (transferSuccess) {
+    //                 await new Promise(resolve => setTimeout(resolve, 500));
+    //             }
+    //         }
+
+    //         toast.success(data?.message);
+    //         window.location.href = "/";
+    //         setUserName('');
+    //         setPassword('');
+
+
+    //     } catch (error) {
+    //         console.error("Error during login:", error);
+    //     }
+    // };
 
     const submitLogin = async (e) => {
         e.preventDefault();
-
+    
         const url = `https://uat.scchs.co.in/api/login`;
         const payload = {
             username: username,
             password: password
         };
-
+    
         try {
             const response = await fetch(url, {
                 method: "POST",
@@ -107,25 +178,23 @@ export default function userlogin(pageProp) {
                 },
                 body: JSON.stringify(payload),
             });
-
-
-
+    
             const data = await response.json();
             console.log(data);
-
+    
             if (data.status === false) {
                 toast.error(data.message);
-                return
+                return;
             }
-
-
-
+    
+            // Store user and access token
             localStorage.setItem("scchs_Access", JSON.stringify(data?.user?.access_token));
             localStorage.setItem("scchs_User", JSON.stringify(data?.user?.user_info));
-
+    
+            // Transfer cart from session storage to backend
             let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
             let transferSuccess = true;
-
+    
             if (allCarts.length > 0) {
                 console.log("Transferring cart items to backend...");
                 
@@ -137,23 +206,42 @@ export default function userlogin(pageProp) {
                         console.error("Failed to transfer cart item:", cart);
                     }
                 }
-
-                // Add a small delay to ensure backend has processed the transfers
+    
+                // Add a small delay to ensure backend processes transfers
                 if (transferSuccess) {
                     await new Promise(resolve => setTimeout(resolve, 500));
                 }
             }
-
+    
             toast.success(data?.message);
-            window.location.href = "/";
+    
+            // 🔹 Check if there’s a saved redirect path
+            const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
+            localStorage.removeItem("redirectAfterLogin"); // clear after using
+    
+            // Reset form fields
             setUserName('');
             setPassword('');
-
-
+    
+            // Redirect back
+            window.location.href = redirectPath;
+    
         } catch (error) {
             console.error("Error during login:", error);
         }
     };
+    
+
+    const [user, setUser] = useState(null);
+
+    // useEffect(() => {
+    //     // Login ke baad user ko save kiya hoga localStorage me
+    //     const storedUser = localStorage.getItem("user");
+    //     if (storedUser) {
+    //       setUser(JSON.parse(storedUser));
+    //       router.replace("/eventdetails"); // direct redirect
+    //     }
+    //   }, []);
 
     return (
         // <section className="login_img">
@@ -342,7 +430,7 @@ export default function userlogin(pageProp) {
                                 <p className="scchs-forgot-link">Forgot Password?</p>
                             </Link>
 
-                            <button type="submit" className="scchs-login-button">Login</button>
+                            <button onClick={submitLogin} type="submit" className="scchs-login-button">Login</button>
                         </form>
                     </div>
                 </div>

@@ -46,7 +46,7 @@ const records = [
     updated: "26 March 2021",
     category: "City/State/Federal Records",
     link: "https://uat.scchs.co.in/backend/admin/media/Business%20%26%20Industry%20Files%20Index/Business%20%26%20Industry%20Files%20Index.pdf",
-    
+
   },
   {
     title: "Cemeteries in St. Charles County",
@@ -75,7 +75,7 @@ const records = [
     updated: "08 November 2023",
     category: "City/State/Federal Records",
     link: "https://s1.sos.mo.gov/records/archives/archivesdb/JudicialRecords/",
-   
+
   },
   {
     title: "Deed Records Related To Smith Chapel Cemetery",
@@ -90,7 +90,7 @@ const records = [
     updated: "20 March 2024",
     category: "Family History",
     link: "https://uat.scchs.co.in/backend/admin/media/Family%20Files/Family%20Files.pdf",
-   
+
   },
   {
     title: "Family Search",
@@ -147,7 +147,7 @@ const records = [
     updated: "7 May 2021",
     category: "Newspapers",
     link: "https://uat.scchs.co.in/backend/admin/media/New_data/St.%20Charles%20County%20Historical%20Society%20-%20McElhiney%20Olson%20Index.pdf",
-   
+
   },
   {
     title: "Missouri Death Certificates",
@@ -204,7 +204,7 @@ const records = [
     updated: "15 July 2016",
     category: "Cemeteries",
     link: "https://uat.scchs.co.in/backend/admin/media/hisrical_record/St.%20Charles%20County%20Historical%20Society%20-%20Sibley%20Diary%201844-1855.pdf",
-  
+
   },
   {
     title: "Stillbirths",
@@ -270,12 +270,37 @@ export default function research(pageProp) {
       setCurrentPage(page);
     }
   };
+
+
+
+  useEffect(() => {
+    const prevCategory = localStorage.getItem("prevResearchCategory");
+    const prevPage = localStorage.getItem("prevResearchPage");
+
+    if (prevCategory) {
+      setSelectedCategory(prevCategory);
+      setAppliedCategory(prevCategory);
+    }
+
+    if (prevPage) {
+      setCurrentPage(Number(prevPage));
+    }
+
+    // Clear after restoring
+    localStorage.removeItem("prevResearchCategory");
+    localStorage.removeItem("prevResearchPage");
+  }, []);
+
   return (
     <div className="page_shopping_list sop">
       <HeadSEO title={"memberlogin"} description={"this member is login"} image={null} />
 
       <HeadSEO1 />
-
+      <div className="deeping-btn">
+                    <a href="javascript:history.back()" className="deep-btn">
+                        ← Back
+                    </a>
+                </div>
       <div className="schss_research">
         <div className="schss_research_inner">
           <h2>SCCHS Research</h2>
@@ -291,6 +316,7 @@ export default function research(pageProp) {
       </div>
 
       <div className="event_system_main event_system_main1">
+      
         <div className="event_main">
           <div className="memberList_filter research_filter" >
             <div className="event-title-filter memberlist-title-filter res-title-filter">
@@ -352,14 +378,25 @@ export default function research(pageProp) {
                 {(() => {
                   const isPdfLink = record?.link?.includes('.pdf') || record?.link?.includes('admin.scchs.org');
                   return isPdfLink ? (
-                    <a href={record?.link} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={record?.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <button className="record-box-button">More</button>
                     </a>
                   ) : (
-                    <Link href={`${record?.link}`}>
+                    <Link
+                      href={`${record?.link}`}
+                      onClick={() => {
+                        localStorage.setItem("prevResearchCategory", appliedCategory);
+                        localStorage.setItem("prevResearchPage", currentPage);
+                      }}
+                    >
                       <button className="record-box-button">More</button>
                     </Link>
                   );
+
                 })()}
               </div>
             ))}

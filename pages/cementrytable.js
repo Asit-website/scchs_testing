@@ -94,7 +94,7 @@ export default function cementrytable(pageProp) {
                                         <th>Age</th>
                                         <th>Birth Year</th>
                                         <th>Death Year</th>
-                                        <th>Burial Year</th>
+                                        <th className="!w-[200px] overflow-x-scroll">Burial Year</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -113,7 +113,7 @@ export default function cementrytable(pageProp) {
                                             <td>{person.age}</td>
                                             <td>{person.birth_year}</td>
                                             <td>{person.death_year}</td>
-                                            <td>{person.burial_year}</td>
+                                            <td className="w-[200px] overflow-x-scroll">{person.burial_year}</td>
                                         </tr>
                                     ))}
                                 </tbody>

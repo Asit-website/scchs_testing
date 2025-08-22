@@ -24,24 +24,33 @@ export default function memberlogin(pageProp) {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
-     const addToCartApi = async (id , access) => {
+     const addToCartApi = async (cartItem, access) => {
+        try {
+            const response = await fetch('https://uat.scchs.co.in/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${access}`
+                },
+                body: JSON.stringify({
+                    product_id: cartItem.id,
+                    quantity: cartItem.quantity || 1,
+                }),
+            });
 
-        const resp = await fetch('https://uat.scchs.co.in/api/cart/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-             "Authorization":`Bearer ${access}`
-          },
-          body: JSON.stringify({
-            product_id: id,
-            quantity: 1,
-          }),
-        })
-          .then(response => response.json())
-         
-          .catch(error => console.error('Error:', error));
-    
-      }
+            if (!response.ok) {
+                console.error('Failed to add item to cart:', response.status, response.statusText);
+                return false;
+            }
+
+            const data = await response.json();
+            console.log('Successfully added item to cart:', data);
+            return true;
+        } catch (error) {
+            console.error('Error adding item to cart:', error);
+            return false;
+        }
+    }
 
 
     const submitLogin = async (e) => {
@@ -80,15 +89,29 @@ export default function memberlogin(pageProp) {
             localStorage.setItem("scchs_Access", JSON.stringify(data?.user?.access_token));
             localStorage.setItem("scchs_User", JSON.stringify(data?.user?.user_info));
 
-            // added the carts into the user carts 
             let allCarts = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+            let transferSuccess = true;
 
-            for(let cart of allCarts){
-                 console.log("cart" , cart);
-                await addToCartApi(cart?.id , data?.user?.access_token);
+            if (allCarts.length > 0) {
+                console.log("Transferring cart items to backend...");
+                
+                for (let cart of allCarts) {
+                    console.log("cart", cart);
+                    const success = await addToCartApi(cart, data?.user?.access_token);
+                    if (!success) {
+                        transferSuccess = false;
+                        console.error("Failed to transfer cart item:", cart);
+                    }
+                }
+
+                // Add a small delay to ensure backend has processed the transfers
+                if (transferSuccess) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
             }
+
             toast.success(data?.message);
-            window.location.href = "/join/memberplan";
+            window.location.href = "/";
             setUserName('');
             setPassword('');
 
